@@ -1,0 +1,36 @@
+@startuml
+
+note "<i>Arrows are in direction of usage.</i>" as N1
+
+package "Qt" #EEEEEE
+[QtCore]
+[QtGui]
+[QtOpenGL]
+end package
+
+[GUI]
+
+package "Rendering" #EEEEEE
+
+[OpenSceneGraph] as osg
+
+osg->[OpenGL]
+
+end package
+
+package "State & Simulation" #EEEEEE
+[AppDataModel]
+[WaveModel]
+end package
+
+GUI->QtGui 
+GUI->AppDataModel
+QtGui->QtOpenGL
+AppDataModel-->WaveModel
+WaveModel-->AppDataModel
+AppDataModel->osg
+AppDataModel->QtCore
+QtOpenGL->OpenGL
+QtGui->osg
+
+@enduml

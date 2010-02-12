@@ -1,0 +1,20 @@
+<project name="EWS UML" default="main">
+  <taskdef name="plantuml" classname="net.sourceforge.plantuml.ant.PlantUmlTask" classpath="${basedir}/libs/plantuml.jar" />
+  <property environment="env"/>
+  <condition property="dot.set">
+    <isset property="env.GRAPHVIZ_DOT"/>
+  </condition>
+  
+  <fail unless="dot.set">
+    Please set environment variable "GRAPHVIZ_DOT" to path of the "dot" command.
+  </fail>
+  
+  <!-- process ./src files -->
+  <target name="main">
+    <plantuml output="${basedir}" config="${basedir}/libs/plantuml.cfg">
+        <fileset dir="${basedir}">
+            <include name="*.txt"/>
+        </fileset>
+    </plantuml>
+  </target>
+</project>
