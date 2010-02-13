@@ -1,0 +1,57 @@
+@startuml
+
+!define QObject (Q,orchid)
+
+
+class Oscillator << QObject >> 
+note top of Oscillator 
+  <b>Oscillator</b> is the 
+  base class for any
+  type that injects 
+  energy into the medium.
+end note
+
+
+Oscillator : +location : Pnt3
+Oscillator : +amplitude : float
+
+Oscillator <|-- PeriodicOscillator
+PeriodicOscillator : +frequency : long
+
+Oscillator <|-- SingleFireOscillator
+
+class SimulationState << QObject >>
+note right of SimulationState
+    The root object of all simulation state
+end note
+
+SimulationState o-- Lattice
+
+SimulationState "1" o---- "1.." Oscillator : has
+
+class Potential << QObject >>
+Potential : +computePotential(i : int, j : int, time : int) : float
+
+SimulationState "1" o-- "1.." Potential : has
+
+Potential <|--- VerticalBarrier
+VerticalBarrier : +slitSeparation : int
+VerticalBarrier : +slitSize : int
+VerticalBarrier : +thickness : int
+
+
+VerticalBarrier <|-- VerticalSingleSlit
+VerticalBarrier <|-- VerticalDoubleSlit
+
+Potential <|- CompositePotential
+CompositePotential -> "0..*" Potential
+
+Potential <|-- PrecomputedPotential
+Potential <|-- WallPotential
+Potential <|-- BarrierPotential
+Potential <|-- SlitPotential
+
+
+class WaveModel
+
+@enduml
