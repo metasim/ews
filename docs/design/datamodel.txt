@@ -1,0 +1,16 @@
+@startuml
+
+
+
+class Oscillator << QObject >>
+Oscillator : +location : Pnt3
+Oscillator : +amplitude : float
+
+Oscillator <|-- PeriodicOscillator
+PeriodicOscillator : +frequency : long
+
+Oscillator <|-- SingleFireOscillator
+
+class SimulationState << QObject >>
+SimulationState "1" o-- "1.." Oscillator
+@enduml
