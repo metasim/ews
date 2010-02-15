@@ -1,0 +1,5 @@
+*.o
+*.app
+ui*.h
+moc_*.cpp
+
