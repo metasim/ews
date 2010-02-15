@@ -1,0 +1,17 @@
+==Dependencies==
+
+===MacOS X===
+# Qt SDK: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
+# OpenSceneGraph binaries: http://www.cuboslocos.com/tutorials/OSG-GettingStarted
+
+
+==Helpful Documents==
+===Qt===
+* Qt API Docs: http://qt.nokia.com/doc/4.6/index.html
+* Qt Tutorials: http://doc.qt.nokia.com/4.6/tutorials.html
+* Qt Examples: http://doc.qt.nokia.com/4.6/examples.html
+* eBook "C++ GUI Programming with Qt 4, 1st ed.: http://www.qtrac.eu/C++-GUI-Programming-with-Qt-4-1st-ed.zip
+
+===OpenSceneGraph===
+
+* Home: http://www.openscenegraph.org/projects/osg
