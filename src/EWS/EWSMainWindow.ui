@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QWidget" name="renderer" native="true"/>
+     <widget class="QOSGWidget" name="renderer" native="true"/>
     </item>
    </layout>
   </widget>
@@ -53,6 +53,14 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QOSGWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">QOSGWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

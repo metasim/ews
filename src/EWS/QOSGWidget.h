@@ -22,15 +22,12 @@
 
 #include <QtGui/QWidget>
 #include <QtOpenGL/QGLWidget>
+#include <QtCore/QTimer>
 
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
-namespace Ui {
-    class QOSGWidget;
-}
-
-class QOSGWidget : public QGLWidget {
+class QOSGWidget : public QGLWidget, osgViewer::Viewer {
     Q_OBJECT
 public:
     QOSGWidget( QWidget* parent = 0);
@@ -38,7 +35,8 @@ public:
 
     osgViewer::GraphicsWindow* getGraphicsWindow() { return _gw.get(); }
     const osgViewer::GraphicsWindow* getGraphicsWindow() const { return _gw.get(); }
-
+    virtual void paintGL();
+    
 protected:
     void changeEvent(QEvent *e);
 
@@ -54,7 +52,8 @@ protected:
     osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
 
 private:
-    Ui::QOSGWidget *_ui;
+    QTimer _timer;
+    
 };
 
 #endif // QOSGWIDGET_H

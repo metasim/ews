@@ -4,14 +4,12 @@
 
 
 class Oscillator << QObject >> 
-note top of Oscillator 
+note right of Oscillator 
   <b>Oscillator</b> is the 
   base class for any
   type that injects 
   energy into the medium.
 end note
-
-
 
 Oscillator : +location : Pnt3
 Oscillator : +amplitude : float
