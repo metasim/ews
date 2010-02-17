@@ -1,0 +1,89 @@
+@startuml
+
+!define QO (Q,orchid) QObject
+!define QW (W,orange) QWidget
+!define OSG (O,lightblue) OSG
+
+package simulator
+#class SimulatorState
+#class Lattice
+end package
+
+package ui
+
+#---------------------------------------------------------
+
+class EWSMainWindow << (W,orange) QMainWindow >>
+EWSMainWindow : -simulation : SimulationState
+
+
+#---------------------------------------------------------
+
+class Renderer << OSG >>
+Renderer : -simulation : SimulationState
+Renderer : -lattice : Lattice
+Renderer : +updateGL()
+
+#---------------------------------------------------------
+
+class Camera << OSG >>
+Camera : +lookAt(...)
+Camera : +handleXXEvent(...)
+
+Camera "1" --> "1" Renderer
+
+#---------------------------------------------------------
+
+class DripSourceEditor << QW >>
+
+DripSourceEditor : +enabled : bool
+DripSourceEditor : +frequency : int
+DripSourceEditor : +amplitude : int
+DripSourceEditor : +pulse()
+
+
+#---------------------------------------------------------
+
+class WallEditor << QW >>
+WallEditor : +addWall(w : WallPotential)
+WallEditor : +removeWall(w : WallPotential)
+WallEditor : +selectWall(w : WallPotential)
+WallEditor : -selectedWall : WallPotential
+WallEditor : -walls : Set<WallPotential>
+
+#---------------------------------------------------------
+
+class BarrierEditor << QW >>
+BarrierEditor : +addBarrier(w : BarrierPotential)
+BarrierEditor : +removeBarrier(w : BarrierPotential)
+BarrierEditor : +selectBarrier(w : BarrierPotential)
+BarrierEditor : -selectedBarrier : BarrierPotential
+BarrierEditor : -barriers : Set<BarrierPotential>
+BarrierEditor : +setNumSlits(slits : int[1,2])
+BarrierEditor : +setSlitWidth(width : float)
+BarrierEditor : +setSlitSeparation(width : float)
+
+#---------------------------------------------------------
+
+class SimulationControls << QW >>
+SimulationControls : -simulation : SimulationState
+SimulationControls : +play()
+SimulationControls : +pause()
+SimulationControls : +reset()
+
+
+#---------------------------------------------------------
+
+
+EWSMainWindow *-- "2" DripSourceEditor
+EWSMainWindow *-- "1" WallEditor
+EWSMainWindow *-- "1" BarrierEditor
+EWSMainWindow *-- "1" Renderer
+EWSMainWindow *- "1" SimulationControls
+Camera <- EWSMainWindow : delegates events
+
+end package
+
+ui .> simulator
+
+@enduml

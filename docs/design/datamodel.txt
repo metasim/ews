@@ -1,16 +1,27 @@
 @startuml
 
-!define QObject (Q,orchid)
+#---------------------------------------------------------
 
+package ui
+end package
 
-class Oscillator << QObject >> 
-note right of Oscillator 
+package simulator
+
+#---------------------------------------------------------
+
+package oscillators
+
+class Oscillator 
+note as N1
   <b>Oscillator</b> is the 
   base class for any
   type that injects 
   energy into the medium.
 end note
 
+Oscillator <. N1
+
+Oscillator : +enabled :bool
 Oscillator : +location : Pnt3
 Oscillator : +amplitude : float
 
@@ -19,22 +30,33 @@ PeriodicOscillator : +frequency : long
 
 Oscillator <|-- SingleFireOscillator
 
-class SimulationState << QObject >>
+end package
 
-note right of SimulationState
+#---------------------------------------------------------
+
+class SimulationState 
+SimulationState : +time : long
+
+note as N2
     The root object of all simulation state
 end note
 
-SimulationState o-- Lattice
+N2 .> SimulationState
 
-SimulationState "1" o---- "1.." Oscillator : has
+SimulationState "1" -> "1.." Oscillator : has
 
-class Potential << QObject >>
+#---------------------------------------------------------
+
+package potentials
+
+class Potential 
 Potential : +computePotential(i : int, j : int, time : int) : float
+Potential : +enabled : bool
 
-SimulationState "1" o-- "1.." Potential : has
 
-Potential <|--- VerticalBarrier
+SimulationState "1" --> "1.." Potential : has
+
+Potential <|-- VerticalBarrier
 VerticalBarrier : +slitSeparation : int
 VerticalBarrier : +slitSize : int
 VerticalBarrier : +thickness : int
@@ -51,7 +73,18 @@ Potential <|-- WallPotential
 Potential <|-- BarrierPotential
 Potential <|-- SlitPotential
 
+end package
 
 class WaveModel
+SimulationState "1" -> "1" WaveModel
+
+WaveModel --> Potential : models
+WaveModel ---> Oscillator : models
+WaveModel -> Lattice : produces
+
+
+end package
+
+ui .> simulator
 
 @enduml

@@ -1,0 +1,20 @@
+@startuml
+!define OSG (O,lightblue) osg::Drawable
+
+package drawables
+
+class WaterSurfaceGeom << OSG >>
+
+class WallGeom << OSG >>
+
+class BarrierGeom << OSG >>
+
+class FaucetGeom << OSG >>
+
+
+BarrierGeom <|-- WallGeom
+
+
+end package
+
+@enduml
