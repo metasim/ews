@@ -68,7 +68,7 @@ osg::ref_ptr<osg::Geode> createAxis()
 }
 
 QOSGWidget::QOSGWidget(QWidget * parent):
-    QGLWidget(parent)
+    QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer()
 {
 
     _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
@@ -104,6 +104,7 @@ QOSGWidget::QOSGWidget(QWidget * parent):
 
 QOSGWidget::~QOSGWidget()
 {
+    delete _gw;
 }
 
 void QOSGWidget::paintGL()

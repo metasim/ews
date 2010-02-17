@@ -27,7 +27,7 @@
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 
-class QOSGWidget : public QGLWidget, osgViewer::Viewer {
+class QOSGWidget : public QGLWidget, public osgViewer::Viewer {
     Q_OBJECT
 public:
     QOSGWidget( QWidget* parent = 0);
@@ -39,9 +39,9 @@ public:
     
 protected:
     void changeEvent(QEvent *e);
-
-    void init();
-
+//
+//    void init();
+//
     virtual void resizeGL( int width, int height );
     virtual void keyPressEvent( QKeyEvent* event );
     virtual void keyReleaseEvent( QKeyEvent* event );

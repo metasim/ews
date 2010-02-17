@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="images">
+    <file>images/list-add.png</file>
+    <file>images/list-remove.png</file>
+    <file>images/view-refresh.png</file>
+    <file>images/WaveImage.png</file>
+    <file>images/edit-undo.png</file>
+    <file>images/media-playback-start.png</file>
+    <file>images/media-playback-pause.png</file>
+  </qresource>
+</RCC>
