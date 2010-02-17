@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1153</width>
-    <height>782</height>
+    <width>1156</width>
+    <height>761</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,8 +21,17 @@
     <item row="0" column="0">
      <widget class="QWidget" name="renderer" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QLabel" name="tmpGraphic">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -44,7 +53,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1153</width>
+     <width>1156</width>
      <height>22</height>
     </rect>
    </property>
@@ -97,9 +106,12 @@
   <widget class="QDockWidget" name="dripControls">
    <property name="minimumSize">
     <size>
-     <width>224</width>
+     <width>250</width>
      <height>521</height>
     </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
     <string>Drip Sources</string>
@@ -306,7 +318,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>40</height>
+         <height>0</height>
         </size>
        </property>
       </spacer>
@@ -317,12 +329,12 @@
   <widget class="QDockWidget" name="barrierControls">
    <property name="minimumSize">
     <size>
-     <width>258</width>
-     <height>414</height>
+     <width>250</width>
+     <height>424</height>
     </size>
    </property>
    <property name="features">
-    <set>QDockWidget::AllDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
     <string>Barriers</string>
@@ -341,10 +353,19 @@
         <item>
          <widget class="QListWidget" name="listWidget_2">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>1</horstretch>
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="baseSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>false</bool>
           </property>
           <property name="currentRow">
            <number>0</number>
@@ -539,7 +560,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>200</height>
+         <height>0</height>
         </size>
        </property>
       </spacer>
@@ -556,9 +577,12 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>210</width>
+     <width>250</width>
      <height>212</height>
     </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="windowTitle">
     <string>Walls</string>
@@ -573,6 +597,15 @@
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
          <widget class="QListWidget" name="listWidget">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>false</bool>
+          </property>
           <property name="currentRow">
            <number>-1</number>
           </property>
@@ -642,19 +675,6 @@
        <zorder>widget</zorder>
        <zorder>listWidget</zorder>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>400</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </widget>
