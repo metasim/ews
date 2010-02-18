@@ -1,8 +1,8 @@
 ==Dependencies==
 
 ===MacOS X===
-# Qt SDK: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
-# OpenSceneGraph binaries: http://www.cuboslocos.com/tutorials/OSG-GettingStarted
+# Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
+# OpenSceneGraph 2.8.2:http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
 
 
 ==Helpful Documents==
@@ -15,3 +15,6 @@
 ===OpenSceneGraph===
 
 * Home: http://www.openscenegraph.org/projects/osg
+* General docs: http://www.openscenegraph.org/projects/osg/wiki/Support
+* Reference manual: http://www.openscenegraph.org/projects/osg/wiki/Support/ReferenceGuides
+* Quick Start Guide (free ebook): http://www.osgbooks.com/books/osg_qs.html

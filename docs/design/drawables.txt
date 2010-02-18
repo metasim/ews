@@ -1,7 +1,10 @@
 @startuml
 !define OSG (O,lightblue) osg::Drawable
+!define QO (Q,orchid) QObject
 
 package drawables
+
+
 
 class WaterSurfaceGeom << OSG >>
 
@@ -14,7 +17,13 @@ class FaucetGeom << OSG >>
 
 BarrierGeom <|-- WallGeom
 
-
 end package
+
+package simulator
+class Oscillator << QO >>
+end package
+
+Oscillator --> FaucetGeom
+
 
 @enduml
