@@ -28,6 +28,7 @@
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 #include <osgViewer/Viewer>
+#include <osgViewer/ViewerEventHandlers>
 #include <osgGA/TrackballManipulator>
 #include <osg/MatrixTransform>
 
@@ -35,37 +36,6 @@
 #include <osgAnimation/Channel>
 #include <osgAnimation/UpdateCallback>
 
-using namespace osgAnimation;
-osg::ref_ptr<osg::Geode> createAxis()
-{
-    osg::ref_ptr<osg::Geode> geode (new osg::Geode());
-    osg::ref_ptr<osg::Geometry> geometry (new osg::Geometry());
-
-    osg::ref_ptr<osg::Vec3Array> vertices (new osg::Vec3Array());
-    vertices->push_back (osg::Vec3 ( 0.0, 0.0, 0.0));
-    vertices->push_back (osg::Vec3 ( 10.0, 0.0, 0.0));
-    vertices->push_back (osg::Vec3 ( 0.0, 0.0, 0.0));
-    vertices->push_back (osg::Vec3 ( 0.0, 10.0, 0.0));
-    vertices->push_back (osg::Vec3 ( 0.0, 0.0, 0.0));
-    vertices->push_back (osg::Vec3 ( 0.0, 0.0, 10.0));
-    geometry->setVertexArray (vertices.get());
-
-    osg::ref_ptr<osg::Vec4Array> colors (new osg::Vec4Array());
-    colors->push_back (osg::Vec4 (1.0f, 0.0f, 0.0f, 1.0f));
-    colors->push_back (osg::Vec4 (1.0f, 0.0f, 0.0f, 1.0f));
-    colors->push_back (osg::Vec4 (0.0f, 1.0f, 0.0f, 1.0f));
-    colors->push_back (osg::Vec4 (0.0f, 1.0f, 0.0f, 1.0f));
-    colors->push_back (osg::Vec4 (0.0f, 0.0f, 1.0f, 1.0f));
-    colors->push_back (osg::Vec4 (0.0f, 0.0f, 1.0f, 1.0f));
-    geometry->setColorArray (colors.get());
-
-    geometry->setColorBinding (osg::Geometry::BIND_PER_VERTEX);
-    geometry->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::LINES,0,6));
-
-    geode->addDrawable( geometry.get() );
-    geode->getOrCreateStateSet()->setMode(GL_LIGHTING, false);
-    return geode;
-}
 
 QOSGWidget::QOSGWidget(QWidget * parent):
     QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer()
@@ -73,6 +43,7 @@ QOSGWidget::QOSGWidget(QWidget * parent):
 
     _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
     setFocusPolicy(Qt::ClickFocus);
+    addEventHandler(new osgViewer::StatsHandler);
 
     getCamera()->setViewport(new osg::Viewport(0,0,width(),height()));
     getCamera()->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(width())/static_cast<double>(height()), 1.0f, 10000.0f);
@@ -82,29 +53,24 @@ QOSGWidget::QOSGWidget(QWidget * parent):
     setCameraManipulator(new osgGA::TrackballManipulator);
     connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
     _timer.start(10);
-
-
-    osg::Group* root = new osg::Group;
-
-    osg::ref_ptr<osg::Geode> axe = createAxis();
-    osg::ref_ptr<osg::Geode> geode = new osg::Geode;
-    geode->addDrawable(new osg::ShapeDrawable(new osg::Box(osg::Vec3(0.0f,0.0f,0.0f),0.5)));
-
-    osg::ref_ptr<osg::MatrixTransform> trans = new osg::MatrixTransform();
-//    trans->setName("AnimatedNode");
-//    trans->setDataVariance(osg::Object::DYNAMIC);
-//    trans->setMatrix(osg::Matrix::identity());
-//    trans->addChild (geode.get());
-
-    root->addChild (axe.get());
-//    root->addChild (trans.get());
-    setSceneData(root);
-
 }
 
 QOSGWidget::~QOSGWidget()
 {
-    delete _gw;
+    _timer.stop();
+    // Don't delete _gw, smart pointer takes care of it.
+}
+
+void QOSGWidget::destroyEvent(bool destroyWindow, bool destroySubWindows)
+{   
+    _gw->getEventQueue()->closeWindow();
+}
+
+
+void QOSGWidget::closeEvent( QCloseEvent * event )
+{
+    event->accept();
+    _gw->getEventQueue()->closeWindow();
 }
 
 void QOSGWidget::paintGL()

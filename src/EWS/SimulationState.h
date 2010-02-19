@@ -16,30 +16,34 @@
  * http://mseedsoft.com
  */
 
-#ifndef EWSMAINWINDOW_H
-#define EWSMAINWINDOW_H
+#ifndef SimulationState_H
+#define SimulationState_H
 
-#include <QtGui/QMainWindow>
-#include "SimulationState.h"
+#include <QtCore>
 
-namespace Ui
+#include "DripSource.h"
+
+class SimulationState : public QObject
 {
-    class EWSMainWindow;
-}
-
-class EWSMainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-    ~EWSMainWindow();
-
-private:
-    Ui::EWSMainWindow* _ui;
-    SimulationState* _state;
+	Q_OBJECT
     
+public:
+    SimulationState(QObject * parent = 0);
+    virtual ~SimulationState();
+    
+    DripSource* dripSource1() {
+        return _dripSource1;
+    }
+    
+    DripSource* dripSource2() {
+        return _dripSource2;
+    }
+    
+private:
+    Q_DISABLE_COPY(SimulationState)
+    DripSource* _dripSource1;
+    DripSource* _dripSource2;
     
 };
 
-#endif // EWSMAINWINDOW_H
+#endif // SimulationState_H

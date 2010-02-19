@@ -1,5 +1,7 @@
 Makefile
 *.user
-OSGFun
+OSGFun*
+build
+
 
 

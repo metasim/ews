@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>NVIDIA Wave Interference Simulation</string>
+   <string>Visualize STEM: Wave</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>
@@ -19,30 +19,11 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QWidget" name="renderer" native="true">
+     <widget class="QOSGWidget" name="renderer" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
        <property name="margin">
         <number>0</number>
        </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="tmpGraphic">
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Plain</enum>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="pixmap">
-          <pixmap resource="Resources.qrc">:/images/images/WaveImage.png</pixmap>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -122,7 +103,7 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QGroupBox" name="dripSource1">
+      <widget class="QGroupBox" name="dripSource1Group">
        <property name="minimumSize">
         <size>
          <width>125</width>
@@ -132,91 +113,14 @@
        <property name="title">
         <string>Drip Source 1</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout_2">
-        <item>
-         <widget class="QCheckBox" name="checkBox">
-          <property name="text">
-           <string>Enabled</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_2">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Frequency</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="horizontalSlider">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>1</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="value">
-           <number>24</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="invertedAppearance">
-           <bool>false</bool>
-          </property>
-          <property name="invertedControls">
-           <bool>false</bool>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_3">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Amplitude</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="horizontalSlider_2">
-          <property name="value">
-           <number>75</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>Pulse</string>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="DripSourceEditor" name="dripSource1" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>60</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -224,7 +128,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="dripSource2Group">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -236,74 +140,12 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <widget class="QCheckBox" name="checkBox_2">
-          <property name="text">
-           <string>Enabled</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Frequency</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="horizontalSlider_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="invertedAppearance">
-           <bool>false</bool>
-          </property>
-          <property name="invertedControls">
-           <bool>false</bool>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="font">
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Amplitude</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="horizontalSlider_4">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="text">
-           <string>Pulse</string>
+         <widget class="DripSourceEditor" name="dripSource2" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>80</height>
+           </size>
           </property>
          </widget>
         </item>
@@ -351,7 +193,7 @@
       <widget class="QGroupBox" name="groupBox">
        <layout class="QVBoxLayout" name="verticalLayout_6">
         <item>
-         <widget class="QListWidget" name="listWidget_2">
+         <widget class="QListView" name="listView_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -367,25 +209,6 @@
           <property name="alternatingRowColors">
            <bool>false</bool>
           </property>
-          <property name="currentRow">
-           <number>0</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>Barrier 1</string>
-           </property>
-           <property name="checkState">
-            <enum>Checked</enum>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Barrier 2</string>
-           </property>
-           <property name="checkState">
-            <enum>Unchecked</enum>
-           </property>
-          </item>
          </widget>
         </item>
         <item>
@@ -596,7 +419,7 @@
       <widget class="QGroupBox" name="groupBox_3">
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
-         <widget class="QListWidget" name="listWidget">
+         <widget class="QListView" name="listView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -606,25 +429,6 @@
           <property name="alternatingRowColors">
            <bool>false</bool>
           </property>
-          <property name="currentRow">
-           <number>-1</number>
-          </property>
-          <item>
-           <property name="text">
-            <string>Wall 1</string>
-           </property>
-           <property name="checkState">
-            <enum>Unchecked</enum>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Wall 2</string>
-           </property>
-           <property name="checkState">
-            <enum>Unchecked</enum>
-           </property>
-          </item>
          </widget>
         </item>
         <item>
@@ -673,8 +477,21 @@
         </item>
        </layout>
        <zorder>widget</zorder>
-       <zorder>listWidget</zorder>
+       <zorder>listView</zorder>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
@@ -808,57 +625,22 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QOSGWidget</class>
+   <extends>QWidget</extends>
+   <header>QOSGWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DripSourceEditor</class>
+   <extends>QWidget</extends>
+   <header>DripSourceEditor.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="Resources.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>checkBox</sender>
-   <signal>clicked()</signal>
-   <receiver>actionToggleDripSource1</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>103</x>
-     <y>131</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionToggleDripSource1</sender>
-   <signal>triggered()</signal>
-   <receiver>checkBox</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>103</x>
-     <y>131</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_2</sender>
-   <signal>clicked()</signal>
-   <receiver>actionToggleDripSource2</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>80</x>
-     <y>351</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

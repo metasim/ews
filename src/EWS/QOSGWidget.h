@@ -48,6 +48,9 @@ protected:
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void mouseMoveEvent( QMouseEvent* event );
+    virtual void closeEvent( QCloseEvent * event );
+    virtual void destroyEvent( bool destroyWindow = true, bool destroySubWindows = true);
+    
 
     osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
 

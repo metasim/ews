@@ -16,30 +16,19 @@
  * http://mseedsoft.com
  */
 
-#ifndef EWSMAINWINDOW_H
-#define EWSMAINWINDOW_H
+#ifndef __WATER_SURFACE_GEOM_H
+#define __WATER_SURFACE_GEOM_H
 
-#include <QtGui/QMainWindow>
-#include "SimulationState.h"
+#include <osg/Geode>
+#include <osg/Geometry>
 
-namespace Ui
-{
-    class EWSMainWindow;
-}
-
-class EWSMainWindow : public QMainWindow
-{
-    Q_OBJECT
-
+class WaterSurfaceGeom : public osg::Geometry {
 public:
-    EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-    ~EWSMainWindow();
-
-private:
-    Ui::EWSMainWindow* _ui;
-    SimulationState* _state;
-    
-    
+    WaterSurfaceGeom();
+    virtual ~WaterSurfaceGeom() {}
 };
 
-#endif // EWSMAINWINDOW_H
+
+
+#endif //__WATER_SURFACE_GEOM_H
+

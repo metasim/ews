@@ -16,30 +16,11 @@
  * http://mseedsoft.com
  */
 
-#ifndef EWSMAINWINDOW_H
-#define EWSMAINWINDOW_H
+#include "DripSource.h"
 
-#include <QtGui/QMainWindow>
-#include "SimulationState.h"
 
-namespace Ui
+DripSource::DripSource(QObject * parent)
+: QObject(parent), _enabled(true), _amplitude(50), _frequency(1000)
 {
-    class EWSMainWindow;
+    
 }
-
-class EWSMainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-    ~EWSMainWindow();
-
-private:
-    Ui::EWSMainWindow* _ui;
-    SimulationState* _state;
-    
-    
-};
-
-#endif // EWSMAINWINDOW_H

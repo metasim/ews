@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="images">
+    <file>images/media-record.png</file>
+    <file alias="images/splash.png">images/Nvidia_logo_200.png</file>
     <file>images/list-add.png</file>
     <file>images/list-remove.png</file>
     <file>images/view-refresh.png</file>

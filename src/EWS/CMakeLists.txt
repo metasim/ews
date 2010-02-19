@@ -8,22 +8,39 @@
 #  
 
 PROJECT (EWS)
-set(EXE_NAME EWS)
+set(EXE_NAME "Visualize STEM - Wave")
 cmake_minimum_required(VERSION 2.8)
 
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
 set( EWS_SRCS
-  main.cpp
+  SimulationState.cpp
   EWSMainWindow.cpp
+  DripSource.cpp
+  DripSourceEditor.cpp
+  QOSGWidget.cpp
+  WaterSurfaceGeom.cpp
+  main.cpp
 )
+
+#--------------------------------------------------------------------------------
+# Regular (non-qt) header files
+#--------------------------------------------------------------------------------
+set( EWS_HDRS
+  WaterSurfaceGeom.h
+)  
+    
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
 set( EWS_MOC_HDRS
-  EWSMainWindow.h
+  DripSource.h
+  SimulationState.h
+  DripSourceEditor.h
+  EWSMainWindow.h 
+  QOSGWidget.h
 )
 
 #--------------------------------------------------------------------------------
@@ -31,15 +48,17 @@ set( EWS_MOC_HDRS
 #--------------------------------------------------------------------------------
 set( EWS_UIS
      EWSMainWindow.ui
+     DripSourceEditor.ui
 )
 
 #--------------------------------------------------------------------------------
-# and finally any resource files. I do not have any in this example
+# and finally any resource files. 
 #--------------------------------------------------------------------------------
 set( EWS_RCS
     Resources.qrc
 )
 
+#--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
 # This sets the windows build that will need the special winmain@16 call. Qt provides
 #  this for us in the qtmain.lib file. Using this cmake code will ensure we have it
@@ -75,7 +94,7 @@ qt4_wrap_cpp( EWS_GEN_MOC_HDRS ${EWS_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgDB osgUtil osgViewer osgGA)
+    COMPONENTS osg osgUtil osgViewer osgGA)
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
@@ -87,19 +106,23 @@ include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${CMAKE_CURRENT_BINARY_DIR} 
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+
 
 #--------------------------------------------------------------------------------
 # For Apple set the icns file containing icons
 if(APPLE)
+  set(ICON_NAME ews-icon.icns)
   # Set the executable wrapper type
   set(EXE_TYPE MACOSX_BUNDLE)
   # set how it shows up in the Info.plist file
-  set(MACOSX_BUNDLE_ICON_FILE MustardSeedIcon.icns) 
+  set(MACOSX_BUNDLE_ICON_FILE ${ICON_NAME}) 
   # set where in the bundle to put the icns file
-  set_SOURCE_FILES_PROPERTIES(${CMAKE_CURRENT_SOURCE_DIR}/images/MustardSeedIcon.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+  set_source_files_properties(${CMAKE_CURRENT_SOURCE_DIR}/images/${ICON_NAME} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
   # include the icns file in the target
-  set(EWS_SRCS ${EWS_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/images/MustardSeedIcon.icns)
+  set(EWS_SRCS ${EWS_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/images/${ICON_NAME})
   # Set additional application metadata.
   set(MACOSX_BUNDLE_BUNDLE_NAME ${EXE_NAME})
   set(MACOSX_BUNDLE_IDENTIFIER com.mseedsoft.ews) # Doesn't seem to work in cmake 2.6
@@ -112,6 +135,13 @@ elseif(WIN32)
   set(EXE_TYPE WIN32)
 endif()
 
+if(CMAKE_GENERATOR STREQUAL "Xcode")
+    source_group("Qt MOC Source"  FILES ${EWS_MOC_HDRS} ${EWS_HDRS})
+    source_group("Qt Designer Files" REGULAR_EXPRESSION ".*\\.ui$")
+    source_group("Generated Source" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+endif()
+
+
 #--------------------------------------------------------------------------------
 #  CMake's way of creating an executable
 add_executable( ${EXE_NAME} ${EXE_TYPE} 
@@ -122,6 +152,15 @@ add_executable( ${EXE_NAME} ${EXE_TYPE}
 )
 
 
+set_property(
+    TARGET ${EXE_NAME} 
+    APPEND
+    PROPERTY XCODE_ATTRIBUTE_DYLD_IMAGE_SUFFIX _debug
+)
+
+# This shouldn't be necessary, but bits aren't getting compiled when the UI files are updated.
+add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS})
+
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( ${EXE_NAME} 
@@ -131,6 +170,10 @@ target_link_libraries ( ${EXE_NAME}
     ${OPENSCENEGRAPH_LIBRARIES} 
 )
 
+
+
+
+#--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
 # Now the installation stuff below
 #--------------------------------------------------------------------------------

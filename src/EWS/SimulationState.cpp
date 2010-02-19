@@ -16,30 +16,18 @@
  * http://mseedsoft.com
  */
 
-#ifndef EWSMAINWINDOW_H
-#define EWSMAINWINDOW_H
-
-#include <QtGui/QMainWindow>
 #include "SimulationState.h"
 
-namespace Ui
+SimulationState::SimulationState(QObject * parent)
+:QObject(parent), _dripSource1(new DripSource(this)), _dripSource2(new DripSource(this))
 {
-    class EWSMainWindow;
+    _dripSource1->setObjectName("dripSource1");
+    _dripSource2->setObjectName("dripSource2");
+    _dripSource2->setEnabled(false);
 }
 
-class EWSMainWindow : public QMainWindow
-{
-    Q_OBJECT
 
-public:
-    EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-    ~EWSMainWindow();
-
-private:
-    Ui::EWSMainWindow* _ui;
-    SimulationState* _state;
-    
-    
-};
-
-#endif // EWSMAINWINDOW_H
+SimulationState::~SimulationState() {
+    delete _dripSource1;
+    delete _dripSource2;
+}
