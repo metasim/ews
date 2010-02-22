@@ -17,12 +17,10 @@
  */
 
 #include "WaterSurfaceGeom.h"
-#include "demo/terrain.cpp"
+#include "demo/Teapot.h"
 
-WaterSurfaceGeom::WaterSurfaceGeom() : osg::Geometry() 
+WaterSurfaceGeom::WaterSurfaceGeom() : osg::Geode() 
 {
     
-    
-    makeTerrain(this);
-    
+    addDrawable(new Teapot);
 }

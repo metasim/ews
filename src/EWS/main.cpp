@@ -28,13 +28,17 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     
     QSplashScreen* splash = new QSplashScreen;
-    splash->setPixmap(QPixmap(":/images/splash.png"));
+    QPixmap img(":/images/splash.png");
+    
+    if(img.isNull()) {
+       qWarning() << "Couldn't load splash image";
+    }
+    
+    splash->setPixmap(img);
     splash->showMessage(QObject::tr("Starting up...."));
     
     a.setQuitOnLastWindowClosed(true);
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-    
-
     
     SimulationState state;
     state.setObjectName("root");
@@ -48,6 +52,7 @@ int main(int argc, char *argv[])
     w.show();
     
     splash->finish(&w);
+
     delete splash;
     
     return a.exec();

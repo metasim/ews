@@ -36,10 +36,7 @@ EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent)
     osg::ref_ptr<WaterSurfaceGeom> water = new WaterSurfaceGeom;
     
     
-    osg::ref_ptr<osg::Geode> geode = new osg::Geode; 
-    geode->addDrawable( water.get() ); 
-    
-    root->addChild(geode.get());
+    root->addChild(water.get());
     
     _ui->renderer->setSceneData(root);
     

@@ -20,9 +20,8 @@
 #define __WATER_SURFACE_GEOM_H
 
 #include <osg/Geode>
-#include <osg/Geometry>
 
-class WaterSurfaceGeom : public osg::Geometry {
+class WaterSurfaceGeom : public osg::Geode {
 public:
     WaterSurfaceGeom();
     virtual ~WaterSurfaceGeom() {}

@@ -99,6 +99,9 @@ find_package(OpenSceneGraph REQUIRED
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
 
+find_package(OpenGL REQUIRED)
+
+
 #--------------------------------------------------------------------------------
 # we need this to be able to include headers produced by uic in our code
 # CMAKE_BINARY_DIR holds a path to the build directory, while INCLUDE_DIRECTORIES()
@@ -136,6 +139,7 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
+    source_group("Headers" FILES ${EWS_MOC_HDRS} ${EWS_HDRS})
     source_group("Qt MOC Source"  FILES ${EWS_MOC_HDRS} ${EWS_HDRS})
     source_group("Qt Designer Files" REGULAR_EXPRESSION ".*\\.ui$")
     source_group("Generated Source" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
@@ -149,6 +153,8 @@ add_executable( ${EXE_NAME} ${EXE_TYPE}
   ${EWS_GEN_MOC_HDRS} 
   ${EWS_GEN_UIS}
   ${EWS_GEN_RCS}
+  ${EWS_HDRS}
+  ${EWS_MOC_HDRS}
 )
 
 
@@ -168,6 +174,7 @@ target_link_libraries ( ${EXE_NAME}
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
     ${OPENSCENEGRAPH_LIBRARIES} 
+    ${OPENGL_LIBRARIES}
 )
 
 

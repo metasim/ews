@@ -20,6 +20,7 @@
 #define DripSource_H
 
 #include <QtCore>
+#include <QtCore/QTimer>
 
 
 class DripSource : public QObject
@@ -64,7 +65,6 @@ public slots:
      * Set the enabled state of this drip source.
      */
     void setEnabled(bool state) {
-        qDebug() << objectName() << "enabled" << state;
         _enabled = state;
         emit enabledChanged(state);
     }
@@ -73,16 +73,14 @@ public slots:
      * TODO: what are the units here?
      */
     void setAmplitude(int amplitude) {
-        qDebug() << objectName() << "amplitude" << amplitude;
         _amplitude = amplitude;
         emit amplitudeChanged(amplitude);
     }
     
     /**
-     * Set the frequency in of drops in milliseconds
+     * Set the frequency in of drops in millihertz
      */
     void setFrequency(int frequency) {
-        qDebug() << objectName() << "frequency" << frequency;
         _frequency = frequency;
         emit frequencyChanged(frequency);
     }
@@ -91,9 +89,11 @@ public slots:
      * Introduce a single drop into the system.
      */
     void pulseDrip() {
-        qDebug() << objectName() << "pulse" << amplitude();
         emit drip(amplitude());
     }
+    
+private slots:
+    void updateTimer();
     
 signals:
     void enabledChanged(bool);
@@ -106,6 +106,7 @@ private:
     bool _enabled;
     int _amplitude;
     int _frequency;
+    QTimer _timer;
 };
 
 inline QDebug operator<<(QDebug dbg, const DripSource &ds) {
