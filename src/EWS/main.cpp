@@ -21,10 +21,17 @@
 
 #include "EWSMainWindow.h"
 
-
+#if defined(__APPLE__)
+#include <stdlib.h>
+#endif
 
 int main(int argc, char *argv[])
 {
+
+    // To see object dumps on macos, run with the environment variable
+    // "DYLD_IMAGE_SUFFIX" set to "_debug"
+    
+    
     QApplication a(argc, argv);
     
     QSplashScreen* splash = new QSplashScreen;

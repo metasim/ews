@@ -14,49 +14,27 @@ cmake_minimum_required(VERSION 2.8)
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
-set( EWS_SRCS
-  SimulationState.cpp
-  EWSMainWindow.cpp
-  DripSource.cpp
-  DripSourceEditor.cpp
-  QOSGWidget.cpp
-  WaterSurfaceGeom.cpp
-  main.cpp
-)
+file(GLOB EWS_SRCS main.cpp ui/*.cpp model/*.cpp drawable/*.cpp)
 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-set( EWS_HDRS
-  WaterSurfaceGeom.h
-)  
-    
+file(GLOB EWS_HDRS drawable/*.h)
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
-set( EWS_MOC_HDRS
-  DripSource.h
-  SimulationState.h
-  DripSourceEditor.h
-  EWSMainWindow.h 
-  QOSGWidget.h
-)
+file(GLOB EWS_MOC_HDRS ui/*.h model/*.h)
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
 #--------------------------------------------------------------------------------
-set( EWS_UIS
-     EWSMainWindow.ui
-     DripSourceEditor.ui
-)
+file(GLOB EWS_UIS ui/*.ui)
 
 #--------------------------------------------------------------------------------
 # and finally any resource files. 
 #--------------------------------------------------------------------------------
-set( EWS_RCS
-    Resources.qrc
-)
+file(GLOB_RECURSE EWS_RCS *.qrc)
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
@@ -110,6 +88,7 @@ include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${CMAKE_CURRENT_BINARY_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ui drawable model
 )
 
 
