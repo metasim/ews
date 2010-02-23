@@ -1,9 +1,10 @@
 ==Dependencies==
 
 ===MacOS X===
+# CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-Darwin-universal.dmg
 # Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
 # OpenSceneGraph 2.8.2:http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
-
+# For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
 
 ==Helpful Documents==
 ===Qt===
