@@ -11,6 +11,8 @@ PROJECT (EWS)
 set(EXE_NAME "Visualize STEM - Wave")
 cmake_minimum_required(VERSION 2.8)
 
+#add_definitions(-fdiagnostics-show-option)
+
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
@@ -24,7 +26,7 @@ file(GLOB EWS_HDRS drawable/*.h)
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
-file(GLOB EWS_MOC_HDRS ui/*.h model/*.h)
+file(GLOB EWS_MOC_HDRS ui/*.h model/*.h drawable/EWSDrawable.h)
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
@@ -118,10 +120,10 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
-    source_group("Headers" FILES ${EWS_MOC_HDRS} ${EWS_HDRS})
-    source_group("Qt MOC Source"  FILES ${EWS_MOC_HDRS} ${EWS_HDRS})
-    source_group("Qt Designer Files" REGULAR_EXPRESSION ".*\\.ui$")
-    source_group("Generated Source" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+    source_group("Headers" FILES ${EWS_HDRS})
+    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
+    source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
+    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
 endif()
 
 

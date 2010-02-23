@@ -6,7 +6,12 @@ package "Qt" #EEEEEE
 [QtOpenGL]
 end package
 
-[GUI]
+package "User Interface" #EEEEEE
+
+[EWS Editors]  as GUI
+[EWS 3-D View] as 3D
+
+end package
 
 package "Rendering" #EEEEEE
 
@@ -22,15 +27,19 @@ package "Simulation" #EEEEEE
 end package
 
 GUI->QtGui  : uses
-GUI->dm : controls
-QtGui->QtOpenGL : uses
+GUI->dm : controls/presents
+QtGui->QtOpenGL : includes
 dm->ws : invokes
 ws->dm : updates
 dm->osg : updates
-dm->QtCore : properties
+dm->QtCore : uses
 QtOpenGL->OpenGL : wraps
-QtGui->osg : contains
 osg->OpenGL : updates
+QtOpenGL->osg : provides for
+
+
+3D -> QtOpenGL : uses
+3D -> osg : uses
 
 
 @enduml
