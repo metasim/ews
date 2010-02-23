@@ -31,18 +31,23 @@ public:
     SimulationState(QObject * parent = 0);
     virtual ~SimulationState();
     
-    DripSource* dripSource1() {
+    DripSource& dripSource1() {
         return _dripSource1;
     }
     
-    DripSource* dripSource2() {
+    DripSource& dripSource2() {
         return _dripSource2;
     }
     
+signals:
+    void objectAdded(QObject& added);
+    void objectRemoved(QObject& removed);
+    
 private:
     Q_DISABLE_COPY(SimulationState)
-    DripSource* _dripSource1;
-    DripSource* _dripSource2;
+    DripSource _dripSource1;
+    DripSource _dripSource2;
+//    Lattice* _lattice;
     
 };
 

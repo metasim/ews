@@ -19,30 +19,55 @@
 #include "EWSMainWindow.h"
 #include "ui_EWSMainWindow.h"
 
-#include "WaterSurfaceGeom.h"
+#include "DrawableFactory.h"
+
 
 EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent)
-    : QMainWindow(parent), _ui(new Ui::EWSMainWindow), _state(state)
+    : QMainWindow(parent), _ui(new Ui::EWSMainWindow), _state(state), _drawables()
 {
     _ui->setupUi(this);
     
     
-    _ui->dripSource1->setDataModel(state->dripSource1());
-    _ui->dripSource2->setDataModel(state->dripSource2());
+    _ui->dripSource1->setDataModel(&state->dripSource1());
+    _ui->dripSource2->setDataModel(&state->dripSource2());
+
     
+    // Setup sync between model and renderer.
+    connect(state, SIGNAL(objectAdded(QObject&)), this, SLOT(addDrawableFor(QObject&)));
+    connect(state, SIGNAL(objectRemoved(QObject&)), this, SLOT(removeDrawableFor(QObject&)));
     
-    osg::Group* root = new osg::Group;
+    _sceneRoot = new SceneRoot;
+
+    _ui->renderer->setSceneData(_sceneRoot);
     
-    osg::ref_ptr<WaterSurfaceGeom> water = new WaterSurfaceGeom;
-    
-    
-    root->addChild(water.get());
-    
-    _ui->renderer->setSceneData(root);
+    addDrawableFor(state->dripSource1());
+    addDrawableFor(state->dripSource2());
     
 }
 
 EWSMainWindow::~EWSMainWindow()
 {
+    _ui->renderer->setSceneData(NULL);
+    
+    delete _sceneRoot;
     delete _ui;
 }
+
+
+void EWSMainWindow::addDrawableFor(QObject& data) 
+{
+    osg::Node* geom = DrawableFactory::instance().createDrawableFor(data);
+    if(geom) {
+        _sceneRoot->addChild(geom);
+        _drawables.insert(&data, geom);
+    }
+}
+
+void EWSMainWindow::removeDrawableFor(QObject& data) 
+{
+    osg::Node* geom = _drawables.take(&data);
+    if(geom) {
+        _sceneRoot->removeChild(geom);
+    }
+}
+

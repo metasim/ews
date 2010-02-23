@@ -17,10 +17,15 @@
  */
 
 #include "WaterSurfaceGeom.h"
-#include "demo/Teapot.h"
+
+#include <osg/Shape>
+#include <osg/ShapeDrawable>
 
 WaterSurfaceGeom::WaterSurfaceGeom() : osg::Geode() 
 {
+    osg::Capsule* thing = new osg::Capsule;
     
-    addDrawable(new Teapot);
+    osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
+    drawable->setColor(osg::Vec4(1, 1, 0, 1));
+    addDrawable(drawable);
 }

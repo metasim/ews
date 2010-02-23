@@ -18,21 +18,18 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QSplashScreen>
-
+#include <QtCore/QThread>
 #include "EWSMainWindow.h"
-
-#if defined(__APPLE__)
-#include <stdlib.h>
-#endif
 
 int main(int argc, char *argv[])
 {
 
     // To see object dumps on macos, run with the environment variable
-    // "DYLD_IMAGE_SUFFIX" set to "_debug"
+    // "DYLD_IMAGE_SUFFIX" set to "_debug".
     
     
     QApplication a(argc, argv);
+    a.setQuitOnLastWindowClosed(true);
     
     QSplashScreen* splash = new QSplashScreen;
     QPixmap img(":/images/splash.png");
@@ -43,16 +40,13 @@ int main(int argc, char *argv[])
     
     splash->setPixmap(img);
     splash->showMessage(QObject::tr("Starting up...."));
+    splash->show();
     
-    a.setQuitOnLastWindowClosed(true);
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     
     SimulationState state;
     state.setObjectName("root");
-    
-    // a.connect(state.dripSource1(), SIGNAL(enabledChanged(bool)), &a, SLOT(aboutQt()));
-    
-    state.dumpObjectTree();
+   
     
     EWSMainWindow w(&state);
 

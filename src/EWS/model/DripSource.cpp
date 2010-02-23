@@ -20,7 +20,7 @@
 
 
 DripSource::DripSource(QObject * parent)
-: QObject(parent), _enabled(true), _amplitude(50), _frequency(1000), _timer(this)
+: QObject(parent), _enabled(false), _amplitude(50), _frequency(1000), _timer(this)
 {
     connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
     connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));

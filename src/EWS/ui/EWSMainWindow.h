@@ -20,7 +20,11 @@
 #define EWSMAINWINDOW_H
 
 #include <QtGui/QMainWindow>
+#include <QtCore/QMap>
+#include <osg/Node>
+
 #include "SimulationState.h"
+#include "SceneRoot.h"
 
 namespace Ui
 {
@@ -35,10 +39,16 @@ public:
     EWSMainWindow(SimulationState* state, QWidget *parent = 0);
     ~EWSMainWindow();
 
+public slots:
+    void addDrawableFor(QObject& data);
+    void removeDrawableFor(QObject& data);
+    
 private:
     Ui::EWSMainWindow* _ui;
     SimulationState* _state;
-    
+    SceneRoot* _sceneRoot;
+    typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
+    Qt2OSGMap _drawables;
     
 };
 
