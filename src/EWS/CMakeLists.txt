@@ -26,7 +26,7 @@ file(GLOB EWS_HDRS drawable/*.h physics/*.h)
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
-file(GLOB EWS_MOC_HDRS ui/*.h model/*.h drawable/EWSDrawable.h)
+file(GLOB EWS_MOC_HDRS ui/*.h model/*.h drawable/EWSDrawable.h test/physics/*.h)
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
@@ -79,12 +79,6 @@ find_package(OpenSceneGraph REQUIRED
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
 #--------------------------------------------------------------------------------
-# this helps the system find gtest and changes visibility to match gtests (prevents warnings about same)
-include(FindGTest)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
-
-#--------------------------------------------------------------------------------
 # this fixes 64-bit problems on Snow Leopard
 if(APPLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
@@ -122,7 +116,7 @@ include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${CMAKE_CURRENT_BINARY_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ui drawable model physics
+  ui drawable model physics test
 )
 
 
@@ -215,7 +209,7 @@ endif(WIN32)
 install(TARGETS ${EXE_NAME} 
     BUNDLE DESTINATION . COMPONENT Runtime
     RUNTIME DESTINATION bin COMPONENT Runtime
-    )
+)
 
 #--------------------------------------------------------------------------------
 # Install needed Qt plugins by copying directories from the qt installation
@@ -263,14 +257,31 @@ include(CPack)
 # cxx_test(name lib srcs...)
 #
 # creates a named test target that is built from the given source files.
-function(cxx_test name)
-  add_executable(${name} ${ARGN} ${EWS_HDRS})
-  add_dependencies(${name} ${ARGN} ${EWS_HDRS})
+function(cxx_test name path)
+  add_executable(${name}
+    ${path}/moc_${name}.cxx
+    ${ARGN}
+    ${EWS_HDRS}
+  )
+  add_dependencies(${name}
+    ${ARGN}
+    ${EWS_GEN_MOC_HDRS} 
+    ${EWS_HDRS}
+  )
   set_target_properties(${name}
     PROPERTIES
     COMPILE_FLAGS "${cxx_default}")
-  target_link_libraries(${name} ${GTEST_LIBRARY})
+# Not all tests will need all libraries
+  target_link_libraries(${name}
+    ${QT_QTCORE_LIBRARY} 
+    ${QT_QTGUI_LIBRARY} 
+    ${QT_QTOPENGL_LIBRARY} 
+    ${OPENSCENEGRAPH_LIBRARIES} 
+    ${OPENGL_LIBRARIES}
+    ${QT_QTTEST_LIBRARY}
+  )
   add_test(${name} ${name})
 endfunction()
 
-cxx_test(LatticeTest test/physics/LatticeTest.cpp physics/Lattice.cpp)
+# First argument is test/executable name, second argument is path to header, remaining arguments are required .cpp files
+cxx_test(LatticeTest test/physics test/physics/LatticeTest.cpp physics/Lattice.cpp)
