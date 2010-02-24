@@ -16,12 +16,12 @@ cmake_minimum_required(VERSION 2.8)
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
-file(GLOB EWS_SRCS main.cpp ui/*.cpp model/*.cpp drawable/*.cpp)
+file(GLOB EWS_SRCS main.cpp ui/*.cpp model/*.cpp drawable/*.cpp physics/*.cpp)
 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS drawable/*.h)
+file(GLOB EWS_HDRS drawable/*.h physics/*.h)
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
@@ -78,6 +78,32 @@ find_package(OpenSceneGraph REQUIRED
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
+#--------------------------------------------------------------------------------
+# this fixes 64-bit problems on Snow Leopard
+if(APPLE)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
+    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
+    #Option -arch is only available with apple compilers
+    include(CheckCXXCompilerFlag)
+    check_cxx_compiler_flag("-arch i386" HAS_ARCH_FLAG)
+#    if(HAS_ARCH_FLAG)
+        if(${CMAKE_GENERATOR} STREQUAL "Xcode")
+            set(CMAKE_OSX_ARCHITECTURES "i386;")
+        else()
+            # Build for single architecture. Using this flag requires more than one
+            # architecture in the list, so this hack of only providing one forces
+            # a single architecture compile.
+            set(CMAKE_OSX_ARCHITECTURES "i386;i386")
+        endif()
+#    elseif(NOT $ENV{M64})
+#	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
+#    else()
+#	message("Using 64-bit mode on Mac")
+#    endif()
+endif()    
 
 find_package(OpenGL REQUIRED)
 
@@ -90,7 +116,7 @@ include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${CMAKE_CURRENT_BINARY_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ui drawable model
+  ui drawable model physics
 )
 
 
@@ -224,3 +250,21 @@ install(CODE "
 # And then there's ways to customize this as well
 set(CPACK_BINARY_DRAGNDROP ON)
 include(CPack)
+
+############################################################
+# C++ tests built with standard compiler flags.
+
+# cxx_test(name lib srcs...)
+#
+# creates a named test target that is built from the given source files.
+function(cxx_test name)
+  add_executable(${name} ${ARGN} ${EWS_HDRS})
+  add_dependencies(${name} ${ARGN} ${EWS_HDRS})
+  set_target_properties(${name}
+    PROPERTIES
+    COMPILE_FLAGS "${cxx_default}")
+  target_link_libraries(${name} gtest)
+  add_test(${name} ${name})
+endfunction()
+
+cxx_test(LatticeTest test/physics/LatticeTest.cpp physics/Lattice.cpp)
