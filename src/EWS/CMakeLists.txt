@@ -79,6 +79,12 @@ find_package(OpenSceneGraph REQUIRED
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
 #--------------------------------------------------------------------------------
+# this helps the system find gtest and changes visibility to match gtests (prevents warnings about same)
+include(FindGTest)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+
+#--------------------------------------------------------------------------------
 # this fixes 64-bit problems on Snow Leopard
 if(APPLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
@@ -263,7 +269,7 @@ function(cxx_test name)
   set_target_properties(${name}
     PROPERTIES
     COMPILE_FLAGS "${cxx_default}")
-  target_link_libraries(${name} gtest)
+  target_link_libraries(${name} ${GTEST_LIBRARY})
   add_test(${name} ${name})
 endfunction()
 
