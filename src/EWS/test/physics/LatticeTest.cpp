@@ -52,7 +52,7 @@ namespace {
         // Objects declared here can be used by all tests in the test case for LatticeTest.
     };
     
-    // Tests that the LatticeTest::Bar() method does Abc.
+    // Tests that the Lattice::computeAverageValue() method works for normal cases.
     TEST_F(LatticeTest, MethodComputeAverageValueWorksForNormalCases) {
         Lattice testLattice(5, 5);
         // Tests that the average value for the range x = [0..4], y = [0..4] is zero
