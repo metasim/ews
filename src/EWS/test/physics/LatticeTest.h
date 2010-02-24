@@ -20,6 +20,7 @@
 #define __LATTICETEST_H
 
 #include "Lattice.h"
+using namespace ews::physics;
 
 #include <QtTest/QtTest>
 

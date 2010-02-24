@@ -21,18 +21,22 @@
 using std::max;
 using std::min;
 
-double Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) {
-    double sum = 0.0;
-    if (_amplitude.size() == 0) return sum;
-    const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
-    const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(_amplitude.size()) - 1);
-    const unsigned int minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
-    const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(_amplitude.at(0).size()) - 1);
-    const unsigned int count = (maxX - minX + 1) * (maxY - minY + 1);
-    for (int i = minX; i <= maxX; i++) {
-        for (int j = minY; j <= maxY; j++) {
-            sum += _amplitude[i][j];
+namespace ews {
+    namespace physics {
+        double Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) {
+            double sum = 0.0;
+            if (_amplitude.size() == 0) return sum;
+            const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
+            const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(_amplitude.size()) - 1);
+            const unsigned int minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
+            const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(_amplitude.at(0).size()) - 1);
+            const unsigned int count = (maxX - minX + 1) * (maxY - minY + 1);
+            for (int i = minX; i <= maxX; i++) {
+                for (int j = minY; j <= maxY; j++) {
+                    sum += _amplitude[i][j];
+                }
+            }
+            return sum / count;    
         }
     }
-    return sum / count;    
 }
