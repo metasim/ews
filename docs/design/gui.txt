@@ -1,36 +1,23 @@
 @startuml
 
-!define QO (Q,orchid) QObject
-!define QW (W,orange) QWidget
-!define OSG (O,lightblue) OSG
+!define QO (Q,orchid)
+!define QW (W,orange)
+!define OSG (O,lightblue)
+!define Mixin (M, brown)
 
-package simulator
-#class SimulatorState
-#class Lattice
-end package
+
+title EWS User Interface Class Diagram
+
+#---------------------------------------------------------
+
 
 package ui
 
 #---------------------------------------------------------
 
-class EWSMainWindow << (W,orange) QMainWindow >>
+class EWSMainWindow << QW QMainWindow >>
 EWSMainWindow : -simulation : SimulationState
 
-
-#---------------------------------------------------------
-
-class Renderer << OSG >>
-Renderer : -simulation : SimulationState
-Renderer : -lattice : Lattice
-Renderer : +updateGL()
-
-#---------------------------------------------------------
-
-class Camera << OSG >>
-Camera : +lookAt(...)
-Camera : +handleXXEvent(...)
-
-Camera "1" --> "1" Renderer
 
 #---------------------------------------------------------
 
@@ -75,15 +62,82 @@ SimulationControls : +reset()
 #---------------------------------------------------------
 
 
+class QGLWidget << QW >>
+QGLWidget : +glcontext
+
+
+class osgViewer << OSG >>
+osgViewer : +setCameraManipulator(manip : osgMatrixManipulator)
+note left of osgViewer
+A powerful OpenSceneGraph 
+encapsulation of the multiple 
+components necessary to setup
+and manage the scene graph and 
+OpenGL pipeline.
+end note
+
+class OSGWidget << Mixin >>
+QGLWidget <|-- OSGWidget
+osgViewer <|-- OSGWidget
+
+OSGWidget : -timer : QTimer
+OSGWidget : -gw : GraphicsWindowEmbedded
+
+OSGWidget : paintGL()
+    
+OSGWidget : resizeGL(width : int,height : int);
+OSGWidget : keyPressEvent(e : QKeyEvent*)
+OSGWidget : keyReleaseEvent(e :  QKeyEvent*)
+OSGWidget : mousePressEvent(e : QMouseEvent*)
+OSGWidget : mouseReleaseEvent(e : QMouseEvent*)
+OSGWidget : mouseMoveEvent(e : QMouseEvent*)
+
+
+class osgCamera << OSG >>
+osgCamera : +displaySettings : osgDisplaySettings
+osgCamera : +viewport : osgViewport
+osgCamera : +projectionMatrix : osgMatrix
+osgCamera : +viewMatrix : osgMatrix
+
+osgViewer *-- osgCamera : provides
+
+class osgNode << OSG >>
+osgViewer "sceneRoot" --> "1" osgNode : renders
+
+class osgGroup << OSG >>
+osgGroup o-- "0..*" osgNode : combines
+
+class osgGeode << OSG >>
+osgGeode : +drawables : List<osgDrawable>
+
+osgNode <|-- osgGroup
+osgNode <|-- osgGeode
+
+#---------------------------------------------------------
+
+
 EWSMainWindow *-- "2" DripSourceEditor
 EWSMainWindow *-- "1" WallEditor
 EWSMainWindow *-- "1" BarrierEditor
-EWSMainWindow *-- "1" Renderer
+EWSMainWindow *---- "1" OSGWidget
 EWSMainWindow *- "1" SimulationControls
-Camera <- EWSMainWindow : delegates events
+
 
 end package
 
-ui .> simulator
+
+#---------------------------------------------------------
+
+package drawables
+class SceneRoot << OSG >>
+class DrawableAdapter << Mixin >>
+end package
+
+
+osgGroup <|-- SceneRoot
+osgGeode <|-- DrawableAdapter
+
+SceneRoot "1" .> "0..*" DrawableAdapter
+
 
 @enduml

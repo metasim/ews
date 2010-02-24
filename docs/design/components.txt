@@ -1,4 +1,5 @@
 @startuml
+title EWS System Component Diagram
 
 package "Qt" #EEEEEE
 [QtCore]

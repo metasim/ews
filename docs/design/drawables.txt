@@ -1,52 +1,69 @@
 @startuml
+
+!define QO (Q,orchid)
+!define QW (W,orange)
 !define OSG (O,lightblue) 
-!define QO (Q,orchid) 
+!define Mixin (M, brown)
 
-!pragma defaultLabeldistance 2.1
+!pragma defaultLabeldistance 1.2
 !pragma defaultLabelangle 30
-
-
-class DrawableFactory << Singleton >>
-DrawableFactory : $ createDrawableFor(QObject) : osg::Drawable
 
 package drawables
 
-class WaterSurfaceGeom << OSG >>
+class DrawableFactory << Singleton >>
+DrawableFactory : +createDrawableFor(QObject) : osgDrawable
 
+class osgGroup << OSG >>
+class SceneRoot << OSG >>
+
+osgGroup <|-- SceneRoot
+
+#-------------------------------------------------------------
+class osgGeode << OSG >>
+class QObject << QO >>
+
+class DrawableQtAdapter << Mixin >>
+osgGeode <|-- DrawableQtAdapter
+QObject <|-- DrawableQtAdapter
+
+
+class WaterSurfaceGeom << OSG >>
+DrawableQtAdapter <|-- WaterSurfaceGeom
 
 class BarrierGeom << OSG >>
+DrawableQtAdapter <|-- BarrierGeom
 
 class FaucetGeom << OSG >>
+DrawableQtAdapter <|-- FaucetGeom
 
 end package
+
+
+package session
 
 class SimulationState << QO >>
 
-package simulator
+class DripSource << QO >>
+class Barrier << QO >>
+class WaveMedium << QO >>
 
-class Oscillator << QO >>
-class WallPotential << QO >>
-class Lattice << QO >>
-
-SimulationState o- "0..*" WallPotential
-SimulationState o- "1" Lattice
-SimulationState o- "1,2" Oscillator
+SimulationState o-- "0..*" Barrier
+SimulationState o-- "1" WaveMedium
+SimulationState o-- "1,2" DripSource
 
 end package
 
-Lattice <--- WaterSurfaceGeom : represents
-WallPotential <--- BarrierGeom : represents
-Oscillator <--- FaucetGeom : represents
+SceneRoot ..> DrawableFactory : invokes
+SceneRoot "1" o-- "1..*" DrawableQtAdapter : manages
+ 
+WaveMedium <. WaterSurfaceGeom : represents
+Barrier <. BarrierGeom : represents
+DripSource <. FaucetGeom : represents
 
 DrawableFactory ..> FaucetGeom : creates
 DrawableFactory ..> BarrierGeom : creates
 DrawableFactory ..> WaterSurfaceGeom : creates
 
-DrawableFactory ..> WallPotential : associates
-DrawableFactory ..> Lattice : associates
-DrawableFactory ..> Oscillator : associates
-
-
-SimulationState .> DrawableFactory : notifies
+SimulationState .> SceneRoot : notifies
 
 @enduml

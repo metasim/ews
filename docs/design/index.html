@@ -1,0 +1,121 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+  <title>EWS Software Design</title>
+</head>
+<body>
+<a href="http://www.mseedsoft.com/"><img alt="Mustard Seed Software, LLC"
+src="http://ews.mseedsoft.com/images/MustardSeedLogo-250.png" width="250"
+border="0"/></a>
+
+<hr style="margin-top: 2em;"/>
+
+
+<h1>EWS Software Design</h1>
+
+<p>The following UML diagrams an accompanying text describe the high-level
+software design for the Educational Wave Simulation (working title) application.</p>
+
+<h2>System Components</h2>
+<p>In the following UML component diagram major system components are rendered. 
+Arrows indicate direction of dependency, and grouping boxes organize related
+components as modules:</p>
+<ul>
+<li><b>Qt</b>: Third-party application development platform in C++.</li>
+<ul>
+<li><b>QtCore</b>: Data-model property support, threading, event management.</li>
+<li><b>QtGui</b>: UI components, native desktop abstraction, look and feel.</li>
+<li><b>QtOpenGL</b>: Provides and manages basic OpenGL rendering context for 
+OpenSceneGraph.</li>
+</ul>
+<li><b>Rendering</b>: 3-D rendering support</li>
+<ul>
+<li><b>OpenSceneGraph</b>: Manages OpenGL pipeline with abstractions for
+camera, scene object hierarchy, model-view transformations, rendering state, etc.</li>
+<li><b>OpenGL</b>: rendering pipeline API</li>
+</ul>
+
+<li><b>Simulation</b>: Wave/interference model simulation
+<ul>
+<li><b>Wave Simulation</b>: Implementation of discretized wave model, heavily
+borrowed from <a href="http://phet.colorado.edu/simulations/sims.php?sim=Wave_Interference">PhET implementation</a>.</li>
+<li><b>Data Model</b>: Maintains simulation state and coordinates updates
+between the data and simulation. Serves as API between the 
+<em>User Interface</em> and <em>Simulation</em>
+</ul>
+
+<li><b>User Interface</b>: Developed using combination of Qt Designer and Qt subclassing.</li>
+<ul>
+<li><b>EWS Editors</b>: Forms and standard UI controls allowing user to control
+simulation parameters, such as water drop sources, interference barriers, etc.</li>
+<li><b>EWS 3-D View</b>: Widget displaying 3-D rendering/animation of simulation
+and dispatches user input events to OpenSceneGraph.</li>
+</ul>
+
+
+</ul>
+<center><a href="components.png"><img src="components.png" border="1"/></a></center>
+
+<h2>Static Class Design</h2>
+
+<p>Classes in the diagrams below are adorned with glyphs providing some
+additional stereotype information:
+<ul>
+<li><b>C</b>: plain old C++ class</li>
+<li><b>A</b>: interface or abstract class</li>
+<li><b>O</b>: related to OpenSceneGraph</li>
+<li><b>Q</b>: Qt-compliant class, with signal/slot support</li>
+<li><b>W</b>: QWidget subclass, aggregating multiple UI components into a single editor.</li>
+<li><b>M</b>: Qt/OSG Mix-in. </li>
+</ul>
+
+<p>In UML, open arrows indicate inheritance (arrow points to base class). All other
+lines indicate association via association, aggregation, or composition, with the 
+arrow representing direction of navigability.</p>
+
+<p>Note: <em>Due to a current limitation in the
+diagramming tool used, packages/namespaces whose contents are exposed are 
+displayed as a simple box with a thick stroke and white background rather than
+the standard package rendering with a tab in the upper left corner.</em></p>
+
+
+<h3>High-level Class Diagram</h3>
+
+<p>This diagram shows the general high-level relationships between classes,
+with the 4 major namespaces represented: </p>
+<ul>
+<li><b><a href="#ui">ui</a></b>: </li>
+<li><b><a href="#drawables">drawables</a></b>: </li>
+<li><b><a href="#session">session</a></b>: </li>
+<li><b><a href="#simulator">simulator</a></b>: </li>
+</ul>
+
+<p>The details within each of these namespaces are shown in the diagrams
+below.</p>
+
+<center><a href="datamodel.png"><img src="datamodel.png" border="1"/></a></center>
+
+<h3 id="session">Session Data Class Diagram</h3>
+
+<center><a href="session.png"><img src="session.png" border="1"/></a></center>
+
+
+<h3 id="ui">User Interface Class Diagram</h3>
+
+
+<center><a href="gui.png"><img src="gui.png" border="1"/></a></center>
+
+
+<h3 ui="drawables">Drawables Class Diagram</h3>
+
+
+<center><a href="drawables.png"><img src="drawables.png" border="1"/></a></center>
+
+
+<h3 id="simulator">Simulator Class Diagram</h3>
+
+<center><a href="simulator.png"><img src="simulator.png" border="1"/></a></center>
+
+
+</body>
+</html>

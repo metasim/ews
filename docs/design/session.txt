@@ -1,0 +1,54 @@
+@startuml
+
+!define QO (Q,orchid)
+!define QW (W,orange)
+!define OSG (O,lightblue)
+
+title Session Data Model Class Diagram
+
+!pragma defaultLabeldistance 2.1
+!pragma defaultLabelangle 30
+
+package session
+
+class SimulationState << QO >>
+SimulationState : +time : long
+SimulationState : +medium : WaveMedium
+SimulationState : +barriers : List<Barrier>
+SimulationState : +sources : List<DripSource>
+
+class SimulationUnits
+SimulationState *-> "1" SimulationUnits
+SimulationUnits : +timeScale : float
+SimulationUnits : +timeUnits : string
+SimulationUnits : +width : float
+SimulationUnits : +length : float
+SimulationUnits : +distanceUnits : string
+
+note as N2
+    The root object of 
+    all simulation state
+end note
+
+N2 .> SimulationState
+
+class Barrier << QO >>
+Barrier : +numSlits
+Barrier : +slitWidth
+Barrier : +slitSpacing
+
+class DripSource << QO >>
+DripSource : -timer : QTimer
+DripSource : +amplitude
+DripSource : +period
+
+class WaveMedium << QO >>
+WaveMedium : +energyMap : Array2d
+
+end package
+
+SimulationState "1" o-- "1..*" Barrier
+SimulationState "1" o-- "1..2" DripSource
+SimulationState "1" o-- "1" WaveMedium
+
+@enduml
