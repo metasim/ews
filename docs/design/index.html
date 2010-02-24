@@ -14,12 +14,16 @@ border="0"/></a>
 <h1>EWS Software Design</h1>
 
 <p>The following UML diagrams an accompanying text describe the high-level
-software design for the Educational Wave Simulation (working title) application.</p>
+software design for the Educational Wave Simulation (EWS, working title) application.</p>
 
 <h2>System Components</h2>
-<p>In the following UML component diagram major system components are rendered. 
+<p>In the following UML component diagram major system components are shown.
+This representation is <b>conceptual</b> and does not imply a class-level design,
+but is intended to identify the major third party dependencies and the 
+general domain of implementation.
 Arrows indicate direction of dependency, and grouping boxes organize related
 components as modules:</p>
+
 <ul>
 <li><b>Qt</b>: Third-party application development platform in C++.</li>
 <ul>
@@ -44,7 +48,8 @@ between the data and simulation. Serves as API between the
 <em>User Interface</em> and <em>Simulation</em>
 </ul>
 
-<li><b>User Interface</b>: Developed using combination of Qt Designer and Qt subclassing.</li>
+<li><b>User Interface</b>: Developed using combination of 
+<a href="http://qt.nokia.com/doc/4.6/qt4-designer.html">Qt Designer</a> and Qt subclassing.</li>
 <ul>
 <li><b>EWS Editors</b>: Forms and standard UI controls allowing user to control
 simulation parameters, such as water drop sources, interference barriers, etc.</li>
@@ -56,9 +61,20 @@ and dispatches user input events to OpenSceneGraph.</li>
 </ul>
 <center><a href="components.png"><img src="components.png" border="1"/></a></center>
 
+<p>The <em>User Interface</em> and <em>Simulation</em> domains are developed
+for this project, while <em>Qt</em> and <em>Rendering</em> are provided by
+third-party packages (<a href="http://qt.nokia.com">Qt</a> and 
+<a href="http://www.openscenegraph.org">OpenSceneGraph</a>).
+
 <h2>Static Class Design</h2>
 
-<p>Classes in the diagrams below are adorned with glyphs providing some
+<p>The following diagrams show the core classes, members, and associations to be
+used in implementing EWS. An attempt has been made to balance completeness and
+sufficiency, so not all foreseen classes or members are necessarily rendered.
+It is believed that the general architecture is sound and sufficient for
+implementation.</p>
+
+<p id="badges">Classes in the diagrams below are adorned with glyphs providing some
 additional stereotype information:
 <ul>
 <li><b>C</b>: plain old C++ class</li>
@@ -73,48 +89,137 @@ additional stereotype information:
 lines indicate association via association, aggregation, or composition, with the 
 arrow representing direction of navigability.</p>
 
-<p>Note: <em>Due to a current limitation in the
-diagramming tool used, packages/namespaces whose contents are exposed are 
+<p id="packages">Note: <em>Due to a current limitation in the
+diagramming tool used (PlantUML + dot), packages/namespaces whose contents are exposed are 
 displayed as a simple box with a thick stroke and white background rather than
 the standard package rendering with a tab in the upper left corner.</em></p>
 
 
-<h3>High-level Class Diagram</h3>
+<h3>High-level Classes</h3>
 
-<p>This diagram shows the general high-level relationships between classes,
+<p id="namespaces">This diagram shows the general high-level relationships between classes,
 with the 4 major namespaces represented: </p>
 <ul>
-<li><b><a href="#ui">ui</a></b>: </li>
-<li><b><a href="#drawables">drawables</a></b>: </li>
-<li><b><a href="#session">session</a></b>: </li>
-<li><b><a href="#simulator">simulator</a></b>: </li>
+<li><b>app</b>: namespace separating the application framework from the 
+physics simulation.</li>
+<ul>
+
+<li><b><a href="#widget">widget</a></b>: The classes in this namespace are
+mainly comprised of forms designed with 
+<a href="http://qt.nokia.com/doc/4.6/qt4-designer.html">Qt Designer</a>, the 
+generated C++ classes, and associated controller classes. The classes shown in
+these diagrams are primarily subclasses of 
+<a href="http://qt.nokia.com/doc/4.6/qwidget.html">QWidget</a> that provide
+the <a href="http://qt.nokia.com/doc/4.6/signalsandslots.html">signals and slots</a> 
+binding to the <a href="http://qt.nokia.com/doc/4.6/qobject.html">QObject</a>-based data 
+model to ensure synchronization between the UI and data model</li>
+
+<li><b><a href="#model">model</a></b>: The various simulation parameters and object
+abstractions, as they are captured from a user perspective, are contained in
+the <tt>app.model</tt> namespace. These classes capture all the application
+state at a given time, and are the means of separating the GUI from the
+simulation, as well as the 3-D representation from the editing forms.</li>
+
+<li id="dpack"><b><a href="#drawable">drawable</a></b>: 
+<a href="http://www.openscenegraph.org">OpenSceneGraph</a> 
+provides multiple abstractions for capturing the low-level OpenGL operations
+for rendering encapsulated object representations. The classes in the 
+<tt>app.drawable</tt> namespace are responsible for representing the simulation
+entities in the 3-D scene graph.</li>
+
+
 </ul>
+<li><b><a href="#physics">physics</a></b>: This namespace is completely separate
+from the others, with no external dependencies, providing a clean separation
+between GUI and simulation.</li>
+</ul>
+
+<p>It should be noted that there are effectively three parallel inheritance
+hierarchies (four if you count the GUI components) representing different 
+yet similar concepts for the different domains. The <tt>app.model</tt> namespace
+contains the user data for configuring the simulation. The <tt>physics</tt> 
+namespace contains the reinterpretation of those user-parameters in the
+simulation domain. The <tt>app.drawable</tt> namespace contains the 3-D geometry
+representation. The details of the data sharing between the <tt>Lattice</tt>, 
+<tt>WaveMedium</tt>, and <tt>WaterSurfaceGeom</tt> classes
+(the respective physics, data model, and scene graph views into the same concept)
+are still to be worked out, as we need to minimize the amount of data copying
+that occurs while maintaining separation.</p>
+
+<center><a href="toplevel.png"><img src="toplevel.png" border="1"/></a></center>
 
 <p>The details within each of these namespaces are shown in the diagrams
 below.</p>
 
-<center><a href="datamodel.png"><img src="datamodel.png" border="1"/></a></center>
+<h3 id="model">Application Data Model Classes</h3>
 
-<h3 id="session">Session Data Class Diagram</h3>
-
-<center><a href="session.png"><img src="session.png" border="1"/></a></center>
-
-
-<h3 id="ui">User Interface Class Diagram</h3>
-
-
-<center><a href="gui.png"><img src="gui.png" border="1"/></a></center>
+<p>The classes in this namespace are responsible for storing the simulation
+state and propagating change events 
+(<a href="http://qt.nokia.com/doc/4.6/signalsandslots.html">signals</a>
+in Qt parlance) to registered classes (e.g. <tt>app.drawable</tt>). 
+Therefore, he <tt>SimulationState</tt> class and its aggregates provide 
+synchronization with the other domains via an Observer/Observed pattern.</p>
 
 
-<h3 ui="drawables">Drawables Class Diagram</h3>
+<center><a href="app.model.png"><img src="app.model.png" border="1"/></a></center>
 
 
-<center><a href="drawables.png"><img src="drawables.png" border="1"/></a></center>
+<h3 id="widget">GUI Widget Classes</h3>
+<p><tt>EWSMainWindow</tt> inherits from 
+<tt><a href="http://qt.nokia.com/doc/4.6/qmainwindow.html">QMainWindow</a></tt>, 
+which provides a large part of the setup code for maintaining an application's
+runtime on the native platform. The editor classes all inherit from 
+<tt><a href="http://qt.nokia.com/doc/4.6/qwidget.html">QWidget</a></tt> 
+which allows multiple UI components to be laid out in a form and then inserted
+into the main window via the 
+<a href="http://qt.nokia.com/doc/4.6/qt4-designer.html">Qt Designer</a> tool.</p>
+
+<p id="osgwidget">The <tt>OSGWidget</tt> class deserves special attention. Based on the
+<a href="http://www.openscenegraph.org/projects/osg/browser/OpenSceneGraph/trunk/examples/osgviewerQT/osgviewerQT.cpp">osgviewerQT</a> example 
+in the OSG distribution, the purpose of this class is to coordinate and synchronize
+the Qt event loop, the OSG rendering look, and a common graphics context. 
+
+<center><a href="app.widget.png"><img src="app.widget.png" border="1"/></a></center>
+
+<h3 id="drawable">3-D Drawable Classes</h3>
+
+<p>When the <tt>SimulationState</tt> class is changed in a way that adds or removes
+by an object in the simulation (i.e. a new barrier),
+it sends a signal to the <tt>SceneRoot</tt> class indicating the change. The 
+<tt>SceneRoot</tt> class then sends a request to the <tt>DrawableFactory</tt>
+class to instantiate the scene graph representation of that object (on an add),
+or removes the association (on a delete) from the scene graph. The 
+<tt>DrawableFactory</tt> class encapsulates the mapping or between data model and 
+scene graph objects, keeping the coupling between them low.</p>
+
+<p id="adapter">All drawables created by <tt>DrawableFactory</tt> subclass the abstract
+base class <tt>DrawableQtAdapter</tt>. This base class provides the convenience facilities 
+for synchronizing the scene graph representation with the Qt-based data model, and
+with the <tt>DrawableFactory</tt> provides a clean separation between the Qt and
+OpenSceneGraph domains. When a GUI action causes a change in a data model object (via <tt>QObject</tt>), 
+a change signal is fired and interpreted by the <tt>DrawableQtAdapter</tt>
+sub-class (<tt>BarrierGeom</tt>, <tt>FaucetGeom</tt>, etc.) to thereby modify the geometric 
+representation.</p>
+ 
+<center><a href="app.drawables.png"><img src="app.drawables.png" border="1"/></a></center>
+
+<h3 id="physics">Wave Physics Classes</h3>
+
+<p>The <tt>physics</tt> namespace is self-contained, with no dependencies
+on the other packages. Classes in the <tt>app.model</tt> package will instantiate
+and manage references to items in this package, but the <tt>physics</tt> code
+is indented to be self-contained and independently testable. The design heavily 
+borrows from <a href="http://phet.colorado.edu/simulations/sims.php?sim=Wave_Interference">PhET implementation</a>, 
+with minor simplifications. Continued investigation into the physics-level distinction between
+"Walls" and "Barriers", as our initial analysis shows there should be no
+distinction and the code could be simplified by combining these concepts into
+a single model.</p>
+
+<center><a href="physics.png"><img src="physics.png" border="1"/></a></center>
 
 
-<h3 id="simulator">Simulator Class Diagram</h3>
-
-<center><a href="simulator.png"><img src="simulator.png" border="1"/></a></center>
+<p>&nbsp;</p>
+<hr/>
 
 
 </body>

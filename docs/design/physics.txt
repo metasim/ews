@@ -4,9 +4,13 @@
 !define QW (W,orange)
 !define OSG (O,lightblue)
 
-title Wave Simulator Class Diagram
+title Wave Physics Class Diagram
 
-package session
+
+  
+#-------------------------------------------------------------
+
+package app.model
 
 class SimulationState <<QO>>
 class DripSource <<QO>>
@@ -19,7 +23,12 @@ SimulationState "1" o-- "1" WaveMedium
 
 end package
 
-package simulator
+#-------------------------------------------------------------
+
+package physics
+
+  
+#-------------------------------------------------------------
 
 package potentials
 
@@ -77,6 +86,8 @@ Potential <|-- ConstantPotential
 
 end package
 
+  
+#-------------------------------------------------------------
 
 class Oscillator 
 Oscillator : +enabled :bool

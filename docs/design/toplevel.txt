@@ -8,8 +8,14 @@
 !pragma defaultLabeldistance 2.1
 !pragma defaultLabelangle 30
 
-title EWS High-level Static Class Diagram
 
+#---------------------------------------------------------------------
+
+title EWS Top-level Static Class Diagram
+
+#---------------------------------------------------------------------
+
+package app
 
 package drawables
 
@@ -17,7 +23,6 @@ note as N3
 3-D representation in
 OpenSceneGraph
 end note
-
 
 class DrawableAdapter << Mixin >>
 class WaterSurfaceGeom << OSG >>
@@ -37,8 +42,9 @@ end note
 N4 .> DrawableAdapter
 end package
 
+#---------------------------------------------------------------------
 
-package ui
+package widget
 note as N2
 User interface components
 end note
@@ -62,7 +68,9 @@ N0 ..> SimulationEditor
 
 end package
 
-package session
+#---------------------------------------------------------------------
+
+package model
 class SimulationState <<QO>>
 class DripSource <<QO>>
 class Barrier <<QO>>
@@ -81,8 +89,12 @@ end note
 
 end package
 
+end package 
 
-package simulator
+
+#---------------------------------------------------------------------
+
+package physics
 
 class WaveModel
 class Lattice
@@ -99,18 +111,12 @@ Wave propagation and
 interference simulation
 end note
 
-
-
-package potentials
-
-interface Potential
+abstract class Potential
 Potential <|-- CompositePotential
 CompositePotential --> Potential
 Potential <|--  ConstantPotential
 Potential <|--  SlitPotential
 Potential <|--  WallPotential
-
-end package
 
 WavePropagator --> Potential
 

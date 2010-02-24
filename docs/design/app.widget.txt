@@ -6,12 +6,13 @@
 !define Mixin (M, brown)
 
 
-title EWS User Interface Class Diagram
+title EWS User Interface Widgets Class Diagram
 
 #---------------------------------------------------------
 
+package app
 
-package ui
+package widget
 
 #---------------------------------------------------------
 
@@ -130,14 +131,15 @@ end package
 
 package drawables
 class SceneRoot << OSG >>
-class DrawableAdapter << Mixin >>
+class DrawableQtAdapter << Mixin >>
 end package
 
+end package
 
 osgGroup <|-- SceneRoot
-osgGeode <|-- DrawableAdapter
+osgGeode <|-- DrawableQtAdapter
 
-SceneRoot "1" .> "0..*" DrawableAdapter
+SceneRoot "1" .> "0..*" DrawableQtAdapter
 
 
 @enduml

@@ -8,10 +8,18 @@
 !pragma defaultLabeldistance 1.2
 !pragma defaultLabelangle 30
 
+
+title 3-D Drawables Class Diagram
+
+
+#-------------------------------------------------------------
+
+package app
+
 package drawables
 
 class DrawableFactory << Singleton >>
-DrawableFactory : +createDrawableFor(QObject) : osgDrawable
+DrawableFactory : +createDrawableFor(QObject) : DrawableQtAdapater
 
 class osgGroup << OSG >>
 class SceneRoot << OSG >>
@@ -39,7 +47,7 @@ DrawableQtAdapter <|-- FaucetGeom
 end package
 
 
-package session
+package model
 
 class SimulationState << QO >>
 
@@ -65,5 +73,7 @@ DrawableFactory ..> BarrierGeom : creates
 DrawableFactory ..> WaterSurfaceGeom : creates
 
 SimulationState .> SceneRoot : notifies
+
+end package
 
 @enduml
