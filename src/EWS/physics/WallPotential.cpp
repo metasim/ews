@@ -25,7 +25,7 @@ namespace ews {
             Point2d pointToProject(static_cast<double>(x), static_cast<double>(y));
             Point2d projectedPoint;            
             if (!_lineSegment.ptSegProjection(pointToProject, projectedPoint)) return 0.0;
-            return Vector2d(pointToProject - projectedPoint).lengthSq() < _thicknessSq ? POTENTIAL : 0.0;
+            return Vector2d(pointToProject - projectedPoint).lengthSq() < _thicknessSq ? DEFAULT_POTENTIAL : 0.0;
         }
     }
 }

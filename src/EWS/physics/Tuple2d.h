@@ -24,6 +24,8 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
+        const double EPSILON_FACTOR = 1e-6; 
+
         /**
          * @ingroup Physics
          * Base class for 2d objects. Note: this class is not read-only since it has an
@@ -102,8 +104,8 @@ namespace ews {
             }
         private:
             double _x, _y;
-            static const double EPSILON_FACTOR = 1e-6;
-        };
+                    };
+        
     }
 }
 

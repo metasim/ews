@@ -27,6 +27,9 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
+        const unsigned int DEFAULT_THICKNESS_SQ = 3 * 3;
+        const double DEFAULT_POTENTIAL = 100.0;
+
         class WallPotential : public Potential {
         public:
             /**
@@ -94,8 +97,6 @@ namespace ews {
         private:
             Line2d _lineSegment;
             unsigned int _thicknessSq;
-            static const unsigned int DEFAULT_THICKNESS_SQ = 3 * 3;
-            static const double POTENTIAL = 100.0;
         };
     }
 }

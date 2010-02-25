@@ -38,10 +38,10 @@ macro(unmoc FILENAME)
     list(APPEND EWS_HDRS ${MOCKERY})
 endmacro()    
 
-unmoc("SceneRoot.h"  )
-unmoc("DrawableFactory.h"   )
+unmoc("SceneRoot.h")
+unmoc("DrawableFactory.h")
 
-message("moc files: ${EWS_MOC_HDRS}")
+#message("moc files: ${EWS_MOC_HDRS}")
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
