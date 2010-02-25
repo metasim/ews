@@ -83,4 +83,4 @@ namespace ews {
 }
 
 using ews::test::Tuple2dTest;
-QTEST_MAIN(Tuple2dTest)
+QTEST_APPLESS_MAIN(Tuple2dTest)

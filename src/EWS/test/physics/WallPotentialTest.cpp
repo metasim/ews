@@ -69,4 +69,4 @@ namespace ews {
 }
 
 using ews::test::WallPotentialTest;
-QTEST_MAIN(WallPotentialTest)
+QTEST_APPLESS_MAIN(WallPotentialTest)

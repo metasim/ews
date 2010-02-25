@@ -297,6 +297,8 @@ function(cxx_test name path)
   add_test(${name} ${name})
 endfunction()
 
+enable_testing()
+
 # First argument is test/executable name, second argument is path to header, remaining arguments are required .cpp files
 cxx_test(LatticeTest test/physics test/physics/LatticeTest.cpp physics/Lattice.cpp)
 cxx_test(ConstantPotentialTest test/physics test/physics/ConstantPotentialTest.cpp)

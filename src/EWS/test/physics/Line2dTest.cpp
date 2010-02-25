@@ -80,4 +80,4 @@ namespace ews {
 }
 
 using ews::test::Line2dTest;
-QTEST_MAIN(Line2dTest)
+QTEST_APPLESS_MAIN(Line2dTest)

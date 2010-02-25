@@ -59,4 +59,4 @@ namespace ews {
 }
 
 using ews::test::Vector2dTest;
-QTEST_MAIN(Vector2dTest)
+QTEST_APPLESS_MAIN(Vector2dTest)

@@ -89,4 +89,4 @@ namespace ews {
 }
 
 using ews::test::LatticeTest;
-QTEST_MAIN(LatticeTest)
+QTEST_APPLESS_MAIN(LatticeTest)

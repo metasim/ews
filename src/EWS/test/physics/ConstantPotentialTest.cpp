@@ -41,4 +41,4 @@ namespace ews {
 }
 
 using ews::test::ConstantPotentialTest;
-QTEST_MAIN(ConstantPotentialTest)
+QTEST_APPLESS_MAIN(ConstantPotentialTest)

@@ -37,4 +37,4 @@ namespace ews {
 }
 
 using ews::test::Point2dTest;
-QTEST_MAIN(Point2dTest)
+QTEST_APPLESS_MAIN(Point2dTest)
