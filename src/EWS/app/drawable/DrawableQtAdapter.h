@@ -20,12 +20,12 @@
 #define __DRAWABLE_ADAPTER_H
 
 #include <QtCore>
-#include <osg/Node>
+#include <osg/Group>
 
 /**
  *  Adapter between the Qt and OSG worlds.
  */
-class DrawableAdapter : public QObject
+class DrawableQtAdapter : public QObject, public osg::Group
 {
     Q_OBJECT
 
@@ -33,17 +33,17 @@ public:
     /**
      * Standard ctor.
      */
-    DrawableAdapter(QObject* peer, osg::Node);
-    virtual ~DrawableAdapter();
+    DrawableQtAdapter(QObject* peer);
+    virtual ~DrawableQtAdapter();
 
-private slot:
+private slots:
     void osgSlotDispatch();
     
 private:
-    Q_DISABLE_COPY(DrawableAdapter)
+    Q_DISABLE_COPY(DrawableQtAdapter)
 };
 
-inline QDebug operator<<(QDebug dbg, const DrawableAdapter &ds) {
+inline QDebug operator<<(QDebug dbg, const DrawableQtAdapter &ds) {
     dbg << ds.metaObject()->className() << "{";
     dbg << "name=" << ds.objectName() << ",";
     dbg << "}";
@@ -52,6 +52,6 @@ inline QDebug operator<<(QDebug dbg, const DrawableAdapter &ds) {
 
 
 
-#endif // __EWS_DRAWABLE_H
+#endif // __DRAWABLE_ADAPTER_H
 
 

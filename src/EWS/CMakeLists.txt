@@ -11,27 +11,35 @@ PROJECT (EWS)
 set(EXE_NAME "Visualize STEM - Wave")
 cmake_minimum_required(VERSION 2.8)
 
-#add_definitions(-fdiagnostics-show-option)
+set(EWS_MODULES app/widget app/drawable app/model physics test)
 
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
-file(GLOB EWS_SRCS main.cpp ui/*.cpp model/*.cpp drawable/*.cpp physics/*.cpp)
+file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp physics/*.cpp)
 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS drawable/*.h physics/*.h)
+file(GLOB EWS_HDRS app/drawable/*.h physics/*.h)
+
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
-file(GLOB EWS_MOC_HDRS ui/*.h model/*.h drawable/EWSDrawable.h test/physics/*.h)
+file(GLOB EWS_MOC_HDRS app/widget/*.h app/model/*.h)
+file(GLOB EWS_TEST_MOC_HDRS test/physics/*.h)
+
+# Need to add move DrawableQtAdapter.h from one list to the other
+file(GLOB_RECURSE DQTAH DrawableQtAdapter.h)
+list(REMOVE_ITEM EWS_HDRS ${DQTAH})
+list(APPEND EWS_MOC_HDRS ${DQTAH})
+
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
 #--------------------------------------------------------------------------------
-file(GLOB EWS_UIS ui/*.ui)
+file(GLOB EWS_UIS app/widget/*.ui)
 
 #--------------------------------------------------------------------------------
 # and finally any resource files. 
@@ -70,6 +78,7 @@ qt4_wrap_ui( EWS_GEN_UIS ${EWS_UIS} )
 #--------------------------------------------------------------------------------
 # and finally this will run moc on the headers
 qt4_wrap_cpp( EWS_GEN_MOC_HDRS ${EWS_MOC_HDRS} )
+qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
@@ -78,13 +87,15 @@ find_package(OpenSceneGraph REQUIRED
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
+find_package(OpenGL REQUIRED)
+
 #--------------------------------------------------------------------------------
 # this fixes 64-bit problems on Snow Leopard
 if(APPLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
-    set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.5")
     #Option -arch is only available with apple compilers
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag("-arch i386" HAS_ARCH_FLAG)
@@ -105,9 +116,6 @@ if(APPLE)
 #    endif()
 endif()    
 
-find_package(OpenGL REQUIRED)
-
-
 #--------------------------------------------------------------------------------
 # we need this to be able to include headers produced by uic in our code
 # CMAKE_BINARY_DIR holds a path to the build directory, while INCLUDE_DIRECTORIES()
@@ -116,7 +124,7 @@ include_directories (
   # Look in the cmake build directory (some generated headers could be there)
   ${CMAKE_CURRENT_BINARY_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ui drawable model physics test
+  ${EWS_MODULES}
 )
 
 
@@ -183,8 +191,6 @@ target_link_libraries ( ${EXE_NAME}
     ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}
 )
-
-
 
 
 #--------------------------------------------------------------------------------
@@ -266,6 +272,7 @@ function(cxx_test name path)
   add_dependencies(${name}
     ${ARGN}
     ${EWS_GEN_MOC_HDRS} 
+    ${EWS_TEST_GEN_MOC_HDRS} 
     ${EWS_HDRS}
   )
   set_target_properties(${name}

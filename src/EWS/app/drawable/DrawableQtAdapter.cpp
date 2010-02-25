@@ -16,18 +16,23 @@
  * http://mseedsoft.com
  */
 
-#ifndef __WATER_SURFACE_GEOM_H
-#define __WATER_SURFACE_GEOM_H
 
-#include <osg/Geode>
+#include "DrawableQtAdapter.h"
 
-class WaterSurfaceGeom : public osg::Geode {
-public:
-    WaterSurfaceGeom();
-    virtual ~WaterSurfaceGeom() {}
-};
+DrawableQtAdapter::DrawableQtAdapter(QObject * parent) : QObject(parent), osg::Group() 
+{
+    
+}
 
 
+DrawableQtAdapter::~DrawableQtAdapter() 
+{
 
-#endif //__WATER_SURFACE_GEOM_H
+}
 
+
+
+void DrawableQtAdapter::osgSlotDispatch() 
+{
+
+}

@@ -21,11 +21,11 @@
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 
-WaterSurfaceGeom::WaterSurfaceGeom() : osg::Geode() 
+WaterSurfaceGeom::WaterSurfaceGeom() : DrawableQtAdapter(NULL)
 {
-    osg::Capsule* thing = new osg::Capsule;
+//    osg::Capsule* thing = new osg::Capsule;
     
-    osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
-    drawable->setColor(osg::Vec4(1, 1, 0, 1));
-    addDrawable(drawable);
+//    osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
+//    drawable->setColor(osg::Vec4(1, 1, 0, 1));
+//    addDrawable(drawable);
 }
