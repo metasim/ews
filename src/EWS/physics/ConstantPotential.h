@@ -25,8 +25,26 @@ namespace ews {
     namespace physics {
         class ConstantPotential : public Potential {
         public:
+            /**
+             * Default constructor, assigning a value of 0
+             */
             ConstantPotential(): _value(0.0) { /* do nothing */ }
+            /**
+             * Constructor, assigning value to the constant potential everywhere
+             * @param value Constant potential
+             */
             ConstantPotential(double value): _value(value) { /* do nothing */ }
+            /**
+             * Virtual destructor
+             */
+            virtual ~ConstantPotential() { /* do nothing */}
+            /**
+             * Returns the constant potential, regardless of x, y, or time
+             * @param x ignored
+             * @param y ignored
+             * @param time ignored
+             * @return Constant potential
+             */
             virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) {
                 return _value;
             }
