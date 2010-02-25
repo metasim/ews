@@ -27,7 +27,7 @@ namespace ews {
         public:
             ConstantPotential(): _value(0.0) { /* do nothing */ }
             ConstantPotential(double value): _value(value) { /* do nothing */ }
-            virtual double getPotential(int x, int y, int time) {
+            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) {
                 return _value;
             }
         private:

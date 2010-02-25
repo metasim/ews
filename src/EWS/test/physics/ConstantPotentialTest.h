@@ -16,21 +16,21 @@
  * http://mseedsoft.com
  */
 
-#ifndef __LATTICETEST_H
-#define __LATTICETEST_H
+#ifndef __CONSTANTPOTENTIALTEST_H
+#define __CONSTANTPOTENTIALTEST_H
 
-#include "Lattice.h"
+#include "ConstantPotential.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
 
 namespace ews {
     namespace test {
-        class LatticeTest: public QObject
+        class ConstantPotentialTest: public QObject
         {
         public:
-            LatticeTest() { /* do nothing */ }
-            virtual ~LatticeTest() { /* do nothing */ }
+            ConstantPotentialTest() { /* do nothing */ }
+            virtual ~ConstantPotentialTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -42,31 +42,15 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the Lattice::computeAverageValue() method works for normal cases.
+             * Tests that the ConstantPotential::ConstantPotential() constructor works
              */
-            void MethodComputeAverageValueWorksForNormalCases();
+            void DefaultConstructorIsZero();
             /**
-             * Tests that the Lattice::computeAverageValue() method works for cases where windows go outside bounds.
+             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
              */
-            void MethodComputeAverageValueWorksForWindowsGoingOutsideBounds();
-            /**
-             * Tests that the Lattice::getWidth() method works
-             */
-            void MethodGetWidthWorks();
-            /**
-             * Tests that the Lattice::getLength() method works
-             */
-            void MethodGetLengthWorks();
-            /**
-             * Tests that the Lattice::setSize() method works
-             */
-            void MethodSetSizeWorks();
-            /**
-             * Tests that Lattice::setValue() and Lattice::getValue() method works
-             */
-            void MethodSetGetValueWorks();
+            void ValueConstructorYieldsValue();
         };
     }
 }
 
-#endif // __LATTICETEST_H
+#endif // __CONSTANTPOTENTIALTEST_H
