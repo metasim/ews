@@ -16,19 +16,24 @@
  * http://mseedsoft.com
  */
 
-#ifndef __POTENTIAL_H
-#define __POTENTIAL_H
+#ifndef __CONSTANTPOTENTIAL_H
+#define __CONSTANTPOTENTIAL_H
+
+#include "Potential.h"
 
 namespace ews {
     namespace physics {
-        class Potential {
+        class ConstantPotential : public Potential {
         public:
-            virtual ~Potential() { /* do nothing */ }
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) = 0;
-        protected:
-            Potential() { /* do nothing */ }
+            ConstantPotential(): _value(0.0) { /* do nothing */ }
+            ConstantPotential(double value): _value(value) { /* do nothing */ }
+            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) {
+                return _value;
+            }
+        private:
+            double _value;
         };
     }
 }
 
-#endif // __POTENTIAL_H
+#endif // __CONSTANTPOTENTIAL_H
