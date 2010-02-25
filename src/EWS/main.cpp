@@ -23,7 +23,9 @@
 
 int main(int argc, char *argv[])
 {
-
+    using namespace ews::app::model;
+    using namespace ews::app::widget;
+    
     // To see object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
     

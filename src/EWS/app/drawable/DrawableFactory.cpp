@@ -21,24 +21,34 @@
 #include "DripSource.h"
 #include "FaucetGeom.h"
 
-DrawableFactory& DrawableFactory::instance() 
-{
-    static DrawableFactory singleton;
-    return singleton;
-}
-
-
-osg::Node* DrawableFactory::createDrawableFor(QObject& data) 
-{
-    // Currently only a loose mapping between object data and drawable type is
-    // maintained, hense the switching on type.
-    qDebug() << "Finding drawable for" << data.metaObject()->className();
-    if(data.inherits("DripSource")) {
-        DripSource* source = qobject_cast<DripSource*>(&data);
-        FaucetGeom* geom = new FaucetGeom(*source);
-        return geom;
+namespace ews {
+    namespace app {
+        namespace drawable {
+            using namespace ews::app::model;
+            
+            DrawableFactory& DrawableFactory::instance() 
+            {
+                static DrawableFactory singleton;
+                return singleton;
+            }
+            
+            
+            osg::Node* DrawableFactory::createDrawableFor(QObject& data) 
+            {
+                // Currently only a loose mapping between object data and drawable type is
+                // maintained, hense the switching on type.
+                QString name(data.metaObject()->className());
+                qDebug() << "Finding drawable for" << name;
+                if(data.inherits(DripSource::staticMetaObject.className())) {
+                    DripSource* source = qobject_cast<DripSource*>(&data);
+                    FaucetGeom* geom = new FaucetGeom(*source);
+                    return geom;
+                }
+                
+                qWarning() << "No drawable found for" << name;
+                return NULL;
+            }
+        }
     }
-    
-    return NULL;
 }
 

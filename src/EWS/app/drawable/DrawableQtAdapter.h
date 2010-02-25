@@ -20,37 +20,38 @@
 #define __DRAWABLE_ADAPTER_H
 
 #include <QtCore>
-#include <osg/Group>
+#include <osg/MatrixTransform>
 
-/**
- *  Adapter between the Qt and OSG worlds.
- */
-class DrawableQtAdapter : public QObject, public osg::Group
-{
-    Q_OBJECT
-
-public:
-    /**
-     * Standard ctor.
-     */
-    DrawableQtAdapter(QObject* peer);
-    virtual ~DrawableQtAdapter();
-
-private slots:
-    void osgSlotDispatch();
+namespace ews {
+    namespace app {
+        namespace drawable {
+            /**
+             *  Adapter between the Qt and OSG worlds.
+             */
+            class DrawableQtAdapter : public QObject, public osg::MatrixTransform {
+                Q_OBJECT
+                
+            public:
+                /**
+                 * Standard ctor.
+                 */
+                DrawableQtAdapter(QObject* peer);
+                virtual ~DrawableQtAdapter();
+                
+            private:
+                Q_DISABLE_COPY(DrawableQtAdapter)
+            };
+            
+            inline QDebug operator<<(QDebug dbg, const DrawableQtAdapter &ds) {
+                dbg << ds.metaObject()->className() << "{";
+                dbg << "name=" << ds.objectName() << ",";
+                dbg << "}";
+                return dbg;
+            }
+        }
+    }
     
-private:
-    Q_DISABLE_COPY(DrawableQtAdapter)
-};
-
-inline QDebug operator<<(QDebug dbg, const DrawableQtAdapter &ds) {
-    dbg << ds.metaObject()->className() << "{";
-    dbg << "name=" << ds.objectName() << ",";
-    dbg << "}";
-    return dbg;
 }
-
-
 
 #endif // __DRAWABLE_ADAPTER_H
 

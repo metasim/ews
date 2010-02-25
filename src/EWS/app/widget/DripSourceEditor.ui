@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DripSourceEditor</class>
+ <class>ews::app::widget::DripSourceEditor</class>
  <widget class="QWidget" name="DripSourceEditor">
   <property name="geometry">
    <rect>

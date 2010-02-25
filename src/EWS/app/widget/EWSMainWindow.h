@@ -26,30 +26,40 @@
 #include "SimulationState.h"
 #include "SceneRoot.h"
 
-namespace Ui
-{
-    class EWSMainWindow;
+
+
+namespace ews {
+    namespace app {
+        namespace widget {
+            
+            /** Forward declaration of generated UI class. */
+            namespace Ui {
+                class EWSMainWindow;
+            }
+            
+            using ews::app::model::SimulationState;
+            using ews::app::drawable::SceneRoot;
+            class EWSMainWindow : public QMainWindow {
+                Q_OBJECT
+                
+            public:
+                EWSMainWindow(SimulationState* state, QWidget *parent = 0);
+                ~EWSMainWindow();
+                
+            public slots:
+                void addDrawableFor(QObject& data);
+                void removeDrawableFor(QObject& data);
+                
+            private:
+                Ui::EWSMainWindow* _ui;
+                SimulationState* _state;
+                SceneRoot* _sceneRoot;
+                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
+                Qt2OSGMap _drawables;
+                
+            };
+        }
+    }
 }
-
-class EWSMainWindow : public QMainWindow
-{
-    Q_OBJECT
-
-public:
-    EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-    ~EWSMainWindow();
-
-public slots:
-    void addDrawableFor(QObject& data);
-    void removeDrawableFor(QObject& data);
-    
-private:
-    Ui::EWSMainWindow* _ui;
-    SimulationState* _state;
-    SceneRoot* _sceneRoot;
-    typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
-    Qt2OSGMap _drawables;
-    
-};
 
 #endif // EWSMAINWINDOW_H

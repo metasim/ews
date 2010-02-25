@@ -19,57 +19,62 @@
 #include "DripSourceEditor.h"
 #include "ui_DripSourceEditor.h"
 
-
-DripSourceEditor::DripSourceEditor(QWidget* parent) : QWidget(parent), 
-_ui(new Ui::DripSourceEditor), _dataModel(NULL) 
-{
-    _ui->setupUi(this);   
-    
-}
-
-DripSourceEditor::~DripSourceEditor() 
-{
-    _dataModel = NULL;
-    delete _ui;
-}
-
-
-void DripSourceEditor::throb() {
-    if(_dataModel) {
-        
-        bool on = false;
-        
-        if(_dataModel->enabled()) {
-            on = !_ui->throbber->isEnabled();
-        }
-        
-        _ui->throbber->setEnabled(on);
-    }
-}
-
-void DripSourceEditor::setDataModel(DripSource* data) 
-{
-    if(_dataModel) {
-        _dataModel->disconnect(this);
-    }
-    
-    _dataModel = data;
-    
-    if(_dataModel) {
-        connect(_dataModel, SIGNAL(drip(int)), this, SLOT(throb()));
-    }
+namespace ews {
+    namespace app {
+        namespace widget {
+            DripSourceEditor::DripSourceEditor(QWidget* parent) : QWidget(parent), 
+            _ui(new Ui::DripSourceEditor), _dataModel(NULL) 
+            {
+                _ui->setupUi(this);   
+                
+            }
             
-    syncUI();
-}
-
-
-void DripSourceEditor::syncUI() 
-{
-    if(_dataModel) {
-        blockSignals(true);
-        _ui->enabled->setChecked(_dataModel->enabled());
-        _ui->frequency->setValue(_dataModel->frequency());
-        _ui->amplitude->setValue(_dataModel->amplitude());
-        blockSignals(false);
+            DripSourceEditor::~DripSourceEditor() 
+            {
+                _dataModel = NULL;
+                delete _ui;
+            }
+            
+            
+            void DripSourceEditor::throb() {
+                if(_dataModel) {
+                    
+                    bool on = false;
+                    
+                    if(_dataModel->enabled()) {
+                        on = !_ui->throbber->isEnabled();
+                    }
+                    
+                    _ui->throbber->setEnabled(on);
+                }
+            }
+            
+            void DripSourceEditor::setDataModel(DripSource* data) 
+            {
+                if(_dataModel) {
+                    _dataModel->disconnect(this);
+                }
+                
+                _dataModel = data;
+                
+                if(_dataModel) {
+                    connect(_dataModel, SIGNAL(drip(int)), this, SLOT(throb()));
+                }
+                
+                syncUI();
+            }
+            
+            
+            void DripSourceEditor::syncUI() 
+            {
+                if(_dataModel) {
+                    blockSignals(true);
+                    _ui->enabled->setChecked(_dataModel->enabled());
+                    _ui->frequency->setValue(_dataModel->frequency());
+                    _ui->amplitude->setValue(_dataModel->amplitude());
+                    blockSignals(false);
+                }
+            }
+        }
     }
 }

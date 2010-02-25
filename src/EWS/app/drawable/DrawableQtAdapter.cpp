@@ -18,21 +18,21 @@
 
 
 #include "DrawableQtAdapter.h"
-
-DrawableQtAdapter::DrawableQtAdapter(QObject * parent) : QObject(parent), osg::Group() 
-{
-    
-}
-
-
-DrawableQtAdapter::~DrawableQtAdapter() 
-{
-
-}
-
-
-
-void DrawableQtAdapter::osgSlotDispatch() 
-{
-
+namespace ews {
+    namespace app {
+        namespace drawable {
+            DrawableQtAdapter::DrawableQtAdapter(QObject * parent) : QObject(parent), osg::MatrixTransform() 
+            {
+                
+            }
+            
+            
+            DrawableQtAdapter::~DrawableQtAdapter() 
+            {
+                
+            }
+            
+            
+        }
+    }
 }

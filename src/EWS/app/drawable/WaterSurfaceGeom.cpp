@@ -18,14 +18,26 @@
 
 #include "WaterSurfaceGeom.h"
 
+#include <osg/Geode>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
-
-WaterSurfaceGeom::WaterSurfaceGeom() : DrawableQtAdapter(NULL)
-{
-//    osg::Capsule* thing = new osg::Capsule;
-    
-//    osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
-//    drawable->setColor(osg::Vec4(1, 1, 0, 1));
-//    addDrawable(drawable);
+namespace ews {
+    namespace app {
+        namespace drawable {
+            WaterSurfaceGeom::WaterSurfaceGeom() : DrawableQtAdapter(NULL)
+            {
+                osg::Capsule* thing = new osg::Capsule;
+                
+                osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
+                drawable->setColor(osg::Vec4(1, 1, 0, 1));
+                
+                osg::Geode* geom = new osg::Geode;
+                
+                geom->addDrawable(drawable);
+                
+//                addChild(geom);
+                
+            }
+        }
+    }
 }

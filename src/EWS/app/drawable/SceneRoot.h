@@ -16,22 +16,25 @@
  * http://mseedsoft.com
  */
 #ifndef __SCENE_ROOT_H
-#define  __SCENE_ROOT_H
+#define __SCENE_ROOT_H
 
 #include <QtCore>
 #include <osg/Geode>
 
-class SceneRoot : public osg::Group
-{
-public:
-    SceneRoot();
-    virtual ~SceneRoot();
-    
-    
-private:    
-    SceneRoot(const SceneRoot& copy) {}
-    void operator=(const SceneRoot& copy) {}
-};
-
+namespace ews {
+    namespace app {
+        namespace drawable {
+            class SceneRoot : public osg::Group {
+            public:
+                SceneRoot();
+                virtual ~SceneRoot();
+                
+            private:    
+                SceneRoot(const SceneRoot& copy) {}
+                void operator=(const SceneRoot& copy) {}
+            };
+        }
+    }
+}
 
 #endif // __SCENE_ROOT_H

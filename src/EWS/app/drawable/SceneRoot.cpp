@@ -17,16 +17,19 @@
  */
 
 #include "SceneRoot.h"
-#include "WaterSurfaceGeom.h";
 
-SceneRoot::SceneRoot() 
-{
-    WaterSurfaceGeom* water = new WaterSurfaceGeom;
-    addChild(water);
-}
-
-
-SceneRoot::~SceneRoot()
-{
-    
+namespace ews {
+    namespace app {
+        namespace drawable {
+            
+            SceneRoot::SceneRoot() 
+            {
+            }
+            
+            
+            SceneRoot::~SceneRoot()
+            {
+            }
+        }
+    }
 }

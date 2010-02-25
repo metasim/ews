@@ -19,33 +19,40 @@
 #include "DripSource.h"
 
 
-DripSource::DripSource(QObject * parent)
-: QObject(parent), _enabled(false), _amplitude(50), _frequency(1000), _timer(this)
-{
-    connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
-    connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
-    
-    connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
-    
-    updateTimer();
-}
-
-void DripSource::updateTimer() 
-{
-    
-    // compute delay in milliseconds from millihertz
-    int delay = (1000*1000)/_frequency;
-    
-    if(_timer.interval() != delay && delay > 0) {
-        _timer.setInterval(delay);
-    }
-    
-    if(_timer.isActive() != enabled()) {
-        if(enabled()) {
-            _timer.start();
-        }
-        else {
-            _timer.stop();
+namespace ews {
+    namespace app {
+        namespace model {
+            DripSource::DripSource(QObject * parent)
+            : QObject(parent), _enabled(false), _amplitude(50), _frequency(1000), _timer(this)
+            {
+                connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
+                connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
+                
+                connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
+                
+                updateTimer();
+            }
+            
+            void DripSource::updateTimer() 
+            {
+                
+                // compute delay in milliseconds from millihertz
+                int delay = (1000*1000)/_frequency;
+                
+                if(_timer.interval() != delay && delay > 0) {
+                    _timer.setInterval(delay);
+                }
+                
+                if(_timer.isActive() != enabled()) {
+                    if(enabled()) {
+                        _timer.start();
+                    }
+                    else {
+                        _timer.stop();
+                    }
+                }
+            }
+            
         }
     }
 }

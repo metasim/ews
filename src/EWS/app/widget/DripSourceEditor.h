@@ -27,47 +27,60 @@ namespace Ui
     class DripSourceEditor;
 }
 
-class DripSourceEditor : public QWidget {
-    Q_OBJECT
-    
-public:
-    DripSourceEditor(QWidget *parent = 0);
-    ~DripSourceEditor();
-
-    void setDataModel(DripSource* data);
-    
-public slots:
-    void setEnabledState(bool state) {
-        if(_dataModel) {
-            _dataModel->setEnabled(state);
+namespace ews {
+    namespace app {
+        namespace widget {
+            /** Forward declaration of UI implementation class. */
+            namespace Ui {
+                class DripSourceEditor;
+            }
+            
+            using ews::app::model::DripSource;
+            
+            class DripSourceEditor : public QWidget {
+                Q_OBJECT
+                
+            public:
+                DripSourceEditor(QWidget *parent = 0);
+                ~DripSourceEditor();
+                
+                void setDataModel(DripSource* data);
+                
+                public slots:
+                void setEnabledState(bool state) {
+                    if(_dataModel) {
+                        _dataModel->setEnabled(state);
+                    }
+                }
+                
+                void pulse() {
+                    if(_dataModel) {
+                        _dataModel->pulseDrip();
+                    }
+                }
+                
+                void setAmplitude(int val) {
+                    if(_dataModel) {
+                        _dataModel->setAmplitude(val);
+                    }
+                }
+                
+                void setFrequency(int val) {
+                    if(_dataModel) {
+                        _dataModel->setFrequency(val);
+                    }
+                }
+                
+            private slots:
+                void throb();
+                
+            private:
+                void syncUI();
+                Ui::DripSourceEditor* _ui;
+                DripSource* _dataModel;
+            };
         }
     }
-    
-    void pulse() {
-        if(_dataModel) {
-            _dataModel->pulseDrip();
-        }
-    }
-    
-    void setAmplitude(int val) {
-        if(_dataModel) {
-            _dataModel->setAmplitude(val);
-        }
-    }
-    
-    void setFrequency(int val) {
-        if(_dataModel) {
-            _dataModel->setFrequency(val);
-        }
-    }
-
-private slots:
-    void throb();
-    
-private:
-    void syncUI();
-    Ui::DripSourceEditor* _ui;
-    DripSource* _dataModel;
-};
+}
 
 #endif // _DRIPSOURCEEDITOR_H

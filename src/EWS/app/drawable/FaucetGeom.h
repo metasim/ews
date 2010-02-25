@@ -23,20 +23,30 @@
 
 #include <osg/Group>
 #include "DripSource.h"
+#include "DrawableQtAdapter.h"
 
-class FaucetGeom : public osg::Group {
-public:
-    FaucetGeom(DripSource& settings);
-    virtual ~FaucetGeom();
-    
-    void drip(int amplitude);
-    
-private:
-    
-    DripSource& _settings;
-};
-
-
+namespace ews {
+    namespace  app {
+        namespace drawable {
+            
+            using ews::app::model::DripSource;
+            
+            class FaucetGeom : public DrawableQtAdapter {
+                Q_OBJECT
+            public:
+                FaucetGeom(DripSource& settings);
+                virtual ~FaucetGeom();
+                
+            public slots:
+                void drip(int amplitude);
+                void setEnabled(bool enabled) ;
+                
+            private:
+                DripSource& _settings;
+            };
+        }
+    }
+}
 
 #endif // __FAUCET_GEOM_H
 

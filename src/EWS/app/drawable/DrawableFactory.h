@@ -20,18 +20,22 @@
 
 #include <QtCore>
 #include <osg/Node>
-
-class DrawableFactory {
-public:
-    static DrawableFactory& instance();
-    
-    osg::Node* createDrawableFor(QObject& model);
-  
-private:
-    DrawableFactory() {}
-    DrawableFactory(const DrawableFactory&) {}
-    void operator=(const DrawableFactory&) {}
-};
-
+namespace ews {
+    namespace app {
+        namespace drawable {
+            class DrawableFactory {
+            public:
+                static DrawableFactory& instance();
+                
+                osg::Node* createDrawableFor(QObject& model);
+                
+            private:
+                DrawableFactory() {}
+                DrawableFactory(const DrawableFactory&) {}
+                void operator=(const DrawableFactory&) {}
+            };
+        }
+    }
+}
 
 #endif // __DRAWABLE_FACTORY_H

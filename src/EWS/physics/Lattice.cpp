@@ -31,8 +31,8 @@ namespace ews {
             const unsigned int minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
             const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(_amplitude.at(0).size()) - 1);
             const unsigned int count = (maxX - minX + 1) * (maxY - minY + 1);
-            for (int i = minX; i <= maxX; i++) {
-                for (int j = minY; j <= maxY; j++) {
+            for (unsigned int i = minX; i <= maxX; i++) {
+                for (unsigned int j = minY; j <= maxY; j++) {
                     sum += _amplitude[i][j];
                 }
             }

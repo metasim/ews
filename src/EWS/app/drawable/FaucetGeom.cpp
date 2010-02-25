@@ -19,45 +19,74 @@
 #include <osg/Geode>
 #include <osg/Drawable>
 #include <osg/PolygonMode>
+#include <osg/MatrixTransform>
+#include <osg/Matrixd>
 #include "FaucetGeom.h"
 #include "demo/Teapot.h"
+
 
 class FaucetDrawCallback : public osg::Drawable::DrawCallback {
     virtual void drawImplementation (osg::RenderInfo&, const osg::Drawable*) const;
 };
 void FaucetDrawCallback::drawImplementation (osg::RenderInfo& ri, const osg::Drawable* d) const
 {
-    glColor3f(0, 0, 1);
+    glColor3f(0, 1, 1);
     d->drawImplementation(ri);
 }
 
-FaucetGeom::FaucetGeom(DripSource& settings) : osg::Group(), _settings(settings)
-{
-    osg::Geode* geode = new osg::Geode;
-    addChild(geode);
-    
-    osg::Drawable* d = new Teapot;
-    d->setDrawCallback(new FaucetDrawCallback);
-    geode->addDrawable(d);
 
-    osg::StateSet* state = geode->getOrCreateStateSet();
-    
-    // Create a PolygonMode attribute 
-    osg::PolygonMode* pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
-    // Force wireframe rendering. 
-    state->setAttributeAndModes(pm, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
-    
-//    QObject::connect(&settings, SIGNAL(drip(int)), this, SLOT(drip(int)));
-}
-
-
-FaucetGeom::~FaucetGeom()
-{
-    
-}
-
-
-void FaucetGeom::drip(int amplitude) 
-{
-    qDebug() << "in geom drip";
+namespace ews {
+    namespace app {
+        namespace drawable {
+            
+            FaucetGeom::FaucetGeom(DripSource& settings) : DrawableQtAdapter(&settings), _settings(settings)
+            {
+                osg::Matrixd m;
+                m.makeScale(0.5, 0.5, 0.5);
+                setMatrix(m);
+                
+                osg::Geode* geode = new osg::Geode;
+                
+                addChild(geode);
+                
+                osg::Drawable* d = new Teapot;
+                d->setDrawCallback(new FaucetDrawCallback);
+                geode->addDrawable(d);
+                
+                osg::StateSet* state = geode->getOrCreateStateSet();
+                
+                // Create a PolygonMode attribute 
+                osg::PolygonMode* pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
+                // Force wireframe rendering. 
+                state->setAttributeAndModes(pm, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
+                
+                
+                QObject::connect(&_settings, SIGNAL(drip(int)), this, SLOT(drip(int)));
+                QObject::connect(&_settings, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
+                
+                setEnabled(_settings.enabled());
+            }
+            
+            
+            FaucetGeom::~FaucetGeom()
+            {
+                
+            }
+            
+            
+            void FaucetGeom::setEnabled(bool enabled) 
+            {
+                // Need to better understand these node masks and how
+                // they affect different types of node visitors
+                setNodeMask(enabled ? 0xffffffff : 0);
+            }
+            
+            void FaucetGeom::drip(int amplitude) 
+            {
+                osg::Matrixd m;
+                m.makeRotate(osg::DegreesToRadians((float)amplitude), 0, 0, 1);
+                postMult(m);
+            }
+        }
+    }
 }

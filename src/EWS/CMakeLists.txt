@@ -27,14 +27,21 @@ file(GLOB EWS_HDRS app/drawable/*.h physics/*.h)
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
-file(GLOB EWS_MOC_HDRS app/widget/*.h app/model/*.h)
+file(GLOB EWS_MOC_HDRS app/widget/*.h app/model/*.h app/drawable/*.h)
 file(GLOB EWS_TEST_MOC_HDRS test/physics/*.h)
 
-# Need to add move DrawableQtAdapter.h from one list to the other
-file(GLOB_RECURSE DQTAH DrawableQtAdapter.h)
-list(REMOVE_ITEM EWS_HDRS ${DQTAH})
-list(APPEND EWS_MOC_HDRS ${DQTAH})
 
+# Move the given file from the EWS_MOC_HDRS list to the EWS_HDRS list
+macro(unmoc FILENAME)
+    file(GLOB_RECURSE MOCKERY ${FILENAME})
+    list(REMOVE_ITEM EWS_MOC_HDRS ${MOCKERY})
+    list(APPEND EWS_HDRS ${MOCKERY})
+endmacro()    
+
+unmoc("SceneRoot.h"  )
+unmoc("DrawableFactory.h"   )
+
+message("moc files: ${EWS_MOC_HDRS}")
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project

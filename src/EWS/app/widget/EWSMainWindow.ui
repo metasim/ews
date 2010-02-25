@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EWSMainWindow</class>
+ <class>ews::app::widget::EWSMainWindow</class>
  <widget class="QMainWindow" name="EWSMainWindow">
   <property name="geometry">
    <rect>

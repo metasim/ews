@@ -20,14 +20,19 @@
 #define __WATER_SURFACE_GEOM_H
 
 #include "DrawableQtAdapter.h"
-
-class WaterSurfaceGeom : public DrawableQtAdapter {
-public:
-    WaterSurfaceGeom();
-    virtual ~WaterSurfaceGeom() {}
-};
-
-
+namespace ews {
+    namespace app {
+        namespace drawable {
+            
+            class WaterSurfaceGeom : public DrawableQtAdapter {
+                Q_OBJECT
+            public:
+                WaterSurfaceGeom();
+                virtual ~WaterSurfaceGeom() {}
+            };
+        }
+    }
+}
 
 #endif //__WATER_SURFACE_GEOM_H
 

@@ -17,17 +17,23 @@
  */
 
 #include "SimulationState.h"
-
-SimulationState::SimulationState(QObject * parent)
-:QObject(parent), _dripSource1(this), _dripSource2(this)
-{
-    _dripSource1.setObjectName("dripSource1");
-    _dripSource1.setEnabled(false);
-    _dripSource2.setObjectName("dripSource2");
-    _dripSource2.setEnabled(false);
-}
-
-
-SimulationState::~SimulationState() {
-
+namespace ews {
+    namespace app {
+        namespace model {
+            SimulationState::SimulationState(QObject * parent)
+            :QObject(parent), _dripSource1(this), _dripSource2(this)
+            {
+                _dripSource1.setObjectName("dripSource1");
+                _dripSource1.setEnabled(false);
+                _dripSource2.setObjectName("dripSource2");
+                _dripSource2.setEnabled(false);
+            }
+            
+            
+            SimulationState::~SimulationState() {
+                
+            }
+            
+        }
+    }
 }
