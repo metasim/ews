@@ -293,3 +293,8 @@ endfunction()
 # First argument is test/executable name, second argument is path to header, remaining arguments are required .cpp files
 cxx_test(LatticeTest test/physics test/physics/LatticeTest.cpp physics/Lattice.cpp)
 cxx_test(ConstantPotentialTest test/physics test/physics/ConstantPotentialTest.cpp)
+cxx_test(Tuple2dTest test/physics test/physics/Tuple2dTest.cpp)
+cxx_test(Point2dTest test/physics test/physics/Point2dTest.cpp)
+cxx_test(Vector2dTest test/physics test/physics/Vector2dTest.cpp)
+cxx_test(Line2dTest test/physics test/physics/Line2dTest.cpp physics/Line2d.cpp)
+cxx_test(WallPotentialTest test/physics test/physics/WallPotentialTest.cpp physics/WallPotential.cpp physics/Line2d.cpp)

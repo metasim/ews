@@ -16,5 +16,25 @@
  * http://mseedsoft.com
  */
 
-#include "ConstantPotential.h"
+#include "Point2dTest.h"
+#include "Vector2d.h"
 
+namespace ews {
+    namespace test {
+        void Point2dTest::initTestCase() { /* do nothing */ }
+        void Point2dTest::cleanupTestCase() { /* do nothing */ }
+        void Point2dTest::init() { /* do nothing */ }
+        void Point2dTest::cleanup() { /* do nothing */ }
+        
+        void Point2dTest::CopyConstructorTakesVector() {
+            double x = 1235.352534;
+            double y = -235.234165;
+            const Point2d p(Vector2d(x, y));
+            QCOMPARE(x, p.x());
+            QCOMPARE(y, p.y());
+        }
+    }
+}
+
+using ews::test::Point2dTest;
+QTEST_MAIN(Point2dTest)
