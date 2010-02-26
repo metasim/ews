@@ -14,6 +14,11 @@ cmake_minimum_required(VERSION 2.8)
 set(EWS_MODULES app/widget app/drawable app/model physics util test)
 
 #--------------------------------------------------------------------------------
+# This is the list of source files that make up the physics engine
+#--------------------------------------------------------------------------------
+file(GLOB EWS_PHYS_SRC physics/*.cpp)
+
+#--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
 #--------------------------------------------------------------------------------
 file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp physics/*.cpp)
@@ -307,3 +312,4 @@ cxx_test(Point2dTest test/physics test/physics/Point2dTest.cpp)
 cxx_test(Vector2dTest test/physics test/physics/Vector2dTest.cpp)
 cxx_test(Line2dTest test/physics test/physics/Line2dTest.cpp physics/Line2d.cpp)
 cxx_test(WallPotentialTest test/physics test/physics/WallPotentialTest.cpp physics/WallPotential.cpp physics/Line2d.cpp)
+cxx_test(WaveModelTest test/physics test/physics/WaveModelTest.cpp ${EWS_PHYS_SRC})
