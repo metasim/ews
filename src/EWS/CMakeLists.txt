@@ -11,7 +11,7 @@ PROJECT (EWS)
 set(EXE_NAME "Visualize STEM - Wave")
 cmake_minimum_required(VERSION 2.8)
 
-set(EWS_MODULES app/widget app/drawable app/model physics test)
+set(EWS_MODULES app/widget app/drawable app/model physics util test)
 
 #--------------------------------------------------------------------------------
 # This is the list of source files that need to be compiled
@@ -21,7 +21,7 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS app/drawable/*.h physics/*.h)
+file(GLOB EWS_HDRS app/drawable/*.h physics/*.h util/*.h)
 
 
 #--------------------------------------------------------------------------------

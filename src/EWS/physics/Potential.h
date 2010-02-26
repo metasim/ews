@@ -24,7 +24,7 @@ namespace ews {
         class Potential {
         public:
             virtual ~Potential() { /* do nothing */ }
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) = 0;
+            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const = 0;
         protected:
             Potential() { /* do nothing */ }
         };

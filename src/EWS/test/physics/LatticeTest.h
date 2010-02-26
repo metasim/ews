@@ -65,6 +65,18 @@ namespace ews {
              * Tests that Lattice::setValue() and Lattice::getValue() method works
              */
             void MethodSetGetValueWorks();
+            /**
+             * Tests that the Lattice::scale() method works
+             */
+            void MethodScaleWorks();
+            /**
+             * Tests that the Lattice::scaleLocation() method works
+             */
+            void MethodScaleLocationWorks();
+            /**
+             * Tests that the Lattice::clear() method works
+             */
+            void MethodClearWorks();
         };
     }
 }

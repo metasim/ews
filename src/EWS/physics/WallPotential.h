@@ -59,7 +59,7 @@ namespace ews {
              * @param time ignored
              * @return 100 if x, y lie within wall, 0 otherwise
              */
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time);
+            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const;
             /**
              * Returns one of the wall's end points
              * @Return wall end point

@@ -40,25 +40,34 @@ namespace ews {
             virtual ~Lattice() {
             }
             /**
+             * Determines whether x and y are within the purview of this lattice
+             * @param x X location to check
+             * @param y Y location to check
+             * @return Whether (x, y) are in this lattice
+             */
+            bool containsLocation(unsigned int x, unsigned int y) const {
+                return (0 <= x) && (x < getWidth()) && (0 <= y) && (y < getLength());
+            }
+            /**
              * Computes the average value of the lattice at x, y with an averaging window of width windowWidth.
              * @param x X location to compute the average for
              * @param y Y location to compute the average for
              * @param windoWidth Width of the averaging window (0 is a single cell)
              * @return Average value for the specified window.
              */
-            double computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth);
+            double computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const;
             /**
              * Gets the width of the lattice.
              * @return Width of the lattice
              */
-            unsigned int getWidth() {
+            unsigned int getWidth() const {
                 return _amplitude.size();
             }
             /**
              * Gets the length of the lattice.
              * @return Length of the lattice
              */
-            unsigned int getLength() {
+            unsigned int getLength() const {
                 return _amplitude.empty() ? 0 : _amplitude[0].size();
             }
             /**
@@ -74,7 +83,7 @@ namespace ews {
              * @param x X location to get the amplitude for
              * @param y Y location to get the amplitude for
              */
-            double getValue(unsigned int x, unsigned int y) {
+            double getValue(unsigned int x, unsigned int y) const {
                 return _amplitude.at(x).at(y);
             }
             /**
@@ -86,7 +95,26 @@ namespace ews {
             void setValue(unsigned int x, unsigned int y, double value) {
                 _amplitude.at(x).at(y) = value;
             }
-            
+            /**
+             * Scales all amplitude values by scaleVal
+             * @param scaleVal amount to scale by
+             */
+            void scale(double scaleVal);
+            /**
+             * Scales amplitude value at x, y by scaleVal
+             * @param x X location to scale the amplitude for
+             * @param y Y location to scale the amplitude for
+             * @param scaleVal amount to scale by
+             */
+            void scaleLocation(unsigned int x, unsigned int y, double scaleVal) {
+                _amplitude[x][y] *= scaleVal;
+            }
+            /**
+             * Sets all amplitude values to zero
+             */
+            void clear() {
+                _amplitude.assign(getWidth(), vector<double>(getLength(), 0.0));
+            }
         private:
             vector<vector<double> > _amplitude;
         };

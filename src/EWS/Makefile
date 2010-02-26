@@ -1,6 +1,6 @@
-.PHONY: xcode clean
+.PHONY: default test xcode clean
 
-build:
+default:
 	(mkdir -p build; cd build; cmake ..; make)
 
 test: build

@@ -45,7 +45,7 @@ namespace ews {
              * @param time ignored
              * @return Constant potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) {
+            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const {
                 return _value;
             }
         private:
