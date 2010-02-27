@@ -90,7 +90,7 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA)
+    COMPONENTS osg osgUtil osgViewer osgGA osgTerrain)
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
@@ -176,9 +176,9 @@ add_executable( ${EXE_NAME} ${EXE_TYPE}
   ${EWS_GEN_UIS}
   ${EWS_GEN_RCS}
   ${EWS_HDRS}
-  ${EWS_MOC_HDRS}
 )
 
+##  ${EWS_MOC_HDRS}
 
 set_property(
     TARGET ${EXE_NAME} 

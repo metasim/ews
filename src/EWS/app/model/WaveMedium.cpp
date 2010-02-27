@@ -16,33 +16,14 @@
  * http://mseedsoft.com
  */
 
-#ifndef __WATER_SURFACE_GEOM_H
-#define __WATER_SURFACE_GEOM_H
 
-#include "DrawableQtAdapter.h"
 #include "WaveMedium.h"
 
 namespace ews {
     namespace app {
-        namespace drawable {
-            using ews::app::model::WaveMedium;
-            
-            class WaterSurfaceGeom : public DrawableQtAdapter {
-                Q_OBJECT
-            public:
-                WaterSurfaceGeom(WaveMedium& settings);
-                virtual ~WaterSurfaceGeom() {}
-                
-            private slots:
-                void updateWaterGeometry();
+        namespace model {
 
-            private:
-                Q_DISABLE_COPY(WaterSurfaceGeom)
-                WaveMedium& _settings;
-            };
+            
         }
     }
 }
-
-#endif //__WATER_SURFACE_GEOM_H
-

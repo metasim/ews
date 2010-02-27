@@ -18,26 +18,82 @@
 
 #include "WaterSurfaceGeom.h"
 
-#include <osg/Geode>
 #include <osg/Shape>
-#include <osg/ShapeDrawable>
+#include <osgTerrain/Terrain>
+#include <osgTerrain/TerrainTile>
+#include <osgTerrain/GeometryTechnique>
+#include <osgTerrain/Layer>
+
 namespace ews {
     namespace app {
         namespace drawable {
-            WaterSurfaceGeom::WaterSurfaceGeom() : DrawableQtAdapter(NULL)
-            {
-                osg::Capsule* thing = new osg::Capsule;
+            using ews::app::model::WaveMedium;
+            using osg::ref_ptr;
+            
+            WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
+            DrawableQtAdapter(&settings), _settings(settings) {
+
+                QObject::connect(&_settings, SIGNAL(sizeChanged(int,int)), this, SLOT(updateWaterGeometry()));
+                QObject::connect(&_settings, SIGNAL(resolutionChanged(int)), this, SLOT(updateWaterGeometry()));
                 
-                osg::ShapeDrawable* drawable = new osg::ShapeDrawable(thing);
-                drawable->setColor(osg::Vec4(1, 1, 0, 1));
+                updateWaterGeometry();
+            }
+            
+            
+            void WaterSurfaceGeom::updateWaterGeometry() {
+                using namespace osgTerrain;
+                using namespace osg;
                 
-                osg::Geode* geom = new osg::Geode;
+                removeChildren(0, getNumChildren());
                 
-                geom->addDrawable(drawable);
+//                ref_ptr<Terrain> t = new Terrain();
                 
-//                addChild(geom);
+                ref_ptr<TerrainTile> terrainTile = new TerrainTile;
+                
+                ref_ptr<Locator> locator = new Locator;
+                ref_ptr<ValidDataOperator> validDataOperator = new NoDataValue(0.0);
+                ref_ptr<Layer> lastAppliedLayer;
+                terrainTile->setTreatBoundariesToValidDataAsDefaultValue(true);
+                
+                locator->setCoordinateSystemType(Locator::PROJECTED);
+                locator->setTransformAsExtents(0, 0, _settings.width(), _settings.length());
+                
+//                ref_ptr<GeometryTechnique> geometryTechnique = new GeometryTechnique;
+//                terrainTile->setTerrainTechnique(geometryTechnique.get());
+                
+                ref_ptr<HeightField> hf = new HeightField;
+                ref_ptr<HeightFieldLayer> hfl = new HeightFieldLayer;
+                hfl->setHeightField(hf.get());
+                
+                hfl->setLocator(locator.get());
+                hfl->setValidDataOperator(validDataOperator.get());
+                
+//                terrainTile->setElevationLayer(hfl.get());
+                
+                
+                addChild(terrainTile.get());
+                
+//                
+//                
+//                osg::ref_ptr<osgTerrain::HeightFieldLayer> hfl = new osgTerrain::HeightFieldLayer;
+//                hfl->setHeightField(hf.get());
+//                
+//                hfl->setLocator(locator.get());
+//                hfl->setValidDataOperator(validDataOperator.get());
+//                hfl->setMagFilter(filter);
+//                
+//                if (offset!=0.0f || scale!=1.0f)
+//                {
+//                    hfl->transform(offset,scale);
+//                }
+//                
+//                terrainTile->setElevationLayer(hfl.get());
+//                
+//                lastAppliedLayer = hfl.get();
+//                
                 
             }
+            
         }
     }
 }

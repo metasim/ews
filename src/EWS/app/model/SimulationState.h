@@ -22,33 +22,74 @@
 #include <QtCore>
 
 #include "DripSource.h"
+#include "WaveMedium.h"
 
 namespace ews {
     namespace app {
         namespace model {
+            
+            /** This class is the root of the simulation state; all transient data
+             *  should be available from the class and or its children.
+             */
             class SimulationState : public QObject {
                 Q_OBJECT
                 
             public:
                 SimulationState(QObject * parent = 0);
                 virtual ~SimulationState();
-                
+               
+                /**
+                 * Get the first drip source.
+                 */
                 DripSource& dripSource1() {
                     return _dripSource1;
                 }
                 
+                /**
+                 * Get the second drip source. 
+                 */
                 DripSource& dripSource2() {
                     return _dripSource2;
                 }
                 
+                /**
+                 * Get the wave medium.
+                 */
+                WaveMedium& waveMedium() {
+                    return _waveMedium;
+                }
+                
+                
             signals:
+                /** 
+                 * Signal fired when a wall or barrier is added to the scene.
+                 */
                 void objectAdded(QObject& added);
+                /**
+                 * Signal fired when a wall or barrier is removed from the scene.
+                 */
                 void objectRemoved(QObject& removed);
+                
+                
+            public:
+                /**
+                 * This is a convenience method for the setup phase when
+                 * signals are getting registered and we want to 
+                 * associate geometry with the default simulation state
+                 * objects. It should only be called by once by the setup code.
+                 */
+                void emitSignalsForDefaults() {
+                    emit objectAdded(waveMedium());
+                    emit objectAdded(dripSource1());
+                    emit objectAdded(dripSource2());
+                }
+
                 
             private:
                 Q_DISABLE_COPY(SimulationState)
                 DripSource _dripSource1;
                 DripSource _dripSource2;
+                WaveMedium _waveMedium;
                 
             };
         }

@@ -44,13 +44,14 @@ namespace ews {
                 
             public:
                 EWSMainWindow(SimulationState* state, QWidget *parent = 0);
-                ~EWSMainWindow();
+                virtual ~EWSMainWindow();
                 
             public slots:
                 void addDrawableFor(QObject& data);
                 void removeDrawableFor(QObject& data);
                 
             private:
+                Q_DISABLE_COPY(EWSMainWindow)
                 Ui::EWSMainWindow* _ui;
                 SimulationState* _state;
                 SceneRoot* _sceneRoot;

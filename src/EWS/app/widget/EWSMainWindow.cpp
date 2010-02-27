@@ -37,18 +37,14 @@ namespace ews {
                 _ui->dripSource1->setDataModel(&state->dripSource1());
                 _ui->dripSource2->setDataModel(&state->dripSource2());
                 
+                _sceneRoot = new SceneRoot;
+                _ui->renderer->setSceneData(_sceneRoot);
                 
                 // Setup sync between model and renderer.
                 connect(state, SIGNAL(objectAdded(QObject&)), this, SLOT(addDrawableFor(QObject&)));
                 connect(state, SIGNAL(objectRemoved(QObject&)), this, SLOT(removeDrawableFor(QObject&)));
                 
-                _sceneRoot = new SceneRoot;
-                
-                
-                addDrawableFor(state->dripSource1());
-                addDrawableFor(state->dripSource2());
-                
-                _ui->renderer->setSceneData(_sceneRoot);
+                _state->emitSignalsForDefaults();
                 
             }
             
