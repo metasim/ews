@@ -37,7 +37,7 @@ namespace ews {
                  */
                 WaveMedium(QObject * parent = 0) : 
                 QObject(parent), _width(100), _length(100), 
-                _latticeDivisionsPerCentimeter(10) {
+                _latticeDivisionsPerCentimeter(1) {
 
                 }
                 

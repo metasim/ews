@@ -45,19 +45,13 @@ namespace ews {
             public:
                 EWSMainWindow(SimulationState* state, QWidget *parent = 0);
                 virtual ~EWSMainWindow();
-                
-            public slots:
-                void addDrawableFor(QObject& data);
-                void removeDrawableFor(QObject& data);
+
                 
             private:
                 Q_DISABLE_COPY(EWSMainWindow)
                 Ui::EWSMainWindow* _ui;
                 SimulationState* _state;
                 SceneRoot* _sceneRoot;
-                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
-                Qt2OSGMap _drawables;
-                
             };
         }
     }

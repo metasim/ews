@@ -24,14 +24,22 @@
 namespace ews {
     namespace app {
         namespace drawable {
-            class SceneRoot : public osg::Group {
+            class SceneRoot : public QObject, public osg::Group {
+                Q_OBJECT
             public:
-                SceneRoot();
+                SceneRoot(QObject* parent = 0);
                 virtual ~SceneRoot();
                 
+                
+            public slots:
+                void addDrawableFor(QObject& data);
+                void removeDrawableFor(QObject& data);
+                
             private:    
-                SceneRoot(const SceneRoot& copy) {}
-                void operator=(const SceneRoot& copy) {}
+                Q_DISABLE_COPY(SceneRoot)
+                
+                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
+                Qt2OSGMap _drawables;
             };
         }
     }

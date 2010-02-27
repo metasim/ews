@@ -38,7 +38,6 @@ macro(unmoc FILENAME)
     list(APPEND EWS_HDRS ${MOCKERY})
 endmacro()    
 
-unmoc("SceneRoot.h")
 unmoc("DrawableFactory.h")
 
 #message("moc files: ${EWS_MOC_HDRS}")
@@ -90,7 +89,7 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA osgTerrain)
+    COMPONENTS osg osgUtil osgViewer osgGA)
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
