@@ -7,6 +7,11 @@ primarily determined by its depth. (See
 http://www.physicsclassroom.com/Class/waves/u10l3b.cfm for a more
 in-depth explanation of this.)
 
+Important:
+The physics in general is very approximate, and although it typically
+"feels" right, it could stand improvement. For one thing, there are
+no units explicitly used, so measurements are only comparative.
+
 Somewhat important:
 It would be nice to be able to scale the magnitude of the various
 graphs available to us, or at the very least have an option to

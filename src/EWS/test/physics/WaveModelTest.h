@@ -43,9 +43,17 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the WaveModel::propage() method works
+             * Tests that the WaveModel constructor works
              */
-            void MethodPropagateWorks();
+            void ConstructorWorks();
+            /**
+             * Tests that the WaveModel::propage() method works for a fixed location
+             */
+            void MethodPropagateWorksInPlace();
+            /**
+             * Tests that the WaveModel::propage() method works for a travelling wave
+             */
+            void MethodPropagateWorksAcrossSpace();
         };
     }
 }
