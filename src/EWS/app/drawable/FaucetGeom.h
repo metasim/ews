@@ -42,6 +42,7 @@ namespace ews {
                 void setEnabled(bool enabled) ;
                 
             private:
+                Q_DISABLE_COPY(FaucetGeom)
                 DripSource& _settings;
             };
         }

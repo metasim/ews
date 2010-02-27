@@ -15,34 +15,15 @@
  * Developed by Mustard Seed Software, LLC 
  * http://mseedsoft.com
  */
-#ifndef __SCENE_ROOT_H
-#define __SCENE_ROOT_H
 
-#include <QtCore>
-#include <osg/Geode>
+
+#include "WaveMedium.h"
 
 namespace ews {
     namespace app {
-        namespace drawable {
-            class SceneRoot : public QObject, public osg::Group {
-                Q_OBJECT
-            public:
-                SceneRoot(QObject* parent = 0);
-                virtual ~SceneRoot();
-                
-                
-            public slots:
-                void addDrawableFor(QObject& data);
-                void removeDrawableFor(QObject& data);
-                
-            private:    
-                Q_DISABLE_COPY(SceneRoot)
-                
-                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
-                Qt2OSGMap _drawables;
-            };
+        namespace model {
+
+            
         }
     }
 }
-
-#endif // __SCENE_ROOT_H

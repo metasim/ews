@@ -18,23 +18,27 @@
  */
 
 #include "QOSGWidget.h"
-
 #include <QtGui/QKeyEvent>
 #include <osgGA/TrackballManipulator>
+#include <osgGA/FlightManipulator>
+#include <osgGA/DriveManipulator>
+#include <osgGA/KeySwitchMatrixManipulator>
+#include <osgGA/TerrainManipulator>
+#include <osgGA/StateSetManipulator>
 
-
-//----------------
 #include <osg/Geometry>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
-#include <osgGA/TrackballManipulator>
 #include <osg/MatrixTransform>
 
 #include <osgAnimation/BasicAnimationManager>
 #include <osgAnimation/Channel>
 #include <osgAnimation/UpdateCallback>
+
+#include "CameraController.h"
+
 
 namespace ews {
     namespace app {
@@ -42,17 +46,42 @@ namespace ews {
             QOSGWidget::QOSGWidget(QWidget * parent):
             QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer()
             {
-                
+                osg::setNotifyLevel(osg::INFO);
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::ClickFocus);
-                addEventHandler(new osgViewer::StatsHandler);
                 
                 getCamera()->setViewport(new osg::Viewport(0,0,width(),height()));
                 getCamera()->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(width())/static_cast<double>(height()), 1.0f, 10000.0f);
                 getCamera()->setGraphicsContext(getGraphicsWindow());
                 
                 setThreadingModel(osgViewer::Viewer::SingleThreaded);
-                setCameraManipulator(new osgGA::TrackballManipulator);
+                
+                osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
+                
+//                keyswitchManipulator->addMatrixManipulator( '1', "Default", new ews::app::drawable::CameraController);
+//                keyswitchManipulator->addMatrixManipulator( '2', "Terrain", new osgGA::TerrainManipulator() );
+//                keyswitchManipulator->addMatrixManipulator( '3', "Trackball", new osgGA::TrackballManipulator() );
+//                keyswitchManipulator->addMatrixManipulator( '3', "Flight", new osgGA::FlightManipulator() );
+//                keyswitchManipulator->addMatrixManipulator( '4', "Drive", new osgGA::DriveManipulator() );
+                
+//                setCameraManipulator(keyswitchManipulator.get());
+                
+                setCameraManipulator(new ews::app::drawable::CameraController);
+                addEventHandler(new osgViewer::StatsHandler);
+                
+                // add the help handler
+                addEventHandler(new osgViewer::HelpHandler());
+                
+                // Allows us to toggle lighting and other basic state items with keyboard
+                addEventHandler( new osgGA::StateSetManipulator(getCamera()->getOrCreateStateSet()));
+                
+                // add the thread model handler
+                addEventHandler(new osgViewer::ThreadingHandler);
+                
+                // add the window size toggle handler
+                addEventHandler(new osgViewer::WindowSizeHandler);               
+                                
+                
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
                 _timer.start(10);
             }

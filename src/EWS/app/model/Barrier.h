@@ -15,34 +15,24 @@
  * Developed by Mustard Seed Software, LLC 
  * http://mseedsoft.com
  */
-#ifndef __SCENE_ROOT_H
-#define __SCENE_ROOT_H
+
+#ifndef __BARRIER_H
+#define __BARRIER_H
+
 
 #include <QtCore>
-#include <osg/Geode>
 
 namespace ews {
     namespace app {
-        namespace drawable {
-            class SceneRoot : public QObject, public osg::Group {
+        namespace model {
+            class Barrier : public QObject {
                 Q_OBJECT
-            public:
-                SceneRoot(QObject* parent = 0);
-                virtual ~SceneRoot();
-                
-                
-            public slots:
-                void addDrawableFor(QObject& data);
-                void removeDrawableFor(QObject& data);
-                
-            private:    
-                Q_DISABLE_COPY(SceneRoot)
-                
-                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
-                Qt2OSGMap _drawables;
+
             };
         }
     }
 }
 
-#endif // __SCENE_ROOT_H
+
+#endif // __BARRIER_H
+

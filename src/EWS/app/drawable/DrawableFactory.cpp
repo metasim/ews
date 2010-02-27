@@ -20,31 +20,36 @@
 #include "DrawableFactory.h"
 #include "DripSource.h"
 #include "FaucetGeom.h"
+#include "WaveMedium.h"
+#include "WaterSurfaceGeom.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace ews::app::model;
             
-            DrawableFactory& DrawableFactory::instance() 
-            {
+            DrawableFactory& DrawableFactory::instance() {
                 static DrawableFactory singleton;
                 return singleton;
             }
             
             
-            osg::Node* DrawableFactory::createDrawableFor(QObject& data) 
-            {
+            osg::Node* DrawableFactory::createDrawableFor(QObject& data)  {
                 // Currently only a loose mapping between object data and drawable type is
                 // maintained, hense the switching on type.
                 QString name(data.metaObject()->className());
-                qDebug() << "Finding drawable for" << name;
+                qDebug() << "Selecting drawable for" << name;
                 if(data.inherits(DripSource::staticMetaObject.className())) {
                     DripSource* source = qobject_cast<DripSource*>(&data);
                     FaucetGeom* geom = new FaucetGeom(*source);
                     return geom;
                 }
-                
+                else if(data.inherits(WaveMedium::staticMetaObject.className())) {
+                    WaveMedium* waves = qobject_cast<WaveMedium*>(&data);
+                    WaterSurfaceGeom* geom = new WaterSurfaceGeom(*waves);
+                    return geom;
+                }
+                    
                 qWarning() << "No drawable found for" << name;
                 return NULL;
             }

@@ -17,18 +17,33 @@
  */
 
 #include "SceneRoot.h"
+#include "DrawableFactory.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             
-            SceneRoot::SceneRoot() 
-            {
+            SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::Group(), _drawables() {
             }
             
             
-            SceneRoot::~SceneRoot()
-            {
+            SceneRoot::~SceneRoot() {
+            }
+            
+            
+            void SceneRoot::addDrawableFor(QObject& data) {
+                osg::Node* geom = DrawableFactory::instance().createDrawableFor(data);
+                if(geom) {
+                    addChild(geom);
+                    _drawables.insert(&data, geom);
+                }
+            }
+            
+            void SceneRoot::removeDrawableFor(QObject& data) {
+                osg::Node* geom = _drawables.take(&data);
+                if(geom) {
+                    removeChild(geom);
+                }
             }
         }
     }

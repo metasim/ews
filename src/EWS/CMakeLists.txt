@@ -43,7 +43,6 @@ macro(unmoc FILENAME)
     list(APPEND EWS_HDRS ${MOCKERY})
 endmacro()    
 
-unmoc("SceneRoot.h")
 unmoc("DrawableFactory.h")
 
 #message("moc files: ${EWS_MOC_HDRS}")
@@ -181,9 +180,9 @@ add_executable( ${EXE_NAME} ${EXE_TYPE}
   ${EWS_GEN_UIS}
   ${EWS_GEN_RCS}
   ${EWS_HDRS}
-  ${EWS_MOC_HDRS}
 )
 
+##  ${EWS_MOC_HDRS}
 
 set_property(
     TARGET ${EXE_NAME} 

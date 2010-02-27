@@ -38,6 +38,7 @@ void FaucetDrawCallback::drawImplementation (osg::RenderInfo& ri, const osg::Dra
 namespace ews {
     namespace app {
         namespace drawable {
+            using osg::ref_ptr;
             
             FaucetGeom::FaucetGeom(DripSource& settings) : DrawableQtAdapter(&settings), _settings(settings)
             {
@@ -45,18 +46,18 @@ namespace ews {
                 m.makeScale(0.5, 0.5, 0.5);
                 setMatrix(m);
                 
-                osg::Geode* geode = new osg::Geode;
+                ref_ptr<osg::Geode> geode = new osg::Geode;
                 
-                addChild(geode);
+                addChild(geode.get());
                 
-                osg::Drawable* d = new Teapot;
+                ref_ptr<osg::Drawable> d = new Teapot;
                 d->setDrawCallback(new FaucetDrawCallback);
                 geode->addDrawable(d);
                 
-                osg::StateSet* state = geode->getOrCreateStateSet();
+                ref_ptr<osg::StateSet> state = geode->getOrCreateStateSet();
                 
                 // Create a PolygonMode attribute 
-                osg::PolygonMode* pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
+                ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
                 // Force wireframe rendering. 
                 state->setAttributeAndModes(pm, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
                 
@@ -84,7 +85,7 @@ namespace ews {
             void FaucetGeom::drip(int amplitude) 
             {
                 osg::Matrixd m;
-                m.makeRotate(osg::DegreesToRadians((float)amplitude), 0, 0, 1);
+                m.makeRotate(osg::DegreesToRadians(amplitude/10.0), 0, 0, 1);
                 postMult(m);
             }
         }
