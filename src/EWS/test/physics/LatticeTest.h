@@ -70,6 +70,10 @@ namespace ews {
              */
             void MethodSetGetValueWorks();
             /**
+             * Tests that Lattice::getValue() yields zero outside of where it is defined.
+             */
+            void MethodGetValueYieldsZeroOutsideOfLattice();
+            /**
              * Tests that the Lattice::scale() method works
              */
             void MethodScaleWorks();

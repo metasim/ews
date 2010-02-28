@@ -86,6 +86,12 @@ namespace ews {
             QCOMPARE(testLattice.getValue(2, 2), 9.0);
         }
         
+        void LatticeTest::MethodGetValueYieldsZeroOutsideOfLattice() {
+            Lattice testLattice(5, 5);
+            QCOMPARE(testLattice.getValue(5, 5), 0.0);
+            QCOMPARE(testLattice.getValue(500, 500), 0.0);
+        }
+
         void LatticeTest::MethodScaleWorks() {
             Lattice testLattice(5, 5);
             testLattice.setValue(2, 2, 9.0);
