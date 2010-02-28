@@ -28,19 +28,46 @@ namespace ews {
         namespace drawable {
             using ews::app::model::WaveMedium;
             using osg::ref_ptr;
+            using namespace osg;
+            static int attrNum = 10; 
             
-            
-
-            
-            class UniformVarying : public osg::Uniform::Callback
-            {
-                virtual void operator () (osg::Uniform* uniform, osg::NodeVisitor* nv)
-                {
+            class VertexHeightUpdate : public osg::Drawable::UpdateCallback {
+                virtual void update (osg::NodeVisitor* nv, osg::Drawable* d) {
                     const osg::FrameStamp* fs = nv->getFrameStamp();
                     float value = fs->getSimulationTime();
-                    uniform->set(osg::Vec4(value,-value,value,value));
+                    
+                    float alpha = sinf(value);
+                    
+                    
+                    Geometry* geometry = d->asGeometry();
+                    Array* data = geometry->getVertexAttribArray(attrNum);
+                    osg::FloatArray* floats = dynamic_cast<FloatArray*>(data);
+//                    osg::notify(osg::NOTICE) << "-- cast " << (floats ? " did " : " did not " ) << "work" << std::endl;
+                    if(!floats) return;
+                    unsigned int size = data->getNumElements();
+                    for(unsigned int i = 0; i < size; i++) {
+                        if(i % 2) {
+                            (*floats)[i] = alpha*10.0f;
+                        }
+                        else {
+                            (*floats)[i] = 0;
+                        }
+                        
+                    }
+                    
+                    data->dirty();
                 }
             };
+            
+//            class UniformVarying : public osg::Uniform::Callback
+//            {
+//                virtual void operator () (osg::Uniform* uniform, osg::NodeVisitor* nv)
+//                {
+//                    const osg::FrameStamp* fs = nv->getFrameStamp();
+//                    float value = fs->getSimulationTime();
+//                    uniform->set(osg::Vec4(value,-value,value,value));
+//                }
+//            };
             
             
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
@@ -52,31 +79,48 @@ namespace ews {
                 updateWaterGeometry();
             }
             
+            void WaterSurfaceGeom::applyWave(osg::Array* heights){
+                osg::FloatArray* floats = dynamic_cast<FloatArray*>(heights);
+                osg::notify(osg::NOTICE) << "**** cast " << (floats ? " did " : " did not " ) << "work" << std::endl;
+                if(!floats) return;
+                unsigned int size = heights->getNumElements();
+                for(unsigned int i = 0; i < size; i++) {
+                    (*floats)[i] = i/(float)size;
+                    
+                }
+                
+                heights->dirty();
+            }
             
-            ///////////////////////////////////////////////////////////////////
-            // vertex shader using just Vec4 coefficients
+            // osg predefined unifoms
+            // int osg_FrameNumber; 
+            // float osg_FrameTime; 
+            // float osg_DeltaFrameTime;
+            // mat4 osg_ViewMatrix;
+            // mat4 osg_InverseViewMatrix; 
+            
             char vertexShaderSource_simple[] = 
-            "uniform vec4 coeff; \n"
+            "attribute float height; \n"
             "\n"
             "void main(void) \n"
             "{ \n"
             "\n"
-            "    // gl_TexCoord[0] = gl_Vertex; \n"
             "    vec4 vert = gl_Vertex; \n"
-
-            
-            
-            "    vert.z = (sin(coeff[0] + (gl_Vertex.x/5.0)) + sin(coeff[1] + (gl_Vertex.y/4.0))) * 2.5; "
-            
+            "    vert.z = height; \n"
             "    gl_Position = gl_ModelViewProjectionMatrix * vert;\n"
             "    gl_FrontColor = gl_Color\n;"
+            "    // gl_FrontColor = vec4(height, height, 0.0, 1.0);\n"
             "}\n";
             
             void WaterSurfaceGeom::updateWaterGeometry() {
 
-                using namespace osg;
-                
                 removeChildren(0, getNumChildren());
+                
+                
+                unsigned int rez = _settings.latticeDivisionsPerCentimeter();
+                unsigned int num_x = _settings.width() * rez;
+                unsigned int num_y = _settings.length() * rez;
+                unsigned int totalVerts = num_x * num_y;
                 
                 ref_ptr<Geode> geode = new Geode;
                 {
@@ -86,7 +130,7 @@ namespace ews {
                     // Create a PolygonMode attribute 
                     ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
                     // Force wireframe rendering. 
-                    state->setAttributeAndModes(pm, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
+                    state->setAttributeAndModes(pm.get(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
                 }
                 addChild(geode.get());
 
@@ -111,22 +155,28 @@ namespace ews {
                     ref_ptr<Shader> vp = new Shader(osg::Shader::VERTEX, vertexShaderSource_simple);
                     program->addShader(vp.get());
                     
-                    ref_ptr<Uniform> coeff = new Uniform("coeff",osg::Vec4(1.0,1.0f,1.0f,1.0f));
-                    
-                    state->addUniform(coeff.get());
-                    
-                    coeff->setUpdateCallback(new UniformVarying);
-                    coeff->setDataVariance(osg::Object::DYNAMIC);
-                    
+
                     state->setDataVariance(osg::Object::DYNAMIC);
+                    
+                    
+                    ref_ptr<FloatArray> attrib = new FloatArray(totalVerts); 
+                    applyWave(attrib.get());
+
+                    
+                    attrib->setDataVariance(osg::Object::DYNAMIC);
+
+                    // (Fill attrib with per-vertex attributes) 
+                    geom->setVertexAttribArray(attrNum, attrib.get()); 
+                    geom->setVertexAttribBinding(attrNum, osg::Geometry::BIND_PER_VERTEX); 
+                    program->addBindAttribLocation("height", attrNum); 
+                    geom->setUpdateCallback(new VertexHeightUpdate);
+                    
+
                 }
-                
-                unsigned int rez = _settings.latticeDivisionsPerCentimeter();
-                unsigned int num_x = _settings.width() * rez;
-                unsigned int num_y = _settings.length() * rez;
+
                 
                 // Code below adapted from demo file osgparametric.cpp
-                ref_ptr<Vec3Array> vertices = new Vec3Array( num_x * num_y );
+                ref_ptr<Vec3Array> vertices = new Vec3Array( totalVerts );
                 
                 float dx = 1/(float) rez;
                 float dy = dx;

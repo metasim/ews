@@ -52,14 +52,14 @@ namespace ews {
                 
                 ref_ptr<osg::Drawable> d = new Teapot;
                 d->setDrawCallback(new FaucetDrawCallback);
-                geode->addDrawable(d);
+                geode->addDrawable(d.get());
                 
                 ref_ptr<osg::StateSet> state = geode->getOrCreateStateSet();
                 
                 // Create a PolygonMode attribute 
                 ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
                 // Force wireframe rendering. 
-                state->setAttributeAndModes(pm, osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
+                state->setAttributeAndModes(pm.get(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
                 
                 
                 QObject::connect(&_settings, SIGNAL(drip(int)), this, SLOT(drip(int)));

@@ -21,6 +21,7 @@
 
 #include "DrawableQtAdapter.h"
 #include "WaveMedium.h"
+#include <osg/Geometry>
 
 namespace ews {
     namespace app {
@@ -38,6 +39,7 @@ namespace ews {
 
             private:
                 Q_DISABLE_COPY(WaterSurfaceGeom)
+                void applyWave(osg::Array* heights);
                 WaveMedium& _settings;
             };
         }
