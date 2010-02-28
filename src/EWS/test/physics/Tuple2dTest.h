@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for Tuple2d.
+         */        
         class Tuple2dTest: public QObject
         {
         public:

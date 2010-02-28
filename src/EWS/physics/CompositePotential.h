@@ -27,6 +27,10 @@ using ews::util::counted_ptr;
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Potential made up of the sum of other potentials.
+         */        
         class CompositePotential : public Potential {
         public:
             CompositePotential() { /* do nothing */ }

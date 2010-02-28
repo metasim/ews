@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for testing the Lattice class.
+         */        
         class LatticeTest: public QObject
         {
         public:

@@ -26,6 +26,10 @@ using ews::util::counted_ptr;
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Model for waves.
+         */        
         class WaveModel {
         public:
             WaveModel(unsigned int width, unsigned length);

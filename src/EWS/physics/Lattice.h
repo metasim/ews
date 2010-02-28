@@ -24,6 +24,10 @@ using std::vector;
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Structure for holding the field state
+         */        
         class Lattice {
             
         public:

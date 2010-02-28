@@ -26,6 +26,10 @@ using ews::util::counted_ptr;
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Interface for models describing wave propagation.
+         */        
         class WavePropagator {
         public:
             virtual ~WavePropagator() { /* do nothing */ }

@@ -27,6 +27,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for WaveModel.
+         */        
         class WaveModelTest: public QObject
         {
         public:

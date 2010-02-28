@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for testing Line2d.
+         */        
         class Line2dTest: public QObject
         {
         public:
