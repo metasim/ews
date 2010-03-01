@@ -19,7 +19,7 @@
 #ifndef __CONSTANTPOTENTIALTEST_H
 #define __CONSTANTPOTENTIALTEST_H
 
-#include "ConstantPotential.h"
+#include "Oscillator.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
@@ -28,13 +28,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for constant potentials.
+         * Test harness for Oscillator.
          */        
-        class ConstantPotentialTest: public QObject
+        class OscillatorTest: public QObject
         {
         public:
-            ConstantPotentialTest() { /* do nothing */ }
-            virtual ~ConstantPotentialTest() { /* do nothing */ }
+            OscillatorTest() { /* do nothing */ }
+            virtual ~OscillatorTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,13 +46,9 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the ConstantPotential::ConstantPotential() constructor works
+             * Tests that the Oscillator default constructor creates a valid object
              */
-            void DefaultConstructorIsZero();
-            /**
-             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
-             */
-            void ValueConstructorYieldsValue();
+            void DefaultConstructor();
         };
     }
 }

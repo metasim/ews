@@ -16,23 +16,18 @@
  * http://mseedsoft.com
  */
 
-#ifndef __POTENTIAL_H
-#define __POTENTIAL_H
+#include "PrecomputedPotential.h"
 
 namespace ews {
     namespace physics {
-        /**
-         * @ingroup Physics
-         * Stores field potentials.
-         */        
-        class Potential {
-        public:
-            virtual ~Potential() { /* do nothing */ }
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const = 0;
-        protected:
-            Potential() { /* do nothing */ }
-        };
+        PrecomputedPotential::PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width,
+                                                   unsigned int length):
+        _potentialValues(width, vector<double>(length, 0.0)) {
+            for (unsigned int i = 0; i < width; i++) {
+                for (unsigned int j = 0; j < length; j++) {
+                    _potentialValues[i][j] = p->getPotential(i, j, 0);
+                }
+            }
+        }
     }
 }
-
-#endif // __POTENTIAL_H

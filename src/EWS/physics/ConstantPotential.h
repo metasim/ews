@@ -23,6 +23,10 @@
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Potential with a constant value everywhere.
+         */        
         class ConstantPotential : public Potential {
         public:
             /**

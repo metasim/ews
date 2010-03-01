@@ -30,6 +30,10 @@ namespace ews {
         const unsigned int DEFAULT_THICKNESS_SQ = 3 * 3;
         const double DEFAULT_POTENTIAL = 100.0;
 
+        /**
+         * @ingroup Physics
+         * Potential describing a wall or mirror
+         */        
         class WallPotential : public Potential {
         public:
             /**

@@ -16,11 +16,12 @@
  * http://mseedsoft.com
  */
 
-#ifndef __CONSTANTPOTENTIALTEST_H
-#define __CONSTANTPOTENTIALTEST_H
+#ifndef __DAMPEDCLASSICALWAVEPROPAGATORTEST_H
+#define __DAMPEDCLASSICALWAVEPROPAGATORTEST_H
 
-#include "ConstantPotential.h"
+#include "DampedClassicalWavePropagator.h"
 using namespace ews::physics;
+
 
 #include <QtTest/QtTest>
 
@@ -28,13 +29,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for constant potentials.
+         * Test harness for DampedClassicalWavePropagator.
          */        
-        class ConstantPotentialTest: public QObject
+        class DampedClassicalWavePropagatorTest: public QObject
         {
         public:
-            ConstantPotentialTest() { /* do nothing */ }
-            virtual ~ConstantPotentialTest() { /* do nothing */ }
+            DampedClassicalWavePropagatorTest() { /* do nothing */ }
+            virtual ~DampedClassicalWavePropagatorTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,15 +47,19 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the ConstantPotential::ConstantPotential() constructor works
+             * Tests that the DampedClassicalWavePropagator constructor works
              */
-            void DefaultConstructorIsZero();
+            void ConstructorWorks();
             /**
-             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
+             * Tests that the DampedClassicalWavePropagator::propage() method works for a fixed location
              */
-            void ValueConstructorYieldsValue();
+            void MethodPropagateWorksInPlace();
+            /**
+             * Tests that the DampedClassicalWavePropagator::propage() method works for a travelling wave
+             */
+            void MethodPropagateWorksAcrossSpace();
         };
     }
 }
 
-#endif // __CONSTANTPOTENTIALTEST_H
+#endif // __DAMPEDCLASSICALWAVEPROPAGATORTEST_H

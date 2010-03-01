@@ -16,10 +16,10 @@
  * http://mseedsoft.com
  */
 
-#ifndef __CONSTANTPOTENTIALTEST_H
-#define __CONSTANTPOTENTIALTEST_H
+#ifndef __COMPOSITEPOTENTIALTEST_H
+#define __COMPOSITEPOTENTIALTEST_H
 
-#include "ConstantPotential.h"
+#include "CompositePotential.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
@@ -28,13 +28,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for constant potentials.
+         * Test harness for composite potentials.
          */        
-        class ConstantPotentialTest: public QObject
+        class CompositePotentialTest: public QObject
         {
         public:
-            ConstantPotentialTest() { /* do nothing */ }
-            virtual ~ConstantPotentialTest() { /* do nothing */ }
+            CompositePotentialTest() { /* do nothing */ }
+            virtual ~CompositePotentialTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,15 +46,15 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the ConstantPotential::ConstantPotential() constructor works
+             * Tests that the CompositePotential::CompositePotential() constructor works
              */
             void DefaultConstructorIsZero();
             /**
-             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
+             * Tests that the CompositePotential can handle a single constant potential
              */
-            void ValueConstructorYieldsValue();
+            void CanHandleSingleConstantPotential();
         };
     }
 }
 
-#endif // __CONSTANTPOTENTIALTEST_H
+#endif // __COMPOSITEPOTENTIALTEST_H

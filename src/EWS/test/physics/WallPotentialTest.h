@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for the wall potential.
+         */        
         class WallPotentialTest: public QObject
         {
         public:

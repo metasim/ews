@@ -16,10 +16,10 @@
  * http://mseedsoft.com
  */
 
-#ifndef __CONSTANTPOTENTIALTEST_H
-#define __CONSTANTPOTENTIALTEST_H
+#ifndef __PRECOMPUTEDPOTENTIALTEST_H
+#define __PRECOMPUTEDPOTENTIALTEST_H
 
-#include "ConstantPotential.h"
+#include "PrecomputedPotential.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
@@ -28,13 +28,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for constant potentials.
+         * Test harness for precomputed potentials.
          */        
-        class ConstantPotentialTest: public QObject
+        class PrecomputedPotentialTest: public QObject
         {
         public:
-            ConstantPotentialTest() { /* do nothing */ }
-            virtual ~ConstantPotentialTest() { /* do nothing */ }
+            PrecomputedPotentialTest() { /* do nothing */ }
+            virtual ~PrecomputedPotentialTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,15 +46,15 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the ConstantPotential::ConstantPotential() constructor works
+             * Tests that the PrecomputedPotential::PrecomputedPotential() constructor works
              */
             void DefaultConstructorIsZero();
             /**
-             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
+             * Tests that the PrecomputedPotential can handle a single constant potential
              */
-            void ValueConstructorYieldsValue();
+            void CanHandleSingleConstantPotential();
         };
     }
 }
 
-#endif // __CONSTANTPOTENTIALTEST_H
+#endif // __PRECOMPUTEDPOTENTIALTEST_H

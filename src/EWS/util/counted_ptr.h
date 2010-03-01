@@ -35,6 +35,10 @@ namespace ews {
                 }
                 return *this;
             }
+            bool operator==(const counted_ptr& r)
+            {
+                return (get() == r.get());                
+            }
             
 #ifndef NO_MEMBER_TEMPLATES
             template <class Y> friend class counted_ptr<Y>;
@@ -47,6 +51,10 @@ namespace ews {
                     acquire(r.itsCounter);
                 }
                 return *this;
+            }
+            template <class Y> bool operator==(const counted_ptr<Y>& r)
+            {
+                return (get() == r.get());                
             }
 #endif // NO_MEMBER_TEMPLATES
             

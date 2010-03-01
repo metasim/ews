@@ -25,6 +25,10 @@
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Wave Propagator using a damped classical model.
+         */        
         class DampedClassicalWavePropagator : public WavePropagator {
         public:
             DampedClassicalWavePropagator(counted_ptr<const Potential>& p, unsigned int width, unsigned int length,

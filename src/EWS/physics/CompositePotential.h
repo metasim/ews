@@ -16,34 +16,32 @@
  * http://mseedsoft.com
  */
 
-#ifndef __WAVEPROPAGATOR_H
-#define __WAVEPROPAGATOR_H
+#ifndef __COMPOSITEPOTENTIAL_H
+#define __COMPOSITEPOTENTIAL_H
 
 #include "Potential.h"
-#include "Lattice.h"
-#include "counted_ptr.h"
+#include <vector>
+using std::vector;
+#include "util/counted_ptr.h"
 using ews::util::counted_ptr;
 
 namespace ews {
     namespace physics {
         /**
          * @ingroup Physics
-         * Interface for models describing wave propagation.
+         * Potential made up of the sum of other potentials.
          */        
-        class WavePropagator {
+        class CompositePotential : public Potential {
         public:
-            virtual ~WavePropagator() { /* do nothing */ }
-            virtual void setBoundaryCondition(unsigned int x, unsigned int y, double value) = 0;
-            virtual void propagate(Lattice& lattice) = 0;
-            virtual void scale(double scale) = 0;
-            virtual void setSize(unsigned int width, unsigned int length) = 0;
-            virtual const counted_ptr<const Potential>& getPotential() const = 0;
-            virtual void setPotential(const counted_ptr<const Potential>& p) = 0;
-            virtual void clear() = 0;
-        protected:
-            WavePropagator() { /* do nothing */ }
+            CompositePotential() { /* do nothing */ }
+            virtual ~CompositePotential() { /* do nothing */ }
+            double getPotential(unsigned int x, unsigned int y, unsigned int time) const;
+            void addPotential(counted_ptr<const Potential>& p);
+            void removePotential(counted_ptr<const Potential>& p);
+        private:
+            vector<counted_ptr<const Potential> > _potentials;
         };
     }
 }
 
-#endif // __WAVEPROPAGATOR_H
+#endif // __COMPOSITEPOTENTIAL_H

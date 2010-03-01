@@ -24,6 +24,10 @@ using std::vector;
 
 namespace ews {
     namespace physics {
+        /**
+         * @ingroup Physics
+         * Structure for holding the field state
+         */        
         class Lattice {
             
         public:
@@ -84,7 +88,7 @@ namespace ews {
              * @param y Y location to get the amplitude for
              */
             double getValue(unsigned int x, unsigned int y) const {
-                return _amplitude.at(x).at(y);
+                return x < getWidth() && y < getLength() ? _amplitude[x][y] : 0;
             }
             /**
              * Sets the amplitude of the lattice at location x,y to value

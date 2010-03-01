@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for testing the Lattice class.
+         */        
         class LatticeTest: public QObject
         {
         public:
@@ -65,6 +69,10 @@ namespace ews {
              * Tests that Lattice::setValue() and Lattice::getValue() method works
              */
             void MethodSetGetValueWorks();
+            /**
+             * Tests that Lattice::getValue() yields zero outside of where it is defined.
+             */
+            void MethodGetValueYieldsZeroOutsideOfLattice();
             /**
              * Tests that the Lattice::scale() method works
              */

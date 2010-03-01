@@ -26,6 +26,10 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+        /**
+         * @ingroup Test
+         * Test harness for Point2d.
+         */        
         class Point2dTest: public QObject
         {
         public:
