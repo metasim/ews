@@ -37,5 +37,8 @@ namespace ews {
             const double alphaVal = alpha(ptToProject);
             return interpolate(alphaVal, projectedPt);
         }
+        double Line2d::length() const {
+            return Vector2d(_p2 - _p1).length();
+        }
     }
 }

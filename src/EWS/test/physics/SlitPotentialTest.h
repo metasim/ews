@@ -16,10 +16,10 @@
  * http://mseedsoft.com
  */
 
-#ifndef __WALLPOTENTIALTEST_H
-#define __WALLPOTENTIALTEST_H
+#ifndef __SLITPOTENTIALTEST_H
+#define __SLITPOTENTIALTEST_H
 
-#include "WallPotential.h"
+#include "SlitPotential.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
@@ -28,13 +28,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for the wall potential.
+         * Test harness for the slit potential.
          */        
-        class WallPotentialTest: public QObject
+        class SlitPotentialTest: public QObject
         {
         public:
-            WallPotentialTest() { /* do nothing */ }
-            virtual ~WallPotentialTest() { /* do nothing */ }
+            SlitPotentialTest() { /* do nothing */ }
+            virtual ~SlitPotentialTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,27 +46,23 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the WallPotential::WallPotential() constructor works
-             */
-            void DefaultConstructorIsPointWall();
-            /**
-             * Tests that the WallPotential's preferred constructor works
+             * Tests that the SlitPotential's preferred constructor works
              */
             void PreferredConstructorWorks();
             /**
-             * Tests that the get/setSrcPoint methods work
+             * Tests that the addSlit method works
              */
-            void MethodsGetSetSrcPointWork();
+            void MethodAddSlitWorks();
             /**
-             * Tests that the get/setDstPoint methods work
+             * Tests that the getSlitLocation method work
              */
-            void MethodsGetSetDstPointWork();
+            void MethodGetSlitLocationWorks();
             /**
-             * Tests that the get/setThickness methods work
+             * Tests that the getPotential method works
              */
-            void MethodGetSetThicknessWorks();
+            void MethodGetPotentialWorks();
         };
     }
 }
 
-#endif // __WALLPOTENTIALTEST_H
+#endif // __SLITPOTENTIALTEST_H

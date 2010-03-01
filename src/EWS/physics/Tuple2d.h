@@ -25,7 +25,7 @@ using std::sqrt;
 namespace ews {
     namespace physics {
         const double EPSILON_FACTOR = 1e-6; 
-
+        
         /**
          * @ingroup Physics
          * Base class for 2d objects. Note: this class is not read-only since it has an
@@ -83,6 +83,13 @@ namespace ews {
              */
             double y() const { return _y; }
             /**
+             * Checks whether another tuple is at the same location as this one. Does not verify that
+             * tuple is of the same type (e.g., Vector2d vs. Point2d)
+             */
+            bool sameLocation(const Tuple2d& o) const {
+                return _x == o._x && _y == o._y;
+            }
+            /**
              * Assignment operator
              * @param rhs Tuple2d to copy
              * @return this
@@ -104,7 +111,7 @@ namespace ews {
             }
         private:
             double _x, _y;
-                    };
+        };
         
     }
 }

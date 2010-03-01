@@ -48,7 +48,7 @@ namespace ews {
              * @param p1 One point of the wall
              * @param p2 The other point of the wall
              */
-            WallPotential(Point2d p1, Point2d p2):
+            WallPotential(const Point2d& p1, const Point2d& p2):
             _lineSegment(p1, p2), _thicknessSq(DEFAULT_THICKNESS_SQ) {
                 /* do nothing */
             }
@@ -68,7 +68,7 @@ namespace ews {
              * Returns one of the wall's end points
              * @Return wall end point
              */
-            Point2d getSrcPoint() { return _lineSegment.getStart(); }
+            Point2d getSrcPoint() const { return _lineSegment.getStart(); }
             /**
              * Changes one of the wall's end points
              * @param p New end point to use
@@ -80,7 +80,7 @@ namespace ews {
              * Returns the wall's other end point
              * @Return other wall end point
              */
-            Point2d getDstPoint() { return _lineSegment.getEnd(); }
+            Point2d getDstPoint() const { return _lineSegment.getEnd(); }
             /**
              * Changes the wall's other end point
              * @param p New end point to use
@@ -92,13 +92,18 @@ namespace ews {
              * Returns the thickness of the wall.
              * @return Wall thickness
              */
-            unsigned int getThickness() { return static_cast<unsigned int>(sqrt(_thicknessSq)); }
+            unsigned int getThickness() const { return static_cast<unsigned int>(sqrt(_thicknessSq)); }
+            /**
+             * Returns the length of the wall (i.e., the distance between its two end points.
+             */
+            double length() const { return _lineSegment.length(); }
             /**
              * Sets the thickness of the wall.
              * @param thickness New thickness for the wall.
              */
             void setThickness(unsigned int thickness) { _thicknessSq = thickness * thickness; }
-        private:
+        protected:
+            double alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
             unsigned int _thicknessSq;
         };

@@ -77,7 +77,7 @@ namespace ews {
             return _amplitude * sin(getCosArg() + _phase) * 2 * M_PI / _period;
         }
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
-            if (_oscillating && shouldOscillate) {
+            if (!_oscillating && shouldOscillate) {
                 resetPhase();
             }
             _oscillating = shouldOscillate;
