@@ -67,8 +67,8 @@ namespace ews {
             QCOMPARE(pre.getPotential(size / 2, 0.0), 100.0);
             QCOMPARE(pre.getPotential(size / 2, size), 0.0); // Because this is outside the precomputed bounds
             QCOMPARE(pre.getPotential(size, size / 2), 0.0); // Because this is outside the precomputed bounds
-            QCOMPARE(pre.getPotential(size / 2, size - 1), 100.0); // However, the wall can be felt from here
-            QCOMPARE(pre.getPotential(size - 1, size / 2), 100.0);
+            QCOMPARE(pre.getPotential(size / 2, size - 2), 100.0); // However, the wall can be felt from here
+            QCOMPARE(pre.getPotential(size - 2, size / 2), 100.0);
             QCOMPARE(pre.getPotential(size / 2, size / 2), 0.0);
         }
     }
