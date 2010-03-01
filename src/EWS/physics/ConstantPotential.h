@@ -43,13 +43,12 @@ namespace ews {
              */
             virtual ~ConstantPotential() { /* do nothing */}
             /**
-             * Returns the constant potential, regardless of x, y, or time
+             * Returns the constant potential, regardless of x or y
              * @param x ignored
              * @param y ignored
-             * @param time ignored
              * @return Constant potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const {
+            virtual double getPotential(unsigned int x, unsigned int y) const {
                 return _value;
             }
         private:

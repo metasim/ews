@@ -29,7 +29,7 @@ namespace ews {
         void CompositePotentialTest::DefaultConstructorIsZero() {
             CompositePotential p;
             // Tests that the potential is zero (unsigned int values shouldn't matter)
-            QCOMPARE(static_cast<double>(0.0), p.getPotential(2, 2, 2));
+            QCOMPARE(p.getPotential(2, 2), 0.0);
         }
         
         void CompositePotentialTest::CanHandleSingleConstantPotential() {
@@ -38,7 +38,7 @@ namespace ews {
             counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
             p.addPotential(constP);
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
-            QCOMPARE(value, p.getPotential(2, 2, 2));
+            QCOMPARE(p.getPotential(2, 2), value);
         }
     }
 }

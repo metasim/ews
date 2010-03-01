@@ -33,9 +33,21 @@ namespace ews {
          */        
         class CompositePotential : public Potential {
         public:
+            /**
+             * Default constructor (has no potentials)
+             */
             CompositePotential() { /* do nothing */ }
+            /**
+             * Virtual destructor
+             */
             virtual ~CompositePotential() { /* do nothing */ }
-            double getPotential(unsigned int x, unsigned int y, unsigned int time) const;
+            /**
+             * Get potential from sum of the composite's potentials.
+             * @param x X location to find potential for
+             * @param y Y location to find potential for
+             * @return Potential
+             */
+            double getPotential(unsigned int x, unsigned int y) const;
             void addPotential(counted_ptr<const Potential>& p);
             void removePotential(counted_ptr<const Potential>& p);
         private:

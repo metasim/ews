@@ -29,16 +29,16 @@ namespace ews {
         void PrecomputedPotentialTest::DefaultConstructorIsZero() {
             PrecomputedPotential p;
             // Tests that the potential is zero (unsigned int values shouldn't matter)
-            QCOMPARE(p.getPotential(2, 2, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), 0.0);
         }
         
         void PrecomputedPotentialTest::CanHandleSingleConstantPotential() {
             const double value = 3.14159;
             counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
             PrecomputedPotential p(constP, 10, 10);
-            QCOMPARE(p.getPotential(2, 2, 2), value);
-            QCOMPARE(p.getPotential(10, 2, 2), 0.0);
-            QCOMPARE(p.getPotential(2, 10, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), value);
+            QCOMPARE(p.getPotential(10, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 10), 0.0);
         }
     }
 }

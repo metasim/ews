@@ -67,13 +67,12 @@ namespace ews {
              */
             void setSlitWidth(double slitWidth) { _slitWidth = slitWidth > 0 ? slitWidth : 0.0; }
             /**
-             * Returns the potential at x, y, regardless of time
+             * Returns the potential at x, y
              * @param x X location to check
              * @param y Y location to check
-             * @param time ignored
              * @return Potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const;
+            virtual double getPotential(unsigned int x, unsigned int y) const;
         private:
             double _slitWidth;
             // Fraction that each slit is along the wall

@@ -50,9 +50,9 @@ namespace ews {
         
         void SlitPotentialTest::MethodGetPotentialWorks() {
             SlitPotential p(Point2d(60.0, 0.0), Point2d(60.0, 60.0), 2);
-            QCOMPARE(p.getPotential(60.0, 10.0, 2), 100.0);
-            QCOMPARE(p.getPotential(60.0, 20.0, 2), 0.0);
-            QCOMPARE(p.getPotential(50.0, 10.0, 2), 0.0);
+            QCOMPARE(p.getPotential(60.0, 10.0), 100.0);
+            QCOMPARE(p.getPotential(60.0, 20.0), 0.0);
+            QCOMPARE(p.getPotential(50.0, 10.0), 0.0);
         }
         
         void SlitPotentialTest::MethodRemoveSlitWorks() {

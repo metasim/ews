@@ -25,7 +25,7 @@ namespace ews {
         _potentialValues(width, vector<double>(length, 0.0)) {
             for (unsigned int i = 0; i < width; i++) {
                 for (unsigned int j = 0; j < length; j++) {
-                    _potentialValues[i][j] = p->getPotential(i, j, 0);
+                    _potentialValues[i][j] = p->getPotential(i, j);
                 }
             }
         }

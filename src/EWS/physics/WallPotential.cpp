@@ -21,7 +21,7 @@
 
 namespace ews {
     namespace physics {
-        double WallPotential::getPotential(unsigned int x, unsigned int y, unsigned int time) const {
+        double WallPotential::getPotential(unsigned int x, unsigned int y) const {
             Point2d pointToProject(static_cast<double>(x), static_cast<double>(y));
             Point2d projectedPoint;            
             if (!_lineSegment.ptSegProjection(pointToProject, projectedPoint)) return 0.0;

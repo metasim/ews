@@ -60,10 +60,9 @@ namespace ews {
              * Returns a potential of 100 if and only if x, y lie within the wall.
              * @param x X location to check for wall
              * @param y Y location to check for wall
-             * @param time ignored
              * @return 100 if x, y lie within wall, 0 otherwise
              */
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const;
+            virtual double getPotential(unsigned int x, unsigned int y) const;
             /**
              * Returns one of the wall's end points
              * @Return wall end point

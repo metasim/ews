@@ -41,8 +41,8 @@ namespace ews {
             _lineSegment.interpolate(alphaVal, interpolatedPoint);
             return interpolatedPoint;
         }
-        double SlitPotential::getPotential(unsigned int x, unsigned int y, unsigned int time) const {
-            const double wallPotential = WallPotential::getPotential(x, y, time);
+        double SlitPotential::getPotential(unsigned int x, unsigned int y) const {
+            const double wallPotential = WallPotential::getPotential(x, y);
             if (wallPotential == 0.0) return wallPotential;
             const double alphaVal = alpha(x, y);
             const double slitAlphaWidth = _slitWidth / length();

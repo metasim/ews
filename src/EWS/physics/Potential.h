@@ -27,10 +27,17 @@ namespace ews {
          */        
         class Potential {
         public:
+            /**
+             * Virtual destructor
+             */
             virtual ~Potential() { /* do nothing */ }
-            virtual double getPotential(unsigned int x, unsigned int y, unsigned int time) const = 0;
-        protected:
-            Potential() { /* do nothing */ }
+            /**
+             * Returns the potential at location x, y
+             * @param x X location to find potential for
+             * @param y Y location to find potential for
+             * @return Potential
+             */
+            virtual double getPotential(unsigned int x, unsigned int y) const = 0;
         };
     }
 }
