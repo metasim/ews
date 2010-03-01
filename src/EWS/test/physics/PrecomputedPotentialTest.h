@@ -53,6 +53,10 @@ namespace ews {
              * Tests that the PrecomputedPotential can handle a single constant potential
              */
             void CanHandleSingleConstantPotential();
+            /**
+             * Tests using a potential that's larger than the specified bounds.
+             */
+            void CanHandlePotentialOutsideItsBounds();
         };
     }
 }

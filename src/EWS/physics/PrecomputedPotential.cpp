@@ -22,9 +22,9 @@ namespace ews {
     namespace physics {
         PrecomputedPotential::PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width,
                                                    unsigned int length):
-        _potentialValues(width, vector<double>(length, 0.0)) {
-            for (unsigned int i = 0; i < width; i++) {
-                for (unsigned int j = 0; j < length; j++) {
+        _potentialValues(width + 1, vector<double>(length + 1, 0.0)) {
+            for (unsigned int i = 0; i <= width; i++) {
+                for (unsigned int j = 0; j <= length; j++) {
                     _potentialValues[i][j] = p->getPotential(i, j);
                 }
             }

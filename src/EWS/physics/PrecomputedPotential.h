@@ -40,8 +40,8 @@ namespace ews {
             /**
              * Constructor that actually calculates a potential
              * @param p Potential to precompute
-             * @param width Width of region where potential is valid
-             * @param length Length of region where potential is valid
+             * @param width Width of region where potential is valid (region is valid from 0 to width, inclusive)
+             * @param length Length of region where potential is valid (region is valid from 0 to length, inclusive)
              */
             PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width, unsigned int length);
             /**
