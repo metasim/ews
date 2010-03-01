@@ -22,7 +22,7 @@
 #include <QtGui/QMainWindow>
 #include <QtCore/QMap>
 #include <osg/Node>
-
+#include <osg/ref_ptr>
 #include "SimulationState.h"
 #include "SceneRoot.h"
 
@@ -51,7 +51,7 @@ namespace ews {
                 Q_DISABLE_COPY(EWSMainWindow)
                 Ui::EWSMainWindow* _ui;
                 SimulationState* _state;
-                SceneRoot* _sceneRoot;
+                osg::ref_ptr<SceneRoot> _sceneRoot;
             };
         }
     }

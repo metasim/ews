@@ -49,13 +49,8 @@ namespace ews {
             
             EWSMainWindow::~EWSMainWindow() {
                 _ui->renderer->setSceneData(NULL);
-                // TODO: figure out why double-delete on _sceneRoot is ocurring.
-//                delete _sceneRoot;
                 delete _ui;
             }
-            
-
-            
         }
     }
 }

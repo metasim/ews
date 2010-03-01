@@ -10,4 +10,8 @@
     <file>images/media-playback-start.png</file>
     <file>images/media-playback-pause.png</file>
   </qresource>
+  <qresource prefix="text">
+    <file alias="waves.vs">app/drawable/waves.vs</file>
+    <file alias="waves.fs">app/drawable/waves.fs</file>
+  </qresource>
 </RCC>

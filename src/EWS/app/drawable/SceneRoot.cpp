@@ -18,12 +18,35 @@
 
 #include "SceneRoot.h"
 #include "DrawableFactory.h"
+#include <osg/Light>
+#include <osg/LightSource>
+
 
 namespace ews {
     namespace app {
         namespace drawable {
-            
+            using namespace osg;
             SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::Group(), _drawables() {
+                // Set up some basic lighting.
+                
+                osg::StateSet* state = getOrCreateStateSet(); 
+                state->setMode( GL_LIGHTING, osg::StateAttribute::ON ); 
+                
+                state->setMode( GL_LIGHT0, osg::StateAttribute::ON );
+                
+                ref_ptr<Light> light = new Light; 
+                light->setLightNum(1);
+                light->setPosition(Vec4(30.0f, 100.0f, 100.0f, 1.0f)); 
+                light->setAmbient(Vec4(0.1f, 0.1f, 0.1f, 1.0f)); 
+                light->setDiffuse(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
+                light->setSpecular(Vec4(0.8f, 0.8f, 0.8f, 1.0f)); 
+//                light->setDirection(Vec3(0.0f, 0.0f, 0.0f));
+//                light->setSpotCutoff(25.f );
+                
+                ref_ptr<LightSource> lSource = new LightSource;
+                lSource->setLight(light.get());
+                lSource->setReferenceFrame(LightSource::ABSOLUTE_RF );
+                addChild(lSource.get());
             }
             
             

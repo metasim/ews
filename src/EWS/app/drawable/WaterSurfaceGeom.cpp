@@ -17,11 +17,12 @@
  */
 
 #include "WaterSurfaceGeom.h"
-
 #include <osg/Shape>
 #include <osg/Geode>
 #include <osg/Geometry>
 #include <osg/PolygonMode>
+#include <osg/Material>
+#include "VertexHeightUpdater.h"
 
 namespace ews {
     namespace app {
@@ -29,88 +30,26 @@ namespace ews {
             using ews::app::model::WaveMedium;
             using osg::ref_ptr;
             using namespace osg;
-            static int attrNum = 10; 
-            
-            class VertexHeightUpdate : public osg::Drawable::UpdateCallback {
-                virtual void update (osg::NodeVisitor* nv, osg::Drawable* d) {
-                    const osg::FrameStamp* fs = nv->getFrameStamp();
-                    float value = fs->getSimulationTime();
-                    
-                    float alpha = sinf(value);
-                    
-                    
-                    Geometry* geometry = d->asGeometry();
-                    Array* data = geometry->getVertexAttribArray(attrNum);
-                    osg::FloatArray* floats = dynamic_cast<FloatArray*>(data);
-//                    osg::notify(osg::NOTICE) << "-- cast " << (floats ? " did " : " did not " ) << "work" << std::endl;
-                    if(!floats) return;
-                    unsigned int size = data->getNumElements();
-                    for(unsigned int i = 0; i < size; i++) {
-                        if(i % 2) {
-                            (*floats)[i] = alpha*10.0f;
-                        }
-                        else {
-                            (*floats)[i] = 0;
-                        }
-                        
-                    }
-                    
-                    data->dirty();
-                }
-            };
-            
-//            class UniformVarying : public osg::Uniform::Callback
-//            {
-//                virtual void operator () (osg::Uniform* uniform, osg::NodeVisitor* nv)
-//                {
-//                    const osg::FrameStamp* fs = nv->getFrameStamp();
-//                    float value = fs->getSimulationTime();
-//                    uniform->set(osg::Vec4(value,-value,value,value));
-//                }
-//            };
-            
-            
+
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
             DrawableQtAdapter(&settings), _settings(settings) {
 
                 QObject::connect(&_settings, SIGNAL(sizeChanged(int,int)), this, SLOT(updateWaterGeometry()));
                 QObject::connect(&_settings, SIGNAL(resolutionChanged(int)), this, SLOT(updateWaterGeometry()));
                 
+                osg::StateSet* state = getOrCreateStateSet(); 
+                osg::ref_ptr<Material> mat = new Material; 
+                mat->setDiffuse(Material::FRONT,
+                                Vec4( .2f, .2f, .9f, 1.f ) ); 
+                mat->setSpecular(Material::FRONT,
+                                 Vec4( 8.f, 8.f, 1.f, 1.f ) ); 
+                mat->setShininess(Material::FRONT, 40.f ); 
+                mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
+                state->setAttribute( mat.get() );
+                
                 updateWaterGeometry();
             }
-            
-            void WaterSurfaceGeom::applyWave(osg::Array* heights){
-                osg::FloatArray* floats = dynamic_cast<FloatArray*>(heights);
-                osg::notify(osg::NOTICE) << "**** cast " << (floats ? " did " : " did not " ) << "work" << std::endl;
-                if(!floats) return;
-                unsigned int size = heights->getNumElements();
-                for(unsigned int i = 0; i < size; i++) {
-                    (*floats)[i] = i/(float)size;
-                    
-                }
-                
-                heights->dirty();
-            }
-            
-            // osg predefined unifoms
-            // int osg_FrameNumber; 
-            // float osg_FrameTime; 
-            // float osg_DeltaFrameTime;
-            // mat4 osg_ViewMatrix;
-            // mat4 osg_InverseViewMatrix; 
-            
-            char vertexShaderSource_simple[] = 
-            "attribute float height; \n"
-            "\n"
-            "void main(void) \n"
-            "{ \n"
-            "\n"
-            "    vec4 vert = gl_Vertex; \n"
-            "    vert.z = height; \n"
-            "    gl_Position = gl_ModelViewProjectionMatrix * vert;\n"
-            "    gl_FrontColor = gl_Color\n;"
-            "    // gl_FrontColor = vec4(height, height, 0.0, 1.0);\n"
-            "}\n";
+
             
             void WaterSurfaceGeom::updateWaterGeometry() {
 
@@ -123,7 +62,7 @@ namespace ews {
                 unsigned int totalVerts = num_x * num_y;
                 
                 ref_ptr<Geode> geode = new Geode;
-                {
+                if(true) {
                     // Turn on wireframe mode.
                     ref_ptr<osg::StateSet> state = geode->getOrCreateStateSet();
                 
@@ -132,48 +71,11 @@ namespace ews {
                     // Force wireframe rendering. 
                     state->setAttributeAndModes(pm.get(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
                 }
+                
                 addChild(geode.get());
 
-                
-                
                 ref_ptr<Geometry> geom = new Geometry;
                 geode->addDrawable(geom.get());
-                {
-                    // Set temporary color
-                    ref_ptr<Vec3Array> colors = new osg::Vec3Array(1);
-                    (*colors)[0] = Vec3(1, 0, 1);
-                    geom->setColorArray(colors.get());
-                    geom->setColorBinding(Geometry::BIND_OVERALL);
-                }
-
-                {
-                    ref_ptr<StateSet> state = geom->getOrCreateStateSet();
-                
-                    ref_ptr<Program> program = new Program;
-                    state->setAttribute(program.get());
-                
-                    ref_ptr<Shader> vp = new Shader(osg::Shader::VERTEX, vertexShaderSource_simple);
-                    program->addShader(vp.get());
-                    
-
-                    state->setDataVariance(osg::Object::DYNAMIC);
-                    
-                    
-                    ref_ptr<FloatArray> attrib = new FloatArray(totalVerts); 
-                    applyWave(attrib.get());
-
-                    
-                    attrib->setDataVariance(osg::Object::DYNAMIC);
-
-                    // (Fill attrib with per-vertex attributes) 
-                    geom->setVertexAttribArray(attrNum, attrib.get()); 
-                    geom->setVertexAttribBinding(attrNum, osg::Geometry::BIND_PER_VERTEX); 
-                    program->addBindAttribLocation("height", attrNum); 
-                    geom->setUpdateCallback(new VertexHeightUpdate);
-                    
-
-                }
-
                 
                 // Code below adapted from demo file osgparametric.cpp
                 ref_ptr<Vec3Array> vertices = new Vec3Array( totalVerts );
@@ -199,7 +101,13 @@ namespace ews {
                 geom->setVertexArray(vertices.get());
                 ref_ptr<VertexBufferObject> vbObject = new VertexBufferObject;
                 vertices->setVertexBufferObject(vbObject.get());
-
+                
+                
+                ref_ptr<Vec3Array> n = new Vec3Array; 
+                geom->setNormalArray(n.get()); 
+                geom->setNormalBinding(Geometry::BIND_OVERALL); 
+                n->push_back(Vec3( 0.f, 1.f, 0.f ));
+                
                 // Create the vertex mesh as triangle strips, stored as an EBO
                 ref_ptr<ElementBufferObject> ebo = new ElementBufferObject;
                 for(iy=0; iy<num_y-1; ++iy) {
@@ -216,8 +124,12 @@ namespace ews {
                 }
                 
                 geom->setUseVertexBufferObjects(true);
+                
+                
+                // Register the delegate responsible for updating hight and 
+                // doing shading.
+                geom->setUpdateCallback(new VertexHeightUpdater(geom, num_x, num_y));
             }
-            
         }
     }
 }
