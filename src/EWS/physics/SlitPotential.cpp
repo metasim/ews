@@ -22,7 +22,6 @@ using std::sort;
 
 namespace ews {
     namespace physics {
-        const unsigned int DEFAULT_SLIT_WIDTH = 2;
         SlitPotential::SlitPotential(const Point2d& p1, const Point2d& p2, unsigned int numSlits): 
         WallPotential(p1, p2), _slitWidth(DEFAULT_SLIT_WIDTH), _slitAlphas(numSlits, 0.0) {
             const double deltaAlpha = 1.0 / (1 + numSlits);

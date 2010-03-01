@@ -26,6 +26,7 @@ using std::vector;
 
 namespace ews {
     namespace physics {
+        const double DEFAULT_SLIT_WIDTH = 2;
         /**
          * @ingroup Physics
          * Potential with a constant value everywhere.

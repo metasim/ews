@@ -17,6 +17,7 @@
  */
 
 #include "SlitPotentialTest.h"
+using namespace ews::physics;
 
 namespace ews {
     namespace test {
@@ -52,6 +53,32 @@ namespace ews {
             QCOMPARE(p.getPotential(60.0, 10.0, 2), 100.0);
             QCOMPARE(p.getPotential(60.0, 20.0, 2), 0.0);
             QCOMPARE(p.getPotential(50.0, 10.0, 2), 0.0);
+        }
+        
+        void SlitPotentialTest::MethodRemoveSlitWorks() {
+            SlitPotential p(Point2d(0.0, 0.0), Point2d(6.0, 6.0), 2);
+            QCOMPARE(p.getSlitLocation(0), Point2d(2.0, 2.0));
+            QCOMPARE(p.getSlitLocation(1), Point2d(4.0, 4.0));
+            p.removeSlit(0);
+            QCOMPARE(p.getSlitLocation(0), Point2d(4.0, 4.0));
+            p.removeSlit(1); // Should do nothing since we now only have one slit
+            QCOMPARE(p.getSlitLocation(0), Point2d(4.0, 4.0));
+        }
+        void SlitPotentialTest::MethodGetSlitWidthWorks() {
+            SlitPotential p(Point2d(0.0, 0.0), Point2d(6.0, 6.0), 2);
+            QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
+            const double newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
+            p.setSlitWidth(newSlitWidth);
+            QCOMPARE(p.getSlitWidth(), newSlitWidth);
+        }
+        void SlitPotentialTest::MethodSetSlitWidthWorks() {
+            SlitPotential p(Point2d(0.0, 0.0), Point2d(6.0, 6.0), 2);
+            QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
+            const double newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
+            p.setSlitWidth(newSlitWidth);
+            QCOMPARE(p.getSlitWidth(), newSlitWidth);
+            p.setSlitWidth(-newSlitWidth);
+            QCOMPARE(p.getSlitWidth(), 0.0);
         }
     }
 }

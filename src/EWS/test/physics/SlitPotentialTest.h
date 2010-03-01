@@ -61,6 +61,9 @@ namespace ews {
              * Tests that the getPotential method works
              */
             void MethodGetPotentialWorks();
+            void MethodRemoveSlitWorks();
+            void MethodGetSlitWidthWorks();
+            void MethodSetSlitWidthWorks();
         };
     }
 }
