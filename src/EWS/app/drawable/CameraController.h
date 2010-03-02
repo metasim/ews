@@ -26,6 +26,9 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
+            
+            
+            
             /**
              * Specialization of OSG TerrainManipulator for
              * setting up some defaults and limiting movement to some degree.
@@ -38,9 +41,7 @@ namespace ews {
                     setMinimumDistance(10);
                 }
                 
-                
                 virtual ~CameraController() {}
-                                             
             };
         }
     }

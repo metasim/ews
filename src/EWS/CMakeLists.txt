@@ -28,6 +28,10 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 file(GLOB EWS_HDRS app/drawable/*.h physics/*.h util/*.h)
 
+#--------------------------------------------------------------------------------
+# Vertex and fragment sharders
+#--------------------------------------------------------------------------------
+file(GLOB EWS_SHADERS app/drawable/waves.vs app/drawable/waves.fs)
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
@@ -44,6 +48,8 @@ macro(unmoc FILENAME)
 endmacro()    
 
 unmoc("DrawableFactory.h")
+unmoc("CameraController.h")
+unmoc("VertexHeightUpdater.h")
 
 #message("moc files: ${EWS_MOC_HDRS}")
 
@@ -94,7 +100,7 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA)
+    COMPONENTS osg osgUtil osgViewer osgGA osgDB)
     
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
@@ -110,7 +116,7 @@ if(APPLE)
     #Option -arch is only available with apple compilers
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag("-arch i386" HAS_ARCH_FLAG)
-#    if(HAS_ARCH_FLAG)
+    if(HAS_ARCH_FLAG)
         if(${CMAKE_GENERATOR} STREQUAL "Xcode")
             set(CMAKE_OSX_ARCHITECTURES "i386;")
         else()
@@ -119,12 +125,7 @@ if(APPLE)
             # a single architecture compile.
             set(CMAKE_OSX_ARCHITECTURES "i386;i386")
         endif()
-#    elseif(NOT $ENV{M64})
-#	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-#	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
-#    else()
-#	message("Using 64-bit mode on Mac")
-#    endif()
+    endif()
 endif()    
 
 #--------------------------------------------------------------------------------
@@ -169,6 +170,7 @@ if(CMAKE_GENERATOR STREQUAL "Xcode")
     source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
     source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
     source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+    source_group("Shaders" FILES ${EWS_SHADERS})
 endif()
 
 
@@ -191,7 +193,7 @@ set_property(
 )
 
 # This shouldn't be necessary, but bits aren't getting compiled when the UI files are updated.
-add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS})
+add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} ${EWS_SHADERS})
 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.

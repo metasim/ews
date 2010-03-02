@@ -21,75 +21,98 @@
 
 #include <osg/Drawable>
 #include <osg/Geometry>
+#include <osg/Texture2D>
+#include <osg/Image>
+#include <osgDB/ReadFile>
 #include <QByteArray>
 
-
-// http://www.ozone3d.net/tutorials/mesh_deformer_p2.php
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            static const int HEIGHT_ARRAY_ATTR_ID = 14; 
 
+            /** Texture binding ID used here and in WaterSurfaceGeom. */
+            const int TEX_ID = 0;
             
-            class VertexHeightUpdater : public Drawable::UpdateCallback {
+            class VertexHeightUpdater : public NodeCallback {
             public:
                 VertexHeightUpdater(Geometry* geom, unsigned int width, unsigned int length) :
-                _gridWidth(width), _gridLength(length) {
-                    Array* va = geom->getVertexArray();
-                    unsigned int totalVerts = va->getNumElements();
+                _gridWidth(width), _gridLength(length), _heightMap(0) {
                     ref_ptr<StateSet> state = geom->getOrCreateStateSet();
+                    // state->setDataVariance(Object::DYNAMIC);
                     
                     ref_ptr<Program> program = new Program;
                     state->setAttribute(program.get());
                     
-                    program->addShader(new Shader(osg::Shader::VERTEX, loadVertexProgram()));
-                    program->addShader(new osg::Shader(osg::Shader::FRAGMENT, loadFragmentProgram()));
+                    program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
+//                    program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
 
+                    _heightMap = new Image;
+                    _heightMap->setDataVariance(Object::DYNAMIC);
                     
-                    state->setDataVariance(osg::Object::DYNAMIC);
+                    if(false) {
+                        // Load the texture image 
+                        _heightMap = 
+                            osgDB::readImageFile("/MyHome/sfitch/Coding/libs/OpenSceneGraph-Data/Images/osg256.png"); 
+                    }
+                    else {
+                        // heightMap->setResizeNonPowerOfTwoHint(false);
+                        _heightMap->allocateImage(_gridWidth, _gridLength, 1, GL_LUMINANCE, GL_FLOAT, 1);
+                        applyHeightMap(_heightMap, 0);
+                    }
                     
-                    
-                    ref_ptr<FloatArray> attrib = new FloatArray(totalVerts); 
-                    attrib->setDataVariance(osg::Object::DYNAMIC);
-                    
-                    // (Fill attrib with per-vertex attributes) 
-                    geom->setVertexAttribArray(HEIGHT_ARRAY_ATTR_ID, attrib.get()); 
-                    geom->setVertexAttribBinding(HEIGHT_ARRAY_ATTR_ID, osg::Geometry::BIND_PER_VERTEX); 
-                    program->addBindAttribLocation("height", HEIGHT_ARRAY_ATTR_ID); 
-                    
+                    ref_ptr<Texture2D> tex = new Texture2D(_heightMap.get());
+                    tex->setDataVariance(Object::DYNAMIC);
+                    tex->setWrap(Texture2D::WRAP_S, Texture2D::REPEAT);
+                    tex->setWrap(Texture2D::WRAP_T, Texture2D::REPEAT);
+                    tex->setFilter(Texture2D::MIN_FILTER, Texture2D::LINEAR);
+                    tex->setFilter(Texture2D::MAG_FILTER, Texture2D::LINEAR);
+                    state->setTextureAttributeAndModes(TEX_ID, tex.get(), StateAttribute::ON);
+
+                    // Set shader variables.
+                    ref_ptr<Uniform> gridSize = new Uniform("gridSize", Vec2(_gridWidth, _gridLength));
+                    gridSize->setDataVariance(Object::STATIC);
+                    state->addUniform(gridSize.get());
+                                             
+                    // TODO figure out how to extract the right texture ID out of
+                    // Texture2D. It's in the TextureObject, but private.
+                    ref_ptr<Uniform> heightMapID = new Uniform("heightMap", TEX_ID);
+                    heightMapID->setDataVariance(Object::STATIC);
+                    state->addUniform(heightMapID.get());
                 }
                 
                 virtual ~VertexHeightUpdater() {
                 }
-                
-                inline virtual void update (osg::NodeVisitor* nv, osg::Drawable* d) {
-
-                    Geometry* geometry = d->asGeometry();
-                    Array* data = geometry->getVertexAttribArray(HEIGHT_ARRAY_ATTR_ID);
-                    osg::FloatArray* floats = dynamic_cast<FloatArray*>(data);
-                    if(!floats) return;
                     
+                /** Callback method called by the NodeVisitor when visiting a node.*/
+                virtual void operator()(Node* node, NodeVisitor* nv) { 
                     const osg::FrameStamp* fs = nv->getFrameStamp();
                     float value = fs->getSimulationTime();
-                    int a = 2;
-                    int i = 0;
-                    for(unsigned int y = 0; y < _gridLength; y++) {
-                        for(unsigned int x = 0; x < _gridWidth; x++) {
-                            float px = (x - _gridWidth/2.0f);
-                            float py = (y - _gridLength/2.0f);
-                            float p = sqrtf(px*px + py*py);
-                            (*floats)[i++] = a * sinf(p + value*2);
-                        }
-                    }
                     
-                    data->dirty();
+                    applyHeightMap(_heightMap, value);
+                    
+                    traverse(node,nv);
                 }
                 
             private:
                 unsigned int _gridWidth;
                 unsigned int _gridLength;
+                ref_ptr<Image> _heightMap;
+                
+                void applyHeightMap(Image* image, float time) {
+                    int a = 1;
+                    for(unsigned int y = 0; y < _gridLength; y++) {
+                        for(unsigned int x = 0; x < _gridWidth; x++) {
+                            float px = (x - _gridWidth/2.0f);
+                            float py = (y - _gridLength/2.0f);
+                            float p = sqrtf(px*px + py*py);
+                            *((float*)image->data(x,y)) = a * sinf(p/8.0 - time*4);
+                        }
+                    }
+                    
+                    image->dirty();
+                }
                 
                 static char* loadTextResource(const char* resource) {
                     QFile progResource(resource);

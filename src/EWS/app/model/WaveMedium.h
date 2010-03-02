@@ -36,7 +36,7 @@ namespace ews {
                  * Standard ctor.
                  */
                 WaveMedium(QObject * parent = 0) : 
-                QObject(parent), _width(100), _length(100), 
+                QObject(parent), _width(128), _length(128), 
                 _latticeDivisionsPerCentimeter(1) {
 
                 }

@@ -36,7 +36,7 @@ namespace ews {
                 
                 ref_ptr<Light> light = new Light; 
                 light->setLightNum(1);
-                light->setPosition(Vec4(30.0f, 100.0f, 100.0f, 1.0f)); 
+                light->setPosition(Vec4(10.0f, 10.0f, 100.0f, 1.0f)); 
                 light->setAmbient(Vec4(0.1f, 0.1f, 0.1f, 1.0f)); 
                 light->setDiffuse(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
                 light->setSpecular(Vec4(0.8f, 0.8f, 0.8f, 1.0f)); 
