@@ -53,6 +53,18 @@ namespace ews {
              * Tests that the CompositePotential can handle a single constant potential
              */
             void CanHandleSingleConstantPotential();
+            /**
+             * Tests that the CompositePotential can handle two constant potentials
+             */
+            void CanHandleTwoConstantPotentials();
+            /**
+             * Tests that RemovePotential works.
+             */
+            void MethodRemovePotentialWorks();
+            /**
+             * Tests that a composite potential can be made of other composite potentials.
+             */
+            void CanHandleCompositePotentialPotential();
         };
     }
 }

@@ -49,7 +49,7 @@ namespace ews {
             /**
              * @return Begin point
              */
-            Point2d getStart() { return _p1; }
+            Point2d getStart() const { return _p1; }
             /**
              * Sets a new starting point
              * @param p New starting point
@@ -58,7 +58,7 @@ namespace ews {
             /**
              * @return End point
              */
-            Point2d getEnd() { return _p2; }
+            Point2d getEnd() const { return _p2; }
             /**
              * Sets a new ending point
              * @param p New ending point
@@ -76,6 +76,7 @@ namespace ews {
              * @return alpha value
              */
             double alpha(Point2d p) const;
+            double length() const;
             /**
              * Find an interpolated point alpha along this line segment. Return false if interpolated
              * point lies outside line segment (i.e., alpha < 0 or alpha > 1).

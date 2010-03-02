@@ -47,8 +47,8 @@ namespace ews {
             unsigned int length = _largeLattice.getLength() - 1;
             for (unsigned int i = 1; i < width; i++) {
                 for (unsigned int j = 1; j < length; j++) {
-                    if (_potential->getPotential(i, j, 0) != 0) {
-                        _largeLattice.setValue(i, j, 0);
+                    if (_potential->getPotential(i, j) != 0) {
+                        _largeLattice.setValue(i, j, 0.0);
                     }
                     else {
                         const double cSquared = 0.25;

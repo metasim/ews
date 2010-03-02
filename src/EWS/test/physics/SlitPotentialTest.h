@@ -16,10 +16,10 @@
  * http://mseedsoft.com
  */
 
-#ifndef __PRECOMPUTEDPOTENTIALTEST_H
-#define __PRECOMPUTEDPOTENTIALTEST_H
+#ifndef __SLITPOTENTIALTEST_H
+#define __SLITPOTENTIALTEST_H
 
-#include "PrecomputedPotential.h"
+#include "SlitPotential.h"
 using namespace ews::physics;
 
 #include <QtTest/QtTest>
@@ -28,13 +28,13 @@ namespace ews {
     namespace test {
         /**
          * @ingroup Test
-         * Test harness for precomputed potentials.
+         * Test harness for the slit potential.
          */        
-        class PrecomputedPotentialTest: public QObject
+        class SlitPotentialTest: public QObject
         {
         public:
-            PrecomputedPotentialTest() { /* do nothing */ }
-            virtual ~PrecomputedPotentialTest() { /* do nothing */ }
+            SlitPotentialTest() { /* do nothing */ }
+            virtual ~SlitPotentialTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
             // Code here will be called before any test case begins
@@ -46,19 +46,26 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the PrecomputedPotential::PrecomputedPotential() constructor works
+             * Tests that the SlitPotential's preferred constructor works
              */
-            void DefaultConstructorIsZero();
+            void PreferredConstructorWorks();
             /**
-             * Tests that the PrecomputedPotential can handle a single constant potential
+             * Tests that the addSlit method works
              */
-            void CanHandleSingleConstantPotential();
+            void MethodAddSlitWorks();
             /**
-             * Tests using a potential that's larger than the specified bounds.
+             * Tests that the getSlitLocation method work
              */
-            void CanHandlePotentialOutsideItsBounds();
+            void MethodGetSlitLocationWorks();
+            /**
+             * Tests that the getPotential method works
+             */
+            void MethodGetPotentialWorks();
+            void MethodRemoveSlitWorks();
+            void MethodGetSlitWidthWorks();
+            void MethodSetSlitWidthWorks();
         };
     }
 }
 
-#endif // __PRECOMPUTEDPOTENTIALTEST_H
+#endif // __SLITPOTENTIALTEST_H

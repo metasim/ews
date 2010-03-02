@@ -16,8 +16,8 @@
  * http://mseedsoft.com
  */
 
-#ifndef __CONSTANTPOTENTIALTEST_H
-#define __CONSTANTPOTENTIALTEST_H
+#ifndef __WALLPOTENTIALTEST_H
+#define __WALLPOTENTIALTEST_H
 
 #include "WallPotential.h"
 using namespace ews::physics;
@@ -69,4 +69,4 @@ namespace ews {
     }
 }
 
-#endif // __CONSTANTPOTENTIALTEST_H
+#endif // __WALLPOTENTIALTEST_H

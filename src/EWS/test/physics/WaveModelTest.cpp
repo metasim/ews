@@ -77,11 +77,13 @@ namespace ews {
             testWaveModel.setSourceValue(x, y, expected);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             x++;
-            for (; x < testWaveModel.getWidth(); x++) {
-                QCOMPARE(testWaveModel.getValue(x, y), 0.0);
-                testWaveModel.propagate();
-                expected /= 4.0;
-                QCOMPARE(testWaveModel.getValue(x, y), expected);
+            QBENCHMARK {
+                for (; x < testWaveModel.getWidth(); x++) {
+                    QCOMPARE(testWaveModel.getValue(x, y), 0.0);
+                    testWaveModel.propagate();
+                    expected /= 4.0;
+                    QCOMPARE(testWaveModel.getValue(x, y), expected);
+                }
             }
         }
     }

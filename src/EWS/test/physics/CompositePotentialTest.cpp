@@ -18,6 +18,7 @@
 
 #include "CompositePotentialTest.h"
 #include "ConstantPotential.h"
+#include "WallPotential.h"
 
 namespace ews {
     namespace test {
@@ -29,7 +30,7 @@ namespace ews {
         void CompositePotentialTest::DefaultConstructorIsZero() {
             CompositePotential p;
             // Tests that the potential is zero (unsigned int values shouldn't matter)
-            QCOMPARE(static_cast<double>(0.0), p.getPotential(2, 2, 2));
+            QCOMPARE(p.getPotential(2, 2), 0.0);
         }
         
         void CompositePotentialTest::CanHandleSingleConstantPotential() {
@@ -38,7 +39,52 @@ namespace ews {
             counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
             p.addPotential(constP);
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
-            QCOMPARE(value, p.getPotential(2, 2, 2));
+            QCOMPARE(p.getPotential(2, 2), value);
+        }
+
+        void CompositePotentialTest::CanHandleTwoConstantPotentials() {
+            CompositePotential p;
+            const double value = 3.14159;
+            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
+            p.addPotential(constP);
+            p.addPotential(constP);
+            // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
+            QCOMPARE(p.getPotential(2, 2), 2 * value);            
+        }
+        
+        void CompositePotentialTest::MethodRemovePotentialWorks() {
+            CompositePotential p;
+            const double value = 3.14159;
+            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
+            p.addPotential(constP);
+            p.addPotential(constP);
+            QCOMPARE(p.getPotential(2, 2), 2 * value);
+            p.removePotential(constP);
+            QCOMPARE(p.getPotential(2, 2), value);
+        }
+        
+        void CompositePotentialTest::CanHandleCompositePotentialPotential() {
+            const double size = 50;
+            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Point2d(size, 0.0), Point2d(size, size)));
+            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, size), Point2d(size, size)));
+            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(size, 0.0)));
+            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(0.0, size)));
+            CompositePotential* northSouth = new CompositePotential();
+            northSouth->addPotential(north);
+            northSouth->addPotential(south);
+            CompositePotential* eastWest = new CompositePotential();
+            eastWest->addPotential(east);
+            eastWest->addPotential(west);
+            CompositePotential world;
+            counted_ptr<const Potential> p = counted_ptr<const Potential>(northSouth);
+            world.addPotential(p);
+            p = counted_ptr<const Potential>(eastWest);
+            world.addPotential(p);
+            QCOMPARE(world.getPotential(0.0, size / 2), 100.0);
+            QCOMPARE(world.getPotential(size / 2, 0.0), 100.0);
+            QCOMPARE(world.getPotential(size / 2, size), 100.0);
+            QCOMPARE(world.getPotential(size, size / 2), 100.0);
+            QCOMPARE(world.getPotential(size / 2, size / 2), 0.0);
         }
     }
 }

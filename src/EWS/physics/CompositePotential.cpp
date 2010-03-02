@@ -23,11 +23,11 @@ using std::find;
 
 namespace ews {
     namespace physics {
-        double CompositePotential::getPotential(unsigned int x, unsigned int y, unsigned int time) const {
+        double CompositePotential::getPotential(unsigned int x, unsigned int y) const {
             double retval = 0.0;
             for (vector<counted_ptr<const Potential> >::const_iterator i = _potentials.begin();
                  i != _potentials.end(); i++) {
-                retval += (*i)->getPotential(x, y, time);
+                retval += (*i)->getPotential(x, y);
             }
             return retval;
         }

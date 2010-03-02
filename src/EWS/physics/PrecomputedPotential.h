@@ -40,8 +40,8 @@ namespace ews {
             /**
              * Constructor that actually calculates a potential
              * @param p Potential to precompute
-             * @param width Width of region where potential is valid
-             * @param length Length of region where potential is valid
+             * @param width Width of region where potential is valid (region is valid from 0 to width - 1)
+             * @param length Length of region where potential is valid (region is valid from 0 to length - 1)
              */
             PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width, unsigned int length);
             /**
@@ -49,14 +49,13 @@ namespace ews {
              */
             virtual ~PrecomputedPotential() { /* do nothing */}
             /**
-             * Returns the constant potential, regardless of x, y, or time
-             * @param x ignored
-             * @param y ignored
-             * @param time ignored
+             * Returns the precomputed potential for location (x, y)
+             * @param x X location to find potential for
+             * @param y Y location to find potential for
              * @return Precomputed potential
              */
-            double getPotential(unsigned int x, unsigned int y, unsigned int time) const {
-                return (0 <= x) && (x < getWidth()) && (0 <= y) && (y < getLength()) ? _potentialValues[x][y] : 0.0;
+            double getPotential(unsigned int x, unsigned int y) const {
+                return (x < getWidth()) && (y < getLength()) ? _potentialValues[x][y] : 0.0;
             }
         private:
             unsigned int getWidth() const { return _potentialValues.size(); }

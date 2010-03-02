@@ -47,6 +47,10 @@ namespace ews {
             Point2d(const Tuple2d& t1, const Tuple2d& t2, double alpha):
             Tuple2d(t1, t2, alpha) { /* do nothing */ }
             /**
+             * Equality operator
+             */
+            bool operator==(const Point2d& p) const { return sameLocation(p); }
+            /**
              * Constructor assigning location of x, y
              */
             Point2d(double x, double y): Tuple2d(x, y) { /* do nothing */ }

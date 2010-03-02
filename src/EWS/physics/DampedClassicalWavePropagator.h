@@ -49,8 +49,8 @@ namespace ews {
                     /* do nothing */
                 }
                 virtual ~PaddedPotential() { /* do nothing */ }
-                double getPotential(unsigned int x, unsigned int y, unsigned int time) const {
-                    return _innerP->getPotential(x - _dampX, y - _dampY, time);
+                double getPotential(unsigned int x, unsigned int y) const {
+                    return _innerP->getPotential(x - _dampX, y - _dampY);
                 }
             private:
                 counted_ptr<const Potential> _innerP;

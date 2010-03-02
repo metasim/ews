@@ -57,6 +57,10 @@ namespace ews {
              */
             virtual ~Vector2d() { /* do nothing */ }
             /**
+             * Equality operator
+             */
+            bool operator==(const Vector2d& v) const { return sameLocation(v); }
+            /**
              * Get the length squared of the vector (faster than getting the length)
              * @return length squared
              */

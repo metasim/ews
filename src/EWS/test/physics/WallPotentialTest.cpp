@@ -28,19 +28,19 @@ namespace ews {
         void WallPotentialTest::DefaultConstructorIsPointWall() {
             WallPotential p;
             // Tests that the potential is zero away from origin
-            QCOMPARE(p.getPotential(2, 2, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), 0.0);
             // Tests that the potential is 100 at origin
-            QCOMPARE(p.getPotential(0, 0, 2), 100.0);
+            QCOMPARE(p.getPotential(0, 0), 100.0);
         }
         
         void WallPotentialTest::PreferredConstructorWorks() {
             WallPotential p(Point2d(0.0, 0.0), Point2d(5.0, 5.0));
-            QCOMPARE(p.getPotential(2, 2, 2), 100.0);
-            QCOMPARE(p.getPotential(6, 6, 2), 0.0);
-            QCOMPARE(p.getPotential(2, 3, 2), 100.0);
-            QCOMPARE(p.getPotential(3, 2, 2), 100.0);
-            QCOMPARE(p.getPotential(4, 2, 2), 100.0);
-            QCOMPARE(p.getPotential(5, 0, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), 100.0);
+            QCOMPARE(p.getPotential(6, 6), 0.0);
+            QCOMPARE(p.getPotential(2, 3), 100.0);
+            QCOMPARE(p.getPotential(3, 2), 100.0);
+            QCOMPARE(p.getPotential(4, 2), 100.0);
+            QCOMPARE(p.getPotential(5, 0), 0.0);
         }
         
         void WallPotentialTest::MethodsGetSetSrcPointWork() {
@@ -61,9 +61,9 @@ namespace ews {
             WallPotential p(Point2d(0.0, 0.0), Point2d(5.0, 5.0));
             p.setThickness(1);
             QCOMPARE(p.getThickness(), static_cast<unsigned int>(1));
-            QCOMPARE(p.getPotential(2, 2, 2), 100.0);
-            QCOMPARE(p.getPotential(3, 2, 2), 100.0);
-            QCOMPARE(p.getPotential(4, 2, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), 100.0);
+            QCOMPARE(p.getPotential(3, 2), 100.0);
+            QCOMPARE(p.getPotential(4, 2), 0.0);
         }
     }
 }
