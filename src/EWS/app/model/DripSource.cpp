@@ -25,17 +25,20 @@ namespace ews {
             using ews::physics::WaveModel;
             
             DripSource::DripSource(WaveModel& model, QObject * parent)
-            :  QObject(parent), _oscillator(model), _timer()
-            {
+            :  QObject(parent), _oscillator(model), _timer() {
+                
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
                 
+                setPosition(osg::Vec2(0, 0));
+                _oscillator.setRadius(2.1);
+                
+                
                 updateTimer();
             }
             
-            void DripSource::updateTimer() 
-            {
+            void DripSource::updateTimer()  {
                 
                 // compute delay in milliseconds from millihertz
                 int delay = (1000*1000)/getFrequency();

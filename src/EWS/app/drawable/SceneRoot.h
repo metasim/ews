@@ -19,12 +19,12 @@
 #define __SCENE_ROOT_H
 
 #include <QtCore>
-#include <osg/Geode>
+#include <osg/PositionAttitudeTransform>
 
 namespace ews {
     namespace app {
         namespace drawable {
-            class SceneRoot : public QObject, public osg::Group {
+            class SceneRoot : public QObject, public osg::PositionAttitudeTransform {
                 Q_OBJECT
             public:
                 SceneRoot(QObject* parent = 0);

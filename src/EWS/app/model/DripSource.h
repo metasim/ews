@@ -22,6 +22,7 @@
 #include <QtCore>
 #include <QtCore/QTimer>
 #include <osg/Geometry>
+#include <osg/Vec2>
 #include "WaveModel.h"
 #include "Oscillator.h"
 
@@ -30,13 +31,15 @@ namespace ews {
         namespace model {
             using ews::physics::WaveModel;
             using ews::physics::Oscillator;
+            using osg::Vec2;
             
             class DripSource : public QObject {
+                
                 Q_OBJECT
                 Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
                 Q_PROPERTY(unsigned int frequency READ getFrequency WRITE setFrequency)
                 Q_PROPERTY(unsigned int amplitude READ getAmplitude WRITE setAmplitude)
-                Q_PROPERTY(QPoint position READ getPosition WRITE setPosition)
+                Q_PROPERTY(Vec2 position READ getPosition WRITE setPosition)
                 
             public:
                 /**
@@ -71,8 +74,8 @@ namespace ews {
                  * Get the position of the drip source in the X/Y plane.
                  * @return 2D location.
                  */
-                QPoint getPosition() const {
-                    return QPoint(_oscillator.x(), _oscillator.y());
+                osg::Vec2 getPosition() const {
+                    return osg::Vec2(_oscillator.x(), _oscillator.y());
                 }
                 
                 /**
@@ -108,7 +111,7 @@ namespace ews {
                     emit frequencyChanged(frequency);
                 }
                 
-                void setPosition(const QPoint& pos) {
+                void setPosition(const osg::Vec2& pos) {
                     _oscillator.setLocation((unsigned int) pos.x(), (unsigned int) pos.y());
                     emit positionChanged(pos);
                 }
@@ -127,7 +130,7 @@ namespace ews {
                 void enabledChanged(bool);
                 void frequencyChanged(int);
                 void amplitudeChanged(int);
-                void positionChanged(QPoint);
+                void positionChanged(osg::Vec2);
                 
                 
                 /**

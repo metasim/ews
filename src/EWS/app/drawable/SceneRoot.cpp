@@ -26,7 +26,7 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::Group(), _drawables() {
+            SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::PositionAttitudeTransform(), _drawables() {
                 // Set up some basic lighting.
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
@@ -60,6 +60,12 @@ namespace ews {
                     addChild(geom);
                     _drawables.insert(&data, geom);
                 }
+                
+                setPosition(Vec3(0, 0, 0));
+                const BoundingSphere& bounds = getBound();
+                Vec3d center = bounds.center();
+                center.z() = 0;
+                setPosition(-center);
             }
             
             void SceneRoot::removeDrawableFor(QObject& data) {

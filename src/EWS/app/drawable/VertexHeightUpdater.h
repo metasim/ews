@@ -26,6 +26,7 @@
 #include <vector>
 #include <QByteArray>
 #include "WaveModel.h"
+#include "Lattice.h"
 
 
 namespace ews {
@@ -33,7 +34,8 @@ namespace ews {
         namespace drawable {
             using namespace osg;
             using ews::physics::WaveModel;
-
+            using ews::physics::Lattice;
+            
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
@@ -63,8 +65,8 @@ namespace ews {
                     ref_ptr<Texture2D> tex = new Texture2D(_heightMap.get());
                     tex->setResizeNonPowerOfTwoHint(false);
                     tex->setDataVariance(Object::DYNAMIC);
-                    tex->setWrap(Texture2D::WRAP_S, Texture2D::REPEAT);
-                    tex->setWrap(Texture2D::WRAP_T, Texture2D::REPEAT);
+                    tex->setWrap(Texture2D::WRAP_S, Texture2D::CLAMP);
+                    tex->setWrap(Texture2D::WRAP_T, Texture2D::CLAMP);
                     tex->setFilter(Texture2D::MIN_FILTER, Texture2D::LINEAR);
                     tex->setFilter(Texture2D::MAG_FILTER, Texture2D::LINEAR);
                     state->setTextureAttributeAndModes(TEX_ID, tex.get(), StateAttribute::ON);
@@ -105,11 +107,11 @@ namespace ews {
                     unsigned int gridWidth = _model.getWidth();
                     unsigned int gridLength = _model.getLength();
 
-                    
-                    vector<vector<double> > field = _model.getAmplitudeField();
+                        
+                    const Lattice& lattice = _model.getLattice();
                     for(unsigned int x = 0; x < gridWidth; x++) {
                         for(unsigned int y = 0; y < gridLength; y++) {
-                            *((float*)image->data(y,x)) = (float) field[x][y] ;
+                            *((float*)image->data(x,y)) = (float) lattice.getValue(x, y);
                         }
                     }
                     

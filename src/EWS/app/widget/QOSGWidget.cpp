@@ -93,7 +93,7 @@ namespace ews {
                                 
                 
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
-                _timer.start(30);
+                _timer.start(10);
             }
             
             QOSGWidget::~QOSGWidget()

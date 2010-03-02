@@ -38,12 +38,8 @@ namespace ews {
                 _waveModel = new WaveModel(_width * _latticeDivisionsPerCentimeter, 
                                            _length * _latticeDivisionsPerCentimeter);
                 
-                counted_ptr<const Potential> p(new SlitPotential(osg::Vec2(10, 10), osg::Vec2(50, 50), 2));
+                counted_ptr<const Potential> p(new SlitPotential(osg::Vec2(10, 50), osg::Vec2(50, 10), 2));
                 _waveModel->setPotential(p);
-            }
-            
-            void WaveMedium::addDrop(float amplitude) {
-                _waveModel->setSourceValue(_waveModel->getWidth()/2, _waveModel->getLength()/2, amplitude*2);
             }
             
         }

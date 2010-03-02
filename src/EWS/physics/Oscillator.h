@@ -25,7 +25,7 @@ namespace ews {
     namespace physics {
         const double DEFAULT_PERIOD = 2.0;
         const double DEFAULT_AMPLITUDE = 1.0;
-        const double MAX_AMPLITUDE = 5.0;
+        const double MAX_AMPLITUDE = 2.0;
         const unsigned int DEFAULT_RADIUS = 2;
         const unsigned int DEFAULT_X = 8;
         /**

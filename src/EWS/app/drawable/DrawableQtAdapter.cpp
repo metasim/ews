@@ -21,7 +21,7 @@
 namespace ews {
     namespace app {
         namespace drawable {
-            DrawableQtAdapter::DrawableQtAdapter(QObject * parent) : QObject(parent), osg::MatrixTransform() 
+            DrawableQtAdapter::DrawableQtAdapter(QObject * parent) : QObject(parent), osg::PositionAttitudeTransform() 
             {
                 
             }

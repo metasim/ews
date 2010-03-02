@@ -25,26 +25,25 @@ namespace ews {
     namespace physics {
         double Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
             double sum = 0.0;
-            if (_amplitude.size() == 0) return sum;
+            if (getSize() == 0) return sum;
             const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
-            const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(_amplitude.size()) - 1);
+            const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(getWidth()) - 1);
             const unsigned int minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
-            const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(_amplitude.at(0).size()) - 1);
+            const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(getLength()) - 1);
             const unsigned int count = (maxX - minX + 1) * (maxY - minY + 1);
             for (unsigned int i = minX; i <= maxX; i++) {
                 for (unsigned int j = minY; j <= maxY; j++) {
-                    sum += _amplitude[i][j];
+                    sum += getValue(i, j);
                 }
             }
             return sum / count;    
         }
         void Lattice::scale(double scaleVal) {
             if (scaleVal == 1.0) return;
-            // TODO: Replace with algorithm's for_each or transform
-            for (vector<vector<double> >::iterator i = _amplitude.begin(); i != _amplitude.end(); i++) {
-                for (vector<double>::iterator j = i->begin(); j != i->end(); j++) {
-                    (*j) *= scaleVal;
-                }
+
+            unsigned int size = getSize();
+            for(unsigned int i = 0; i < size; i++) {
+                _amplitudeData[i] *= scaleVal;
             }
         }
     }

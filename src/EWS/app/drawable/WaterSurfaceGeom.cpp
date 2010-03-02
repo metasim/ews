@@ -31,9 +31,6 @@ namespace ews {
             using osg::ref_ptr;
             using namespace osg;
 
-            /** Texture binding ID used here and in VertexHeightUpdater. */
-//            const int TEX_ID = 0;
-            
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
             DrawableQtAdapter(&settings), _settings(settings) {
 
@@ -44,10 +41,8 @@ namespace ews {
                 osg::ref_ptr<Material> mat = new Material; 
                 mat->setAmbient(Material::FRONT, Vec4(.6f, .6f, .7f, 1.f));
                     // mat->setAmbient(Material::BACK, Vec4(.6f, .6f, 1.f, 1.f));
-                mat->setDiffuse(Material::FRONT,
-                                Vec4( .2f, .2f, .9f, 1.f ) ); 
-                mat->setSpecular(Material::FRONT,
-                                 Vec4( 2.f, 2.f, 2.f, 1.f ) ); 
+                mat->setDiffuse(Material::FRONT, Vec4( .2f, .2f, .9f, 1.f)); 
+                mat->setSpecular(Material::FRONT, Vec4( 2.f, 2.f, 2.f, 1.f)); 
                 mat->setShininess(Material::FRONT, 90.f ); 
                 mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                 state->setAttribute( mat.get() );
@@ -60,10 +55,9 @@ namespace ews {
 
                 removeChildren(0, getNumChildren());
                 
-                
-                unsigned int rez = _settings.latticeDivisionsPerCentimeter();
-                unsigned int numX = _settings.width() * rez;
-                unsigned int numY = _settings.length() * rez;
+                unsigned int rez = _settings.getLatticeDivisionsPerCentimeter();
+                unsigned int numX = _settings.getWidth() * rez;
+                unsigned int numY = _settings.getLength() * rez;
                 unsigned int totalVerts = numX * numY;
                 
                 ref_ptr<Geode> geode = new Geode;
@@ -72,7 +66,7 @@ namespace ews {
                     ref_ptr<osg::StateSet> state = geode->getOrCreateStateSet();
                 
                     // Create a PolygonMode attribute 
-                    ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
+                    ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE); 
                     // Force wireframe rendering. 
                     state->setAttributeAndModes(pm.get(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
                 }
@@ -88,7 +82,7 @@ namespace ews {
                 
                 float dx = 1/(float) rez;
                 float dy = dx;
-                Vec3 row(-_settings.width()/2.0f, -_settings.length()/2.0f,0.0f);
+                Vec3 row(0.0f, 0.0f,0.0f);
                 Vec2 rowTex(0, 0);
                 
                 // Concice way of allocating grid vertices with texture coordinates.

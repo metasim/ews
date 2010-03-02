@@ -21,6 +21,7 @@
 #ifndef __FAUCET_GEOM_H
 #define __FAUCET_GEOM_H
 
+#include <osg/Vec2>
 #include <osg/Group>
 #include "DripSource.h"
 #include "DrawableQtAdapter.h"
@@ -41,9 +42,12 @@ namespace ews {
                     return _dataModel;
                 }
                 
+                void setColor(osg::Vec4 color);
+                
             public slots:
-                void drip(float amplitude);
+                void drip();
                 void setEnabled(bool enabled) ;
+                void setPosition(const osg::Vec2& pos);
                 
             private:
                 Q_DISABLE_COPY(FaucetGeom)

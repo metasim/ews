@@ -25,6 +25,7 @@
 #include "FaucetGeom.h"
 #include "Oscillator.h"
 #include "demo/Teapot.h"
+#include <QtGlobal>
 
 
 namespace ews {
@@ -56,14 +57,9 @@ namespace ews {
             
             FaucetGeom::FaucetGeom(DripSource& dataModel) 
             : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
-                
-                // Move somewhere off origin.
-                Matrixf m;
-                m.makeScale(5, 5, 5);
-                m.preMultRotate(Quat(M_PI/4.0f, Vec3f(0, 1, 0)));
-                m.postMultTranslate(Vec3f(-25, 0, 50));
-                setMatrix(m);
-                
+                setPosition(_dataModel.getPosition());
+
+                setScale(Vec3(5, 5, 5));
                 // Create geometric representation
                 {
                     ref_ptr<osg::Geode> geode = new osg::Geode;
@@ -74,33 +70,40 @@ namespace ews {
                 }
                 
                 
-                {
-                    // Define material
-                    StateSet* state = getOrCreateStateSet(); 
-                    ref_ptr<Material> mat = new osg::Material; 
-                    mat->setDiffuse(Material::FRONT,
-                                    Vec4( .2f, .9f, .9f, 1.f ) ); 
-                    mat->setSpecular(Material::FRONT,
-                                     Vec4( 1.f, 1.f, 1.f, 1.f ) ); 
-                    mat->setShininess(Material::FRONT, 96.f ); 
-                    mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
-                    state->setAttribute( mat.get() );
-                    
-                    state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON); 
-                }
+                
+                setColor(Vec4(.2f, .9f, .9f, 1.f)); 
+                ref_ptr<StateSet> state = getOrCreateStateSet(); 
+                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON); 
                 
                 setUpdateCallback(new OscillatorUpdater);
                 
-                
-                QObject::connect(&_dataModel, SIGNAL(drip(float)), this, SLOT(drip(float)));
+                QObject::connect(&_dataModel, SIGNAL(drip(int)), this, SLOT(drip()));
                 QObject::connect(&_dataModel, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
-
+                QObject::connect(&_dataModel, SIGNAL(positionChanged(osg::Vec2)), this, SLOT(setPosition(const osg::Vec2&)));
+                
                 setEnabled(_dataModel.isEnabled());
             }
             
             
             FaucetGeom::~FaucetGeom() {
                 
+            }
+            
+            void FaucetGeom::setColor(osg::Vec4 color) {
+                ref_ptr<StateSet> state = getOrCreateStateSet(); 
+                ref_ptr<Material> mat = new osg::Material; 
+                mat->setDiffuse(Material::FRONT, color);
+                mat->setSpecular(Material::FRONT,
+                                 Vec4( 0.8f, 0.8, 0.8f, 0.8f ) ); 
+                mat->setShininess(Material::FRONT, 96.f ); 
+                mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
+                state->setAttribute( mat.get() );
+            }
+
+            void FaucetGeom::setPosition(const osg::Vec2& pos) {
+                PositionAttitudeTransform::setPosition(osg::Vec3d(pos.x(), pos.y(), 50));
+                
+//                qDebug() << "**** faucet loc: " << center.x() << center.y() << center.z();
             }
             
             
@@ -110,13 +113,9 @@ namespace ews {
                 setNodeMask(enabled ? 0xffffffff : 0);
             }
             
-            void FaucetGeom::drip(float amplitude)  {
-                
-                // TODO add water drop geometry.
-                
+            void FaucetGeom::drip()  {
+//                qDebug() << "drip" << __FILE__ << __LINE__;
             }
-
-
         }
     }
 }

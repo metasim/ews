@@ -131,6 +131,7 @@ namespace ews {
             dampHorizontal(0, 1, _dampX / 2);
             dampHorizontal(_largeLattice.getLength() - 1, -1, _dampX / 2);
         }
+        
         double DampedClassicalWavePropagator::getDamp(unsigned int depthInDampRegion) {
             return (1 - depthInDampRegion * 0.0001);
         }

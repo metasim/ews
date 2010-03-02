@@ -20,7 +20,7 @@
 #define __DRAWABLE_ADAPTER_H
 
 #include <QtCore>
-#include <osg/MatrixTransform>
+#include <osg/PositionAttitudeTransform>
 
 namespace ews {
     namespace app {
@@ -28,7 +28,7 @@ namespace ews {
             /**
              *  Adapter between the Qt and OSG worlds.
              */
-            class DrawableQtAdapter : public QObject, public osg::MatrixTransform {
+            class DrawableQtAdapter : public QObject, public osg::PositionAttitudeTransform {
                 Q_OBJECT
                 
             public:

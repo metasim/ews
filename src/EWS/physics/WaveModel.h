@@ -122,8 +122,8 @@ namespace ews {
              * data.
              * @return vector of vectors containing amplitude values.
              */
-            const vector<vector<double> >& getAmplitudeField() const {
-                return _lattice.getAmplitudeField(); 
+            const Lattice& getLattice() const {
+                return _lattice;
             }
             
             /**
