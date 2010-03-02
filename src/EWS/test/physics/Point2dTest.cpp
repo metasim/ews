@@ -30,8 +30,8 @@ namespace ews {
             double x = 1235.352534;
             double y = -235.234165;
             const Point2d p(Vector2d(x, y));
-            QCOMPARE(x, p.x());
-            QCOMPARE(y, p.y());
+            QCOMPARE(p.x(), x);
+            QCOMPARE(p.y(), y);
         }
     }
 }
