@@ -46,7 +46,7 @@ namespace ews {
                     state->setAttribute(program.get());
                     
                     program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
-//                    program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
+                    program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
 
                     _heightMap = new Image;
                     _heightMap->setDataVariance(Object::DYNAMIC);
@@ -59,6 +59,7 @@ namespace ews {
                     else {
                         // heightMap->setResizeNonPowerOfTwoHint(false);
                         _heightMap->allocateImage(_gridWidth, _gridLength, 1, GL_LUMINANCE, GL_FLOAT, 1);
+                        _heightMap->setInternalTextureFormat(GL_LUMINANCE32F_ARB);
                         applyHeightMap(_heightMap, 0);
                     }
                     

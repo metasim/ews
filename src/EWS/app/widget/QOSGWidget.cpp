@@ -50,6 +50,14 @@ namespace ews {
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::ClickFocus);
                 
+                if(true) {
+                    QGLFormat fmt; 
+                    QGLFormat::setDefaultFormat(fmt); 
+                    fmt.setSamples(4); 
+                    fmt.setSampleBuffers(true); 
+                    setFormat(fmt);                    
+                }
+                
                 osg::Camera* c = getCamera();
                 c->setViewport(new osg::Viewport(0,0,width(),height()));
                 c->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(width())/static_cast<double>(height()), 1.0f, 10000.0f);

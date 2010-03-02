@@ -44,8 +44,9 @@ namespace ews {
             DrawableQtAdapter(&settings), _settings(settings){
                 // Move somewhere off origin.
                 Matrixf m;
-                m.makeRotate(Quat(M_PI/4.0f, Vec3f(1, 0, 0)));
-                m.postMultTranslate(Vec3f(10, 10, 30));
+                m.makeScale(5, 5, 5);
+                m.preMultRotate(Quat(M_PI/4.0f, Vec3f(0, 1, 0)));
+                m.postMultTranslate(Vec3f(-25, 0, 50));
                 setMatrix(m);
                 
                 // Create geometric representation
@@ -70,28 +71,14 @@ namespace ews {
                     mat->setShininess(Material::FRONT, 96.f ); 
                     mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                     state->setAttribute( mat.get() );
+                    
+                    state->setMode(GL_MULTISAMPLE_ARB,
+                                                         StateAttribute::ON); 
                 }
-                
-                
-                
-                
-                
-                
-                
-//                ref_ptr<osg::StateSet> state = geode->getOrCreateStateSet();
-//                
-//                // Create a PolygonMode attribute 
-//                ref_ptr<osg::PolygonMode> pm = new osg::PolygonMode(osg::PolygonMode::FRONT_AND_BACK, osg::PolygonMode::LINE ); 
-//                // Force wireframe rendering. 
-//                state->setAttributeAndModes(pm.get(), osg::StateAttribute::ON | osg::StateAttribute::OVERRIDE); 
-                
                 
                 QObject::connect(&_settings, SIGNAL(drip(int)), this, SLOT(drip(int)));
                 QObject::connect(&_settings, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
-                
-                
-                
-                
+
                 
                 setEnabled(_settings.enabled());
             }
@@ -109,9 +96,16 @@ namespace ews {
             }
             
             void FaucetGeom::drip(int amplitude)  {
-                osg::Matrixd m;
-                m.makeRotate(osg::DegreesToRadians(amplitude/10.0), 0, 0, 1);
-                postMult(m);
+                static bool prev = false;
+                ref_ptr<StateSet> state = getOrCreateStateSet();
+                state->setDataVariance(Object::DYNAMIC);
+                // Create a PolygonMode attribute 
+                ref_ptr<PolygonMode> pm = new PolygonMode(PolygonMode::FRONT_AND_BACK, PolygonMode::LINE ); 
+                pm->setDataVariance(Object::DYNAMIC);
+                // Force wireframe rendering. 
+                prev = !prev;
+                StateAttribute::Values on = prev ? StateAttribute::ON : StateAttribute::OFF;
+//                state->setAttributeAndModes(pm.get(), on | StateAttribute::OVERRIDE); 
             }
         }
     }

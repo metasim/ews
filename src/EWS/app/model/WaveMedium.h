@@ -21,10 +21,17 @@
 
 
 #include <QtCore>
+#include "WaveModel.h"
 
 namespace ews {
     namespace app {
         namespace model {
+            using ews::physics::WaveModel;
+            
+            /**
+             * Encapsulation of the state data associated with configuring
+             * and updating the wave model.
+             */
             class WaveMedium : public QObject {
                 Q_OBJECT
                 Q_PROPERTY(int width READ width WRITE setWidth)
@@ -37,8 +44,12 @@ namespace ews {
                  */
                 WaveMedium(QObject * parent = 0) : 
                 QObject(parent), _width(128), _length(128), 
-                _latticeDivisionsPerCentimeter(1) {
-
+                _latticeDivisionsPerCentimeter(1), _waveModel(NULL) {
+                    QObject::connect(this, SIGNAL(sizeChanged(int, int)), SLOT(updateWaveModel()));
+                    QObject::connect(this, SIGNAL(resolutionChanged(int)), SLOT(updateWaveModel()));
+                    
+                    updateWaveModel();
+                    
                 }
                 
                 virtual ~WaveMedium() {}
@@ -97,6 +108,13 @@ namespace ews {
                     emit resolutionChanged(divisions);
                 }
                 
+                /**
+                 * Get a R/W reference to the wave model.
+                 */
+                WaveModel& waveModel() {
+                    return *_waveModel;
+                }
+                
             signals:
                 /**
                  * Signal fired when either the width or length changes.
@@ -110,12 +128,16 @@ namespace ews {
                  * @param divisions new value
                  */
                 void resolutionChanged(int divisions);
-                             
+                
+            private slots:
+                void updateWaveModel();
+                
             private:
                 Q_DISABLE_COPY(WaveMedium)
                 int _width;
                 int _length;
                 int _latticeDivisionsPerCentimeter;
+                WaveModel* _waveModel;
                 
             };
             

@@ -42,11 +42,12 @@ namespace ews {
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
                 osg::ref_ptr<Material> mat = new Material; 
+                mat->setAmbient(Material::FRONT_AND_BACK, Vec4(.4f, .4f, .4f, 1.f));
                 mat->setDiffuse(Material::FRONT,
-                                Vec4( .2f, .2f, .9f, 1.f ) ); 
+                                Vec4( .5f, .5f, .5f, 1.f ) ); 
                 mat->setSpecular(Material::FRONT,
-                                 Vec4( 8.f, 8.f, 1.f, 1.f ) ); 
-                mat->setShininess(Material::FRONT, 5.f ); 
+                                 Vec4( 8.f, 8.f, 8.f, 1.f ) ); 
+                mat->setShininess(Material::FRONT, 100.f ); 
                 mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                 state->setAttribute( mat.get() );
                 

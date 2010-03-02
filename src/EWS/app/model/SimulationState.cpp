@@ -24,7 +24,7 @@ namespace ews {
             QObject(parent), _dripSource1(this), _dripSource2(this), 
             _waveMedium(this) {
                 _dripSource1.setObjectName("dripSource1");
-                _dripSource1.setEnabled(false);
+                _dripSource1.setEnabled(true);
                 _dripSource2.setObjectName("dripSource2");
                 _dripSource2.setEnabled(false);
                 
@@ -33,11 +33,8 @@ namespace ews {
             }
             
             
-            SimulationState::~SimulationState() 
-            {
-                
+            SimulationState::~SimulationState()  {
             }
-            
         }
     }
 }

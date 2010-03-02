@@ -23,6 +23,18 @@ namespace ews {
     namespace app {
         namespace model {
 
+            void WaveMedium::updateWaveModel() {
+                using ews::physics::WaveModel;
+
+                if(_waveModel) {
+                    delete _waveModel;
+                    _waveModel = 0;
+                }
+                
+                _waveModel = new WaveModel(_width * _latticeDivisionsPerCentimeter, 
+                                           _length * _latticeDivisionsPerCentimeter);
+                
+            }
             
         }
     }
