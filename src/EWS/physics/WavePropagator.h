@@ -32,13 +32,44 @@ namespace ews {
          */        
         class WavePropagator {
         public:
+            /**
+             * Virtual destructor
+             */
             virtual ~WavePropagator() { /* do nothing */ }
+            /**
+             * Adjusts the given point as if it had an immediate history of having the given value there.
+             * @param x X-location to modify
+             * @param y Y-location to modify
+             * @param value Value to assign
+             */            
             virtual void setBoundaryCondition(unsigned int x, unsigned int y, double value) = 0;
+            /**
+             * Update the given lattice using history stored in this propagator.
+             * @param lattice Lattice to update
+             */
             virtual void propagate(Lattice& lattice) = 0;
+            /**
+             * Scale the histories of this propagator by the given factor.
+             * @param scale Amount to scale by
+             */
             virtual void scale(double scale) = 0;
+            /**
+             * Adjusts the region over which this propagator is valid.
+             */
             virtual void setSize(unsigned int width, unsigned int length) = 0;
+            /**
+             * Returns the potential associated with this propagator.
+             * @return Associated potential
+             */
             virtual const counted_ptr<const Potential>& getPotential() const = 0;
+            /**
+             * Assigns a new potential to this propagator.
+             * @param p New potential
+             */
             virtual void setPotential(const counted_ptr<const Potential>& p) = 0;
+            /**
+             * Resets the immediate history to zero.
+             */
             virtual void clear() = 0;
         protected:
             WavePropagator() { /* do nothing */ }

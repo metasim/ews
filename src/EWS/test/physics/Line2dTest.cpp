@@ -26,10 +26,10 @@ namespace ews {
         void Line2dTest::cleanup() { /* do nothing */ }
         
         void Line2dTest::ConstructorWorks() {
-            QCOMPARE(_x1, _l.getStart().x());
-            QCOMPARE(_y1, _l.getStart().y());
-            QCOMPARE(_x2, _l.getEnd().x());
-            QCOMPARE(_y2, _l.getEnd().y());
+            QCOMPARE(_l.getStart().x(), _x1);
+            QCOMPARE(_l.getStart().y(), _x1);
+            QCOMPARE(_l.getEnd().x(), _x2);
+            QCOMPARE(_l.getEnd().y(), _y2);
         }
         
         void Line2dTest::MethodsGetSetStartWork() {
@@ -37,8 +37,8 @@ namespace ews {
             double y = -99922.3452;
             Point2d newStart(x, y);
             _l.setStart(newStart);
-            QCOMPARE(x, _l.getStart().x());
-            QCOMPARE(y, _l.getStart().y());
+            QCOMPARE(_l.getStart().x(), x);
+            QCOMPARE(_l.getStart().y(), y);
         }
         
         void Line2dTest::MethodsGetSetEndWork() {
@@ -46,15 +46,15 @@ namespace ews {
             double y = -99922.3452;
             Point2d newEnd(x, y);
             _l.setEnd(newEnd);
-            QCOMPARE(x, _l.getEnd().x());
-            QCOMPARE(y, _l.getEnd().y());
+            QCOMPARE(_l.getEnd().x(), x);
+            QCOMPARE(_l.getEnd().y(), y);
         }
         
         void Line2dTest::MethodEpsilonWorks() {
             const Point2d p1(0.0, 3.0);
             const Point2d p2(4.0, 0.0);
             const Line2d l(p1, p2);
-            QCOMPARE(5e-6, l.epislon());
+            QCOMPARE(l.epislon(), 5e-6);
         }
         
         void Line2dTest::MethodPtSegProjectionWorks() {
@@ -63,17 +63,17 @@ namespace ews {
             const Line2d l(p1, p2);
             const Point2d ptToProject1(2.0, 3.1253);
             Point2d projectedPt;
-            QCOMPARE(true, l.ptSegProjection(ptToProject1, projectedPt));
-            QCOMPARE(2.0, projectedPt.x());
-            QCOMPARE(0.0, projectedPt.y());
+            QCOMPARE(l.ptSegProjection(ptToProject1, projectedPt), true);
+            QCOMPARE(projectedPt.x(), 2.0);
+            QCOMPARE(projectedPt.y(), 0.0);
             const Point2d ptToProject2(4.0, 3.1253);
-            QCOMPARE(true, l.ptSegProjection(ptToProject2, projectedPt));
-            QCOMPARE(4.0, projectedPt.x());
-            QCOMPARE(0.0, projectedPt.y());
+            QCOMPARE(l.ptSegProjection(ptToProject2, projectedPt), true);
+            QCOMPARE(projectedPt.x(), 4.0);
+            QCOMPARE(projectedPt.y(), 0.0);
             const Point2d ptToProject3(4.01, 3.1253);
-            QCOMPARE(false, l.ptSegProjection(ptToProject3, projectedPt));
-            QCOMPARE(4.01, projectedPt.x());
-            QCOMPARE(0.0, projectedPt.y());
+            QCOMPARE(l.ptSegProjection(ptToProject3, projectedPt), false);
+            QCOMPARE(projectedPt.x(), 4.01);
+            QCOMPARE(projectedPt.y(), 0.0);
             // TODO: Create a more rigorous test
         }
     }

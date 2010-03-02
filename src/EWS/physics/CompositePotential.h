@@ -48,7 +48,16 @@ namespace ews {
              * @return Potential
              */
             double getPotential(unsigned int x, unsigned int y) const;
+            /**
+             * Add a potential to this composite list of potentials.
+             * @param p Potential to add
+             */
             void addPotential(counted_ptr<const Potential>& p);
+            /**
+             * Remove a potential from this composite list of potentials. If potential
+             * is not in current list of potentials, nothing happens.
+             * @param p Potential to remove
+             */
             void removePotential(counted_ptr<const Potential>& p);
         private:
             vector<counted_ptr<const Potential> > _potentials;
