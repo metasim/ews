@@ -23,24 +23,29 @@
 #include <osg/Geometry>
 #include <osg/Texture2D>
 #include <osg/Image>
-#include <osgDB/ReadFile>
+#include <vector>
 #include <QByteArray>
+#include "WaveModel.h"
 
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
+            using ews::physics::WaveModel;
 
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
             class VertexHeightUpdater : public NodeCallback {
             public:
-                VertexHeightUpdater(Geometry* geom, unsigned int width, unsigned int length) :
-                _gridWidth(width), _gridLength(length), _heightMap(0) {
+                VertexHeightUpdater(WaveModel& model, Geometry* geom) :
+                _model(model), _heightMap(0) {
+                    
+                    unsigned int gridWidth = _model.getWidth();
+                    unsigned int gridLength = _model.getLength();
+                    
                     ref_ptr<StateSet> state = geom->getOrCreateStateSet();
-                    // state->setDataVariance(Object::DYNAMIC);
                     
                     ref_ptr<Program> program = new Program;
                     state->setAttribute(program.get());
@@ -51,19 +56,12 @@ namespace ews {
                     _heightMap = new Image;
                     _heightMap->setDataVariance(Object::DYNAMIC);
                     
-                    if(false) {
-                        // Load the texture image 
-                        _heightMap = 
-                            osgDB::readImageFile("/MyHome/sfitch/Coding/libs/OpenSceneGraph-Data/Images/osg256.png"); 
-                    }
-                    else {
-                        // heightMap->setResizeNonPowerOfTwoHint(false);
-                        _heightMap->allocateImage(_gridWidth, _gridLength, 1, GL_LUMINANCE, GL_FLOAT, 1);
-                        _heightMap->setInternalTextureFormat(GL_LUMINANCE32F_ARB);
-                        applyHeightMap(_heightMap, 0);
-                    }
-                    
+                    _heightMap->allocateImage(gridWidth, gridLength, 1, GL_LUMINANCE, GL_FLOAT, 1);
+                    _heightMap->setInternalTextureFormat(GL_LUMINANCE32F_ARB);
+                    applyHeightMap(_heightMap, 0);
+
                     ref_ptr<Texture2D> tex = new Texture2D(_heightMap.get());
+                    tex->setResizeNonPowerOfTwoHint(false);
                     tex->setDataVariance(Object::DYNAMIC);
                     tex->setWrap(Texture2D::WRAP_S, Texture2D::REPEAT);
                     tex->setWrap(Texture2D::WRAP_T, Texture2D::REPEAT);
@@ -72,7 +70,7 @@ namespace ews {
                     state->setTextureAttributeAndModes(TEX_ID, tex.get(), StateAttribute::ON);
 
                     // Set shader variables.
-                    ref_ptr<Uniform> gridSize = new Uniform("gridSize", Vec2(_gridWidth, _gridLength));
+                    ref_ptr<Uniform> gridSize = new Uniform("gridSize", Vec2(gridWidth, gridLength));
                     gridSize->setDataVariance(Object::STATIC);
                     state->addUniform(gridSize.get());
                                              
@@ -97,20 +95,33 @@ namespace ews {
                 }
                 
             private:
-                unsigned int _gridWidth;
-                unsigned int _gridLength;
+                WaveModel& _model;
                 ref_ptr<Image> _heightMap;
                 
                 void applyHeightMap(Image* image, float time) {
-                    int a = 1;
-                    for(unsigned int y = 0; y < _gridLength; y++) {
-                        for(unsigned int x = 0; x < _gridWidth; x++) {
-                            float px = (x - _gridWidth/2.0f);
-                            float py = (y - _gridLength/2.0f);
-                            float p = sqrtf(px*px + py*py);
-                            *((float*)image->data(x,y)) = a * sinf(p/8.0 - time*4);
+                    using std::vector;
+                    
+                    _model.propagate();
+                    unsigned int gridWidth = _model.getWidth();
+                    unsigned int gridLength = _model.getLength();
+
+                    
+                    vector<vector<double> > field = _model.getAmplitudeField();
+                    for(unsigned int x = 0; x < gridWidth; x++) {
+                        for(unsigned int y = 0; y < gridLength; y++) {
+                            *((float*)image->data(y,x)) = (float) field[x][y] ;
                         }
                     }
+                    
+//                    int a = 1;
+//                    for(unsigned int y = 0; y < _gridLength; y++) {
+//                        for(unsigned int x = 0; x < _gridWidth; x++) {
+//                            float px = (x - _gridWidth/2.0f);
+//                            float py = (y - _gridLength/2.0f);
+//                            float p = sqrtf(px*px + py*py);
+//                            *((float*)image->data(x,y)) = a * sinf(p/8.0 - time*4);
+//                        }
+//                    }
                     
                     image->dirty();
                 }

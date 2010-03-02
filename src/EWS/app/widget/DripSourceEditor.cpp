@@ -35,13 +35,13 @@ namespace ews {
                 delete _ui;
             }
             
-            
+                
             void DripSourceEditor::throb() {
                 if(_dataModel) {
                     
                     bool on = false;
                     
-                    if(_dataModel->enabled()) {
+                    if(_dataModel->isEnabled()) {
                         on = !_ui->throbber->isEnabled();
                     }
                     
@@ -69,9 +69,9 @@ namespace ews {
             {
                 if(_dataModel) {
                     blockSignals(true);
-                    _ui->enabled->setChecked(_dataModel->enabled());
-                    _ui->frequency->setValue(_dataModel->frequency());
-                    _ui->amplitude->setValue(_dataModel->amplitude());
+                    _ui->enabled->setChecked(_dataModel->isEnabled());
+                    _ui->frequency->setValue(_dataModel->getFrequency());
+                    _ui->amplitude->setValue(_dataModel->getAmplitude());
                     blockSignals(false);
                 }
             }

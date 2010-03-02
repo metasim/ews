@@ -25,6 +25,7 @@ namespace ews {
     namespace physics {
         const double DEFAULT_PERIOD = 2.0;
         const double DEFAULT_AMPLITUDE = 1.0;
+        const double MAX_AMPLITUDE = 5.0;
         const unsigned int DEFAULT_RADIUS = 2;
         const unsigned int DEFAULT_X = 8;
         /**
@@ -37,14 +38,14 @@ namespace ews {
              * Constructor for default location
              * @param waveModel Model this oscillator is attached to
              */
-            Oscillator(WaveModel waveModel);
+            Oscillator(WaveModel& waveModel);
             /**
              * Constructor for location x, y
              * @param waveModel Model this oscillator is attached to
              * @param x X location of oscillator
              * @param y Y location of oscillator
              */
-            Oscillator(WaveModel waveModel, unsigned int x, unsigned int y);
+            Oscillator(WaveModel& waveModel, unsigned int x, unsigned int y);
             /**
              * Updates the time value of the oscillator and oscillates the attached wave model.
              * @param time Current time
@@ -57,16 +58,18 @@ namespace ews {
             /**
              * Gets the current value associated with the oscillator.
              */
-            double getValue();
+            double getValue() const;
+            
             /**
-             * Gets the velocity of the oscillator
+             * Gets the velocity of the oscillator (CRUFT?)
              */
-            double getVelocity();
+            double getVelocity() const;
+            
             /**
              * Gets the radius the oscillator acts upon.
              * @return Oscillator radius
              */
-            unsigned int getRadius() { return _radius; }
+            unsigned int getRadius() const { return _radius; }
             /**
              * Sets the radius the oscillator acts upon.
              * @param r Oscillator radius
@@ -76,7 +79,7 @@ namespace ews {
              * Gets the period of the oscillator
              * @return Oscillator period
              */
-            double getPeriod() { return _period; }
+            double getPeriod() const { return _period; }
             /**
              * Sets the period of the oscillator
              * @param p Oscillator period
@@ -92,22 +95,22 @@ namespace ews {
              * Gets the x location of the oscillator.
              * @return X location of oscillator
              */
-            unsigned int x() { return _x; }
+            unsigned int x() const { return _x; }
             /**
              * Gets the y location of the oscillator.
              * @return Y location of oscillator
              */
-            unsigned int y() { return _y; }
+            unsigned int y() const { return _y; }
             /**
              * Computes the frequency of the oscillator.
              * @return Oscillator frequency.
              */
-            double computeFrequency() { return 1 / _period; }
+            double computeFrequency() const { return 1 / _period; }
             /**
              * Gets the amplitude of the oscillator.
              * @return Oscillator amplitude.
              */
-            double getAmplitude() { return _amplitude; }
+            double getAmplitude() const { return _amplitude; }
             /**
              * Gets the amplitude of the oscillator.
              * @param a Oscillator amplitude.
@@ -117,7 +120,7 @@ namespace ews {
              * Gets the osillator's time state
              * @return time per the oscillator's perspective
              */
-            double getTime() { return _time; }
+            double getTime() const { return _time; }
             /**
              * Sets whether the oscillator should oscillate.
              */
@@ -126,11 +129,12 @@ namespace ews {
              * Gets whether or not this oscillator is turned on.
              * @return oscillating status
              */
-            bool getOscillateStatus() { return _oscillating; }
+            bool getOscillateStatus() const { return _oscillating; }
+            
         private:
             void resetPhase();
-            double getCosArg();
-            WaveModel _waveModel;
+            double getCosArg() const;
+            WaveModel& _waveModel;
             unsigned int _x;
             unsigned int _y;
             unsigned int _radius;

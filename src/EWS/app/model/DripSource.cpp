@@ -22,12 +22,13 @@
 namespace ews {
     namespace app {
         namespace model {
-            DripSource::DripSource(QObject * parent)
-            : QObject(parent), _enabled(false), _amplitude(50), _frequency(1000), _timer(this)
+            using ews::physics::WaveModel;
+            
+            DripSource::DripSource(WaveModel& model, QObject * parent)
+            :  QObject(parent), _oscillator(model), _timer()
             {
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
-                
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
                 
                 updateTimer();
@@ -37,14 +38,14 @@ namespace ews {
             {
                 
                 // compute delay in milliseconds from millihertz
-                int delay = (1000*1000)/_frequency;
+                int delay = (1000*1000)/getFrequency();
                 
                 if(_timer.interval() != delay && delay > 0) {
                     _timer.setInterval(delay);
                 }
                 
-                if(_timer.isActive() != enabled()) {
-                    if(enabled()) {
+                if(_timer.isActive() != isEnabled()) {
+                    if(isEnabled()) {
                         _timer.start();
                     }
                     else {

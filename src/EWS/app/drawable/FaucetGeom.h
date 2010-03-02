@@ -34,16 +34,20 @@ namespace ews {
             class FaucetGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:
-                FaucetGeom(DripSource& settings);
+                FaucetGeom(DripSource& dataModel);
                 virtual ~FaucetGeom();
                 
+                DripSource& getDataModel() {
+                    return _dataModel;
+                }
+                
             public slots:
-                void drip(int amplitude);
+                void drip(float amplitude);
                 void setEnabled(bool enabled) ;
                 
             private:
                 Q_DISABLE_COPY(FaucetGeom)
-                DripSource& _settings;
+                DripSource& _dataModel;
             };
         }
     }

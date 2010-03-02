@@ -46,7 +46,7 @@ namespace ews {
             QOSGWidget::QOSGWidget(QWidget * parent):
             QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer()
             {
-                osg::setNotifyLevel(osg::NOTICE);
+                osg::setNotifyLevel(osg::INFO);
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::ClickFocus);
                 
@@ -93,7 +93,7 @@ namespace ews {
                                 
                 
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
-                _timer.start(10);
+                _timer.start(30);
             }
             
             QOSGWidget::~QOSGWidget()

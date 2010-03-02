@@ -87,10 +87,9 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(SimulationState)
+                WaveMedium _waveMedium;
                 DripSource _dripSource1;
                 DripSource _dripSource2;
-                WaveMedium _waveMedium;
-                
             };
         }
     }

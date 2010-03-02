@@ -119,6 +119,16 @@ namespace ews {
             void clear() {
                 _amplitude.assign(getWidth(), vector<double>(getLength(), 0.0));
             }
+            
+            /**
+             * Get direct access to the low level storage of the amplitude
+             * data.
+             * @return vector of vectors containing amplitude values.
+             */
+            const vector<vector<double> >& getAmplitudeField() const {
+                return _amplitude;
+            }
+                           
         private:
             vector<vector<double> > _amplitude;
         };

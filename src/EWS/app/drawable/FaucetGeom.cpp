@@ -21,18 +21,10 @@
 #include <osg/PolygonMode>
 #include <osg/MatrixTransform>
 #include <osg/Material>
+#include <osg/NodeCallback>
 #include "FaucetGeom.h"
+#include "Oscillator.h"
 #include "demo/Teapot.h"
-
-
-//class FaucetDrawCallback : public osg::Drawable::DrawCallback {
-//    virtual void drawImplementation (osg::RenderInfo&, const osg::Drawable*) const;
-//};
-//void FaucetDrawCallback::drawImplementation (osg::RenderInfo& ri, const osg::Drawable* d) const
-//{
-//    glColor3f(0, 1, 1);
-//    d->drawImplementation(ri);
-//}
 
 
 namespace ews {
@@ -40,8 +32,31 @@ namespace ews {
         namespace drawable {
             using namespace osg;
             
-            FaucetGeom::FaucetGeom(DripSource& settings) : 
-            DrawableQtAdapter(&settings), _settings(settings){
+            /**
+             * Private class responsible for updating the oscillator simulation
+             */
+            class OscillatorUpdater : public NodeCallback {
+                virtual void operator()(Node* node, NodeVisitor* nv) { 
+                    using ews::physics::Oscillator;
+                    FaucetGeom* geom = dynamic_cast<FaucetGeom*>(node);
+                    if(!geom) {
+                        osg::notify(osg::WARN) << "OscillatorUpdater didn't receieve the right geometry type";
+                        return;
+                    }
+                    
+                    const osg::FrameStamp* fs = nv->getFrameStamp();
+                    float value = fs->getSimulationTime();
+                    
+                    Oscillator& o = geom->getDataModel().getOscillator();
+                    o.updateTimeAndOscillator(value);
+                    
+                    traverse(node,nv);
+                }
+            };
+            
+            FaucetGeom::FaucetGeom(DripSource& dataModel) 
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
+                
                 // Move somewhere off origin.
                 Matrixf m;
                 m.makeScale(5, 5, 5);
@@ -55,7 +70,6 @@ namespace ews {
                     addChild(geode.get());
                 
                     ref_ptr<osg::Drawable> d = new Teapot;
-//                d->setDrawCallback(new FaucetDrawCallback);
                     geode->addDrawable(d.get());
                 }
                 
@@ -72,15 +86,16 @@ namespace ews {
                     mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                     state->setAttribute( mat.get() );
                     
-                    state->setMode(GL_MULTISAMPLE_ARB,
-                                                         StateAttribute::ON); 
+                    state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON); 
                 }
                 
-                QObject::connect(&_settings, SIGNAL(drip(int)), this, SLOT(drip(int)));
-                QObject::connect(&_settings, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
-
+                setUpdateCallback(new OscillatorUpdater);
                 
-                setEnabled(_settings.enabled());
+                
+                QObject::connect(&_dataModel, SIGNAL(drip(float)), this, SLOT(drip(float)));
+                QObject::connect(&_dataModel, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
+
+                setEnabled(_dataModel.isEnabled());
             }
             
             
@@ -95,18 +110,13 @@ namespace ews {
                 setNodeMask(enabled ? 0xffffffff : 0);
             }
             
-            void FaucetGeom::drip(int amplitude)  {
-                static bool prev = false;
-                ref_ptr<StateSet> state = getOrCreateStateSet();
-                state->setDataVariance(Object::DYNAMIC);
-                // Create a PolygonMode attribute 
-                ref_ptr<PolygonMode> pm = new PolygonMode(PolygonMode::FRONT_AND_BACK, PolygonMode::LINE ); 
-                pm->setDataVariance(Object::DYNAMIC);
-                // Force wireframe rendering. 
-                prev = !prev;
-                StateAttribute::Values on = prev ? StateAttribute::ON : StateAttribute::OFF;
-//                state->setAttributeAndModes(pm.get(), on | StateAttribute::OVERRIDE); 
+            void FaucetGeom::drip(float amplitude)  {
+                
+                // TODO add water drop geometry.
+                
             }
+
+
         }
     }
 }

@@ -111,7 +111,7 @@ namespace ews {
                 /**
                  * Get a R/W reference to the wave model.
                  */
-                WaveModel& waveModel() {
+                WaveModel& getWaveModel() {
                     return *_waveModel;
                 }
                 
@@ -128,6 +128,9 @@ namespace ews {
                  * @param divisions new value
                  */
                 void resolutionChanged(int divisions);
+                
+            public slots:
+                void addDrop(float amplitude);
                 
             private slots:
                 void updateWaveModel();

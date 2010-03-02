@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ews::app::widget::DripSourceEditor</class>
+ <class>DripSourceEditor</class>
  <widget class="QWidget" name="DripSourceEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>231</width>
-    <height>262</height>
+    <width>295</width>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,11 +54,18 @@
          <string/>
         </property>
         <property name="pixmap">
-         <pixmap resource="Resources.qrc">:/images/images/media-record.png</pixmap>
+         <pixmap resource="../../Resources.qrc">:/images/images/media-record.png</pixmap>
         </property>
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_3">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item>
@@ -118,6 +125,28 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="freqValue">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="a">
      <property name="font">
       <font>
@@ -168,6 +197,12 @@
        <height>50</height>
       </size>
      </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
      <property name="value">
       <number>10</number>
      </property>
@@ -182,6 +217,28 @@
      </property>
      <property name="notchesVisible">
       <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="ampValue">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>0</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
@@ -238,7 +295,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="Resources.qrc"/>
+  <include location="../../Resources.qrc"/>
+  <include location="../../Resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -264,8 +322,8 @@
    <slot>pulse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>146</x>
-     <y>215</y>
+     <x>178</x>
+     <y>306</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -297,7 +355,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>85</x>
-     <y>143</y>
+     <y>196</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -333,7 +391,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>104</x>
-     <y>143</y>
+     <y>196</y>
     </hint>
    </hints>
   </connection>
@@ -348,8 +406,8 @@
      <y>11</y>
     </hint>
     <hint type="destinationlabel">
-     <x>111</x>
-     <y>215</y>
+     <x>143</x>
+     <y>306</y>
     </hint>
    </hints>
   </connection>
@@ -366,6 +424,38 @@
     <hint type="destinationlabel">
      <x>115</x>
      <y>130</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>frequency</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>freqValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>184</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>148</x>
+     <y>115</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>amplitude</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ampValue</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>151</x>
+     <y>255</y>
     </hint>
    </hints>
   </connection>

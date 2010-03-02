@@ -21,6 +21,8 @@
 
 #include "Tuple2d.h"
 
+#include <osg/Vec2>
+
 namespace ews {
     namespace physics {
         /**
@@ -46,6 +48,13 @@ namespace ews {
              */
             Point2d(const Tuple2d& t1, const Tuple2d& t2, double alpha):
             Tuple2d(t1, t2, alpha) { /* do nothing */ }
+            
+            /** osg::Vec2 conversion ctor. */
+            Point2d(const osg::Vec2& v) : Tuple2d(v.x(), v.y()) { /* do nothing */ }
+            inline operator osg::Vec2() const {
+                return osg::Vec2(x(), y());
+            }
+            
             /**
              * Equality operator
              */

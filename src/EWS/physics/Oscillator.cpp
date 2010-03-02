@@ -29,12 +29,12 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
-        Oscillator::Oscillator(WaveModel waveModel): _waveModel(waveModel), _x(DEFAULT_X),
+        Oscillator::Oscillator(WaveModel& waveModel): _waveModel(waveModel), _x(DEFAULT_X),
         _y(waveModel.getLength() / 2), _radius(DEFAULT_RADIUS), _amplitude(DEFAULT_AMPLITUDE),
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
         }
-        Oscillator::Oscillator(WaveModel waveModel, unsigned int x, unsigned int y):
+        Oscillator::Oscillator(WaveModel& waveModel, unsigned int x, unsigned int y):
         _waveModel(waveModel), _x(x), _y(y), _radius(DEFAULT_RADIUS), _amplitude(DEFAULT_AMPLITUDE),
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
@@ -52,7 +52,7 @@ namespace ews {
                 const int minY = max(0, y - r);
                 const int maxY = min(static_cast<int>(_waveModel.getLength() - 1), y + r);
                 for (int i = minX; i <= maxX; i++) {
-                    for (int j = minY; j <= minY; j++) {
+                    for (int j = minY; j <= maxY; j++) {
                         if (sqrt((i - x) * (i - x)  + (j - y) * (j - y)) < _radius) {
                             _waveModel.setSourceValue(i, j, value);
                         }
@@ -70,10 +70,10 @@ namespace ews {
             _oscillating = true;
             _inPulse = true;
         }
-        double Oscillator::getValue() {
+        double Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
         }
-        double Oscillator::getVelocity() {
+        double Oscillator::getVelocity() const {
             return _amplitude * sin(getCosArg() + _phase) * 2 * M_PI / _period;
         }
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
@@ -85,7 +85,8 @@ namespace ews {
         void Oscillator::resetPhase() {
             _phase = -getCosArg() + M_PI / 2; // Puts getValue at its minimum
         }
-        double Oscillator::getCosArg() {
+        
+        double Oscillator::getCosArg() const {
             return 2 * M_PI * _time / _period;
         }
     }

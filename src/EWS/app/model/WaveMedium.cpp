@@ -18,6 +18,8 @@
 
 
 #include "WaveMedium.h"
+#include "SlitPotential.h"
+#include <osg/Vec2>
 
 namespace ews {
     namespace app {
@@ -25,7 +27,9 @@ namespace ews {
 
             void WaveMedium::updateWaveModel() {
                 using ews::physics::WaveModel;
-
+                using ews::physics::SlitPotential;
+                using ews::physics::Potential;
+                
                 if(_waveModel) {
                     delete _waveModel;
                     _waveModel = 0;
@@ -34,6 +38,12 @@ namespace ews {
                 _waveModel = new WaveModel(_width * _latticeDivisionsPerCentimeter, 
                                            _length * _latticeDivisionsPerCentimeter);
                 
+                counted_ptr<const Potential> p(new SlitPotential(osg::Vec2(10, 10), osg::Vec2(50, 50), 2));
+                _waveModel->setPotential(p);
+            }
+            
+            void WaveMedium::addDrop(float amplitude) {
+                _waveModel->setSourceValue(_waveModel->getWidth()/2, _waveModel->getLength()/2, amplitude*2);
             }
             
         }
