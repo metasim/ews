@@ -226,7 +226,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="Resources.qrc">
+              <iconset resource="../../Resources.qrc">
                <normaloff>:/images/images/list-add.png</normaloff>:/images/images/list-add.png</iconset>
              </property>
             </widget>
@@ -237,7 +237,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="Resources.qrc">
+              <iconset resource="../../Resources.qrc">
                <normaloff>:/images/images/list-remove.png</normaloff>:/images/images/list-remove.png</iconset>
              </property>
             </widget>
@@ -443,7 +443,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="Resources.qrc">
+              <iconset resource="../../Resources.qrc">
                <normaloff>:/images/images/list-add.png</normaloff>:/images/images/list-add.png</iconset>
              </property>
             </widget>
@@ -454,7 +454,7 @@
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="Resources.qrc">
+              <iconset resource="../../Resources.qrc">
                <normaloff>:/images/images/list-remove.png</normaloff>:/images/images/list-remove.png</iconset>
              </property>
             </widget>
@@ -498,7 +498,7 @@
   </widget>
   <action name="actionRun">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/media-playback-start.png</normaloff>:/images/images/media-playback-start.png</iconset>
    </property>
    <property name="text">
@@ -510,7 +510,7 @@
   </action>
   <action name="actionPause">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/media-playback-pause.png</normaloff>:/images/images/media-playback-pause.png</iconset>
    </property>
    <property name="text">
@@ -525,7 +525,7 @@
   </action>
   <action name="actionReset">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/view-refresh.png</normaloff>:/images/images/view-refresh.png</iconset>
    </property>
    <property name="text">
@@ -540,7 +540,7 @@
   </action>
   <action name="actionAddWall">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/list-add.png</normaloff>:/images/images/list-add.png</iconset>
    </property>
    <property name="text">
@@ -555,7 +555,7 @@
   </action>
   <action name="actionRemoveWall">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/list-remove.png</normaloff>:/images/images/list-remove.png</iconset>
    </property>
    <property name="text">
@@ -570,7 +570,7 @@
   </action>
   <action name="actionAddBarrier">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/list-add.png</normaloff>:/images/images/list-add.png</iconset>
    </property>
    <property name="text">
@@ -585,7 +585,7 @@
   </action>
   <action name="actionRemoveBarrier">
    <property name="icon">
-    <iconset resource="Resources.qrc">
+    <iconset resource="../../Resources.qrc">
      <normaloff>:/images/images/list-remove.png</normaloff>:/images/images/list-remove.png</iconset>
    </property>
    <property name="text">
@@ -627,20 +627,73 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QOSGWidget</class>
-   <extends>QWidget</extends>
-   <header>QOSGWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>DripSourceEditor</class>
    <extends>QWidget</extends>
    <header>DripSourceEditor.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>QOSGWidget</class>
+   <extends>QWidget</extends>
+   <header>qosgwidget.h</header>
+  </customwidget>
  </customwidgets>
  <resources>
-  <include location="Resources.qrc"/>
+  <include location="../../Resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionRun</sender>
+   <signal>triggered()</signal>
+   <receiver>EWSMainWindow</receiver>
+   <slot>start()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>577</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPause</sender>
+   <signal>triggered()</signal>
+   <receiver>EWSMainWindow</receiver>
+   <slot>stop()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>577</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionReset</sender>
+   <signal>triggered()</signal>
+   <receiver>EWSMainWindow</receiver>
+   <slot>reset()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>577</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>start()</slot>
+  <slot>stop()</slot>
+  <slot>reset()</slot>
+ </slots>
 </ui>

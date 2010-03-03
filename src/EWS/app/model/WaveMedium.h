@@ -34,6 +34,7 @@ namespace ews {
              */
             class WaveMedium : public QObject {
                 Q_OBJECT
+                Q_PROPERTY(bool paused READ isPaused WRITE setPaused)
                 Q_PROPERTY(int width READ getWidth WRITE setWidth)
                 Q_PROPERTY(int length READ getLength WRITE setLength)
                 Q_PROPERTY(int latticeDivisionsPerCentimeter READ getLatticeDivisionsPerCentimeter WRITE setLatticeDivisionsPerCentimeter)
@@ -43,7 +44,7 @@ namespace ews {
                  * Standard ctor.
                  */
                 WaveMedium(QObject * parent = 0)  
-                : QObject(parent), _width(128), _length(128), 
+                : QObject(parent), _paused(true), _width(128), _length(128), 
                 _latticeDivisionsPerCentimeter(1), _waveModel(NULL) {
                     QObject::connect(this, SIGNAL(sizeChanged(int, int)), SLOT(updateWaveModel()));
                     QObject::connect(this, SIGNAL(resolutionChanged(int)), SLOT(updateWaveModel()));
@@ -54,6 +55,16 @@ namespace ews {
                 
                 virtual ~WaveMedium() {}
                 
+                
+                /**
+                 * Get the paused state, which indicates whether or not the
+                 * wave propagator is updated each rendering loop.
+                 */
+                bool isPaused() {
+                    return _paused;
+                }
+                
+                
                 /**
                  * Get the width in centimeters.
                  * @return width in centimeters.
@@ -61,15 +72,7 @@ namespace ews {
                 int getWidth() const {
                     return _width;
                 }
-                
-                /**
-                 * Set the width in centimeters
-                 * @param width width in centimeters
-                 */
-                void setWidth(int width) {
-                    _width = width;
-                    emit sizeChanged(this->getWidth(), this->getLength());
-                }
+
                 
                 /**
                  * Get the length in centimeters.
@@ -78,14 +81,7 @@ namespace ews {
                 int getLength() const {
                     return _length;
                 }
-                
-                /**
-                 * Set the length in centimeters. 
-                 */
-                void setLength(int length) {
-                    _length = length;
-                    emit sizeChanged(this->getWidth(), this->getLength());
-                }
+
                 
                 /**
                  * Get the number of lattice divisions per centimeter.
@@ -95,17 +91,6 @@ namespace ews {
                  */
                 int getLatticeDivisionsPerCentimeter() const {
                     return _latticeDivisionsPerCentimeter;
-                }
-                
-                /**
-                 * Set the number of lattice divisions per centimeter.
-                 * This is effectively how the resolution of the simulation is set.
-                 * For each centimeter of width or length, the wave state
-                 * is defined by that number of descrete values.
-                 */
-                void setLatticeDivisionsPerCentimeter(int divisions){
-                    _latticeDivisionsPerCentimeter = divisions;
-                    emit resolutionChanged(divisions);
                 }
                 
                 /**
@@ -129,12 +114,52 @@ namespace ews {
                  */
                 void resolutionChanged(int divisions);
                 
+            public slots:
+                
+                /**
+                 * Set the paused state, which means the wave propagator 
+                 * won't be updated.
+                 */
+                void setPaused(bool state) {
+                    _paused = state;
+                }
+                
+                
+                /**
+                 * Set the number of lattice divisions per centimeter.
+                 * This is effectively how the resolution of the simulation is set.
+                 * For each centimeter of width or length, the wave state
+                 * is defined by that number of descrete values.
+                 */
+                void setLatticeDivisionsPerCentimeter(int divisions){
+                    _latticeDivisionsPerCentimeter = divisions;
+                    emit resolutionChanged(divisions);
+                }                
+                
+                
+                /**
+                 * Set the width in centimeters
+                 * @param width width in centimeters
+                 */
+                void setWidth(int width) {
+                    _width = width;
+                    emit sizeChanged(this->getWidth(), this->getLength());
+                }
+                
+                /**
+                 * Set the length in centimeters. 
+                 */
+                void setLength(int length) {
+                    _length = length;
+                    emit sizeChanged(this->getWidth(), this->getLength());
+                }                
               
             private slots:
                 void updateWaveModel();
                 
             private:
                 Q_DISABLE_COPY(WaveMedium)
+                bool _paused;
                 int _width;
                 int _length;
                 int _latticeDivisionsPerCentimeter;

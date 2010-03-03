@@ -31,6 +31,8 @@ namespace ews {
             EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent) :
             QMainWindow(parent), _ui(new Ui::EWSMainWindow), _state(state) {
                 _ui->setupUi(this);
+                _ui->actionPause->setEnabled(false);
+                _ui->actionRun->setEnabled(true);
                 
                 
                 _ui->dripSource1->setDataModel(&state->getDripSource1());
@@ -43,13 +45,30 @@ namespace ews {
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
                 
+
                 _state->emitSignalsForDefaults();
-                
             }
             
             EWSMainWindow::~EWSMainWindow() {
                 _ui->renderer->setSceneData(NULL);
                 delete _ui;
+            }
+            
+            void EWSMainWindow::start() {
+                _state->setPaused(false);
+                _ui->actionPause->setEnabled(true);
+                _ui->actionRun->setEnabled(false);
+                
+            }
+            
+            void EWSMainWindow::stop() {
+                _state->setPaused(true);
+                _ui->actionPause->setEnabled(false);
+                _ui->actionRun->setEnabled(true);
+            }
+            
+            void EWSMainWindow::reset() {
+                
             }
         }
     }

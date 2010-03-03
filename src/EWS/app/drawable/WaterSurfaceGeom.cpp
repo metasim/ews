@@ -39,8 +39,7 @@ namespace ews {
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
                 osg::ref_ptr<Material> mat = new Material; 
-                mat->setAmbient(Material::FRONT, Vec4(.6f, .6f, .7f, 1.f));
-                    // mat->setAmbient(Material::BACK, Vec4(.6f, .6f, 1.f, 1.f));
+                mat->setAmbient(Material::FRONT, Vec4(.6f, .6f, .8f, 1.f));
                 mat->setDiffuse(Material::FRONT, Vec4( .2f, .2f, .9f, 1.f)); 
                 mat->setSpecular(Material::FRONT, Vec4( 2.f, 2.f, 2.f, 1.f)); 
                 mat->setShininess(Material::FRONT, 90.f ); 
@@ -137,7 +136,7 @@ namespace ews {
                 
                 // Register the delegate responsible for updating hight and 
                 // doing shading.
-                setUpdateCallback(new VertexHeightUpdater(_settings.getWaveModel(), geom));
+                setUpdateCallback(new VertexHeightUpdater(_settings, geom));
             }
         }
     }

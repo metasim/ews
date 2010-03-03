@@ -11,6 +11,8 @@ PROJECT (EWS)
 set(EXE_NAME "Visualize STEM - Wave")
 cmake_minimum_required(VERSION 2.8)
 
+option(TESTING "build unit tests and include 'test' target" ON)
+
 set(EWS_MODULES app/widget app/drawable app/model physics util test)
 
 #--------------------------------------------------------------------------------
@@ -26,18 +28,16 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS app/drawable/*.h physics/*.h util/*.h)
+file(GLOB EWS_HDRS physics/*.h util/*.h)
 
-#--------------------------------------------------------------------------------
-# Vertex and fragment sharders
-#--------------------------------------------------------------------------------
-file(GLOB EWS_SHADERS app/drawable/waves.vs app/drawable/waves.fs)
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
 file(GLOB EWS_MOC_HDRS app/widget/*.h app/model/*.h app/drawable/*.h)
 file(GLOB EWS_TEST_MOC_HDRS test/physics/*.h)
+# The following is suppposed to add header files to the IDE without them having
+# be be added to the target executable.
 
 
 # Move the given file from the EWS_MOC_HDRS list to the EWS_HDRS list
@@ -47,11 +47,14 @@ macro(unmoc FILENAME)
     list(APPEND EWS_HDRS ${MOCKERY})
 endmacro()    
 
-unmoc("DrawableFactory.h")
-unmoc("CameraController.h")
-unmoc("VertexHeightUpdater.h")
+unmoc(DrawableFactory.h)
+unmoc(CameraController.h)
+unmoc(VertexHeightUpdater.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
+
+set_source_files_properties(${EWS_HDRS} PROPERTIES HEADER_FILE_ONLY TRUE) 
+
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
@@ -62,6 +65,11 @@ file(GLOB EWS_UIS app/widget/*.ui)
 # and finally any resource files. 
 #--------------------------------------------------------------------------------
 file(GLOB_RECURSE EWS_RCS *.qrc)
+
+#--------------------------------------------------------------------------------
+# Vertex and fragment sharders
+#--------------------------------------------------------------------------------
+file(GLOB EWS_SHADERS app/drawable/waves.vs app/drawable/waves.fs)
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
@@ -87,6 +95,9 @@ include( ${QT_USE_FILE} )
 # this command will generate rules that will run rcc on all files from EWS_RCS
 # in result EWS_GEN_RCS variable will contain paths to files produced by rcc
 qt4_add_resources( EWS_GEN_RCS ${EWS_RCS} )
+foreach(SHADE_SRC ${SHADERS})
+    set_source_files_properties(${EWS_GEN_RCS} PROPERTIES OBJECT_DEPENDS ${SHADE_SRC})
+endforeach()
 
 #--------------------------------------------------------------------------------
 # this will run uic on .ui files:
@@ -166,10 +177,10 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
-    source_group("Headers" FILES ${EWS_HDRS})
-    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
+#    source_group("Headers" FILES ${EWS_HDRS})
+#    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
     source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
-    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+#    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
     source_group("Shaders" FILES ${EWS_SHADERS})
 endif()
 
@@ -303,19 +314,21 @@ function(cxx_test name path)
   add_test(${name} ${name})
 endfunction()
 
-enable_testing()
+if(TESTING)
+    enable_testing()
 
-# First argument is test/executable name, second argument is path to header, remaining arguments are required .cpp files
-cxx_test(LatticeTest test/physics test/physics/LatticeTest.cpp physics/Lattice.cpp)
-cxx_test(ConstantPotentialTest test/physics test/physics/ConstantPotentialTest.cpp)
-cxx_test(Tuple2dTest test/physics test/physics/Tuple2dTest.cpp)
-cxx_test(Point2dTest test/physics test/physics/Point2dTest.cpp)
-cxx_test(Vector2dTest test/physics test/physics/Vector2dTest.cpp)
-cxx_test(Line2dTest test/physics test/physics/Line2dTest.cpp physics/Line2d.cpp)
-cxx_test(WallPotentialTest test/physics test/physics/WallPotentialTest.cpp physics/WallPotential.cpp physics/Line2d.cpp)
-cxx_test(SlitPotentialTest test/physics test/physics/SlitPotentialTest.cpp physics/SlitPotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
-cxx_test(CompositePotentialTest test/physics test/physics/CompositePotentialTest.cpp physics/CompositePotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
-cxx_test(PrecomputedPotentialTest test/physics test/physics/PrecomputedPotentialTest.cpp physics/PrecomputedPotential.cpp physics/CompositePotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
-cxx_test(DampedClassicalWavePropagatorTest test/physics test/physics/DampedClassicalWavePropagatorTest.cpp ${EWS_PHYS_SRC})
-cxx_test(WaveModelTest test/physics test/physics/WaveModelTest.cpp ${EWS_PHYS_SRC})
-cxx_test(OscillatorTest test/physics test/physics/OscillatorTest.cpp ${EWS_PHYS_SRC})
+    # First argument is test/executable name, second argument is path to header, remaining arguments are required .cpp files
+    cxx_test(LatticeTest test/physics test/physics/LatticeTest.cpp physics/Lattice.cpp)
+    cxx_test(ConstantPotentialTest test/physics test/physics/ConstantPotentialTest.cpp)
+    cxx_test(Tuple2dTest test/physics test/physics/Tuple2dTest.cpp)
+    cxx_test(Point2dTest test/physics test/physics/Point2dTest.cpp)
+    cxx_test(Vector2dTest test/physics test/physics/Vector2dTest.cpp)
+    cxx_test(Line2dTest test/physics test/physics/Line2dTest.cpp physics/Line2d.cpp)
+    cxx_test(WallPotentialTest test/physics test/physics/WallPotentialTest.cpp physics/WallPotential.cpp physics/Line2d.cpp)
+    cxx_test(SlitPotentialTest test/physics test/physics/SlitPotentialTest.cpp physics/SlitPotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
+    cxx_test(CompositePotentialTest test/physics test/physics/CompositePotentialTest.cpp physics/CompositePotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
+    cxx_test(PrecomputedPotentialTest test/physics test/physics/PrecomputedPotentialTest.cpp physics/PrecomputedPotential.cpp physics/CompositePotential.cpp physics/WallPotential.cpp physics/Line2d.cpp)
+    cxx_test(DampedClassicalWavePropagatorTest test/physics test/physics/DampedClassicalWavePropagatorTest.cpp ${EWS_PHYS_SRC})
+    cxx_test(WaveModelTest test/physics test/physics/WaveModelTest.cpp ${EWS_PHYS_SRC})
+    cxx_test(OscillatorTest test/physics test/physics/OscillatorTest.cpp ${EWS_PHYS_SRC})
+endif()

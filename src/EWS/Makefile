@@ -33,7 +33,7 @@ test: $(BLD)
 
 XBLD=build.xcode
 xcode:
-	(mkdir -p $(XBLD); cd $(XBLD); cmake .. -G"Xcode"; open EWS.xcodeproj)
+	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open EWS.xcodeproj)
 
 VSBLD=build-vs
 vs:

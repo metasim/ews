@@ -37,6 +37,12 @@ namespace ews {
             
             SimulationState::~SimulationState()  {
             }
+            
+            void SimulationState::setPaused(bool state) {
+                _dripSource1.setPaused(state);
+                _dripSource2.setPaused(state);
+                _waveMedium.setPaused(state);
+            }
         }
     }
 }

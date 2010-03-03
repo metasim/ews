@@ -66,10 +66,10 @@ namespace ews {
             dampVertical(width, -1);
             _priorPriorLattice = _priorLattice;
             _priorLattice = _largeLattice;
-            for (unsigned int i = 0; i < 1; i++) {
-                dampScale();
-            }
-            // TODO: Replace with algorithm's for_each or transform
+            
+
+            dampScale();
+
             for (unsigned int i = 0; i < lattice.getWidth(); i++) {
                 for (unsigned int j = 0; j < lattice.getLength(); j++) {
                     lattice.setValue(i, j, _largeLattice.getValue(i + _dampX, j + _dampY));
