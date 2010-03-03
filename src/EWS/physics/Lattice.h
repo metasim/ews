@@ -121,7 +121,7 @@ namespace ews {
              */
             inline LatticeVal& getValue(unsigned int x, unsigned int y) {
                 assert(x < getWidth() && y < getLength());
-                return  _amplitudeData[x*getWidth() + y];
+                return  _amplitudeData[x*getLength() + y];
             }
             
             /**
@@ -131,7 +131,7 @@ namespace ews {
              */
             inline LatticeVal getValue(unsigned int x, unsigned int y) const {
                 assert(x < getWidth() && y < getLength());
-                return  _amplitudeData[x*getWidth() + y];
+                return  _amplitudeData[x*getLength() + y];
             }
             
             /**
@@ -158,15 +158,30 @@ namespace ews {
             inline void scaleLocation(unsigned int x, unsigned int y, LatticeVal scaleVal) {
                 getValue(x, y) *= scaleVal;
             }
+            
             /**
              * Sets all amplitude values to zero
              */
             void clear() {
                 setSize(_width, _length);
             }
+            
+            /**
+             * Assignment operator; copy another lattice into this one.
+             */
+            Lattice& operator=(const Lattice& l) {
+                // Set size makes deletes current memory
+                // and allocates enough for the new array
+                if(getWidth() != l.getWidth() || getLength() != l.getLength()) { 
+                    setSize(l.getWidth(), l.getLength());
+                }
+                memcpy(_amplitudeData, l._amplitudeData, getSize() * sizeof(LatticeVal));
+                return *this;
+            }
 
                            
         private:
+            Lattice(const Lattice&) {} // Not allowed
             LatticeVal* _amplitudeData;
             unsigned int _width;
             unsigned int _length;
