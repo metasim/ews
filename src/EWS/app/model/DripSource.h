@@ -52,7 +52,8 @@ namespace ews {
                  * Determine if this source is enabled or not.
                  */
                 bool isEnabled() const {
-                    return _oscillator.getOscillateStatus();
+//                    return _oscillator.getOscillateStatus();
+                    return _enabled;
                 }
                 
                 
@@ -60,7 +61,8 @@ namespace ews {
                  * Get the drip frequency in millihertz. 
                  */
                 unsigned int getFrequency() const {
-                    return (unsigned int) (1000.0/_oscillator.getPeriod());
+                    return _frequency;
+//                    return (unsigned int) (1000.0/_oscillator.getPeriod());
                 }
                 
                 
@@ -97,7 +99,8 @@ namespace ews {
                  * Set the enabled state of this drip source.
                  */
                 void setEnabled(bool state) {
-                    _oscillator.setOscillateStatus(state);
+//                    _oscillator.setOscillateStatus(state);
+                    _enabled = state;
                     emit enabledChanged(state);
                 }
                 
@@ -122,7 +125,8 @@ namespace ews {
                  * Set the frequency in of drops in millihertz
                  */
                 void setFrequency(unsigned int frequency) {
-                    _oscillator.setPeriod(1000.0/frequency);
+//                    _oscillator.setPeriod(1000.0/frequency);
+                    _frequency = frequency;
                     emit frequencyChanged(frequency);
                 }
                 
@@ -170,6 +174,8 @@ namespace ews {
                  *  the current time. */
                 QTimer _timer;
                 bool _paused;
+                bool _enabled;
+                unsigned int _frequency;
             };
             
             inline QDebug operator<<(QDebug dbg, const DripSource &ds) {

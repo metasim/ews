@@ -124,6 +124,8 @@ namespace ews {
                             *((float*)image->data(x,y)) = (float) lattice.getValue(x, y);
                         }
                     }
+                    
+                    // qDebug() << "middle lattice amplitude: " << lattice.getValue(lattice.getWidth()/2, lattice.getLength()/2);
 
                     image->dirty();
                 }

@@ -33,6 +33,7 @@ namespace ews {
                 _dripSource2.setEnabled(false);
                 
                 _waveMedium.setObjectName("waveMedium");
+                setPaused(true);
             }
             
             SimulationState::~SimulationState()  {
@@ -42,6 +43,10 @@ namespace ews {
                 _dripSource1.setPaused(state);
                 _dripSource2.setPaused(state);
                 _waveMedium.setPaused(state);
+            }
+            
+            void SimulationState::reset() {
+                _waveMedium.getWaveModel().clear();
             }
         }
     }

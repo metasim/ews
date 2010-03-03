@@ -31,6 +31,7 @@ namespace ews {
             EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent) :
             QMainWindow(parent), _ui(new Ui::EWSMainWindow), _state(state) {
                 _ui->setupUi(this);
+                
                 _ui->actionPause->setEnabled(false);
                 _ui->actionRun->setEnabled(true);
                 
@@ -47,6 +48,8 @@ namespace ews {
                 
 
                 _state->emitSignalsForDefaults();
+                
+                start();
             }
             
             EWSMainWindow::~EWSMainWindow() {
@@ -68,7 +71,7 @@ namespace ews {
             }
             
             void EWSMainWindow::reset() {
-                
+                _state->reset();                
             }
         }
     }

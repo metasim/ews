@@ -59,7 +59,8 @@ namespace ews {
                     }
                 }
             }
-            if (_inPulse && (getCosArg() + _phase >= 2 * M_PI)) {
+//            if (_inPulse && (getCosArg() + _phase >= 2 * M_PI)) {
+            if (_inPulse && (getCosArg() + _phase >= M_PI)) {
                 _inPulse = false;
                 _oscillating = false;
                 _phase = 0;
@@ -83,7 +84,7 @@ namespace ews {
             _oscillating = shouldOscillate;
         }
         void Oscillator::resetPhase() {
-            _phase = -getCosArg() + M_PI / 2; // Puts getValue at its minimum
+            _phase = -getCosArg() + M_PI/2.0; // Puts getValue at its minimum
         }
         
         double Oscillator::getCosArg() const {

@@ -30,6 +30,8 @@ namespace ews {
             using ews::app::model::WaveMedium;
             using osg::ref_ptr;
             using namespace osg;
+            
+            const Vec3 DEFAULT_VERTEX_COLOR(0.1f, 0.1f, 1.f);
 
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
             DrawableQtAdapter(&settings), _settings(settings) {
@@ -107,13 +109,15 @@ namespace ews {
                 geom->setVertexArray(vertices.get());
                 ref_ptr<VertexBufferObject> vbObject = new VertexBufferObject;
                 vertices->setVertexBufferObject(vbObject.get());
-                
+                    
+                // Set the texture coordinates.
                 geom->setTexCoordArray(TEX_ID, texCoords.get());
                 
+                // Set the default normal (adjusted by vertex shader).
                 ref_ptr<Vec3Array> n = new Vec3Array; 
                 geom->setNormalArray(n.get()); 
                 geom->setNormalBinding(Geometry::BIND_OVERALL); 
-                n->push_back(Vec3( 0.f, 1.f, 0.f ));
+                n->push_back(Vec3(0, 0, 1));
                 
                 
                 // Create the vertex mesh as triangle strips, stored as an EBO
@@ -132,6 +136,14 @@ namespace ews {
                 }
                 
                 geom->setUseVertexBufferObjects(true);
+                
+                // Set default vertex color.
+                ref_ptr<Vec3Array> colors = new osg::Vec3Array(1);
+                (*colors)[0] = DEFAULT_VERTEX_COLOR;
+                geom->setColorArray(colors.get());
+                geom->setColorBinding(Geometry::BIND_OVERALL);
+
+                
                 
                 
                 // Register the delegate responsible for updating hight and 

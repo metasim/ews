@@ -37,7 +37,7 @@ namespace ews {
             public:
                 CameraController() : osgGA::TerrainManipulator() {
                     setRotationMode(osgGA::TerrainManipulator::ELEVATION_AZIM);
-                    setHomePosition(Vec3d(200, 300, 100), Vec3d(0, 0, 0), Vec3d(0, 1, 0), false);
+                    setHomePosition(Vec3d(200, 300, 200), Vec3d(0, 0, 0), Vec3d(0, 1, 0), false);
                     setMinimumDistance(10);
                 }
                 

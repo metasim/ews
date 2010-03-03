@@ -86,6 +86,7 @@ namespace ews {
                 
             public slots:
                 void setPaused(bool);
+                void reset();
 
                 
             private:

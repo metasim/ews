@@ -25,7 +25,7 @@ namespace ews {
             using ews::physics::WaveModel;
             
             DripSource::DripSource(WaveModel& model, QObject * parent)
-            :  QObject(parent), _oscillator(model), _timer() {
+            :  QObject(parent), _oscillator(model), _timer(), _paused(false), _enabled(false), _frequency(0) {
                 
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
@@ -42,7 +42,13 @@ namespace ews {
             void DripSource::updateTimer()  {
                 
                 // compute delay in milliseconds from millihertz
-                int delay = (1000*1000)/getFrequency();
+                if(getFrequency() == 0) {
+                    _timer.stop();
+                    return;
+                }
+                
+                int delay = 100000/getFrequency();
+                qDebug() << "***** drip delay is: " << delay;
                 
                 if(_timer.interval() != delay && delay > 0) {
                     _timer.setInterval(delay);
@@ -56,9 +62,16 @@ namespace ews {
                         _timer.stop();
                     }
                 }
+                
+                // A bit of a hack to get a drop immediately
+                // when the timer is turned on or changed.
+                if(_timer.isActive()) {
+                    pulseDrip();
+                }
             }
             
             void DripSource::pokeOscillator() {
+                qDebug() << "triggering oscillator";
                 _oscillator.firePulse();
             }
         }
