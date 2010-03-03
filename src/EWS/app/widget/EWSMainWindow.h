@@ -46,6 +46,10 @@ namespace ews {
                 EWSMainWindow(SimulationState* state, QWidget *parent = 0);
                 virtual ~EWSMainWindow();
 
+            public slots:
+                void start();
+                void stop();
+                void reset();
                 
             private:
                 Q_DISABLE_COPY(EWSMainWindow)

@@ -51,6 +51,16 @@ namespace ews {
                 _ui->renderer->setSceneData(NULL);
                 delete _ui;
             }
+            
+            void EWSMainWindow::start() {
+
+            }
+            
+            void EWSMainWindow::stop() {
+            }
+            void EWSMainWindow::reset() {
+                
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ test: build
 	(cd build; make test)
 
 xcode:
-	(mkdir -p build.xcode; cd build.xcode; cmake .. -G"Xcode"; open EWS.xcodeproj)
+	(mkdir -p build.xcode; cd build.xcode; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open EWS.xcodeproj)
 
 clean:
 	rm -rf build build.xcode

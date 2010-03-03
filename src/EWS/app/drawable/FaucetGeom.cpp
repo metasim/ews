@@ -59,7 +59,10 @@ namespace ews {
             : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
                 setPosition(_dataModel.getPosition());
 
+                setAttitude(Quat(osg::DegreesToRadians(50.0f), Vec3f(0, 1, 0)));
                 setScale(Vec3(5, 5, 5));
+                
+                
                 // Create geometric representation
                 {
                     ref_ptr<osg::Geode> geode = new osg::Geode;
@@ -101,9 +104,9 @@ namespace ews {
             }
 
             void FaucetGeom::setPosition(const osg::Vec2& pos) {
-                PositionAttitudeTransform::setPosition(osg::Vec3d(pos.x(), pos.y(), 50));
-                
-//                qDebug() << "**** faucet loc: " << center.x() << center.y() << center.z();
+                PositionAttitudeTransform::setPosition(osg::Vec3d(-24+pos.x(), pos.y(), 50));
+                Vec3d cpos = getPosition();
+                qDebug() << "**** faucet pos: " << cpos.x() << cpos.y() << cpos.z();
             }
             
             
