@@ -26,6 +26,9 @@ using namespace ews::physics;
 #include <QtTest/QtTest>
 
 namespace ews {
+    /**
+     * Contains QtTest harnesses
+     */
     namespace test {
         /**
          * @ingroup Test

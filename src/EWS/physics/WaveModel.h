@@ -24,7 +24,13 @@
 #include "counted_ptr.h"
 using ews::util::counted_ptr;
 
+/**
+ * Parent namespace for all code specific to NVIDIA Foundation simulations
+ */
 namespace ews {
+    /**
+     * Contains physics and math classes independent of UI
+     */
     namespace physics {
         /**
          * @ingroup Physics

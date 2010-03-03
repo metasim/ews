@@ -7,6 +7,9 @@
 #define NO_MEMBER_TEMPLATES
 
 namespace ews {
+    /**
+     * Contains utility classes, independent of physics and math
+     */
     namespace util {
         /**
          * @ingroup Util
