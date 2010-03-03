@@ -46,9 +46,17 @@ namespace ews {
             QOSGWidget::QOSGWidget(QWidget * parent):
             QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer()
             {
-                osg::setNotifyLevel(osg::NOTICE);
+                osg::setNotifyLevel(osg::INFO);
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::ClickFocus);
+                
+                if(true) {
+                    QGLFormat fmt; 
+                    QGLFormat::setDefaultFormat(fmt); 
+                    fmt.setSamples(4); 
+                    fmt.setSampleBuffers(true); 
+                    setFormat(fmt);                    
+                }
                 
                 osg::Camera* c = getCamera();
                 c->setViewport(new osg::Viewport(0,0,width(),height()));

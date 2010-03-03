@@ -27,7 +27,7 @@ namespace ews {
         
         void Line2dTest::ConstructorWorks() {
             QCOMPARE(_l.getStart().x(), _x1);
-            QCOMPARE(_l.getStart().y(), _x1);
+            QCOMPARE(_l.getStart().y(), _y1);
             QCOMPARE(_l.getEnd().x(), _x2);
             QCOMPARE(_l.getEnd().y(), _y2);
         }

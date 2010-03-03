@@ -1,7 +1,14 @@
 
 varying vec3 normal, lightDir, eyeVec;
 uniform sampler2D heightMap; 
-void main (void) {
+
+/**
+ * Phong lighting model from:
+ * http://www.ozone3d.net/tutorials/glsl_lighting_phong.php
+ * If multi-light support is needed, see:
+ * http://www.geeks3d.com/20091013/shader-library-phong-shader-with-multiple-lights-glsl/
+ */
+vec4 phong() {
     vec4 final_color = 
         (gl_FrontLightModelProduct.sceneColor * gl_FrontMaterial.ambient) + 
         (gl_LightSource[0].ambient * gl_FrontMaterial.ambient);
@@ -19,6 +26,10 @@ void main (void) {
             gl_FrontMaterial.specular * specular;
     }
     
-    gl_FragColor = texture2D(heightMap, gl_TexCoord[0].xy);
-//    gl_FragColor = final_color;
+//    gl_FragColor = texture2D(heightMap, gl_TexCoord[0].xy);
+    return final_color;
+}
+
+void main (void) {
+    gl_FragColor = phong();
 }

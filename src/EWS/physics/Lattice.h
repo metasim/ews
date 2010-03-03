@@ -24,6 +24,10 @@ using std::vector;
 
 namespace ews {
     namespace physics {
+        
+        typedef double LatticeVal;
+        
+        
         /**
          * @ingroup Physics
          * Structure for holding the field state
@@ -36,12 +40,17 @@ namespace ews {
              * @param width Width of the lattice
              * @param length Length of the lattice
              */
-            Lattice(unsigned int width, unsigned int length): _amplitude(width, vector<double>(length, 0.0)) {
+            Lattice(unsigned int width, unsigned int length): _amplitudeData(0), _width(0), _length(0) {
+                setSize(width, length);
             }
+            
             /**
              * Destructor
              */
             virtual ~Lattice() {
+                if(_amplitudeData) {
+                    delete[] _amplitudeData;
+                }
             }
             /**
              * Determines whether x and y are within the purview of this lattice
@@ -52,6 +61,7 @@ namespace ews {
             bool containsLocation(unsigned int x, unsigned int y) const {
                 return (0 <= x) && (x < getWidth()) && (0 <= y) && (y < getLength());
             }
+            
             /**
              * Computes the average value of the lattice at x, y with an averaging window of width windowWidth.
              * @param x X location to compute the average for
@@ -59,68 +69,122 @@ namespace ews {
              * @param windoWidth Width of the averaging window (0 is a single cell)
              * @return Average value for the specified window.
              */
-            double computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const;
+            LatticeVal computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const;
+            
             /**
              * Gets the width of the lattice.
              * @return Width of the lattice
              */
-            unsigned int getWidth() const {
-                return _amplitude.size();
+            inline unsigned int getWidth() const {
+                return _width;
             }
+            
             /**
              * Gets the length of the lattice.
              * @return Length of the lattice
              */
-            unsigned int getLength() const {
-                return _amplitude.empty() ? 0 : _amplitude[0].size();
+            inline unsigned int getLength() const {
+                return _length;
             }
+            
+            /**
+             * Get the total number of elements in the Lattice.
+             */
+            inline unsigned int getSize() const {
+                return _length * _width;
+            }
+            
             /**
              * Sets the width and length of the lattice, and resets all amplitudes to zero.
              * @param width Width of the lattice
              * @param length Length of the lattice
              */
             void setSize(unsigned int width, unsigned int length) {
-                _amplitude = vector<vector<double> >(width, vector<double>(length, 0.0));
+                _width = width;
+                _length = length;
+                
+                if(_amplitudeData){
+                    delete[] _amplitudeData;
+                }
+                
+                unsigned int len = getSize();
+                _amplitudeData = new LatticeVal[len];
+                while(len--) {
+                    _amplitudeData[len] = 0;
+                }
             }
+            
+            /**
+             * Gets the amplitude of the lattice at location x,y as a writable value.
+             * @param x X location to get the amplitude for
+             * @param y Y location to get the amplitude for
+             */
+            inline LatticeVal& getValue(unsigned int x, unsigned int y) {
+                assert(x < getWidth() && y < getLength());
+                return  _amplitudeData[x*getLength() + y];
+            }
+            
             /**
              * Gets the amplitude of the lattice at location x,y
              * @param x X location to get the amplitude for
              * @param y Y location to get the amplitude for
              */
-            double getValue(unsigned int x, unsigned int y) const {
-                return x < getWidth() && y < getLength() ? _amplitude[x][y] : 0;
+            inline LatticeVal getValue(unsigned int x, unsigned int y) const {
+                assert(x < getWidth() && y < getLength());
+                return  _amplitudeData[x*getLength() + y];
             }
+            
             /**
              * Sets the amplitude of the lattice at location x,y to value
              * @param x X location to set the amplitude at
              * @param y Y location to set the amplitude at
              * @param value New value of the amplitude
              */
-            void setValue(unsigned int x, unsigned int y, double value) {
-                _amplitude.at(x).at(y) = value;
+            inline void setValue(unsigned int x, unsigned int y, LatticeVal value) {
+                getValue(x, y) = value;
             }
             /**
              * Scales all amplitude values by scaleVal
              * @param scaleVal amount to scale by
              */
-            void scale(double scaleVal);
+            void scale(LatticeVal scaleVal);
+            
             /**
              * Scales amplitude value at x, y by scaleVal
              * @param x X location to scale the amplitude for
              * @param y Y location to scale the amplitude for
              * @param scaleVal amount to scale by
              */
-            void scaleLocation(unsigned int x, unsigned int y, double scaleVal) {
-                _amplitude[x][y] *= scaleVal;
+            inline void scaleLocation(unsigned int x, unsigned int y, LatticeVal scaleVal) {
+                getValue(x, y) *= scaleVal;
             }
+            
             /**
              * Sets all amplitude values to zero
              */
             void clear() {
-                _amplitude.assign(getWidth(), vector<double>(getLength(), 0.0));
+                setSize(_width, _length);
             }
+            
+            /**
+             * Assignment operator; copy another lattice into this one.
+             */
+            Lattice& operator=(const Lattice& l) {
+                // Set size makes deletes current memory
+                // and allocates enough for the new array
+                if(getWidth() != l.getWidth() || getLength() != l.getLength()) { 
+                    setSize(l.getWidth(), l.getLength());
+                }
+                memcpy(_amplitudeData, l._amplitudeData, getSize() * sizeof(LatticeVal));
+                return *this;
+            }
+
+                           
         private:
-            vector<vector<double> > _amplitude;
+            Lattice(const Lattice&) {} // Not allowed
+            LatticeVal* _amplitudeData;
+            unsigned int _width;
+            unsigned int _length;
         };
     }
 }

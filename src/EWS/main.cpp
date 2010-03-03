@@ -19,6 +19,8 @@
 #include <QtGui/QApplication>
 #include <QtGui/QSplashScreen>
 #include <QtCore/QThread>
+#include <osg/DisplaySettings>
+#include <osg/ref_ptr>
 #include "EWSMainWindow.h"
 
 int main(int argc, char *argv[])
@@ -45,10 +47,9 @@ int main(int argc, char *argv[])
     splash->show();
     
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
-    
+
     SimulationState state;
     state.setObjectName("root");
-   
     
     EWSMainWindow w(&state);
 

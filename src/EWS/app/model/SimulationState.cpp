@@ -17,27 +17,26 @@
  */
 
 #include "SimulationState.h"
+#include <osg/Vec2>
 namespace ews {
     namespace app {
         namespace model {
             SimulationState::SimulationState(QObject * parent) :
-            QObject(parent), _dripSource1(this), _dripSource2(this), 
-            _waveMedium(this) {
+            QObject(parent), _waveMedium(this) ,_dripSource1(_waveMedium.getWaveModel(), this), 
+            _dripSource2(_waveMedium.getWaveModel(), this) {
                 _dripSource1.setObjectName("dripSource1");
-                _dripSource1.setEnabled(false);
+                _dripSource1.setPosition(osg::Vec2(_waveMedium.getWidth()/2,_waveMedium.getLength()/2));
+                _dripSource1.setEnabled(true);
+                
                 _dripSource2.setObjectName("dripSource2");
+                _dripSource2.setPosition(osg::Vec2(20, 20));
                 _dripSource2.setEnabled(false);
                 
                 _waveMedium.setObjectName("waveMedium");
-                
             }
             
-            
-            SimulationState::~SimulationState() 
-            {
-                
+            SimulationState::~SimulationState()  {
             }
-            
         }
     }
 }

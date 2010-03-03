@@ -21,24 +21,35 @@
 
 
 #include <QtCore>
+#include "WaveModel.h"
 
 namespace ews {
     namespace app {
         namespace model {
+            using ews::physics::WaveModel;
+            
+            /**
+             * Encapsulation of the state data associated with configuring
+             * and updating the wave model.
+             */
             class WaveMedium : public QObject {
                 Q_OBJECT
-                Q_PROPERTY(int width READ width WRITE setWidth)
-                Q_PROPERTY(int length READ length WRITE setLength)
-                Q_PROPERTY(int latticeDivisionsPerCentimeter READ latticeDivisionsPerCentimeter WRITE setLatticeDivisionsPerCentimeter)
+                Q_PROPERTY(int width READ getWidth WRITE setWidth)
+                Q_PROPERTY(int length READ getLength WRITE setLength)
+                Q_PROPERTY(int latticeDivisionsPerCentimeter READ getLatticeDivisionsPerCentimeter WRITE setLatticeDivisionsPerCentimeter)
                 
             public:
                 /**
                  * Standard ctor.
                  */
-                WaveMedium(QObject * parent = 0) : 
-                QObject(parent), _width(128), _length(128), 
-                _latticeDivisionsPerCentimeter(1) {
-
+                WaveMedium(QObject * parent = 0)  
+                : QObject(parent), _width(128), _length(128), 
+                _latticeDivisionsPerCentimeter(1), _waveModel(NULL) {
+                    QObject::connect(this, SIGNAL(sizeChanged(int, int)), SLOT(updateWaveModel()));
+                    QObject::connect(this, SIGNAL(resolutionChanged(int)), SLOT(updateWaveModel()));
+                    
+                    updateWaveModel();
+                    
                 }
                 
                 virtual ~WaveMedium() {}
@@ -47,7 +58,7 @@ namespace ews {
                  * Get the width in centimeters.
                  * @return width in centimeters.
                  */
-                int width() const {
+                int getWidth() const {
                     return _width;
                 }
                 
@@ -57,14 +68,14 @@ namespace ews {
                  */
                 void setWidth(int width) {
                     _width = width;
-                    emit sizeChanged(this->width(), this->length());
+                    emit sizeChanged(this->getWidth(), this->getLength());
                 }
                 
                 /**
                  * Get the length in centimeters.
                  * @return length in centimeters
                  */
-                int length() const {
+                int getLength() const {
                     return _length;
                 }
                 
@@ -73,7 +84,7 @@ namespace ews {
                  */
                 void setLength(int length) {
                     _length = length;
-                    emit sizeChanged(this->width(), this->length());
+                    emit sizeChanged(this->getWidth(), this->getLength());
                 }
                 
                 /**
@@ -82,7 +93,7 @@ namespace ews {
                  * For each centimeter of width or length, the wave state
                  * is defined by that number of descrete values.
                  */
-                int latticeDivisionsPerCentimeter() const {
+                int getLatticeDivisionsPerCentimeter() const {
                     return _latticeDivisionsPerCentimeter;
                 }
                 
@@ -95,6 +106,13 @@ namespace ews {
                 void setLatticeDivisionsPerCentimeter(int divisions){
                     _latticeDivisionsPerCentimeter = divisions;
                     emit resolutionChanged(divisions);
+                }
+                
+                /**
+                 * Get a R/W reference to the wave model.
+                 */
+                WaveModel& getWaveModel() {
+                    return *_waveModel;
                 }
                 
             signals:
@@ -110,21 +128,26 @@ namespace ews {
                  * @param divisions new value
                  */
                 void resolutionChanged(int divisions);
-                             
+                
+              
+            private slots:
+                void updateWaveModel();
+                
             private:
                 Q_DISABLE_COPY(WaveMedium)
                 int _width;
                 int _length;
                 int _latticeDivisionsPerCentimeter;
+                WaveModel* _waveModel;
                 
             };
             
             inline QDebug operator<<(QDebug dbg, const WaveMedium &ds) {
                 dbg << ds.metaObject()->className() << "{";
                 dbg << "name=" << ds.objectName() << ",";
-                dbg << "width=" << ds.width() << ",";
-                dbg << "length=" << ds.length() << ",";
-                dbg << "latticeDivisionsPerCentimeter=" << ds.latticeDivisionsPerCentimeter() << ",";
+                dbg << "width=" << ds.getWidth() << ",";
+                dbg << "length=" << ds.getLength() << ",";
+                dbg << "latticeDivisionsPerCentimeter=" << ds.getLatticeDivisionsPerCentimeter() << ",";
                 dbg << "}";
                 return dbg;
             }

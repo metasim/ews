@@ -39,6 +39,7 @@ namespace ews {
                 _l.setStart(_p1);
                 _l.setEnd(_p2);
             }
+            
             virtual ~Line2dTest() { /* do nothing */ }
             Q_OBJECT
             private slots:

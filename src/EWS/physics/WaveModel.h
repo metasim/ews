@@ -122,6 +122,16 @@ namespace ews {
              * Assign a new potential to be used by this wave model.
              */
             void setPotential(counted_ptr<const Potential> p) { _wavePropagator->setPotential(p); }
+            
+            /**
+             * Get direct access to the low level storage of the amplitude
+             * data.
+             * @return vector of vectors containing amplitude values.
+             */
+            const Lattice& getLattice() const {
+                return _lattice;
+            }
+            
             /**
              * Reset the state of the wave model.
              */

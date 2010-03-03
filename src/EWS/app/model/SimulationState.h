@@ -41,21 +41,21 @@ namespace ews {
                 /**
                  * Get the first drip source.
                  */
-                DripSource& dripSource1() {
+                DripSource& getDripSource1() {
                     return _dripSource1;
                 }
                 
                 /**
                  * Get the second drip source. 
                  */
-                DripSource& dripSource2() {
+                DripSource& getDripSource2() {
                     return _dripSource2;
                 }
                 
                 /**
                  * Get the wave medium.
                  */
-                WaveMedium& waveMedium() {
+                WaveMedium& getWaveMedium() {
                     return _waveMedium;
                 }
                 
@@ -79,18 +79,17 @@ namespace ews {
                  * objects. It should only be called by once by the setup code.
                  */
                 void emitSignalsForDefaults() {
-                    emit objectAdded(waveMedium());
-                    emit objectAdded(dripSource1());
-                    emit objectAdded(dripSource2());
+                    emit objectAdded(getWaveMedium());
+                    emit objectAdded(getDripSource1());
+                    emit objectAdded(getDripSource2());
                 }
 
                 
             private:
                 Q_DISABLE_COPY(SimulationState)
+                WaveMedium _waveMedium;
                 DripSource _dripSource1;
                 DripSource _dripSource2;
-                WaveMedium _waveMedium;
-                
             };
         }
     }

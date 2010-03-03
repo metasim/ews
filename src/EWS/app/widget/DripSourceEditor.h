@@ -22,6 +22,8 @@
 #include <QtGui/QWidget>
 #include "DripSource.h"
 
+/** Forward declaration of UI implementation class. */
+
 namespace Ui
 {
     class DripSourceEditor;
@@ -30,10 +32,6 @@ namespace Ui
 namespace ews {
     namespace app {
         namespace widget {
-            /** Forward declaration of UI implementation class. */
-            namespace Ui {
-                class DripSourceEditor;
-            }
             
             using ews::app::model::DripSource;
             
@@ -76,7 +74,7 @@ namespace ews {
                 
             private:
                 void syncUI();
-                Ui::DripSourceEditor* _ui;
+                ::Ui::DripSourceEditor* _ui;
                 DripSource* _dataModel;
             };
         }

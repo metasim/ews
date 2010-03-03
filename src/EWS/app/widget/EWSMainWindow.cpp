@@ -33,8 +33,8 @@ namespace ews {
                 _ui->setupUi(this);
                 
                 
-                _ui->dripSource1->setDataModel(&state->dripSource1());
-                _ui->dripSource2->setDataModel(&state->dripSource2());
+                _ui->dripSource1->setDataModel(&state->getDripSource1());
+                _ui->dripSource2->setDataModel(&state->getDripSource2());
                 
                 _sceneRoot = new SceneRoot(this);
                 _ui->renderer->setSceneData(_sceneRoot);
