@@ -31,9 +31,7 @@ float sampleHeight(vec2 heightMapCoord) {
     // the sign. Not ideal
     float height = length(heightTexl);
     // height = heightTexl.s + heightTexl.t + heightTexl.p + heightTexl.q
-    
-    // Exaggerate height a bit....
-    height *= 5.0;
+
     return height;
 }
 
@@ -49,6 +47,10 @@ void main(void) {
     
     // Get the desired height value at the current vertex.
     float height = sampleHeight(gl_TexCoord[0].st);
+        
+    // Exaggerate height a bit....
+    height *= 5.0;
+    
     // Add hight offset to vertex and provide
     vec4 newVertex = gl_Vertex;
     newVertex.z += height;

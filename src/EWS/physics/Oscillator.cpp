@@ -53,7 +53,7 @@ namespace ews {
                 const int maxY = min(static_cast<int>(_waveModel.getLength() - 1), y + r);
                 for (int i = minX; i <= maxX; i++) {
                     for (int j = minY; j <= maxY; j++) {
-                        if (sqrt((i - x) * (i - x)  + (j - y) * (j - y)) < _radius) {
+                        if (sqrt(static_cast<double>((i - x) * (i - x)  + (j - y) * (j - y))) < _radius) {
                             _waveModel.setSourceValue(i, j, value);
                         }
                     }

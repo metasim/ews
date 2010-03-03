@@ -26,7 +26,7 @@ namespace ews {
         const double DEFAULT_PERIOD = 2.0;
         const double DEFAULT_AMPLITUDE = 1.0;
         const double MAX_AMPLITUDE = 2.0;
-        const unsigned int DEFAULT_RADIUS = 2;
+        const double DEFAULT_RADIUS = 2.0;
         const unsigned int DEFAULT_X = 8;
         /**
          * @ingroup Physics
@@ -69,12 +69,12 @@ namespace ews {
              * Gets the radius the oscillator acts upon.
              * @return Oscillator radius
              */
-            unsigned int getRadius() const { return _radius; }
+            double getRadius() const { return _radius; }
             /**
              * Sets the radius the oscillator acts upon.
              * @param r Oscillator radius
              */
-            void setRadius(unsigned int r) { _radius = r; }
+			void setRadius(double r) { _radius = r > 0 ? r : 0; }
             /**
              * Gets the period of the oscillator
              * @return Oscillator period
@@ -137,7 +137,7 @@ namespace ews {
             WaveModel& _waveModel;
             unsigned int _x;
             unsigned int _y;
-            unsigned int _radius;
+            double _radius;
             double _amplitude;
             double _period;
             double _time;
