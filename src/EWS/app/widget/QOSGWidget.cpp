@@ -173,10 +173,11 @@ namespace ews {
             void QOSGWidget::changeEvent(QEvent *e)
             {
                 QWidget::changeEvent(e);
-                switch (e->type()) {
-                    default:
-                        break;
-                }
+				// CRUFT To fill out ... maybe
+//                switch (e->type()) {
+//                    default:
+//                        break;
+//                }
             }
         }
     }

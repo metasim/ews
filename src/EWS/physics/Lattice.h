@@ -21,6 +21,7 @@
 
 #include <vector>
 using std::vector;
+#include <cassert>
 
 namespace ews {
     namespace physics {

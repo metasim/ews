@@ -27,7 +27,7 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
-        const unsigned int DEFAULT_THICKNESS_SQ = 3 * 3;
+        const double DEFAULT_THICKNESS_SQ = 3 * 3;
         const double DEFAULT_POTENTIAL = 100.0;
 
         /**
@@ -91,7 +91,7 @@ namespace ews {
              * Returns the thickness of the wall.
              * @return Wall thickness
              */
-            unsigned int getThickness() const { return static_cast<unsigned int>(sqrt(_thicknessSq)); }
+            double getThickness() const { return sqrt(_thicknessSq); }
             /**
              * Returns the length of the wall (i.e., the distance between its two end points.
              */
@@ -104,7 +104,7 @@ namespace ews {
         protected:
             double alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
-            unsigned int _thicknessSq;
+            double _thicknessSq;
         };
     }
 }

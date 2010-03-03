@@ -72,8 +72,10 @@ namespace ews {
                 
                 
                 setColor(Vec4(.2f, .9f, .9f, 1.f)); 
-                ref_ptr<StateSet> state = getOrCreateStateSet(); 
-                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON); 
+                ref_ptr<StateSet> state = getOrCreateStateSet();
+#if defined(GL_MULTISAMPLE_ARB)
+                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
+#endif
                 
                 setUpdateCallback(new OscillatorUpdater);
                 
@@ -94,7 +96,7 @@ namespace ews {
                 ref_ptr<Material> mat = new osg::Material; 
                 mat->setDiffuse(Material::FRONT, color);
                 mat->setSpecular(Material::FRONT,
-                                 Vec4( 0.8f, 0.8, 0.8f, 0.8f ) ); 
+                                 Vec4( 0.8f, 0.8f, 0.8f, 0.8f ) ); 
                 mat->setShininess(Material::FRONT, 96.f ); 
                 mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                 state->setAttribute( mat.get() );

@@ -60,7 +60,7 @@ namespace ews {
         void WallPotentialTest::MethodGetSetThicknessWorks() {
             WallPotential p(Point2d(0.0, 0.0), Point2d(5.0, 5.0));
             p.setThickness(1);
-            QCOMPARE(p.getThickness(), static_cast<unsigned int>(1));
+            QCOMPARE(p.getThickness(), 1.0);
             QCOMPARE(p.getPotential(2, 2), 100.0);
             QCOMPARE(p.getPotential(3, 2), 100.0);
             QCOMPARE(p.getPotential(4, 2), 0.0);
