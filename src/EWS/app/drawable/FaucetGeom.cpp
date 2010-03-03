@@ -45,11 +45,14 @@ namespace ews {
                         return;
                     }
                     
-                    const osg::FrameStamp* fs = nv->getFrameStamp();
-                    float value = fs->getSimulationTime();
+                    if(!geom->getDataModel().isPaused()) {
                     
-                    Oscillator& o = geom->getDataModel().getOscillator();
-                    o.updateTimeAndOscillator(value);
+                        const osg::FrameStamp* fs = nv->getFrameStamp();
+                        float value = fs->getSimulationTime();
+                        
+                        Oscillator& o = geom->getDataModel().getOscillator();
+                        o.updateTimeAndOscillator(value);
+                    }
                     
                     traverse(node,nv);
                 }

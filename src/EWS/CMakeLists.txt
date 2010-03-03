@@ -28,18 +28,16 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS app/drawable/*.h physics/*.h util/*.h)
+file(GLOB EWS_HDRS physics/*.h util/*.h)
 
-#--------------------------------------------------------------------------------
-# Vertex and fragment sharders
-#--------------------------------------------------------------------------------
-file(GLOB EWS_SHADERS app/drawable/waves.vs app/drawable/waves.fs)
 
 #--------------------------------------------------------------------------------
 # another list, this time it includes all header files that should be treated with moc
 #--------------------------------------------------------------------------------
 file(GLOB EWS_MOC_HDRS app/widget/*.h app/model/*.h app/drawable/*.h)
 file(GLOB EWS_TEST_MOC_HDRS test/physics/*.h)
+# The following is suppposed to add header files to the IDE without them having
+# be be added to the target executable.
 
 
 # Move the given file from the EWS_MOC_HDRS list to the EWS_HDRS list
@@ -49,11 +47,14 @@ macro(unmoc FILENAME)
     list(APPEND EWS_HDRS ${MOCKERY})
 endmacro()    
 
-unmoc("DrawableFactory.h")
-unmoc("CameraController.h")
-unmoc("VertexHeightUpdater.h")
+unmoc(DrawableFactory.h)
+unmoc(CameraController.h)
+unmoc(VertexHeightUpdater.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
+
+set_source_files_properties(${EWS_HDRS} PROPERTIES HEADER_FILE_ONLY TRUE) 
+
 
 #--------------------------------------------------------------------------------
 # .ui files that are used in the project
@@ -64,6 +65,11 @@ file(GLOB EWS_UIS app/widget/*.ui)
 # and finally any resource files. 
 #--------------------------------------------------------------------------------
 file(GLOB_RECURSE EWS_RCS *.qrc)
+
+#--------------------------------------------------------------------------------
+# Vertex and fragment sharders
+#--------------------------------------------------------------------------------
+file(GLOB EWS_SHADERS app/drawable/waves.vs app/drawable/waves.fs)
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
@@ -89,6 +95,9 @@ include( ${QT_USE_FILE} )
 # this command will generate rules that will run rcc on all files from EWS_RCS
 # in result EWS_GEN_RCS variable will contain paths to files produced by rcc
 qt4_add_resources( EWS_GEN_RCS ${EWS_RCS} )
+foreach(SHADE_SRC ${SHADERS})
+    set_source_files_properties(${EWS_GEN_RCS} PROPERTIES OBJECT_DEPENDS ${SHADE_SRC})
+endforeach()
 
 #--------------------------------------------------------------------------------
 # this will run uic on .ui files:
@@ -168,10 +177,10 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
-    source_group("Headers" FILES ${EWS_HDRS})
-    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
+#    source_group("Headers" FILES ${EWS_HDRS})
+#    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
     source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
-    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+#    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
     source_group("Shaders" FILES ${EWS_SHADERS})
 endif()
 

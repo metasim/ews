@@ -37,6 +37,7 @@ namespace ews {
                 
                 Q_OBJECT
                 Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
+                Q_PROPERTY(bool paused READ isPaused WRITE setPaused)
                 Q_PROPERTY(unsigned int frequency READ getFrequency WRITE setFrequency)
                 Q_PROPERTY(unsigned int amplitude READ getAmplitude WRITE setAmplitude)
                 Q_PROPERTY(Vec2 position READ getPosition WRITE setPosition)
@@ -85,6 +86,11 @@ namespace ews {
                     return _oscillator;
                 }
                 
+                bool isPaused() const {
+                    return _paused;
+                }
+                    
+                
             public slots:
                 
                 /**
@@ -94,6 +100,15 @@ namespace ews {
                     _oscillator.setOscillateStatus(state);
                     emit enabledChanged(state);
                 }
+                
+                /**
+                 * Set the paused state.
+                 */
+                void setPaused(bool state) {
+                    _paused = state;
+                    emit pausedStateChanged(state);
+                }
+                 
                 /**
                  * Set the amplitude percentage
                  * @param amplitude value in (0, 100]
@@ -111,6 +126,10 @@ namespace ews {
                     emit frequencyChanged(frequency);
                 }
                 
+                /**
+                 * Set the XY position of the drip source in water medium
+                 * coordinates.
+                 */
                 void setPosition(const osg::Vec2& pos) {
                     _oscillator.setLocation((unsigned int) pos.x(), (unsigned int) pos.y());
                     emit positionChanged(pos);
@@ -125,9 +144,11 @@ namespace ews {
                 
             private slots:
                 void updateTimer();
+                void pokeOscillator();
                 
             signals:
                 void enabledChanged(bool);
+                void pausedStateChanged(bool);
                 void frequencyChanged(int);
                 void amplitudeChanged(int);
                 void positionChanged(osg::Vec2);
@@ -148,6 +169,7 @@ namespace ews {
                  *  takes care of it's own triggering when it's updated with
                  *  the current time. */
                 QTimer _timer;
+                bool _paused;
             };
             
             inline QDebug operator<<(QDebug dbg, const DripSource &ds) {

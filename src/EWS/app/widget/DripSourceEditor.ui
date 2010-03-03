@@ -96,19 +96,19 @@
       </sizepolicy>
      </property>
      <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
       <number>100</number>
      </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
      <property name="singleStep">
-      <number>1</number>
+      <number>50</number>
      </property>
      <property name="pageStep">
-      <number>5</number>
+      <number>250</number>
      </property>
      <property name="value">
-      <number>4</number>
+      <number>100</number>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -297,7 +297,6 @@
  <resources>
   <include location="../../Resources.qrc"/>
   <include location="../../Resources.qrc"/>
-  <include location="../../Resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -393,6 +392,22 @@
     <hint type="destinationlabel">
      <x>104</x>
      <y>196</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pulse</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>162</x>
+     <y>11</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>306</y>
     </hint>
    </hints>
   </connection>

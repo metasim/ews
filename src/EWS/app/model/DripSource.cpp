@@ -29,10 +29,11 @@ namespace ews {
                 
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
+                connect(this, SIGNAL(drip(int)), this, SLOT(pokeOscillator()));
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
                 
                 setPosition(osg::Vec2(0, 0));
-                _oscillator.setRadius(2.1);
+                _oscillator.setRadius(2);
                 
                 
                 updateTimer();
@@ -57,6 +58,9 @@ namespace ews {
                 }
             }
             
+            void DripSource::pokeOscillator() {
+                _oscillator.firePulse();
+            }
         }
     }
 }

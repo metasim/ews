@@ -83,6 +83,9 @@ namespace ews {
                     emit objectAdded(getDripSource1());
                     emit objectAdded(getDripSource2());
                 }
+                
+            public slots:
+                void setPaused(bool);
 
                 
             private:

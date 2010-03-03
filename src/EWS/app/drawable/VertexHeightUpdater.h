@@ -41,7 +41,7 @@ namespace ews {
             
             class VertexHeightUpdater : public NodeCallback {
             public:
-                VertexHeightUpdater(WaveModel& model, Geometry* geom) :
+                VertexHeightUpdater(WaveMedium& model, Geometry* geom) :
                 _model(model), _heightMap(0) {
                     
                     unsigned int gridWidth = _model.getWidth();
@@ -60,7 +60,7 @@ namespace ews {
                     
                     _heightMap->allocateImage(gridWidth, gridLength, 1, GL_LUMINANCE, GL_FLOAT, 1);
                     _heightMap->setInternalTextureFormat(GL_LUMINANCE32F_ARB);
-                    applyHeightMap(_heightMap, 0);
+                    applyHeightMap(_heightMap);
 
                     ref_ptr<Texture2D> tex = new Texture2D(_heightMap.get());
                     tex->setResizeNonPowerOfTwoHint(false);
@@ -86,45 +86,45 @@ namespace ews {
                 virtual ~VertexHeightUpdater() {
                 }
                     
-                /** Callback method called by the NodeVisitor when visiting a node.*/
+                /** Callback method called by the NodeVisitor when visiting a node.
+                 *  TODO: Consider moving the propagate stage of this
+                 *  out of this class and into someghitn more general, such
+                 *  as a parent decorator node for simulation update. See
+                 *  corresponding code in FaucetGeom.
+                 */
+                
                 virtual void operator()(Node* node, NodeVisitor* nv) { 
-                    const osg::FrameStamp* fs = nv->getFrameStamp();
-                    float value = fs->getSimulationTime();
-                    
-                    applyHeightMap(_heightMap, value);
-                    
+                    /** If the simulation is paused then we don't propagate
+                     *  the wave model nor update the deformation texture.
+                     */
+                    if(!_model.isPaused()) {
+                        _model.getWaveModel().propagate();
+                        
+                        applyHeightMap(_heightMap);
+                    }
                     traverse(node,nv);
                 }
                 
             private:
-                WaveModel& _model;
+                WaveMedium& _model;
                 ref_ptr<Image> _heightMap;
                 
-                void applyHeightMap(Image* image, float time) {
+                void applyHeightMap(Image* image) {
                     using std::vector;
-                    
-                    _model.propagate();
+
                     unsigned int gridWidth = _model.getWidth();
                     unsigned int gridLength = _model.getLength();
 
                         
-                    const Lattice& lattice = _model.getLattice();
+                    const Lattice& lattice = _model.getWaveModel().getLattice();
+                    // The efficiency of this copy operation is very important
+                    // could surely be made better.
                     for(unsigned int x = 0; x < gridWidth; x++) {
                         for(unsigned int y = 0; y < gridLength; y++) {
                             *((float*)image->data(x,y)) = (float) lattice.getValue(x, y);
                         }
                     }
-                    
-//                    int a = 1;
-//                    for(unsigned int y = 0; y < _gridLength; y++) {
-//                        for(unsigned int x = 0; x < _gridWidth; x++) {
-//                            float px = (x - _gridWidth/2.0f);
-//                            float py = (y - _gridLength/2.0f);
-//                            float p = sqrtf(px*px + py*py);
-//                            *((float*)image->data(x,y)) = a * sinf(p/8.0 - time*4);
-//                        }
-//                    }
-                    
+
                     image->dirty();
                 }
                 

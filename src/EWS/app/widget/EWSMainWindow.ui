@@ -627,16 +627,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ews::app::widget::QOSGWidget</class>
-   <extends>QWidget</extends>
-   <header>QOSGWidget.h</header>
-   <container>o</container>
-  </customwidget>
-  <customwidget>
    <class>DripSourceEditor</class>
    <extends>QWidget</extends>
    <header>DripSourceEditor.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QOSGWidget</class>
+   <extends>QWidget</extends>
+   <header>qosgwidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -660,7 +659,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionRemoveBarrier</sender>
+   <sender>actionPause</sender>
    <signal>triggered()</signal>
    <receiver>EWSMainWindow</receiver>
    <slot>stop()</slot>
