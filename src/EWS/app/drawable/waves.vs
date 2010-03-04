@@ -29,8 +29,10 @@ float sampleHeight(vec2 heightMapCoord) {
     
     // Calling length gives us something to work with, but we loose
     // the sign. Not ideal
-    float height = length(heightTexl);
+    // float height = length(heightTexl);
     // height = heightTexl.s + heightTexl.t + heightTexl.p + heightTexl.q
+    
+    float height = heightTexl.x;
 
     return height;
 }
@@ -49,7 +51,7 @@ void main(void) {
     float height = sampleHeight(gl_TexCoord[0].st);
         
     // Exaggerate height a bit....
-    height *= 5.0;
+    height *= 15.0;
     
     // Add hight offset to vertex and provide
     vec4 newVertex = gl_Vertex;
@@ -65,7 +67,7 @@ void main(void) {
     // from discrete samples around the current vertex. Basically approximates
     // local curvature.
     // offset is in texture coordinates
-	const float offset = 0.01; 
+	const float offset = 0.001; 
     
 	// HACK: Use matrix as a cheap array of vectors to set up
 	// offsets around current texture coordinate. Current MacOS drivers

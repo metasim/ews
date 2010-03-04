@@ -17,24 +17,25 @@
  */
 
 #include "EWSMainWindow.h"
-#include "ui_EWSMainWindow.h"
+
 
 #include "DrawableFactory.h"
 
+#include "ui_EWSMainWindow.h"
 
 namespace ews {
     namespace app {
         namespace widget {
+            
             using namespace ews::app::drawable;
             using namespace ews::app::model;
             
-            EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent) :
-            QMainWindow(parent), _ui(new Ui::EWSMainWindow), _state(state) {
+            EWSMainWindow::EWSMainWindow(SimulationState* state, QWidget *parent) 
+            : QMainWindow(parent), _ui(new Ui::EWSMainWindowForm), _state(state) {
                 _ui->setupUi(this);
                 
                 _ui->actionPause->setEnabled(false);
                 _ui->actionRun->setEnabled(true);
-                
                 
                 _ui->dripSource1->setDataModel(&state->getDripSource1());
                 _ui->dripSource2->setDataModel(&state->getDripSource2());

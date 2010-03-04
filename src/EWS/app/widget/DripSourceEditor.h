@@ -26,7 +26,7 @@
 
 namespace Ui
 {
-    class DripSourceEditor;
+    class DripSourceEditorForm;
 }
 
 namespace ews {
@@ -40,7 +40,7 @@ namespace ews {
                 
             public:
                 DripSourceEditor(QWidget *parent = 0);
-                ~DripSourceEditor();
+                virtual ~DripSourceEditor();
                 
                 void setDataModel(DripSource* data);
                 
@@ -74,7 +74,7 @@ namespace ews {
                 
             private:
                 void syncUI();
-                ::Ui::DripSourceEditor* _ui;
+                Ui::DripSourceEditorForm* _ui;
                 DripSource* _dataModel;
             };
         }

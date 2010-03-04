@@ -27,18 +27,17 @@
 #include "SceneRoot.h"
 
 
+/** Forward declaration of generated UI class. */
+namespace Ui {
+    class EWSMainWindowForm;
+}
 
 namespace ews {
     namespace app {
         namespace widget {
-            
-            /** Forward declaration of generated UI class. */
-            namespace Ui {
-                class EWSMainWindow;
-            }
-            
             using ews::app::model::SimulationState;
             using ews::app::drawable::SceneRoot;
+            
             class EWSMainWindow : public QMainWindow {
                 Q_OBJECT
                 
@@ -53,7 +52,7 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(EWSMainWindow)
-                Ui::EWSMainWindow* _ui;
+                Ui::EWSMainWindowForm* _ui;
                 SimulationState* _state;
                 osg::ref_ptr<SceneRoot> _sceneRoot;
             };

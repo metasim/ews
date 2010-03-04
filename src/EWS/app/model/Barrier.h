@@ -21,12 +21,51 @@
 
 
 #include <QtCore>
+#include <QObject>
 
 namespace ews {
     namespace app {
         namespace model {
             class Barrier : public QObject {
                 Q_OBJECT
+                Q_ENUMS(NumSlits)
+                Q_PROPERTY(NumSlits numSlits READ getNumSlits WRITE setNumSlits)
+                
+            public:
+                enum NumSlits { Zero, One, Two };
+                
+                Barrier(QObject* parent = 0) 
+                : QObject(parent), _enabled(true), _numSlits(Zero) {
+                
+                }
+                
+                virtual ~Barrier() {}
+                
+                NumSlits getNumSlits() const {
+                    return _numSlits;
+                }
+                
+                bool isEnabled() const {
+                    return _enabled;
+                }
+                
+            public slots:
+                void setNumSlits(NumSlits num) {
+                    _numSlits = num;
+                    emit dataChanged();
+                }
+                
+                void setEnabled(bool enabled) {
+                    _enabled = enabled;
+                    emit dataChanged();
+                }
+                
+            signals:
+                void dataChanged();
+                
+            private:
+                bool _enabled;
+                NumSlits _numSlits;
 
             };
         }

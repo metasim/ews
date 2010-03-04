@@ -22,16 +22,14 @@
 namespace ews {
     namespace app {
         namespace widget {
-            DripSourceEditor::DripSourceEditor(QWidget* parent) : QWidget(parent), 
-            _ui(new Ui::DripSourceEditor), _dataModel(NULL) 
-            {
-                _ui->setupUi(this);   
+            DripSourceEditor::DripSourceEditor(QWidget* parent) 
+            : QWidget(parent), _ui(new Ui::DripSourceEditorForm), _dataModel(NULL) {
                 
+                _ui->setupUi(this);   
             }
             
-            DripSourceEditor::~DripSourceEditor() 
-            {
-                _dataModel = NULL;
+            DripSourceEditor::~DripSourceEditor() {
+                _dataModel = NULL; // We don't own the data model.
                 delete _ui;
             }
             
@@ -49,8 +47,7 @@ namespace ews {
                 }
             }
             
-            void DripSourceEditor::setDataModel(DripSource* data) 
-            {
+            void DripSourceEditor::setDataModel(DripSource* data) {
                 if(_dataModel) {
                     _dataModel->disconnect(this);
                 }
@@ -65,8 +62,7 @@ namespace ews {
             }
             
             
-            void DripSourceEditor::syncUI() 
-            {
+            void DripSourceEditor::syncUI() {
                 if(_dataModel) {
                     blockSignals(true);
                     _ui->enabled->setChecked(_dataModel->isEnabled());
