@@ -37,14 +37,10 @@ namespace ews {
         void DampedClassicalWavePropagator::setPotential(const counted_ptr<const Potential>& p) {
             _potential = counted_ptr<const Potential>(new PaddedPotential(p, _dampX, _dampY));
         }
-        void DampedClassicalWavePropagator::propagate(Lattice& lattice) {
-            for (unsigned int i = 0; i < lattice.getWidth(); i++) {
-                for (unsigned int j = 0; j < lattice.getLength(); j++) {
-                    _largeLattice.setValue(i + _dampX, j + _dampY, lattice.getValue(i, j));
-                }
-            }
+        void DampedClassicalWavePropagator::propagate(Lattice& lattice) {            
             unsigned int width = _largeLattice.getWidth() - 1;
             unsigned int length = _largeLattice.getLength() - 1;
+            _largeLattice = _priorLattice; // At this point, largeLattice and priorLattice should already be the same
             for (unsigned int i = 1; i < width; i++) {
                 for (unsigned int j = 1; j < length; j++) {
                     if (_potential->getPotential(i, j) != 0) {
@@ -53,10 +49,8 @@ namespace ews {
                     else {
                         const double cSquared = 0.25;
                         const double neigh = cSquared * (_priorLattice.getValue(i + 1, j) + _priorLattice.getValue(i - 1, j)
-                                                         + _priorLattice.getValue(i, j + 1) + _priorLattice.getValue(i, j - 1)
-                                                         - 4 * _priorLattice.getValue(i, j));
-                        _largeLattice.setValue(i, j, 2 * _priorLattice.getValue(i, j) - 
-                                               _priorPriorLattice.getValue(i, j) + neigh);
+                                                         + _priorLattice.getValue(i, j + 1) + _priorLattice.getValue(i, j - 1));
+                        _largeLattice.getValue(i, j) += neigh - _priorPriorLattice.getValue(i, j);
                     }
                 }
             }
@@ -64,9 +58,9 @@ namespace ews {
             dampHorizontal(length, -1);
             dampVertical(0, 1);
             dampVertical(width, -1);
+
             _priorPriorLattice = _priorLattice;
-            _priorLattice = _largeLattice;
-            
+            _priorLattice = _largeLattice;            
 
             dampScale();
 

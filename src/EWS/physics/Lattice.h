@@ -126,7 +126,7 @@ namespace ews {
              * @param y Y location to get the amplitude for
              */
             inline LatticeVal& getValue(unsigned int x, unsigned int y) {
-                assert(x < getWidth() && y < getLength());
+//                assert(x < getWidth() && y < getLength());
                 return  _amplitudeData[x*getLength() + y];
             }
             
@@ -136,7 +136,7 @@ namespace ews {
              * @param y Y location to get the amplitude for
              */
             inline LatticeVal getValue(unsigned int x, unsigned int y) const {
-                assert(x < getWidth() && y < getLength());
+//                assert(x < getWidth() && y < getLength());
                 return  _amplitudeData[x*getLength() + y];
             }
             

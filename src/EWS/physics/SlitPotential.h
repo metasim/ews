@@ -75,7 +75,7 @@ namespace ews {
             virtual double getPotential(unsigned int x, unsigned int y) const;
         private:
             SlitPotential(const SlitPotential&) {} // Not allowed
-            SlitPotential& operator=(const SlitPotential& l) {} // Not allowed
+            SlitPotential& operator=(const SlitPotential& l) { return *this; } // Not allowed
             double _slitWidth;
             // Fraction that each slit is along the wall
             vector<double> _slitAlphas;

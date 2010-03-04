@@ -134,7 +134,7 @@ namespace ews {
         private:
             // Not allowed, so don't worry about leaked memory
             Oscillator(const Oscillator&): _waveModel(*(new WaveModel(0, 0))) {}
-            Oscillator& operator=(const Oscillator& l) {} // Not allowed
+            Oscillator& operator=(const Oscillator& l) { return *this; } // Not allowed
             void resetPhase();
             double getCosArg() const;
             WaveModel& _waveModel;

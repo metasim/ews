@@ -45,7 +45,7 @@ namespace ews {
                  */
                 WaveMedium(QObject * parent = 0)  
                 : QObject(parent), _paused(true), _width(128), _length(128), 
-                _latticeDivisionsPerCentimeter(1), _waveModel(NULL) {
+                _latticeDivisionsPerCentimeter(4), _waveModel(NULL) {
                     QObject::connect(this, SIGNAL(sizeChanged(int, int)), SLOT(updateWaveModel()));
                     QObject::connect(this, SIGNAL(resolutionChanged(int)), SLOT(updateWaveModel()));
                     

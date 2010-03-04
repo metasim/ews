@@ -42,7 +42,7 @@ namespace ews {
             Potential() { /* do nothing */ }
         private:
             Potential(const Potential&) {} // Not allowed
-            Potential& operator=(const Potential& l) {} // Not allowed
+            Potential& operator=(const Potential& l) { return *this; } // Not allowed
         };
     }
 }

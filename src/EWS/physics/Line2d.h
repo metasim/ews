@@ -20,6 +20,7 @@
 #define __LINE2D_H
 
 #include "Point2d.h"
+#include "Vector2d.h"
 
 namespace ews {
     namespace physics {
@@ -69,19 +70,31 @@ namespace ews {
              * line).
              * @return scale-invariant epsilon
              */
-            double epislon() const { return _epsilon; }
+            inline double epislon() const { return _epsilon; }
             /**
              * Compute the alpha value [0, 1] (if on the line) of the given point by projecting it
              * on to the line and determining how far along the line segment it lies.
              * @return alpha value
              */
-            double alpha(Point2d p) const;
-            double length() const;
+            inline double alpha(const Point2d& p) const {
+                const Vector2d dir(_p2 - _p1);
+                const Vector2d tmp(p - _p1);
+                const double sqlen = dir.lengthSq();
+                // If this is effectively a point (_p1 and _p2 are at the same location), then
+                // return 0 if p is also at this location, or NaN otherwise
+                return sqlen > 0 || p.x() != _p1.x() || p.y() != _p1.y() ? tmp.dot(dir) / sqlen : 0.0;
+            }
+            inline double length() const {
+                return Vector2d(_p2 - _p1).length();
+            }
             /**
              * Find an interpolated point alpha along this line segment. Return false if interpolated
              * point lies outside line segment (i.e., alpha < 0 or alpha > 1).
              */
-            bool interpolate(double alphaVal, Point2d& interpolatedPt) const;
+            inline bool interpolate(double alphaVal, Point2d& interpolatedPt) const {
+                interpolatedPt = Point2d(_p1, _p2, alphaVal);
+                return (alphaVal >= 0.0 - _epsilon && alphaVal <= 1.0 + _epsilon);
+            }
             /**
              * Project the given point on to the line segment. If the projected point falls outside
              * the segment, then return false.
@@ -89,10 +102,13 @@ namespace ews {
              * @param projectedPt Result of projection
              * @return Wther projected point falls on the line segment
              */
-            bool ptSegProjection(const Point2d& ptToProject, Point2d& projectedPt) const;
+            inline bool ptSegProjection(const Point2d& ptToProject, Point2d& projectedPt) const {
+                const double alphaVal = alpha(ptToProject);
+                return interpolate(alphaVal, projectedPt);
+            }
         private:
             Line2d(const Line2d&) {} // Not allowed
-            Line2d& operator=(const Line2d& l) {} // Not allowed
+            Line2d& operator=(const Line2d& l) { return *this; } // Not allowed
             Point2d _p1, _p2;
             double _epsilon;
         };
