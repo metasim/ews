@@ -127,7 +127,7 @@ if(APPLE)
     #Option -arch is only available with apple compilers
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag("-arch i386" HAS_ARCH_FLAG)
-    if(HAS_ARCH_FLAG)
+#    if(HAS_ARCH_FLAG)
         if(${CMAKE_GENERATOR} STREQUAL "Xcode")
             set(CMAKE_OSX_ARCHITECTURES "i386;")
         else()
@@ -136,7 +136,7 @@ if(APPLE)
             # a single architecture compile.
             set(CMAKE_OSX_ARCHITECTURES "i386;i386")
         endif()
-    endif()
+#    endif()
 endif()    
 
 #--------------------------------------------------------------------------------

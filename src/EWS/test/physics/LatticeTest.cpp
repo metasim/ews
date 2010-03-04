@@ -66,7 +66,7 @@ namespace ews {
         
         void LatticeTest::MethodGetLengthWorks() {
             QCOMPARE(Lattice(5, 3).getLength(), static_cast<unsigned int>(3));
-            QCOMPARE(Lattice(0, 1).getLength(), static_cast<unsigned int>(0)); // s/b zero because of implementation detail
+            QCOMPARE(Lattice(0, 1).getLength(), static_cast<unsigned int>(1));
             QCOMPARE(Lattice(1, 0).getLength(), static_cast<unsigned int>(0));
         }
         
@@ -84,12 +84,6 @@ namespace ews {
             Lattice testLattice(5, 5);
             testLattice.setValue(2, 2, 9.0);
             QCOMPARE(testLattice.getValue(2, 2), 9.0);
-        }
-        
-        void LatticeTest::MethodGetValueYieldsZeroOutsideOfLattice() {
-            Lattice testLattice(5, 5);
-            QCOMPARE(testLattice.getValue(5, 5), 0.0);
-            QCOMPARE(testLattice.getValue(500, 500), 0.0);
         }
 
         void LatticeTest::MethodScaleWorks() {
@@ -113,6 +107,22 @@ namespace ews {
             testLattice.setValue(2, 2, 9.0);
             testLattice.clear();
             QCOMPARE(testLattice.getValue(2, 2), 0.0);
+        }
+        
+        void LatticeTest::AssignmentOperatorWorks() {
+            Lattice testLattice(15, 5);
+            testLattice.setValue(2, 1, 3.0);
+	    // This uses a copy constructor, not the assignment operator. To test that the copy constructor
+	    // is disabled. Uncomment the following line. It should not compile.
+            //Lattice copy = testLattice;
+            Lattice copy(1, 1);
+            copy = testLattice;
+            testLattice.setValue(2, 2, 9.0);
+            QCOMPARE(testLattice.getValue(2, 2), 9.0);            
+            QCOMPARE(copy.getValue(2, 2), 0.0);            
+            QCOMPARE(copy.getValue(2, 1), 3.0);            
+            QCOMPARE(copy.getWidth(), testLattice.getWidth());
+            QCOMPARE(copy.getLength(), testLattice.getLength());
         }
     }
 }

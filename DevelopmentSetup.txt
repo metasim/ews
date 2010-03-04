@@ -3,9 +3,20 @@
 ===MacOS X===
 # CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-Darwin-universal.dmg
 # Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
-# OpenSceneGraph 2.8.2:http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
-# For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
-# http://googletest.googlecode.com/files/gtest-1.4.0.tar.gz (works for all platforms)
+# OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
+  * For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
+  * http://googletest.googlecode.com/files/gtest-1.4.0.tar.gz (works for all platforms)
+
+===Windows XP==
+# MSYS
+# MinGW
+# Visual Studio 2008 (AKA Visual Studio 9)
+# CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-win32-x86.exe
+# Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-windows-cpp
+  * You'll also want http://qt.nokia.com/downloads/windows-cpp-vs2008
+  * You'll need to update your Path environment variable manually
+# OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/binaries/Windows/VisualStudio9/openscenegraph-all-2.8.2-win32-x86-vc90-Release.zip
+  * You'll also have to set OSG_DIR to C:\Documents and Settings\Administrator\Desktop\OpenSceneGraph-2.8.2\ (or wherever you unzip your the above zip file to). Note: do not include "bin" in OSG_DIR.
 
 ==Helpful Documents==
 
