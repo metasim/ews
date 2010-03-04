@@ -8,7 +8,7 @@
 #  
 
 PROJECT (EWS)
-set(EXE_NAME "Visualize STEM - Wave")
+set(EXE_NAME "Visualize_STEM-Wave")
 cmake_minimum_required(VERSION 2.8)
 
 option(TESTING "build unit tests and include 'test' target" ON)
