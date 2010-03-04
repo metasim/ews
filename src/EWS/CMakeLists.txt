@@ -8,7 +8,7 @@
 #  
 
 PROJECT (EWS)
-set(EXE_NAME "Visualize STEM - Wave")
+set(EXE_NAME "Visualize_STEM-Wave")
 cmake_minimum_required(VERSION 2.8)
 
 option(TESTING "build unit tests and include 'test' target" ON)
@@ -209,6 +209,7 @@ add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( ${EXE_NAME} 
+    ${QT_LIBRARIES}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
