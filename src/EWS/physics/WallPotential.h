@@ -103,7 +103,7 @@ namespace ews {
             void setThickness(unsigned int thickness) { _thicknessSq = thickness * thickness; }
         protected:
             WallPotential(const WallPotential&) {} // Not allowed
-            WallPotential& operator=(const WallPotential& l) {} // Not allowed
+            WallPotential& operator=(const WallPotential& l) { return *this; } // Not allowed
             double alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
             double _thicknessSq;

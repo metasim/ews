@@ -75,7 +75,7 @@ namespace ews {
             WavePropagator() { /* do nothing */ }
         private:
             WavePropagator(const WavePropagator&) {} // Not allowed
-            WavePropagator& operator=(const WavePropagator& l) {} // Not allowed
+            WavePropagator& operator=(const WavePropagator& l) { return *this; } // Not allowed
         };
     }
 }

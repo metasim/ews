@@ -53,7 +53,7 @@ namespace ews {
             }
         private:
             ConstantPotential(const ConstantPotential&) {} // Not allowed
-            ConstantPotential& operator=(const ConstantPotential& l) {} // Not allowed
+            ConstantPotential& operator=(const ConstantPotential& l) { return *this; } // Not allowed
             double _value;
         };
     }

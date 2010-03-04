@@ -141,7 +141,7 @@ namespace ews {
             }
         private:
             WaveModel(const WaveModel&) {} // Not allowed
-            WaveModel& operator=(const WaveModel& l) {} // Not allowed
+            WaveModel& operator=(const WaveModel& l) { return *this; } // Not allowed
             static WavePropagator* createDefaultPropagator(unsigned int width, unsigned int length,
                                                            unsigned int dampX, unsigned int dampY);
             Lattice _lattice;

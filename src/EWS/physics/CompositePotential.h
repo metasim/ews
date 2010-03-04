@@ -61,7 +61,7 @@ namespace ews {
             void removePotential(counted_ptr<const Potential>& p);
         private:
             CompositePotential(const CompositePotential&) {} // Not allowed
-            CompositePotential& operator=(const CompositePotential& l) {} // Not allowed
+            CompositePotential& operator=(const CompositePotential& l) { return *this; } // Not allowed
             vector<counted_ptr<const Potential> > _potentials;
         };
     }

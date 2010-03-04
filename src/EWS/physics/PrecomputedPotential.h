@@ -59,7 +59,7 @@ namespace ews {
             }
         private:
             PrecomputedPotential(const PrecomputedPotential&) {} // Not allowed
-            PrecomputedPotential& operator=(const PrecomputedPotential& l) {} // Not allowed
+            PrecomputedPotential& operator=(const PrecomputedPotential& l) { return *this; } // Not allowed
             unsigned int getWidth() const { return _potentialValues.size(); }
             unsigned int getLength() const {
                 return _potentialValues.size() > 0 ? _potentialValues[0].size() : 0;
