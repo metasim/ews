@@ -22,7 +22,7 @@ namespace ews {
     namespace app {
         namespace model {
             SimulationState::SimulationState(QObject * parent) :
-            QObject(parent), _waveMedium(this) ,_dripSource1(_waveMedium.getWaveModel(), this), 
+            QObject(parent), _waveMedium(128, 128, 1, this) ,_dripSource1(_waveMedium.getWaveModel(), this), 
             _dripSource2(_waveMedium.getWaveModel(), this) {
                 _dripSource1.setObjectName("dripSource1");
                 _dripSource1.setPosition(osg::Vec2(_waveMedium.getWidth()/2,_waveMedium.getLength()/2));

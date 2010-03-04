@@ -43,9 +43,9 @@ namespace ews {
                 /**
                  * Standard ctor.
                  */
-                WaveMedium(QObject * parent = 0)  
-                : QObject(parent), _paused(true), _width(128), _length(128), 
-                _latticeDivisionsPerCentimeter(1), _waveModel(NULL) {
+                WaveMedium(unsigned int width, unsigned int length, unsigned int resolution = 1, QObject * parent = 0)  
+                : QObject(parent), _paused(true), _width(width), _length(length), 
+                _latticeDivisionsPerCentimeter(resolution), _waveModel(NULL) {
                     QObject::connect(this, SIGNAL(sizeChanged(int, int)), SLOT(updateWaveModel()));
                     QObject::connect(this, SIGNAL(resolutionChanged(int)), SLOT(updateWaveModel()));
                     
