@@ -83,6 +83,8 @@ namespace ews {
              */
             void clear();
         private:
+            DampedClassicalWavePropagator(const DampedClassicalWavePropagator&) {} // Not allowed
+            DampedClassicalWavePropagator& operator=(const DampedClassicalWavePropagator& l) {} // Not allowed
             /**
              * Subtracts the dampening offset added by DampedClassicalWavePropagator
              */

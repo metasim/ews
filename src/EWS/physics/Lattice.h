@@ -37,11 +37,16 @@ namespace ews {
             
         public:
             /**
+             * Default constructor
+             */
+            Lattice(): _amplitudeData(NULL), _width(0), _length(0) {
+            }
+            /**
              * Creates a lattice of size width x length, initialized to 0
              * @param width Width of the lattice
              * @param length Length of the lattice
              */
-            Lattice(unsigned int width, unsigned int length): _amplitudeData(0), _width(0), _length(0) {
+            Lattice(unsigned int width, unsigned int length): _amplitudeData(NULL), _width(0), _length(0) {
                 setSize(width, length);
             }
             

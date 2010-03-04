@@ -46,6 +46,10 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
+             * Verifies that we can create an empty lattice of zero size.
+             */
+            void DefaultConstructorWorks();
+            /**
              * Tests that the Lattice::computeAverageValue() method works for normal cases.
              */
             void MethodComputeAverageValueWorksForNormalCases();

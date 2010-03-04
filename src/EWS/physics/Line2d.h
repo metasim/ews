@@ -91,6 +91,8 @@ namespace ews {
              */
             bool ptSegProjection(const Point2d& ptToProject, Point2d& projectedPt) const;
         private:
+            Line2d(const Line2d&) {} // Not allowed
+            Line2d& operator=(const Line2d& l) {} // Not allowed
             Point2d _p1, _p2;
             double _epsilon;
         };

@@ -38,6 +38,11 @@ namespace ews {
              * @return Potential
              */
             virtual double getPotential(unsigned int x, unsigned int y) const = 0;
+        protected:
+            Potential() { /* do nothing */ }
+        private:
+            Potential(const Potential&) {} // Not allowed
+            Potential& operator=(const Potential& l) {} // Not allowed
         };
     }
 }

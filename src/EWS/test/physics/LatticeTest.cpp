@@ -20,12 +20,20 @@
 
 namespace ews {
     namespace test {
+        const unsigned int UNSIGNED_ZERO = 0;
         
         void LatticeTest::initTestCase() { /* do nothing */ }
         void LatticeTest::cleanupTestCase() { /* do nothing */ }
         void LatticeTest::init() { /* do nothing */ }
         void LatticeTest::cleanup() { /* do nothing */ }
         
+        void LatticeTest::DefaultConstructorWorks() {
+            Lattice nada;
+            unsigned int zero = 0;
+            QCOMPARE(nada.getLength(), UNSIGNED_ZERO);
+            QCOMPARE(nada.getWidth(), UNSIGNED_ZERO);
+        }
+
         void LatticeTest::MethodComputeAverageValueWorksForNormalCases() {
             Lattice testLattice(5, 5);
             // Tests that the average value for the range x = [0..4], y = [0..4] is zero
@@ -60,14 +68,14 @@ namespace ews {
         
         void LatticeTest::MethodGetWidthWorks() {
             QCOMPARE(Lattice(5, 3).getWidth(), static_cast<unsigned int>(5));
-            QCOMPARE(Lattice(0, 1).getWidth(), static_cast<unsigned int>(0));
+            QCOMPARE(Lattice(0, 1).getWidth(), UNSIGNED_ZERO);
             QCOMPARE(Lattice(1, 0).getWidth(), static_cast<unsigned int>(1));
         }
         
         void LatticeTest::MethodGetLengthWorks() {
             QCOMPARE(Lattice(5, 3).getLength(), static_cast<unsigned int>(3));
             QCOMPARE(Lattice(0, 1).getLength(), static_cast<unsigned int>(1));
-            QCOMPARE(Lattice(1, 0).getLength(), static_cast<unsigned int>(0));
+            QCOMPARE(Lattice(1, 0).getLength(), UNSIGNED_ZERO);
         }
         
         void LatticeTest::MethodSetSizeWorks() {

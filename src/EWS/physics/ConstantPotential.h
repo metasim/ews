@@ -52,6 +52,8 @@ namespace ews {
                 return _value;
             }
         private:
+            ConstantPotential(const ConstantPotential&) {} // Not allowed
+            ConstantPotential& operator=(const ConstantPotential& l) {} // Not allowed
             double _value;
         };
     }

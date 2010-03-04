@@ -132,6 +132,9 @@ namespace ews {
             bool getOscillateStatus() const { return _oscillating; }
             
         private:
+            // Not allowed, so don't worry about leaked memory
+            Oscillator(const Oscillator&): _waveModel(*(new WaveModel(0, 0))) {}
+            Oscillator& operator=(const Oscillator& l) {} // Not allowed
             void resetPhase();
             double getCosArg() const;
             WaveModel& _waveModel;

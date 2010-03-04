@@ -140,6 +140,8 @@ namespace ews {
                 _wavePropagator->clear();
             }
         private:
+            WaveModel(const WaveModel&) {} // Not allowed
+            WaveModel& operator=(const WaveModel& l) {} // Not allowed
             static WavePropagator* createDefaultPropagator(unsigned int width, unsigned int length,
                                                            unsigned int dampX, unsigned int dampY);
             Lattice _lattice;

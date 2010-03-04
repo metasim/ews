@@ -73,6 +73,9 @@ namespace ews {
             virtual void clear() = 0;
         protected:
             WavePropagator() { /* do nothing */ }
+        private:
+            WavePropagator(const WavePropagator&) {} // Not allowed
+            WavePropagator& operator=(const WavePropagator& l) {} // Not allowed
         };
     }
 }
