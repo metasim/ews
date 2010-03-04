@@ -209,6 +209,7 @@ add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
 target_link_libraries ( ${EXE_NAME} 
+    ${QT_LIBRARIES}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
