@@ -20,15 +20,41 @@
 #define __BARRIERSET_H
 
 
-#include <QtCore>
-#include <QStandardItemModel>
+#include <QObject>
+#include <QList>
+#include "Barrier.h"
 
 namespace ews {
     namespace app {
         namespace model {
-            class BarrierSet : public QStandardItemModel {
+            class BarrierSet : public QObject {
                 Q_OBJECT
-
+                BarrierSet(QObject* parent = 0) {}
+                virtual ~BarrierSet() {}
+                
+                Barrier* createBarrier() {
+                    Barrier* b = new Barrier(this);
+                    _barriers << b;
+                    emit barrierAdded(b);
+                    return b;
+                }
+                
+                void removeBarrier(Barrier* b) {
+                    _barriers.removeOne(b);
+                    emit barrierRemoved(b);
+                }
+                
+                int indexOf(Barrier* b) {
+                    return _barriers.indexOf(b);
+                }
+                
+            signals:
+                void barrierAdded(Barrier*);
+                void barrierRemoved(Barrier*);
+                
+            private:
+                Q_DISABLE_COPY(BarrierSet)
+                QList<Barrier*> _barriers;
             };
         }
     }

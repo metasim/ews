@@ -64,6 +64,7 @@ namespace ews {
                 void dataChanged();
                 
             private:
+                Q_DISABLE_COPY(Barrier)
                 bool _enabled;
                 NumSlits _numSlits;
 

@@ -17,6 +17,7 @@
  */
 
 #include "DampedClassicalWavePropagator.h"
+#include <cmath>
 
 namespace ews {
     namespace physics {
@@ -63,10 +64,11 @@ namespace ews {
             _priorLattice = _largeLattice;            
 
             dampScale();
-
+            double val;
             for (unsigned int i = 0; i < lattice.getWidth(); i++) {
                 for (unsigned int j = 0; j < lattice.getLength(); j++) {
-                    lattice.setValue(i, j, _largeLattice.getValue(i + _dampX, j + _dampY));
+                    val = _largeLattice.getValue(i + _dampX, j + _dampY);
+                    lattice.setValue(i, j, val);
                 }
             }
         }
