@@ -32,42 +32,39 @@ namespace ews {
         }
         void WaveModelTest::MethodPropagateWorksInPlace() {
             WaveModel testWaveModel(50, 50);
-            testWaveModel.setSourceValue(10, 10, 1);
             double expected = 1.0;
-            QCOMPARE(testWaveModel.getValue(10, 10), 1.0);
+            unsigned int x = 10;
+            unsigned int y = 10;
+            testWaveModel.setSourceValue(10, 10, expected);
+            QCOMPARE(testWaveModel.getValue(x, y), expected);
             testWaveModel.propagate();
-            // Using deltas because I'm trying to find a way to generalize this
-            double delta = -1;
-            expected += delta; // 0
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
+            double prior = expected;
+            double priorPrior = prior;
+            const double w1 = 0.14;
+            const double w2 = 0.06;
+            const double w3 = 1.1;
+            const double w4 = -0.95;
+            expected = w3 * prior + w4 * priorPrior;
+            QCOMPARE(testWaveModel.getValue(x, y), expected);
+            double neighbor = w1 * prior;
+            QCOMPARE(testWaveModel.getValue(x, y + 1), neighbor);
+            double diagNeigh = w2 * prior;
+            QCOMPARE(testWaveModel.getValue(x + 1, y + 1), diagNeigh);
             testWaveModel.propagate();
-            delta = -0.75;
-            expected += delta; // -0.75
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
+            priorPrior = prior;
+            prior = expected;
+            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            QCOMPARE(testWaveModel.getValue(x, y), expected);
+            double priorNeigh = neighbor;
+            neighbor = (prior + 2 * diagNeigh) * w1 + priorNeigh * (2 * w2 + w3);
+            QCOMPARE(testWaveModel.getValue(x, y + 1), neighbor);
+            diagNeigh = 2 * priorNeigh * w1 + prior * w2 + diagNeigh * w3;
+            QCOMPARE(testWaveModel.getValue(x + 1, y + 1), diagNeigh);
             testWaveModel.propagate();
-            delta = 0.25;
-            expected += delta; // -0.5
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
-            testWaveModel.propagate();
-            delta = 0.640625;
-            expected += delta; // 0.140625
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
-            testWaveModel.propagate();
-            delta = 0.171875;
-            expected += delta; // 0.3125
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
-            testWaveModel.propagate();
-            delta = -0.26171875;
-            expected += delta; // 0.05078125
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
-            testWaveModel.propagate();
-            delta = -0.16796875;
-            expected += delta; // -0.1171875
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
-            testWaveModel.propagate();
-            delta = 0.04351806640625;
-            expected += delta; // -0.07366943359375
-            QCOMPARE(testWaveModel.getValue(10, 10), expected);
+            priorPrior = prior;
+            prior = expected;
+            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            QCOMPARE(testWaveModel.getValue(x, y), expected);
         }
         void WaveModelTest::MethodPropagateWorksAcrossSpace() {
             WaveModel testWaveModel(50, 50);
@@ -77,11 +74,17 @@ namespace ews {
             testWaveModel.setSourceValue(x, y, expected);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             x++;
+            const double w1 = 0.14;
+            const double w2 = 0.06;
             QBENCHMARK {
                 for (; x < testWaveModel.getWidth(); x++) {
                     QCOMPARE(testWaveModel.getValue(x, y), 0.0);
+                    QCOMPARE(testWaveModel.getValue(x, y - 1), 0.0);
+                    QCOMPARE(testWaveModel.getValue(x, y + 1), 0.0);
+                    const double priorDiag = testWaveModel.getValue(x - 1, y + 1);
                     testWaveModel.propagate();
-                    expected /= 4.0;
+                    expected *= w1;
+                    expected += 2 * priorDiag * w2; // From both diagonals
                     QCOMPARE(testWaveModel.getValue(x, y), expected);
                 }
             }

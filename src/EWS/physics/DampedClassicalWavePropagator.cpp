@@ -42,8 +42,8 @@ namespace ews {
             unsigned int width = _largeLattice.getWidth() - 1;
             unsigned int length = _largeLattice.getLength() - 1;
             _largeLattice = _priorLattice; // At this point, largeLattice and priorLattice should already be the same
-            const double w1 = 2.1 / 15.0;
-            const double w2 = 0.9 / 15.0;
+            const double w1 = 0.14;
+            const double w2 = 0.06;
             for (unsigned int i = 1; i < width; i++) {
                 for (unsigned int j = 1; j < length; j++) {
                     if (_potential->getPotential(i, j) != 0) {
