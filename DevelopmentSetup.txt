@@ -7,6 +7,20 @@
   * For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
   * http://googletest.googlecode.com/files/gtest-1.4.0.tar.gz (works for all platforms)
 
+===Linux (64 bit)===
+# CMake 2.8.0: http://www.cmake.org/cmake/resources/software.html
+  * tar -xzf cmake-2.8.0.tar.gz
+  * cd cmake-2.8.0
+  * ./configure
+  * make
+  * sudo make install 
+# Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-linux-x11-64bit-cpp
+  * Follow the directions on the web-page
+  * Read the installation notes and make sure you have the necessary dependencies loaded
+  * sudo apt-get install libqt
+# OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
+
+
 ===Windows XP==
 # MSYS
 # MinGW
