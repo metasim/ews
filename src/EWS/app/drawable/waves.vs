@@ -32,6 +32,7 @@ float sampleHeight(vec2 heightMapCoord) {
     // float height = length(heightTexl);
     // height = heightTexl.s + heightTexl.t + heightTexl.p + heightTexl.q
     
+
     float height = heightTexl.x;
 
     return height;
@@ -67,7 +68,7 @@ void main(void) {
     // from discrete samples around the current vertex. Basically approximates
     // local curvature.
     // offset is in texture coordinates
-	const float offset = 0.001; 
+	const float offset = 0.005; 
     
 	// HACK: Use matrix as a cheap array of vectors to set up
 	// offsets around current texture coordinate. Current MacOS drivers
@@ -90,6 +91,11 @@ void main(void) {
     // and then taking their cross product.
     vec3 dir1 = neighbors[0].xyz - neighbors[1].xyz;
     vec3 dir2 = neighbors[2].xyz - neighbors[3].xyz;
+    vec3 newNorm = normalize(cross(dir1,dir2));
+    
+//    float d = dot(newNorm, gl_Normal);
+//    newNorm = (d < 0.1) ? gl_Normal : newNorm;
+    
     // Assign value to varying normal for fs
-	normal = gl_NormalMatrix  * normalize(cross(dir1,dir2));
+	normal = gl_NormalMatrix  * newNorm;
 }
