@@ -20,7 +20,7 @@
 #define __BARRIEREDITOR_H
 
 #include <QtGui/QWidget>
-#include "Barrier.h"
+#include "BarrierSet.h"
 
 /** Forward declaration of UI implementation class. */
 
@@ -33,7 +33,7 @@ namespace ews {
     namespace app {
         namespace widget {
             
-            using ews::app::model::Barrier;
+            using ews::app::model::BarrierSet;
             
             class BarrierEditor : public QWidget {
                 Q_OBJECT
@@ -42,12 +42,16 @@ namespace ews {
                 BarrierEditor(QWidget *parent = 0);
                 ~BarrierEditor();
                 
-                void setDataModel(Barrier* barrier);
+                void setDataModel(BarrierSet* barriers);
+                
+            public slots:
+                void addBarrier();
+                void removeBarrier();
                 
             private:
                 void syncUI();
                 Ui::BarrierEditorForm* _ui;
-                Barrier* _dataModel;
+                BarrierSet* _dataModel;
             };
         }
     }

@@ -68,6 +68,7 @@ namespace ews {
             for (unsigned int i = 0; i < lattice.getWidth(); i++) {
                 for (unsigned int j = 0; j < lattice.getLength(); j++) {
                     val = _largeLattice.getValue(i + _dampX, j + _dampY);
+                    // val = fabs(val) > 1e-2 ?  val : 0 ;
                     lattice.setValue(i, j, val);
                 }
             }

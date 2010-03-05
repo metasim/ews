@@ -21,6 +21,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -259,5 +262,42 @@
  <resources>
   <include location="../../Resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>addBarrier</sender>
+   <signal>clicked()</signal>
+   <receiver>BarrierEditorForm</receiver>
+   <slot>addBarrier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>131</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>37</x>
+     <y>175</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeBarrier</sender>
+   <signal>clicked()</signal>
+   <receiver>BarrierEditorForm</receiver>
+   <slot>removeBarrier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>141</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>169</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addBarrier()</slot>
+  <slot>removeBarrier()</slot>
+ </slots>
 </ui>

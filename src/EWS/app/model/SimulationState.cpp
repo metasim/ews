@@ -21,9 +21,11 @@
 namespace ews {
     namespace app {
         namespace model {
-            SimulationState::SimulationState(QObject * parent) :
-            QObject(parent), _waveMedium(128, 128, 1, this) ,_dripSource1(_waveMedium.getWaveModel(), this), 
-            _dripSource2(_waveMedium.getWaveModel(), this) {
+            SimulationState::SimulationState(QObject * parent) 
+            : QObject(parent), _waveMedium(128, 128, 1, this),
+            _dripSource1(_waveMedium.getWaveModel(), this), 
+            _dripSource2(_waveMedium.getWaveModel(), this), 
+            _barriers(this) {
                 _dripSource1.setObjectName("dripSource1");
                 _dripSource1.setPosition(osg::Vec2(_waveMedium.getWidth()/2,_waveMedium.getLength()/2));
                 _dripSource1.setEnabled(true);
@@ -43,10 +45,16 @@ namespace ews {
                 _dripSource1.setPaused(state);
                 _dripSource2.setPaused(state);
                 _waveMedium.setPaused(state);
+                
+                
             }
             
             void SimulationState::reset() {
                 _waveMedium.getWaveModel().clear();
+                
+                if(isPaused()) {
+                    _waveMedium.getWaveModel().propagate();
+                }
             }
         }
     }

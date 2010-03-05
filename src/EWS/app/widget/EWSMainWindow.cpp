@@ -18,10 +18,12 @@
 
 #include "EWSMainWindow.h"
 
+#include "BarrierEditor.h"
 
 #include "DrawableFactory.h"
 
 #include "ui_EWSMainWindow.h"
+
 
 namespace ews {
     namespace app {
@@ -34,12 +36,18 @@ namespace ews {
             : QMainWindow(parent), _ui(new Ui::EWSMainWindowForm), _state(state) {
                 _ui->setupUi(this);
                 
+                // Config actions
                 _ui->actionPause->setEnabled(false);
                 _ui->actionRun->setEnabled(true);
                 
+                // Config drip editors
                 _ui->dripSource1->setDataModel(&state->getDripSource1());
                 _ui->dripSource2->setDataModel(&state->getDripSource2());
                 
+                // Config barrier editor.
+                _ui->barrierEditor->setDataModel(&state->getBarriers());
+                
+                // Config 3-D view.
                 _sceneRoot = new SceneRoot(this);
                 _ui->renderer->setSceneData(_sceneRoot);
                 
@@ -47,9 +55,10 @@ namespace ews {
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
                 
-
+                // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
                 
+                // Start simulation.
                 start();
             }
             

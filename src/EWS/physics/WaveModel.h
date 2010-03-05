@@ -138,6 +138,7 @@ namespace ews {
             void clear() {
                 _lattice.clear();
                 _wavePropagator->clear();
+
             }
         private:
             WaveModel(const WaveModel&) {} // Not allowed

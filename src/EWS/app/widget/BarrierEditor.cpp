@@ -23,7 +23,7 @@ namespace ews {
     namespace app {
         namespace widget {
             
-            using ews::app::model::Barrier;
+            using ews::app::model::BarrierSet;
             
             BarrierEditor::BarrierEditor(QWidget* parent) 
             : QWidget(parent), _ui(new Ui::BarrierEditorForm) {
@@ -36,13 +36,21 @@ namespace ews {
                 delete _ui;
             }
 
-            void BarrierEditor::setDataModel(Barrier* barrier) {
-                _dataModel = barrier;
+            void BarrierEditor::setDataModel(BarrierSet* barriers) {
+                _dataModel = barriers;
             }
             
             void BarrierEditor::syncUI() {
 
             }
+            
+            void BarrierEditor::addBarrier() {
+                _dataModel->createBarrier();
+            }
+            
+            void BarrierEditor::removeBarrier() {
+            }
+
         }
     }
 }

@@ -60,7 +60,7 @@ namespace ews {
                  * Get the paused state, which indicates whether or not the
                  * wave propagator is updated each rendering loop.
                  */
-                bool isPaused() {
+                bool isPaused() const {
                     return _paused;
                 }
                 

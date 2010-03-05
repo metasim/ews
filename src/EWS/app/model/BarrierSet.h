@@ -29,6 +29,7 @@ namespace ews {
         namespace model {
             class BarrierSet : public QObject {
                 Q_OBJECT
+            public:
                 BarrierSet(QObject* parent = 0) {}
                 virtual ~BarrierSet() {}
                 

@@ -21,13 +21,13 @@
 namespace ews {
     namespace app {
         namespace model {
-        
-            BarrierSet::BarrierSet(QObject* parent = 0) {
-                
-            }
-            
-            virtual BarrierSet::~BarrierSet() {
-            }
+//        
+//            BarrierSet::BarrierSet(QObject* parent = 0) {
+//                
+//            }
+//            
+//            virtual BarrierSet::~BarrierSet() {
+//            }
         }
     }
 }
