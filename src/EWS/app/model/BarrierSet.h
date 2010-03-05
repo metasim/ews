@@ -29,28 +29,43 @@ namespace ews {
         namespace model {
             class BarrierSet : public QObject {
                 Q_OBJECT
+            public:
                 BarrierSet(QObject* parent = 0) {}
                 virtual ~BarrierSet() {}
                 
                 Barrier* createBarrier() {
                     Barrier* b = new Barrier(this);
+                    int pos = _barriers.size();
                     _barriers << b;
-                    emit barrierAdded(b);
+                    emit barrierAdded(pos, b);
                     return b;
                 }
                 
+                int size() const {
+                    return _barriers.size();
+                }
+                
                 void removeBarrier(Barrier* b) {
-                    _barriers.removeOne(b);
-                    emit barrierRemoved(b);
+                    int pos = indexOf(b);
+                    if(pos >= 0) {
+                        bool did = _barriers.removeOne(b);
+                        if(did) {
+                            emit barrierRemoved(pos, b);
+                        }
+                    }
                 }
                 
                 int indexOf(Barrier* b) {
                     return _barriers.indexOf(b);
                 }
                 
+                Barrier* barrierAt(unsigned int index) const {
+                    return _barriers[index];
+                }
+                
             signals:
-                void barrierAdded(Barrier*);
-                void barrierRemoved(Barrier*);
+                void barrierAdded(int,Barrier*);
+                void barrierRemoved(int,Barrier*);
                 
             private:
                 Q_DISABLE_COPY(BarrierSet)

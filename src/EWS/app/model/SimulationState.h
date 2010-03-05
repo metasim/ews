@@ -23,6 +23,7 @@
 
 #include "DripSource.h"
 #include "WaveMedium.h"
+#include "BarrierSet.h"
 
 namespace ews {
     namespace app {
@@ -53,10 +54,24 @@ namespace ews {
                 }
                 
                 /**
+                 * Get the set of defined barriers.
+                 */
+                BarrierSet& getBarriers() {
+                    return _barriers;
+                }
+                
+                /**
                  * Get the wave medium.
                  */
                 WaveMedium& getWaveMedium() {
                     return _waveMedium;
+                }
+                
+                /**
+                 * Determine if the simulation is currently in the "paused" state.
+                 */
+                bool isPaused() const {
+                    return _waveMedium.isPaused();
                 }
                 
                 
@@ -82,18 +97,19 @@ namespace ews {
                     emit objectAdded(getWaveMedium());
                     emit objectAdded(getDripSource1());
                     emit objectAdded(getDripSource2());
+                    emit objectAdded(getBarriers());
                 }
                 
             public slots:
                 void setPaused(bool);
                 void reset();
 
-                
             private:
                 Q_DISABLE_COPY(SimulationState)
                 WaveMedium _waveMedium;
                 DripSource _dripSource1;
                 DripSource _dripSource2;
+                BarrierSet _barriers;
             };
         }
     }

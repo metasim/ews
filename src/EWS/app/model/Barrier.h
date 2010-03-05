@@ -32,10 +32,10 @@ namespace ews {
                 Q_PROPERTY(NumSlits numSlits READ getNumSlits WRITE setNumSlits)
                 
             public:
-                enum NumSlits { Zero, One, Two };
+                enum NumSlits { ZERO, ONE, TWO };
                 
                 Barrier(QObject* parent = 0) 
-                : QObject(parent), _enabled(true), _numSlits(Zero) {
+                : QObject(parent), _enabled(true), _numSlits(ZERO) {
                 
                 }
                 
