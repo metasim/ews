@@ -46,7 +46,7 @@ namespace ews {
                 /**
                  * Standard ctor.
                  */
-                DripSource(WaveModel& model, QObject * parent = 0);
+                explicit DripSource(WaveModel& model, QObject * parent = 0);
                 
                 /**
                  * Determine if this source is enabled or not.

@@ -38,7 +38,7 @@ namespace ews {
              * Constructor for default location
              * @param waveModel Model this oscillator is attached to
              */
-            Oscillator(WaveModel& waveModel);
+            explicit Oscillator(WaveModel& waveModel);
             /**
              * Constructor for location x, y
              * @param waveModel Model this oscillator is attached to

@@ -41,7 +41,7 @@ namespace ews {
                 Q_OBJECT
                 
             public:
-                BarrierEditor(QWidget *parent = 0);
+                explicit BarrierEditor(QWidget *parent = 0);
                 ~BarrierEditor();
                 
                 void setDataModel(BarrierSet* barriers);

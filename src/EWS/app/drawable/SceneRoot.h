@@ -27,7 +27,7 @@ namespace ews {
             class SceneRoot : public QObject, public osg::PositionAttitudeTransform {
                 Q_OBJECT
             public:
-                SceneRoot(QObject* parent = 0);
+                explicit SceneRoot(QObject* parent = 0);
                 virtual ~SceneRoot();
                 
                 

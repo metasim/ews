@@ -42,7 +42,7 @@ namespace ews {
                 Q_OBJECT
                 
             public:
-                EWSMainWindow(SimulationState* state, QWidget *parent = 0);
+                explicit EWSMainWindow(SimulationState* state, QWidget *parent = 0);
                 virtual ~EWSMainWindow();
 
             public slots:

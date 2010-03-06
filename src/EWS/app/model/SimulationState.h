@@ -36,7 +36,7 @@ namespace ews {
                 Q_OBJECT
                 
             public:
-                SimulationState(QObject * parent = 0);
+                explicit SimulationState(QObject * parent = 0);
                 virtual ~SimulationState();
                
                 /**
