@@ -26,6 +26,7 @@ namespace ews {
             : QWidget(parent), _ui(new Ui::DripSourceEditorForm), _dataModel(NULL) {
                 
                 _ui->setupUi(this);   
+
             }
             
             DripSourceEditor::~DripSourceEditor() {

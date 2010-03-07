@@ -37,7 +37,7 @@ namespace ews {
             BarrierEditor::BarrierEditor(QWidget* parent) 
             : QWidget(parent), _ui(new Ui::BarrierEditorForm) {
                 _ui->setupUi(this);   
-                
+
                 _mapper.addMapping(_ui->slitWidth, 3);
                 _mapper.addMapping(_ui->slitSeparation, 4);
                 updateEnabled();
@@ -67,6 +67,14 @@ namespace ews {
                     QAbstractItemModel* newModel = new BarrierTableModel(_dataModel);
                     
                     _ui->barrierTable->setModel(newModel);
+                    
+                    
+                    // Hide columns we don't want in the table.
+                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
+                        _ui->barrierTable->setColumnHidden(c, true);
+                    }
+                
+                    
                     _mapper.setModel(newModel);
 
                     connect(_ui->barrierTable->selectionModel(), 

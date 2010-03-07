@@ -22,44 +22,88 @@
 
 #include <QtCore>
 #include <QObject>
+#include <osg/Vec2>
 
 namespace ews {
     namespace app {
         namespace model {
+            using osg::Vec2;
+            
             class Barrier : public QObject {
                 Q_OBJECT
                 Q_ENUMS(NumSlits)
+                Q_PROPERTY(Vec2 start READ getStart WRITE setStart)
+                Q_PROPERTY(Vec2 end READ getEnd WRITE setEnd)
                 Q_PROPERTY(NumSlits numSlits READ getNumSlits WRITE setNumSlits)
+                Q_PROPERTY(unsigned int slitWidth READ getSlitWidth WRITE setSlitWidth)
+                Q_PROPERTY(unsigned int slitSeparation READ getSlitSeparation WRITE setSlitSeparation)
                 
             public:
                 enum NumSlits { ZERO, ONE, TWO };
                 
                 Barrier(QObject* parent = 0) 
-                : QObject(parent), _enabled(true), _numSlits(ZERO) {
+                : QObject(parent), _enabled(true), _numSlits(ZERO), 
+                _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50) {
                 
                 }
                 
                 virtual ~Barrier() {}
                 
-                NumSlits getNumSlits() const {
-                    return _numSlits;
-                }
-                
                 bool isEnabled() const {
                     return _enabled;
                 }
                 
-            public slots:
-                void setNumSlits(NumSlits num) {
-                    _numSlits = num;
-                    emit dataChanged();
+                NumSlits getNumSlits() const {
+                    return _numSlits;
                 }
+                
+                unsigned int getSlitWidth() const {
+                    return _slitWidth;
+                }
+                
+                unsigned int getSlitSeparation() const {
+                    return _slitSeparation;
+                }
+                
+                osg::Vec2 getStart() const {
+                    return _start;
+                }
+                
+                osg::Vec2 getEnd() const {
+                    return _end;
+                }
+                
+            public slots:
                 
                 void setEnabled(bool enabled) {
                     _enabled = enabled;
                     emit dataChanged();
                 }
                 
+                void setNumSlits(NumSlits num) {
+                    _numSlits = num;
+                    emit dataChanged();
+                }
+                
+                void setSlitWidth(unsigned int slitWidth) {
+                    _slitWidth = slitWidth;
+                    emit dataChanged();
+                }
+                
+                void setSlitSeparation(unsigned int slitSeparation) {
+                    _slitSeparation = slitSeparation;
+                    emit dataChanged();
+                }
+                
+                void setStart(osg::Vec2 start) {
+                    _start = start;
+                }
+                
+                void setEnd(osg::Vec2 end) {
+                    _end = end;
+                }
+
+
             signals:
                 void dataChanged();
                 
@@ -67,7 +111,10 @@ namespace ews {
                 Q_DISABLE_COPY(Barrier)
                 bool _enabled;
                 NumSlits _numSlits;
-
+                unsigned int _slitWidth;
+                unsigned int _slitSeparation;
+                osg::Vec2 _start;
+                osg::Vec2 _end;
             };
         }
     }

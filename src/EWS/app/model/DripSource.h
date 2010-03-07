@@ -177,16 +177,6 @@ namespace ews {
                 bool _enabled;
                 unsigned int _frequency;
             };
-            
-            inline QDebug operator<<(QDebug dbg, const DripSource &ds) {
-                dbg << ds.metaObject()->className() << "{";
-                dbg << "name=" << ds.objectName() << ",";
-                dbg << "enabled=" << ds.isEnabled() << ",";
-                dbg << "frequency=" << ds.getFrequency() << ",";
-                dbg << "amplitude=" << ds.getAmplitude();
-                dbg << "}";
-                return dbg;
-            }
         }
     }
 }

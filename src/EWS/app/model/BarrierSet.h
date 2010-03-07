@@ -37,6 +37,9 @@ namespace ews {
                     Barrier* b = new Barrier(this);
                     int pos = _barriers.size();
                     _barriers << b;
+                    
+                    b->setObjectName(QString("Barrier %1").arg(pos+1));
+                    
                     emit barrierAdded(pos, b);
                     return b;
                 }

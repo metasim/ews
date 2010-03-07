@@ -32,16 +32,22 @@ namespace ews {
             class QOSGWidget : public QGLWidget, public osgViewer::Viewer {
                 Q_OBJECT
             public:
-                QOSGWidget( QWidget* parent = 0);
+                QOSGWidget(QWidget* parent = 0);
                 virtual ~QOSGWidget();
                 
                 osgViewer::GraphicsWindow* getGraphicsWindow() { return _gw.get(); }
                 const osgViewer::GraphicsWindow* getGraphicsWindow() const { return _gw.get(); }
+                
+                /**
+                 * Set the delay interjected between frames in milliseconds.
+                 */
+                void setBetweenFrameDelay(unsigned int delayMilliSec) {
+                    _timer.setInterval(delayMilliSec);
+                }
+                
                 virtual void paintGL();
                 
             protected:
-                void changeEvent(QEvent *e);
-                
                 virtual void resizeGL( int width, int height );
                 virtual void keyPressEvent( QKeyEvent* event );
                 virtual void keyReleaseEvent( QKeyEvent* event );
@@ -55,6 +61,7 @@ namespace ews {
                 osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
                 
             private:
+                Q_DISABLE_COPY(QOSGWidget)
                 QTimer _timer;
                 
             };

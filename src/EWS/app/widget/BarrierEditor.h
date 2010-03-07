@@ -56,7 +56,7 @@ namespace ews {
             private:
                 Barrier::NumSlits numSlitsSelected() const;
                 void select(Barrier* barrier);
-                Barrier* BarrierEditor::selectedBarrier() const;
+                Barrier* selectedBarrier() const;
 
                 Ui::BarrierEditorForm* _ui;
                 QDataWidgetMapper _mapper;

@@ -18,14 +18,17 @@
 
 #ifndef __BARRIER_TABLE_MODEL
 #define __BARRIER_TABLE_MODEL
-#include "BarrierSet.h"
+
 #include <QAbstractTableModel>
+#include "BarrierSet.h"
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
         namespace widget {
             using ews::app::model::BarrierSet;
             using ews::app::model::Barrier;
+            using namespace ews::util::debug;
             
             class BarrierTableModel : public QAbstractTableModel {
                 Q_OBJECT
@@ -40,11 +43,14 @@ namespace ews {
                     _barriers = NULL;
                 }
                 
+                
+                enum ColType { ENABLED, NAME, NUM_SLITS, SLIT_WIDTH, SLIT_SEPARATION, NUM_COLS };
+                
                 virtual int rowCount(const QModelIndex &parent = QModelIndex()) const {
                     return _barriers->size();
                 }
                 virtual int columnCount(const QModelIndex &parent = QModelIndex()) const {
-                    return 2;
+                    return NUM_COLS;
                 }
                 
                 virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
@@ -54,28 +60,92 @@ namespace ews {
                     
                     if(role == Qt::DisplayRole) {
                         switch(j) {
-                            case 0:
-                                return QVariant(b->isEnabled());
-                            case 1:
-                                return QString("foo: " + b->objectName());
+//                            case ENABLED:
+//                                return QVariant(b->isEnabled());
+                            case NAME:
+                                return QString(b->objectName());
+                        }
+                    }
+                    else if(role == Qt::CheckStateRole) {
+                        switch(j) {
+                            case ENABLED:
+                                return QVariant(b->isEnabled() ? Qt::Checked : Qt::Unchecked);
                         }
                     }
                     
                     return QVariant();
                 }
-                
+                enum CheckState {
+                    Unchecked,
+                    PartiallyChecked,
+                    Checked
+                };
                 
                 virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const {
+                    
                     if(role == Qt::DisplayRole && orientation == Qt::Horizontal) {
                         switch(section) {
-                            case 0:
+                            case ENABLED:
                                 return QString(tr("Enabled"));
-                            case 1:
+                            case NAME:
                                 return QString(tr("Name"));
                         }
                     }                    
                     return QVariant();
                 }
+                
+                virtual Qt::ItemFlags flags(const QModelIndex& index) const {
+                    if (!index.isValid())
+                        return Qt::ItemIsEnabled;
+                    
+                    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
+                    switch(index.column()) {
+                        case ENABLED:
+                            flags |= Qt::ItemIsUserCheckable;
+//                            flags |= Qt::ItemIsEditable;
+                            break;
+                        case NAME:
+                            flags |= Qt::ItemIsEditable;
+                            break;
+                    }
+                                        
+                    
+                    return  flags;
+                }
+                
+                virtual bool setData(const QModelIndex& index, const QVariant& value,
+                                     int role = Qt::EditRole) {
+                    qDebug() << "setData: " << value;
+                    
+                    int i = index.row();
+                    Barrier* b = _barriers->barrierAt(i);
+                    
+                    if (index.isValid() && value.isValid()) {
+                        if(role == Qt::EditRole ) {
+                            switch(index.column()) {
+                                case NAME:
+                                    QString name = value.toString();
+                                    if(name.size() > 0) {
+                                        b->setObjectName(name);
+                                    }
+                                    break;
+                            }
+                        }
+                        else if(role == Qt::CheckStateRole) {
+                            switch(index.column()) {
+                                case ENABLED:
+                                    int state = value.toInt();
+                                    b->setEnabled(state == Qt::Checked);
+                                    break;
+                            }                                    
+                        }
+                        qDebug() << *b;
+                        emit dataChanged(index, index);
+                        return true;
+                    }
+                    return false;
+                }
+                
                 
             public slots:
                 bool rowsAdded(int position) {
