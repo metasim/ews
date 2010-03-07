@@ -35,7 +35,7 @@ namespace ews {
                 /**
                  * Standard ctor.
                  */
-                DrawableQtAdapter(QObject* peer);
+                explicit DrawableQtAdapter(QObject* peer);
                 virtual ~DrawableQtAdapter();
                 
             private:

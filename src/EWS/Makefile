@@ -35,6 +35,10 @@ XBLD=build.xcode
 xcode:
 	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open EWS.xcodeproj)
 
+XBLD=build.xcode-test
+xcode-test:
+	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -G"Xcode"; open EWS.xcodeproj)
+
 VSBLD=build-vs
 vs:
 	(mkdir -p $(VSBLD); cd $(VSBLD); cmake -G"Visual Studio 9 2008" ..)

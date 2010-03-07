@@ -39,7 +39,7 @@ namespace ews {
                 Q_OBJECT
                 
             public:
-                DripSourceEditor(QWidget *parent = 0);
+                explicit DripSourceEditor(QWidget *parent = 0);
                 virtual ~DripSourceEditor();
                 
                 void setDataModel(DripSource* data);

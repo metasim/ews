@@ -132,6 +132,14 @@ namespace ews {
             }
             
             /**
+             * Gets an entire row of amplitude information as read/writeable values.
+             * @param x Row to retrieve
+             */
+            inline LatticeVal* getRow(unsigned int x) {
+                return &_amplitudeData[x * getLength()];
+            }
+            
+            /**
              * Gets the amplitude of the lattice at location x,y
              * @param x X location to get the amplitude for
              * @param y Y location to get the amplitude for

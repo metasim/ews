@@ -312,7 +312,8 @@ function(cxx_test name path)
     ${OPENGL_LIBRARIES}
     ${QT_QTTEST_LIBRARY}
   )
-  add_test(${name} ${name})
+#  add_test(${name} ${name} -xml -o ${name}.xml)
+  add_test(${name} ${name} -xunitxml -o ${name}.xml)
 endfunction()
 
 if(TESTING)

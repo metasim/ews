@@ -32,12 +32,13 @@ namespace ews {
             /**
              * Default constructor, assigning a value of 0
              */
-            ConstantPotential(): _value(0.0) { /* do nothing */ }
+            explicit ConstantPotential(): _value(0.0) { /* do nothing */ }
             /**
-             * Constructor, assigning value to the constant potential everywhere
+             * Constructor, assigning value to the constant potential everywhere. Explicit to prevent
+             * automatic conversions from doubles to ConstantPotentials.
              * @param value Constant potential
              */
-            ConstantPotential(double value): _value(value) { /* do nothing */ }
+            explicit ConstantPotential(double value): _value(value) { /* do nothing */ }
             /**
              * Virtual destructor
              */

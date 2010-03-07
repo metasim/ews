@@ -30,7 +30,7 @@ namespace ews {
             class WaterSurfaceGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:
-                WaterSurfaceGeom(WaveMedium& settings);
+                explicit WaterSurfaceGeom(WaveMedium& settings);
                 virtual ~WaterSurfaceGeom() {}
                 
             private slots:

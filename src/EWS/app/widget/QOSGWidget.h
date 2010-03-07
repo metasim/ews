@@ -32,7 +32,7 @@ namespace ews {
             class QOSGWidget : public QGLWidget, public osgViewer::Viewer {
                 Q_OBJECT
             public:
-                QOSGWidget(QWidget* parent = 0);
+                explicit QOSGWidget(QWidget* parent = 0);
                 virtual ~QOSGWidget();
                 
                 osgViewer::GraphicsWindow* getGraphicsWindow() { return _gw.get(); }

@@ -41,7 +41,7 @@ namespace ews {
             public:
                 enum NumSlits { ZERO, ONE, TWO };
                 
-                Barrier(QObject* parent = 0) 
+                explicit Barrier(QObject* parent = 0) 
                 : QObject(parent), _enabled(true), _numSlits(ZERO), 
                 _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50) {
                 

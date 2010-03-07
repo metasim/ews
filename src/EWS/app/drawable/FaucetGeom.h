@@ -35,7 +35,7 @@ namespace ews {
             class FaucetGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:
-                FaucetGeom(DripSource& dataModel);
+                explicit FaucetGeom(DripSource& dataModel);
                 virtual ~FaucetGeom();
                 
                 DripSource& getDataModel() {

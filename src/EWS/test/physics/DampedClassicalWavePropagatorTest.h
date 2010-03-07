@@ -58,6 +58,10 @@ namespace ews {
              * Tests that the DampedClassicalWavePropagator::propage() method works for a travelling wave
              */
             void MethodPropagateWorksAcrossSpace();
+            /**
+             * Gathers timing information
+             */
+            void BenchmarkPropagate();
         };
     }
 }
