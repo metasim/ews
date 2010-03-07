@@ -95,6 +95,23 @@ namespace ews {
                 QCOMPARE(lattice.getValue(x, y), expected);
             }
         }
+        void DampedClassicalWavePropagatorTest::BenchmarkPropagate() {
+            unsigned int width = 1000;
+            unsigned int length = 1000;
+            Lattice lattice(width, length);
+            counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, 50, 50, 20, 20);
+            double expected = 1.0;
+            unsigned int x = 10;
+            unsigned int y = 10;
+            lattice.setValue(x, y, expected);
+            testDampedClassicalWavePropagator.setBoundaryCondition(x, y, expected);
+            QBENCHMARK {
+                for (; x < lattice.getWidth(); x++) {
+                    testDampedClassicalWavePropagator.propagate(lattice);
+                }
+            }
+        }
     }
 }
 

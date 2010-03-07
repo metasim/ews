@@ -45,16 +45,19 @@ namespace ews {
             const double w1 = 0.14;
             const double w2 = 0.06;
             for (unsigned int i = 1; i < width; i++) {
+                LatticeVal* priorRow = _priorLattice.getRow(i - 1);
+                LatticeVal* row = _priorLattice.getRow(i);
+                LatticeVal* nextRow = _priorLattice.getRow(i + 1);
+                LatticeVal* oldRow = _priorPriorLattice.getRow(i);
+                LatticeVal* newRow = _largeLattice.getRow(i);
                 for (unsigned int j = 1; j < length; j++) {
                     if (_potential->getPotential(i, j) != 0) {
-                        _largeLattice.setValue(i, j, 0.0);
+                        newRow[j] = 0.0;
                     }
                     else {
-                        const double neigh = (_priorLattice.getValue(i+1, j) + _priorLattice.getValue(i-1, j)
-                                              +  _priorLattice.getValue(i, j+1) + _priorLattice.getValue(i, j-1)) * w1
-                                       + (_priorLattice.getValue(i-1, j-1) + _priorLattice.getValue(i-1, j+1)
-                                          + _priorLattice.getValue(i+1, j-1) + _priorLattice.getValue(i+1, j+1)) * w2;
-                        _largeLattice.getValue(i, j) = (_priorLattice.getValue(i, j) * 1.1 - _priorPriorLattice.getValue(i, j) * 0.95 + neigh);
+                        const double neigh = (priorRow[j] + row[j-1] + row[j+1] + nextRow[j]) * w1 +
+                                             (priorRow[j-1] + priorRow[j+1] + nextRow[j-1] + nextRow[j+1]) * w2;
+                        newRow[j] = row[j] * 1.1 - oldRow[j] * 0.95 + neigh;
                     }
                 }
             }
