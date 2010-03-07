@@ -23,7 +23,7 @@ using std::min;
 
 namespace ews {
     namespace physics {
-        double Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
+        LatticeVal Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
             double sum = 0.0;
             if (getSize() == 0) return sum;
             const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
@@ -38,7 +38,7 @@ namespace ews {
             }
             return sum / count;    
         }
-        void Lattice::scale(double scaleVal) {
+        void Lattice::scale(LatticeVal scaleVal) {
             if (scaleVal == 1.0) return;
 
             unsigned int size = getSize();

@@ -36,23 +36,23 @@ namespace ews {
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
             DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
-            double expected = 1.0;
+            LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
             lattice.setValue(x, y, expected);
             testDampedClassicalWavePropagator.setBoundaryCondition(x, y, expected);
             testDampedClassicalWavePropagator.propagate(lattice);
-            double prior = expected;
-            double priorPrior = prior;
-            const double w1 = 0.14;
-            const double w2 = 0.06;
-            const double w3 = 1.1;
-            const double w4 = -0.95;
+            LatticeVal prior = expected;
+            LatticeVal priorPrior = prior;
+            const LatticeVal w1 = 0.14;
+            const LatticeVal w2 = 0.06;
+            const LatticeVal w3 = 1.1;
+            const LatticeVal w4 = -0.95;
             expected = w3 * prior + w4 * priorPrior;
             QCOMPARE(lattice.getValue(x, y), expected);
-            double neighbor = w1 * prior;
+            LatticeVal neighbor = w1 * prior;
             QCOMPARE(lattice.getValue(x, y + 1), neighbor);
-            double diagNeigh = w2 * prior;
+            LatticeVal diagNeigh = w2 * prior;
             QCOMPARE(lattice.getValue(x + 1, y + 1), diagNeigh);
             testDampedClassicalWavePropagator.propagate(lattice);
             priorPrior = prior;
@@ -76,19 +76,20 @@ namespace ews {
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
             DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
-            double expected = 1.0;
+            LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
             lattice.setValue(x, y, expected);
             testDampedClassicalWavePropagator.setBoundaryCondition(x, y, expected);
             x++;
-            const double w1 = 0.14;
-            const double w2 = 0.06;
+            const LatticeVal w1 = 0.14;
+            const LatticeVal w2 = 0.06;
+            const LatticeVal zero = 0.0f;
             for (; x < lattice.getWidth(); x++) {
-                QCOMPARE(lattice.getValue(x, y), 0.0);
-                QCOMPARE(lattice.getValue(x, y - 1), 0.0);
-                QCOMPARE(lattice.getValue(x, y + 1), 0.0);
-                const double priorDiag = lattice.getValue(x - 1, y + 1);
+                QCOMPARE(lattice.getValue(x, y), zero);
+                QCOMPARE(lattice.getValue(x, y - 1), zero);
+                QCOMPARE(lattice.getValue(x, y + 1), zero);
+                const LatticeVal priorDiag = lattice.getValue(x - 1, y + 1);
                 testDampedClassicalWavePropagator.propagate(lattice);
                 expected *= w1;
                 expected += 2 * priorDiag * w2; // From both diagonals
@@ -96,12 +97,12 @@ namespace ews {
             }
         }
         void DampedClassicalWavePropagatorTest::BenchmarkPropagate() {
-            unsigned int width = 1000;
-            unsigned int length = 1000;
+            unsigned int width = 500;
+            unsigned int length = 500;
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
             DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
-            double expected = 1.0;
+            LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
             lattice.setValue(x, y, expected);

@@ -31,7 +31,7 @@ namespace ews {
             /* do nothing */
         }
         void DampedClassicalWavePropagator::setBoundaryCondition(unsigned int x, unsigned int y,
-                                                                 double value) {
+                                                                 LatticeVal value) {
             _priorLattice.setValue(x + _dampX, y + _dampY, value );
             _priorPriorLattice.setValue(x + _dampX, y + _dampY, value );
         }
@@ -42,8 +42,8 @@ namespace ews {
             unsigned int width = _largeLattice.getWidth() - 1;
             unsigned int length = _largeLattice.getLength() - 1;
             _largeLattice = _priorLattice; // At this point, largeLattice and priorLattice should already be the same
-            const double w1 = 0.14;
-            const double w2 = 0.06;
+            const LatticeVal w1 = 0.14;
+            const LatticeVal w2 = 0.06;
             for (unsigned int i = 1; i < width; i++) {
                 LatticeVal* priorRow = _priorLattice.getRow(i - 1);
                 LatticeVal* row = _priorLattice.getRow(i);
@@ -55,7 +55,7 @@ namespace ews {
                         newRow[j] = 0.0;
                     }
                     else {
-                        const double neigh = (priorRow[j] + row[j-1] + row[j+1] + nextRow[j]) * w1 +
+                        const LatticeVal neigh = (priorRow[j] + row[j-1] + row[j+1] + nextRow[j]) * w1 +
                                              (priorRow[j-1] + priorRow[j+1] + nextRow[j-1] + nextRow[j+1]) * w2;
                         newRow[j] = row[j] * 1.1 - oldRow[j] * 0.95 + neigh;
                     }
@@ -76,7 +76,7 @@ namespace ews {
                 }
             }
         }
-        void DampedClassicalWavePropagator::scale(double scaleVal) {
+        void DampedClassicalWavePropagator::scale(LatticeVal scaleVal) {
             _priorLattice.scale(scaleVal);
             _priorPriorLattice.scale(scaleVal);
         }
@@ -102,7 +102,7 @@ namespace ews {
             for (unsigned int i = 0; i < _largeLattice.getWidth(); i++) {
                 for (unsigned int step = 0; step < numDampPts; step++) {
                     const unsigned int distFromDampBoundary = numDampPts - step;
-                    const double damp = getDamp(distFromDampBoundary);
+                    const LatticeVal damp = getDamp(distFromDampBoundary);
                     unsigned int j = y + step * delta;
                     _largeLattice.scaleLocation(i, j, damp);
                     _priorLattice.scaleLocation(i, j, damp);
@@ -118,7 +118,7 @@ namespace ews {
             for (unsigned int j = 0; j < _largeLattice.getLength(); j++ ) {
                 for (unsigned int step = 0; step < numDampPts; step++) {
                     const unsigned int distFromDampBoundary = numDampPts - step;
-                    const double damp = getDamp(distFromDampBoundary);
+                    const LatticeVal damp = getDamp(distFromDampBoundary);
                     unsigned int i = x + step * delta;
                     _largeLattice.scaleLocation(i, j, damp);
                     _priorLattice.scaleLocation(i, j, damp);
@@ -132,7 +132,7 @@ namespace ews {
             dampHorizontal(_largeLattice.getLength() - 1, -1, _dampX / 2);
         }
         
-        double DampedClassicalWavePropagator::getDamp(unsigned int depthInDampRegion) {
+        LatticeVal DampedClassicalWavePropagator::getDamp(unsigned int depthInDampRegion) {
             return (1 - depthInDampRegion * 0.0001);
         }
     }

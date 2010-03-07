@@ -52,7 +52,7 @@ namespace ews {
              * @param y Y-location to modify
              * @param value Value to assign
              */
-            void setBoundaryCondition(unsigned int x, unsigned int y, double value);
+            void setBoundaryCondition(unsigned int x, unsigned int y, LatticeVal value);
             /**
              * Update the given lattice using history stored in this propagator.
              * @param lattice Lattice to update
@@ -62,7 +62,7 @@ namespace ews {
              * Scale the histories of this propagator by the given factor.
              * @param scale Amount to scale by
              */
-            void scale(double scale);
+            void scale(LatticeVal scale);
             /**
              * Adjusts the region over which this propagator is valid. If the valid differs from the existing
              * size, it resets all history to zero.
@@ -108,7 +108,7 @@ namespace ews {
             void dampVertical(unsigned int x, int delta);
             void dampVertical(unsigned int x, int delta, unsigned int numDampPts);
             void dampScale();
-            double getDamp(unsigned int depthInDampRegion);
+            LatticeVal getDamp(unsigned int depthInDampRegion);
             counted_ptr<const Potential> _potential;
             Lattice _largeLattice;
             Lattice _priorLattice;

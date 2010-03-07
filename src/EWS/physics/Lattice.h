@@ -27,7 +27,7 @@ using std::vector;
 namespace ews {
     namespace physics {
         
-        typedef double LatticeVal;
+        typedef float LatticeVal;
         
         
         /**

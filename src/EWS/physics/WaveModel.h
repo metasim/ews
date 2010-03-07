@@ -82,14 +82,14 @@ namespace ews {
              * @param y Y-location to check
              * @return Wave amplitude
              */
-            double getValue(unsigned int x, unsigned int y) const { return _lattice.getValue(x, y); }
+            LatticeVal getValue(unsigned int x, unsigned int y) const { return _lattice.getValue(x, y); }
             /**
              * Compute the average wave amplitude over a region of the model.
              * @param x X-location to check
              * @param y Y-location to check
              * @param windowWidth The window size over which to average.
              */
-            double computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
+            LatticeVal computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
                 return _lattice.computeAverageValue(x, y, windowWidth);
             }
             /**
@@ -98,7 +98,7 @@ namespace ews {
              * @param y Y-location to set
              * @param value New value for the location
              */
-            void setSourceValue(unsigned int x, unsigned int y, double value) {
+            void setSourceValue(unsigned int x, unsigned int y, LatticeVal value) {
                 _lattice.setValue(x, y, value);
                 _wavePropagator->setBoundaryCondition(x, y, value);
             }

@@ -42,7 +42,7 @@ namespace ews {
              * @param y Y-location to modify
              * @param value Value to assign
              */            
-            virtual void setBoundaryCondition(unsigned int x, unsigned int y, double value) = 0;
+            virtual void setBoundaryCondition(unsigned int x, unsigned int y, LatticeVal value) = 0;
             /**
              * Update the given lattice using history stored in this propagator.
              * @param lattice Lattice to update
@@ -52,7 +52,7 @@ namespace ews {
              * Scale the histories of this propagator by the given factor.
              * @param scale Amount to scale by
              */
-            virtual void scale(double scale) = 0;
+            virtual void scale(LatticeVal scale) = 0;
             /**
              * Adjusts the region over which this propagator is valid.
              */

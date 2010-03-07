@@ -79,4 +79,4 @@ namespace ews {
 }
 
 
-#endif __BARRIERSET_H
+#endif // __BARRIERSET_H
