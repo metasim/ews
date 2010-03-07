@@ -71,8 +71,10 @@ namespace ews {
 
             dampScale();
             for (unsigned int i = 0; i < lattice.getWidth(); i++) {
+                LatticeVal* row = _largeLattice.getRow(i + _dampX);
+                LatticeVal* retRow = lattice.getRow(i);
                 for (unsigned int j = 0; j < lattice.getLength(); j++) {
-                    lattice.setValue(i, j, _largeLattice.getValue(i + _dampX, j + _dampY));
+                    retRow[j] = row[j + _dampY];
                 }
             }
         }
