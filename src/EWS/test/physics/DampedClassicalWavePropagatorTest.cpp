@@ -35,7 +35,7 @@ namespace ews {
             unsigned int length = 50;
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, 50, 50, 20, 20);
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
             double expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
@@ -75,7 +75,7 @@ namespace ews {
             unsigned int length = 50;
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, 50, 50, 20, 20);
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
             double expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
@@ -100,7 +100,7 @@ namespace ews {
             unsigned int length = 1000;
             Lattice lattice(width, length);
             counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, 50, 50, 20, 20);
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
             double expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
