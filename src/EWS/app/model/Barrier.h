@@ -23,11 +23,15 @@
 #include <QtCore>
 #include <QObject>
 #include <osg/Vec2>
+#include "Potential.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using osg::Vec2;
+            
+            class BarrierSet;
+            using ews::physics::Potential;
             
             class Barrier : public QObject {
                 Q_OBJECT
@@ -41,13 +45,14 @@ namespace ews {
             public:
                 enum NumSlits { ZERO, ONE, TWO };
                 
-                explicit Barrier(QObject* parent = 0) 
-                : QObject(parent), _enabled(true), _numSlits(ZERO), 
-                _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50) {
+                explicit Barrier(BarrierSet* parent = 0); 
                 
-                }
+                virtual ~Barrier();
+
                 
-                virtual ~Barrier() {}
+                /** Get the owner of this. */
+                BarrierSet* getBarrierSet();
+
                 
                 bool isEnabled() const {
                     return _enabled;
@@ -107,6 +112,9 @@ namespace ews {
             signals:
                 void dataChanged();
                 
+            private slots:
+                void updatePotentials();
+                
             private:
                 Q_DISABLE_COPY(Barrier)
                 bool _enabled;
@@ -115,6 +123,7 @@ namespace ews {
                 unsigned int _slitSeparation;
                 osg::Vec2 _start;
                 osg::Vec2 _end;
+                Potential* _potential;
             };
         }
     }
