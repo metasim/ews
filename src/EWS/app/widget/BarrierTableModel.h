@@ -30,6 +30,9 @@ namespace ews {
             using ews::app::model::Barrier;
             using namespace ews::util::debug;
             
+            /**
+             * Mapping wrapper between BarrierSet and Barrier into Qt table and item models. 
+             */
             class BarrierTableModel : public QAbstractTableModel {
                 Q_OBJECT
             public:
@@ -39,18 +42,62 @@ namespace ews {
                     connect(barriers, SIGNAL(barrierRemoved(int,Barrier*)), this, SLOT(rowsRemoved(int)));
                 }
                 
+                /** Standard dtor. */
                 virtual ~BarrierTableModel() {
                     _barriers = NULL;
                 }
                 
-                
+                /** Enumeration mapping column symbol names to indexes. */
                 enum ColType { ENABLED, NAME, NUM_SLITS, SLIT_WIDTH, SLIT_SEPARATION, NUM_COLS };
                 
                 virtual int rowCount(const QModelIndex &parent = QModelIndex()) const {
                     return _barriers->size();
                 }
+                
                 virtual int columnCount(const QModelIndex &parent = QModelIndex()) const {
                     return NUM_COLS;
+                }
+                
+                /** Get flags on data. */
+                virtual Qt::ItemFlags flags(const QModelIndex& index) const {
+                    if (!index.isValid())
+                        return Qt::ItemIsEnabled;
+                    
+                    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
+                    
+                    switch(index.column()) {
+                        case ENABLED:
+                            flags |= Qt::ItemIsUserCheckable;
+                            break;
+                        default:
+                            flags |= Qt::ItemIsEditable;
+                            break;
+                    }
+                  
+                    
+                    return  flags;
+                }
+                 
+                /**
+                 * Get header names.
+                 */
+                virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const {
+                    
+                    if(orientation == Qt::Vertical) {
+                        return QVariant(section + 1);
+                    }
+                    
+                    if(role == Qt::DisplayRole) {
+                        switch(section) {
+                            case ENABLED:
+                                return QString(tr("Show"));
+                            case NAME:
+                                return QString(tr("Name"));
+                            default:
+                                return QString("Col# %1").arg(section);
+                        }
+                    }
+                    return QVariant();
                 }
                 
                 virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
@@ -58,76 +105,61 @@ namespace ews {
                     int j = index.column();
                     Barrier* b = _barriers->barrierAt(i);
                     
-                    if(role == Qt::DisplayRole) {
-                        switch(j) {
-//                            case ENABLED:
-//                                return QVariant(b->isEnabled());
-                            case NAME:
-                                return QString(b->objectName());
-                        }
-                    }
-                    else if(role == Qt::CheckStateRole) {
-                        switch(j) {
-                            case ENABLED:
-                                return QVariant(b->isEnabled() ? Qt::Checked : Qt::Unchecked);
-                        }
+                    switch(role) {
+                        case Qt::DisplayRole:
+                        case Qt::EditRole:
+                            switch(j) {
+                                case NAME:
+                                    return QString(b->objectName());
+                                case NUM_SLITS:
+                                    return QVariant(b->getNumSlits());
+                                case SLIT_WIDTH:
+                                    return QVariant(b->getSlitWidth());
+                                case SLIT_SEPARATION:
+                                    return QVariant(b->getSlitSeparation());
+                                default:
+                                    break;
+                            }
+                            break;
+                        case Qt::CheckStateRole:
+                            switch(j) {
+                                case ENABLED:                                    
+                                    return QVariant(b->isEnabled() ? Qt::Checked : Qt::Unchecked);
+                                default:
+                                    break;
+                            }
+                            break;
+                        default:
+                            break;
                     }
                     
                     return QVariant();
                 }
-                enum CheckState {
-                    Unchecked,
-                    PartiallyChecked,
-                    Checked
-                };
-                
-                virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const {
-                    
-                    if(role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-                        switch(section) {
-                            case ENABLED:
-                                return QString(tr("Enabled"));
-                            case NAME:
-                                return QString(tr("Name"));
-                        }
-                    }                    
-                    return QVariant();
-                }
-                
-                virtual Qt::ItemFlags flags(const QModelIndex& index) const {
-                    if (!index.isValid())
-                        return Qt::ItemIsEnabled;
-                    
-                    Qt::ItemFlags flags = QAbstractItemModel::flags(index);
-                    switch(index.column()) {
-                        case ENABLED:
-                            flags |= Qt::ItemIsUserCheckable;
-//                            flags |= Qt::ItemIsEditable;
-                            break;
-                        case NAME:
-                            flags |= Qt::ItemIsEditable;
-                            break;
-                    }
-                                        
-                    
-                    return  flags;
-                }
+
                 
                 virtual bool setData(const QModelIndex& index, const QVariant& value,
                                      int role = Qt::EditRole) {
-                    qDebug() << "setData: " << value;
-                    
                     int i = index.row();
                     Barrier* b = _barriers->barrierAt(i);
                     
-                    if (index.isValid() && value.isValid()) {
+                    if (b != NULL && index.isValid() && value.isValid()) {
+                        QString name;
                         if(role == Qt::EditRole ) {
                             switch(index.column()) {
                                 case NAME:
-                                    QString name = value.toString();
+                                    name = value.toString();
                                     if(name.size() > 0) {
                                         b->setObjectName(name);
                                     }
+                                    break;
+                                case NUM_SLITS:
+                                    b->setNumSlits(static_cast<Barrier::NumSlits>(value.toInt()));
+                                    break;
+                                case SLIT_WIDTH:
+                                    b->setSlitWidth(value.toUInt());
+                                    break;
+                                case SLIT_SEPARATION:
+                                    b->setSlitSeparation(value.toUInt());
                                     break;
                             }
                         }
@@ -139,7 +171,7 @@ namespace ews {
                                     break;
                             }                                    
                         }
-                        qDebug() << *b;
+                        qDebug() << value << "became" << *b;
                         emit dataChanged(index, index);
                         return true;
                     }

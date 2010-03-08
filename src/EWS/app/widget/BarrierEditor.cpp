@@ -22,6 +22,7 @@
 
 #include <QTableView>
 #include <QModelIndex>
+#include <QItemDelegate>
 #include <QItemSelectionModel>
 #include "ui_BarrierEditor.h"
 
@@ -32,14 +33,42 @@ namespace ews {
             using ews::app::model::BarrierSet;
             using ews::app::model::Barrier;
             
-            
+            class MapperDelegate : public QItemDelegate {
+//                Q_OBJECT
+            public:
+                MapperDelegate(QObject* parent) : QItemDelegate(parent) {}
+                virtual ~MapperDelegate() {}
+                
+                virtual void setEditorData(QWidget* editor,
+                                   const QModelIndex &index) const {
+
+                    QTRACE;
+                    qDebug() << *editor << index;
+                    QItemDelegate::setEditorData(editor, index);
+                }
+                
+                virtual void setModelData(QWidget* editor,
+                                  QAbstractItemModel* model,
+                                  const QModelIndex& index) const {
+                    
+                    QTRACE;
+                    qDebug() << (*editor) << index << model;
+                    
+                    
+                    QItemDelegate::setModelData(editor, model, index);
+                }
+                
+            private:
+                Q_DISABLE_COPY(MapperDelegate)
+            };
             
             BarrierEditor::BarrierEditor(QWidget* parent) 
-            : QWidget(parent), _ui(new Ui::BarrierEditorForm) {
+            : QWidget(parent), _ui(new Ui::BarrierEditorForm), _mapper(this) {
                 _ui->setupUi(this);   
-
-                _mapper.addMapping(_ui->slitWidth, 3);
-                _mapper.addMapping(_ui->slitSeparation, 4);
+                _mapper.setItemDelegate(new MapperDelegate(this));
+                _mapper.addMapping(_ui->slitWidth, BarrierTableModel::SLIT_WIDTH);
+                _mapper.addMapping(_ui->slitSeparation, BarrierTableModel::SLIT_SEPARATION);
+                _mapper.setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
                 updateEnabled();
             }
             
@@ -70,15 +99,15 @@ namespace ews {
                     
                     
                     // Hide columns we don't want in the table.
-                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
-                        _ui->barrierTable->setColumnHidden(c, true);
-                    }
-                
+//                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
+//                        _ui->barrierTable->setColumnHidden(c, true);
+//                    }
                     
                     _mapper.setModel(newModel);
+                    _mapper.toFirst();
 
                     connect(_ui->barrierTable->selectionModel(), 
-                            SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)),
+                            SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
                             this, SLOT(updateOnSelection()));
                 }
                 
@@ -99,12 +128,12 @@ namespace ews {
             }
             
             void BarrierEditor::updateOnSelection() {
-                Barrier* b = selectedBarrier();
-                
-                if(b) {
-                    
+                QModelIndex idx = _ui->barrierTable->currentIndex();
+                qDebug() << "selected barrier:" << idx;
+                if(idx.row() >= 0) {
+                    _mapper.setCurrentIndex(idx.row());
                 }
-                
+
                 updateEnabled();
             }
 

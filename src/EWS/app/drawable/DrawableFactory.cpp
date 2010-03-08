@@ -22,6 +22,7 @@
 #include "FaucetGeom.h"
 #include "WaveMedium.h"
 #include "WaterSurfaceGeom.h"
+#include "Barrier.h"
 
 namespace ews {
     namespace app {
@@ -32,7 +33,6 @@ namespace ews {
                 static DrawableFactory singleton;
                 return singleton;
             }
-            
             
             osg::Node* DrawableFactory::createDrawableFor(QObject& data)  {
                 // Currently only a loose mapping between object data and drawable type is
@@ -49,7 +49,14 @@ namespace ews {
                     WaterSurfaceGeom* geom = new WaterSurfaceGeom(*waves);
                     return geom;
                 }
+
+                else if(data.inherits(Barrier::staticMetaObject.className())) {
+                    // BarrierGeom creation.
+                    qDebug() << "*** Create BarrierGeom here:" << __FILE__ << __LINE__;
                     
+                }
+                                    
+                
                 qWarning() << "No drawable found for" << name;
                 return NULL;
             }

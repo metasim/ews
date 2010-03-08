@@ -36,7 +36,10 @@ namespace ews {
             
             using ews::app::model::BarrierSet;
             using ews::app::model::Barrier;
-            
+                
+            /**
+             * Form controller for editing barriers.
+             */
             class BarrierEditor : public QWidget {
                 Q_OBJECT
                 
@@ -44,11 +47,15 @@ namespace ews {
                 explicit BarrierEditor(QWidget *parent = 0);
                 ~BarrierEditor();
                 
+                /** Connect the data model instance with the editor. */
                 void setDataModel(BarrierSet* barriers);
 
             public slots:
+                /** Slot to create a new barrier and add it to the end of the list.*/
                 void addBarrier();
+                /** Slot to remove the selected barrier. */
                 void removeBarrier();
+                /** Slot to update the enabled state of the controls. */
                 void updateEnabled();
                 /** Update UI after the table seletion changes. */
                 void updateOnSelection();

@@ -39,6 +39,7 @@ namespace ews {
                 
                 _waveModel = new WaveModel(_width * _latticeDivisionsPerCentimeter, 
                                            _length * _latticeDivisionsPerCentimeter);
+                
                 SlitPotential* sp = new SlitPotential(osg::Vec2(10, 50), osg::Vec2(50, 10), 2);
                 sp->setSlitWidth(5);
                 counted_ptr<const Potential> p(sp);

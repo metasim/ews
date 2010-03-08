@@ -97,12 +97,12 @@ namespace ews {
                     emit objectAdded(getWaveMedium());
                     emit objectAdded(getDripSource1());
                     emit objectAdded(getDripSource2());
-                    emit objectAdded(getBarriers());
                 }
                 
             public slots:
                 void setPaused(bool);
                 void reset();
+                void forwardBarrierSetChanges(int index, Barrier* barrier);
 
             private:
                 Q_DISABLE_COPY(SimulationState)
