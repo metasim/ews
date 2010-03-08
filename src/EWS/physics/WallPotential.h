@@ -72,7 +72,7 @@ namespace ews {
              * Changes one of the wall's end points
              * @param p New end point to use
              */
-            void setSrcPoint(Point2d p) {
+            void setSrcPoint(const Point2d& p) {
                 _lineSegment.setStart(p);
             }
             /**
@@ -84,7 +84,7 @@ namespace ews {
              * Changes the wall's other end point
              * @param p New end point to use
              */
-            void setDstPoint(Point2d p) {
+            void setDstPoint(const Point2d& p) {
                 _lineSegment.setEnd(p);
             }
             /**

@@ -19,6 +19,7 @@
 
 #include "WaveMedium.h"
 #include "SlitPotential.h"
+#include "PrecomputedPotential.h"
 #include <osg/Vec2>
 
 namespace ews {
@@ -29,6 +30,7 @@ namespace ews {
                 using ews::physics::WaveModel;
                 using ews::physics::SlitPotential;
                 using ews::physics::Potential;
+                using ews::physics::PrecomputedPotential;
                 
                 if(_waveModel) {
                     delete _waveModel;
@@ -40,7 +42,10 @@ namespace ews {
                 SlitPotential* sp = new SlitPotential(osg::Vec2(10, 50), osg::Vec2(50, 10), 2);
                 sp->setSlitWidth(5);
                 counted_ptr<const Potential> p(sp);
-                _waveModel->setPotential(p);
+                PrecomputedPotential* prePot = new PrecomputedPotential(p, _waveModel->getWidth(),
+                                                                        _waveModel->getLength());
+                counted_ptr<const Potential> ptrPrePot(prePot);
+                _waveModel->setPotential(ptrPrePot);
             }
             
         }
