@@ -27,36 +27,23 @@
 namespace ews {
     namespace app {
         namespace model {
+            class SimulationState;
+            
             class BarrierSet : public QObject {
                 Q_OBJECT
             public:
-                BarrierSet(QObject* parent = 0) {}
-                virtual ~BarrierSet() {}
+                BarrierSet(SimulationState* parent = 0);
+                virtual ~BarrierSet();
                 
-                Barrier* createBarrier() {
-                    Barrier* b = new Barrier(this);
-                    int pos = _barriers.size();
-                    _barriers << b;
-                    
-                    b->setObjectName(QString("Barrier %1").arg(pos+1));
-                    
-                    emit barrierAdded(pos, b);
-                    return b;
-                }
+                Barrier* createBarrier(); 
+                
+                SimulationState* getSimulationState() const;
                 
                 int size() const {
                     return _barriers.size();
                 }
                 
-                void removeBarrier(Barrier* b) {
-                    int pos = indexOf(b);
-                    if(pos >= 0) {
-                        bool did = _barriers.removeOne(b);
-                        if(did) {
-                            emit barrierRemoved(pos, b);
-                        }
-                    }
-                }
+                void removeBarrier(Barrier* b);
                 
                 int indexOf(Barrier* b) {
                     return _barriers.indexOf(b);

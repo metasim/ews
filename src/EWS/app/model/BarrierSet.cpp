@@ -17,17 +17,50 @@
  */
 
 #include "BarrierSet.h"
+#include "SimulationState.h"
 
 namespace ews {
     namespace app {
         namespace model {
-//        
-//            BarrierSet::BarrierSet(QObject* parent = 0) {
-//                
-//            }
-//            
-//            virtual BarrierSet::~BarrierSet() {
-//            }
+        
+            BarrierSet::BarrierSet(SimulationState* parent)  
+            : QObject(parent), _barriers() {
+                
+            }
+            
+            BarrierSet::~BarrierSet() {
+            }
+            
+            
+            Barrier* BarrierSet::createBarrier() {
+                Barrier* b = new Barrier(this);
+                int pos = _barriers.size();
+                _barriers << b;
+                
+                b->setObjectName(QString("Barrier %1").arg(pos+1));
+                
+                emit barrierAdded(pos, b);
+                return b;
+            }
+            
+            
+            void BarrierSet::removeBarrier(Barrier* b) {
+                int pos = indexOf(b);
+                if(pos >= 0) {
+                    bool did = _barriers.removeOne(b);
+                    if(did) {
+                        emit barrierRemoved(pos, b);
+                    }
+                }
+            }
+            
+            SimulationState* BarrierSet::getSimulationState() const {
+                QObject* obj = parent();
+                return qobject_cast<SimulationState*>(obj);
+            }
+
+            
+
         }
     }
 }
