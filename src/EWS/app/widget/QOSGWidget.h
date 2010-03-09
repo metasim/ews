@@ -45,7 +45,12 @@ namespace ews {
                     _timer.setInterval(delayMilliSec);
                 }
                 
+                /** Set the sene graph data that viewer with view.*/
+                virtual void setSceneData(osg::Node* node);
+                
                 virtual void paintGL();
+                
+                virtual void homePosition();
                 
             protected:
                 virtual void resizeGL( int width, int height );

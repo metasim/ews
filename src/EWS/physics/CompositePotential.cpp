@@ -36,9 +36,8 @@ namespace ews {
             _potentials.push_back(p);
         }
         void CompositePotential::removePotential(Potential* p) {
-            ref_ptr<Potential> ptr = p;
             PotentialList::iterator i = find(_potentials.begin(),
-                                             _potentials.end(), ptr);
+                                             _potentials.end(), p);
             
             if (i != _potentials.end()) { // If found, remove
                 _potentials.erase(i);

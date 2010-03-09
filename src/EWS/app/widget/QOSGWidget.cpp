@@ -19,11 +19,6 @@
 
 #include "QOSGWidget.h"
 #include <QtGui/QKeyEvent>
-#include <osgGA/TrackballManipulator>
-#include <osgGA/FlightManipulator>
-#include <osgGA/DriveManipulator>
-#include <osgGA/KeySwitchMatrixManipulator>
-#include <osgGA/TerrainManipulator>
 #include <osgGA/StateSetManipulator>
 
 #include <osg/Geometry>
@@ -33,9 +28,9 @@
 #include <osgViewer/ViewerEventHandlers>
 #include <osg/MatrixTransform>
 
-#include <osgAnimation/BasicAnimationManager>
-#include <osgAnimation/Channel>
-#include <osgAnimation/UpdateCallback>
+//#include <osgAnimation/BasicAnimationManager>
+//#include <osgAnimation/Channel>
+//#include <osgAnimation/UpdateCallback>
 
 #include "CameraController.h"
 
@@ -46,7 +41,7 @@ namespace ews {
             QOSGWidget::QOSGWidget(QWidget* parent)
             : QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer() {
                 
-                osg::setNotifyLevel(osg::NOTICE);
+                osg::setNotifyLevel(osg::INFO);
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::ClickFocus);
                 
@@ -90,6 +85,20 @@ namespace ews {
                 _timer.stop();
                 // Don't delete _gw, smart pointer takes care of it.
             }
+            
+            void QOSGWidget::setSceneData(osg::Node* node) {
+                osgViewer::Viewer::setSceneData(node);
+                getCameraManipulator()->setNode(node);
+                
+            }
+            
+            void QOSGWidget::homePosition() {
+                // HACK: Happen to know that the CameraController responds
+                // to the space key for a camera reset, which seems to need to be 
+                // called inside the event loop.
+                _gw->getEventQueue()->keyPress(osgGA::GUIEventAdapter::KEY_Space);
+            }
+
             
             void QOSGWidget::destroyEvent(bool destroyWindow, bool destroySubWindows) {   
                 _gw->getEventQueue()->closeWindow();

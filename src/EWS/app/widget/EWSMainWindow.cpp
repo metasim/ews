@@ -50,7 +50,7 @@ namespace ews {
                 // Config 3-D view.
                 _sceneRoot = new SceneRoot(this);
                 _ui->renderer->setSceneData(_sceneRoot);
-                _ui->renderer->setBetweenFrameDelay(20);
+                _ui->renderer->setBetweenFrameDelay(10);
                 
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
@@ -82,7 +82,8 @@ namespace ews {
             }
             
             void EWSMainWindow::reset() {
-                _state->reset();                
+                _state->reset();     
+                _ui->renderer->homePosition();
             }
         }
     }
