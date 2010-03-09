@@ -75,11 +75,9 @@ namespace ews {
                     geode->addDrawable(d.get());
                 }
                 
-                
-                
                 setColor(Vec4(.2f, .9f, .9f, 1.f)); 
-                ref_ptr<StateSet> state = getOrCreateStateSet();
 #if defined(GL_MULTISAMPLE_ARB)
+                ref_ptr<StateSet> state = getOrCreateStateSet();
                 state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
 #endif
                 

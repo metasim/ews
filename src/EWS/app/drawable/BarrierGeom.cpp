@@ -33,6 +33,7 @@ namespace ews {
             using namespace osg;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float VISIBLE_BARRIER_HEIGHT = 20.f;
+            const Vec4 BARRIER_COLOR(.2f, .9f, .9f, 1.f);
             
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
             : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
@@ -40,9 +41,9 @@ namespace ews {
                 insertChild(0, geode.get());
                 updateData();
                 
-                setColor(Vec4(.9f, .2f, .2f, .5f)); 
-                ref_ptr<StateSet> state = getOrCreateStateSet();
+                setColor(this, BARRIER_COLOR); 
 #if defined(GL_MULTISAMPLE_ARB)
+                ref_ptr<StateSet> state = getOrCreateStateSet();
                 state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
 #endif
                 
@@ -54,13 +55,13 @@ namespace ews {
                 
             }
             
-            void BarrierGeom::setColor(osg::Vec4 color) {
-                ref_ptr<StateSet> state = getOrCreateStateSet(); 
+            void BarrierGeom::setColor(osg::Node *srcNode, const osg::Vec4& color) {
+                ref_ptr<StateSet> state = srcNode->getOrCreateStateSet(); 
                 ref_ptr<Material> mat = new osg::Material; 
                 mat->setDiffuse(Material::FRONT, color);
                 mat->setSpecular(Material::FRONT,
-                                 Vec4( 0.8f, 0.8f, 0.8f, 0.8f )); 
-                mat->setShininess(Material::FRONT, 96.f ); 
+                                 Vec4(0.8f, 0.8f, 0.8f, 0.8f)); 
+                mat->setShininess(Material::FRONT, 96.f); 
                 mat->setColorMode(osg::Material::AMBIENT_AND_DIFFUSE);
                 state->setAttribute(mat.get());
             }
@@ -123,6 +124,7 @@ namespace ews {
                         geode->addDrawable(d.get());                        
                     }
                 }
+                setColor(geode.get(), BARRIER_COLOR);
             }            
         }
     }

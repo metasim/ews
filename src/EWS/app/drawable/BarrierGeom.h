@@ -41,7 +41,7 @@ namespace ews {
                     return _dataModel;
                 }
 
-                void setColor(osg::Vec4 color);
+                void setColor(osg::Node *srcNode, const osg::Vec4& color);
                 
             public slots:
                 void updateData();
