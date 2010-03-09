@@ -27,13 +27,14 @@ namespace ews {
         
         SlitPotential::SlitPotential(const Vec2d& p1, const Vec2d& p2, unsigned int numSlits): 
         WallPotential(p1, p2), _slitWidth(DEFAULT_SLIT_WIDTH), _slitAlphas(numSlits, 0.0) {
+            setThickness(DEFAULT_WALL_THICKNESS);
             const double deltaAlpha = 1.0 / (1 + numSlits);
             double alpha = deltaAlpha;
             for (unsigned int i = 0; i < numSlits; i++, alpha += deltaAlpha) {
                 _slitAlphas[i] = alpha;
             }
         }
-        void SlitPotential::addSlit(double alphaVal) {
+        void SlitPotential::addSlit(float alphaVal) {
             _slitAlphas.push_back(alphaVal);
             sort(_slitAlphas.begin(), _slitAlphas.end());
         }

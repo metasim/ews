@@ -22,6 +22,8 @@
 
 #include <osg/Vec2>
 #include <osg/Group>
+#include <osg/Geode>
+#include <osg/ref_ptr>
 #include "Barrier.h"
 #include "DrawableQtAdapter.h"
 
@@ -41,13 +43,14 @@ namespace ews {
                     return _dataModel;
                 }
 
-                void setColor(osg::Node *srcNode, const osg::Vec4& color);
+                void setColor(const osg::Vec4& color);
                 
             public slots:
                 void updateData();
                 
             private:
                 Q_DISABLE_COPY(BarrierGeom)
+                void addBox(const osg::ref_ptr<osg::Geode>& geode, float boxCenter, float boxLength);
                 Barrier& _dataModel;
             };
         }

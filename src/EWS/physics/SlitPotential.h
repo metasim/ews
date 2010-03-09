@@ -29,8 +29,8 @@ namespace ews {
         
         using osg::Vec2d;
         
-        const double DEFAULT_SLIT_WIDTH = 3;
-        
+        const float DEFAULT_SLIT_WIDTH = 3.f;
+        const float DEFAULT_WALL_THICKNESS = 4.f;
         
         /**
          * @ingroup Physics
@@ -51,7 +51,7 @@ namespace ews {
              * Add a slit at a specified fraction of the distance along its wall
              * @param alphaVal fraction of the distance along the wall to add the slit
              */
-            void addSlit(double alphaVal);
+            void addSlit(float alphaVal);
             /**
              * Remove the nth slit
              * @param slitNumber Which slit to delete (slits are sorted by location)
@@ -67,7 +67,7 @@ namespace ews {
             /**
              * Get the width of the slits
              */
-            double getSlitWidth() const { return _slitWidth; }
+            float getSlitWidth() const { return _slitWidth; }
             /**
              * Set the width of the slits
              * @param slitWidth New slit width (values less than zero will use zero instead)

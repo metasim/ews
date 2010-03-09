@@ -94,7 +94,6 @@ namespace ews {
                     connect(_ui->barrierTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
                             this, SLOT(updateOnSelection()));
-                    
                 }
                 
                 syncUI();
@@ -176,6 +175,7 @@ namespace ews {
                             b->setNumSlits(Barrier::TWO);                            
                         }
                     }
+
                     updateEnabled();
                 }
             }

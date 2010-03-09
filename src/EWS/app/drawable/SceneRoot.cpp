@@ -53,6 +53,13 @@ namespace ews {
             SceneRoot::~SceneRoot() {
             }
             
+            void SceneRoot::centerScene() {
+                setPosition(Vec3(0, 0, 0));
+                const BoundingSphere& bounds = getBound();
+                Vec3d center = bounds.center();
+                center.z() = 0;
+                setPosition(-center);
+            }
             
             void SceneRoot::addDrawableFor(QObject& data) {
                 osg::Node* geom = DrawableFactory::instance().createDrawableFor(data);
@@ -61,11 +68,11 @@ namespace ews {
                     _drawables.insert(&data, geom);
                 }
                 
-                setPosition(Vec3(0, 0, 0));
-                const BoundingSphere& bounds = getBound();
-                Vec3d center = bounds.center();
-                center.z() = 0;
-                setPosition(-center);
+                // HACK: Process of centering scene at origin needs to be 
+                // better handled outside of here
+                if(_drawables.size() == 1) {
+                    centerScene();
+                }
             }
             
             void SceneRoot::removeDrawableFor(QObject& data) {

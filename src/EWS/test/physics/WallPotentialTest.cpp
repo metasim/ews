@@ -61,8 +61,9 @@ namespace ews {
         
         void WallPotentialTest::MethodGetSetThicknessWorks() {
             WallPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
-            p.setThickness(1);
-            QCOMPARE(p.getThickness(), 1.0);
+            const float expected = 2.f;
+            p.setThickness(expected);
+            QCOMPARE(p.getThickness(), expected);
             QCOMPARE(p.getPotential(2, 2), 100.0);
             QCOMPARE(p.getPotential(3, 2), 100.0);
             QCOMPARE(p.getPotential(4, 2), 0.0);

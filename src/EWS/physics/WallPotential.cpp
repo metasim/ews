@@ -27,7 +27,7 @@ namespace ews {
             Vec2d pointToProject(static_cast<double>(x), static_cast<double>(y));
             Vec2d projectedPoint;            
             if (!_lineSegment.ptSegProjection(pointToProject, projectedPoint)) return 0.0;
-            return Vec2d(pointToProject - projectedPoint).length2() < _thicknessSq ? DEFAULT_POTENTIAL : 0.0;
+            return Vec2d(pointToProject - projectedPoint).length2() < _halfThicknessSq ? DEFAULT_POTENTIAL : 0.0;
         }
         double WallPotential::alpha(unsigned int x, unsigned int y) const {
             Vec2d pointToProject(static_cast<double>(x), static_cast<double>(y));

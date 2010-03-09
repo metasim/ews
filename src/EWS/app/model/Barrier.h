@@ -23,7 +23,7 @@
 #include <QtCore>
 #include <QObject>
 #include <osg/Vec2>
-#include "Potential.h"
+#include "SlitPotential.h"
 
 namespace ews {
     namespace app {
@@ -70,11 +70,19 @@ namespace ews {
                     return _slitSeparation;
                 }
                 
-                osg::Vec2 getStart() const {
+                float length() const {
+                    return (_end - _start).length();
+                }
+                
+//                float width() const {
+                    
+//                }
+                
+                const osg::Vec2& getStart() const {
                     return _start;
                 }
                 
-                osg::Vec2 getEnd() const {
+                const osg::Vec2& getEnd() const {
                     return _end;
                 }
                 
@@ -91,20 +99,24 @@ namespace ews {
                 }
                 
                 void setSlitWidth(unsigned int slitWidth) {
-                    _slitWidth = slitWidth;
-                    emit dataChanged();
+                    if (validSettings(slitWidth, _slitSeparation)) {
+                        _slitWidth = slitWidth;
+                        emit dataChanged();
+                    }
                 }
                 
                 void setSlitSeparation(unsigned int slitSeparation) {
-                    _slitSeparation = slitSeparation;
-                    emit dataChanged();
+                    if (validSettings(_slitWidth, slitSeparation)) {
+                        _slitSeparation = slitSeparation;
+                        emit dataChanged();
+                    }
                 }
                 
-                void setStart(osg::Vec2 start) {
+                void setStart(const osg::Vec2& start) {
                     _start = start;
                 }
                 
-                void setEnd(osg::Vec2 end) {
+                void setEnd(const osg::Vec2& end) {
                     _end = end;
                 }
 
@@ -117,6 +129,9 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(Barrier)
+                bool validSettings(unsigned int slitWidth, unsigned int slitSeparation) {
+                    return slitWidth > 0 && slitSeparation > 0 && length() > slitSeparation + 2 * slitWidth;
+                }
                 bool _enabled;
                 NumSlits _numSlits;
                 unsigned int _slitWidth;

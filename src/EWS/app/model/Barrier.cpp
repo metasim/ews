@@ -20,7 +20,6 @@
 
 #include "Barrier.h"
 #include "BarrierSet.h"
-#include "SlitPotential.h"
 #include "PrecomputedPotential.h"
 #include "SimulationState.h"
 #include "WaveModel.h"
@@ -49,18 +48,11 @@ namespace ews {
                 return qobject_cast<BarrierSet*>(obj);
             }
             Barrier::~Barrier() {
-//                if(_potential) {
-//                    delete _potential;
-//                }
+            
             }
+            
             void Barrier::updatePotentials() {
-                QTRACE;
-                
-//                if(_potential) {
-//                    delete _potential;
-//                }
-//                
-                
+
                 BarrierSet* barriers = getBarrierSet();
                 if(!barriers) {
                     qWarning() << "Unexpected missing barrier set.";
@@ -74,14 +66,23 @@ namespace ews {
                 }
                 
                 WaveModel& waveModel = state->getWaveMedium().getWaveModel();
-                ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd(), getNumSlits());
+                ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd());
+
                 sp->setSlitWidth(getSlitWidth());
+                if (getNumSlits() != ZERO) {
+                    if (getNumSlits() == ONE) {
+                        sp->addSlit(.5f);
+                    }
+                    else {
+                        float deltaAlpha = .5f * (getSlitSeparation() + getSlitWidth()) / length();
+                        sp->addSlit(.5f - deltaAlpha);
+                        sp->addSlit(.5f + deltaAlpha);
+                    }
+                }
                 
                 ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(sp.get(), waveModel.getWidth(),
-                                                                        waveModel.getLength());
+                                                                                waveModel.getLength());
                 waveModel.setPotential(prePot.get());
-                
-//                _potential  = prePot;
             }
 
             
