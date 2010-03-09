@@ -112,6 +112,7 @@ namespace ews {
                         addBox(geode, 0.5f, separationAlpha);
                     }
                 }
+                setNodeMask(_dataModel.isEnabled() ? 0xffffffff : 0);
             }            
         }
     }

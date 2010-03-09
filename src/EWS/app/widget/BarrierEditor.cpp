@@ -93,7 +93,7 @@ namespace ews {
                     // Register for selection changes so we can update the widgets. */
                     connect(_ui->barrierTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
-                            this, SLOT(updateOnSelection()));
+                            this, SLOT(updateOnSelection()));                    
                 }
                 
                 syncUI();
@@ -150,14 +150,19 @@ namespace ews {
                     canEdit = _ui->barrierTable->selectionModel()->hasSelection();
                 }
                 
+                if (canEdit) {
+                    Barrier* b = selectedBarrier();
+                    canEdit = b->isEnabled();
+                }
                 _ui->removeBarrier->setEnabled(canEdit);
                 _ui->slitNumSelect->setEnabled(canEdit);
                 
                 Barrier::NumSlits num = numSlitsSelected();
                 
-                bool canEditSlit = canEdit && num != Barrier::ZERO;
+                const bool canEditSlit = canEdit && num != Barrier::ZERO;
                 _ui->slitWidth->setEnabled(canEditSlit);
-                _ui->slitSeparation->setEnabled(canEditSlit);
+                const bool canEditSlitSep = canEdit && num == Barrier::TWO;
+                _ui->slitSeparation->setEnabled(canEditSlitSep);
             }
             
             void BarrierEditor::updateNumSlits() {

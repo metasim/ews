@@ -166,8 +166,8 @@ namespace ews {
                         else if(role == Qt::CheckStateRole) {
                             switch(index.column()) {
                                 case ENABLED:
-                                    int state = value.toInt();
-                                    b->setEnabled(state == Qt::Checked);
+                                    const bool enabled = (value.toInt() == Qt::Checked);
+                                    b->setEnabled(enabled);
                                     break;
                             }                                    
                         }
@@ -177,8 +177,10 @@ namespace ews {
                     }
                     return false;
                 }
-                
-                
+
+            signals:
+                void setEnabled(bool enabled);
+
             public slots:
                 bool rowsAdded(int position) {
                     beginInsertRows(QModelIndex(), position, position);

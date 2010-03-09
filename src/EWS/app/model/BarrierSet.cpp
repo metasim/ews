@@ -47,7 +47,6 @@ namespace ews {
                 }
             }
             
-            
             Barrier* BarrierSet::createBarrier() {                
                 Barrier* b = new Barrier(this);
                 const WaveMedium& water = getSimulationState()->getWaveMedium();
@@ -69,7 +68,9 @@ namespace ews {
                 ref_ptr<CompositePotential> worldPot = new CompositePotential();
                 for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
                     Barrier* b = *i;
-                    worldPot->addPotential(b->generatePotential().get());
+                    if (b->isEnabled()) {
+                        worldPot->addPotential(b->generatePotential().get());
+                    }
                 }
                 WaveModel& waveModel = getSimulationState()->getWaveMedium().getWaveModel();
                 ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(worldPot.get(), waveModel.getWidth(),
@@ -82,6 +83,7 @@ namespace ews {
                 if(pos >= 0) {
                     const bool did = _barriers.removeOne(b);
                     if(did) {
+                        updatePotentials();
                         emit barrierRemoved(pos, b);
                     }
                 }
