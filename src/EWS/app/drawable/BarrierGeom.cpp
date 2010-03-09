@@ -68,8 +68,9 @@ namespace ews {
             
             void BarrierGeom::addBox(const ref_ptr<osg::Geode>& geode, float boxCenter, float boxLength) {
                 ref_ptr<osg::ShapeDrawable> d = new ShapeDrawable();
+                const float boxWidth = _dataModel.width();
                 ref_ptr<osg::Shape> s = new osg::Box(osg::Vec3(boxCenter, 0.f, 0.f),
-                                                     boxLength, ews::physics::DEFAULT_WALL_THICKNESS,
+                                                     boxLength, boxWidth,
                                                      VISIBLE_BARRIER_HEIGHT);
                 d->setShape(s.get());
                 geode->addDrawable(d.get());

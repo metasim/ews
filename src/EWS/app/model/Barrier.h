@@ -75,6 +75,7 @@ namespace ews {
                 }
                 
                 float width() const {
+                    return ews::physics::DEFAULT_WALL_THICKNESS;
                 }
                 
                 const osg::Vec2& getStart() const {
