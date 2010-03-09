@@ -30,8 +30,7 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            const float VISIBLE_BARRIER_WIDTH = 6.f;
-            const float VISIBLE_BARRIER_HEIGHT = 20.f;
+            const float VISIBLE_BARRIER_HEIGHT = 10.f;
             const float BARRIER_OPACITY = .5f;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             

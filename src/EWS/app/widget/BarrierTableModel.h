@@ -178,9 +178,6 @@ namespace ews {
                     return false;
                 }
 
-            signals:
-                void setEnabled(bool enabled);
-
             public slots:
                 bool rowsAdded(int position) {
                     beginInsertRows(QModelIndex(), position, position);

@@ -75,7 +75,7 @@ namespace ews {
                         sm->disconnect(this);
                         delete sm;
                     }
-                    
+                    model->disconnect(this);
                     delete model;
                 }
                 
@@ -94,6 +94,8 @@ namespace ews {
                     connect(_ui->barrierTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
                             this, SLOT(updateOnSelection()));                    
+                    connect(newModel, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
+                            this, SLOT(updateEnabled()));                    
                 }
                 
                 syncUI();
@@ -154,6 +156,7 @@ namespace ews {
                     Barrier* b = selectedBarrier();
                     canEdit = b->isEnabled();
                 }
+                qDebug() << "canEdit = " << canEdit;
                 _ui->removeBarrier->setEnabled(canEdit);
                 _ui->slitNumSelect->setEnabled(canEdit);
                 
