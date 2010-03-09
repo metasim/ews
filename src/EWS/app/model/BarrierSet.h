@@ -23,10 +23,13 @@
 #include <QObject>
 #include <QList>
 #include "Barrier.h"
+#include "CompositePotential.h"
 
 namespace ews {
     namespace app {
         namespace model {
+            using ews::physics::CompositePotential;
+            
             class SimulationState;
             
             class BarrierSet : public QObject {
@@ -60,6 +63,8 @@ namespace ews {
             private:
                 Q_DISABLE_COPY(BarrierSet)
                 QList<Barrier*> _barriers;
+                CompositePotential* _potentials;
+                
             };
         }
     }

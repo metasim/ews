@@ -18,11 +18,14 @@
 
 #include "SlitPotential.h"
 #include <algorithm>
+#include <osg/Vec2d>
 using std::sort;
 
 namespace ews {
     namespace physics {
-        SlitPotential::SlitPotential(const Point2d& p1, const Point2d& p2, unsigned int numSlits): 
+        using osg::Vec2d;
+        
+        SlitPotential::SlitPotential(const Vec2d& p1, const Vec2d& p2, unsigned int numSlits): 
         WallPotential(p1, p2), _slitWidth(DEFAULT_SLIT_WIDTH), _slitAlphas(numSlits, 0.0) {
             const double deltaAlpha = 1.0 / (1 + numSlits);
             double alpha = deltaAlpha;
@@ -34,10 +37,10 @@ namespace ews {
             _slitAlphas.push_back(alphaVal);
             sort(_slitAlphas.begin(), _slitAlphas.end());
         }
-        Point2d SlitPotential::getSlitLocation(unsigned int slitNumber) const {
+        Vec2d SlitPotential::getSlitLocation(unsigned int slitNumber) const {
             if (slitNumber >= _slitAlphas.size()) return getDstPoint();
             const double alphaVal = _slitAlphas[slitNumber];
-            Point2d interpolatedPoint;
+            Vec2d interpolatedPoint;
             _lineSegment.interpolate(alphaVal, interpolatedPoint);
             return interpolatedPoint;
         }

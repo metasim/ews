@@ -21,7 +21,7 @@
 
 #include "Potential.h"
 #include "Line2d.h"
-
+#include <osg/Vec2d>
 #include <cmath>
 using std::sqrt;
 
@@ -29,6 +29,7 @@ namespace ews {
     namespace physics {
         const double DEFAULT_THICKNESS_SQ = 3 * 3;
         const double DEFAULT_POTENTIAL = 100.0;
+        using osg::Vec2d;
 
         /**
          * @ingroup Physics
@@ -40,7 +41,7 @@ namespace ews {
              * Default constructor, with both points at origin (0, 0)
              */
             WallPotential():
-            _lineSegment(Point2d(0.0, 0.0), Point2d(0.0, 0.0)), _thicknessSq(DEFAULT_THICKNESS_SQ) {
+            _lineSegment(Vec2d(0.0, 0.0), Vec2d(0.0, 0.0)), _thicknessSq(DEFAULT_THICKNESS_SQ) {
                 /* do nothing */
             }
             /**
@@ -48,7 +49,7 @@ namespace ews {
              * @param p1 One point of the wall
              * @param p2 The other point of the wall
              */
-            WallPotential(const Point2d& p1, const Point2d& p2):
+            WallPotential(const Vec2d& p1, const Vec2d& p2):
             _lineSegment(p1, p2), _thicknessSq(DEFAULT_THICKNESS_SQ) {
                 /* do nothing */
             }
@@ -67,24 +68,24 @@ namespace ews {
              * Returns one of the wall's end points
              * @Return wall end point
              */
-            Point2d getSrcPoint() const { return _lineSegment.getStart(); }
+            const Vec2d& getSrcPoint() const { return _lineSegment.getStart(); }
             /**
              * Changes one of the wall's end points
              * @param p New end point to use
              */
-            void setSrcPoint(const Point2d& p) {
+            void setSrcPoint(const Vec2d& p) {
                 _lineSegment.setStart(p);
             }
             /**
              * Returns the wall's other end point
              * @Return other wall end point
              */
-            Point2d getDstPoint() const { return _lineSegment.getEnd(); }
+            const Vec2d& getDstPoint() const { return _lineSegment.getEnd(); }
             /**
              * Changes the wall's other end point
              * @param p New end point to use
              */
-            void setDstPoint(const Point2d& p) {
+            void setDstPoint(const Vec2d& p) {
                 _lineSegment.setEnd(p);
             }
             /**

@@ -24,11 +24,14 @@ namespace ews {
         namespace model {
         
             BarrierSet::BarrierSet(SimulationState* parent)  
-            : QObject(parent), _barriers() {
-                
+            : QObject(parent), _barriers(), _potentials(NULL) {
+                _potentials = new CompositePotential();
             }
             
             BarrierSet::~BarrierSet() {
+                if(_potentials) {
+                    delete _potentials;
+                }
             }
             
             
@@ -36,8 +39,9 @@ namespace ews {
                 Barrier* b = new Barrier(this);
                 int pos = _barriers.size();
                 _barriers << b;
-                
+                                
                 b->setObjectName(QString("Barrier %1").arg(pos+1));
+                
                 
                 emit barrierAdded(pos, b);
                 return b;
@@ -58,9 +62,6 @@ namespace ews {
                 QObject* obj = parent();
                 return qobject_cast<SimulationState*>(obj);
             }
-
-            
-
         }
     }
 }

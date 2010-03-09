@@ -22,6 +22,7 @@
 
 namespace ews {
     namespace test {
+        using osg::Vec2d;
         void CompositePotentialTest::initTestCase() { /* do nothing */ }
         void CompositePotentialTest::cleanupTestCase() { /* do nothing */ }
         void CompositePotentialTest::init() { /* do nothing */ }
@@ -65,10 +66,10 @@ namespace ews {
         
         void CompositePotentialTest::CanHandleCompositePotentialPotential() {
             const double size = 50;
-            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Point2d(size, 0.0), Point2d(size, size)));
-            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, size), Point2d(size, size)));
-            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(size, 0.0)));
-            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(0.0, size)));
+            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2d(size, 0.0), Vec2d(size, size)));
+            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, size), Vec2d(size, size)));
+            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, 0.0), Vec2d(size, 0.0)));
+            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, 0.0), Vec2d(0.0, size)));
             CompositePotential* northSouth = new CompositePotential();
             northSouth->addPotential(north);
             northSouth->addPotential(south);

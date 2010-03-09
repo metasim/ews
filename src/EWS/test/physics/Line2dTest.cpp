@@ -17,9 +17,11 @@
  */
 
 #include "Line2dTest.h"
-
+#include <osg/Vec2d>
 namespace ews {
     namespace test {
+        using osg::Vec2d;
+        
         void Line2dTest::initTestCase() { /* do nothing */ }
         void Line2dTest::cleanupTestCase() { /* do nothing */ }
         void Line2dTest::init() { /* do nothing */ }
@@ -35,7 +37,7 @@ namespace ews {
         void Line2dTest::MethodsGetSetStartWork() {
             double x = 13542.523;
             double y = -99922.3452;
-            Point2d newStart(x, y);
+            Vec2d newStart(x, y);
             _l.setStart(newStart);
             QCOMPARE(_l.getStart().x(), x);
             QCOMPARE(_l.getStart().y(), y);
@@ -44,33 +46,33 @@ namespace ews {
         void Line2dTest::MethodsGetSetEndWork() {
             double x = 13542.523;
             double y = -99922.3452;
-            Point2d newEnd(x, y);
+            Vec2d newEnd(x, y);
             _l.setEnd(newEnd);
             QCOMPARE(_l.getEnd().x(), x);
             QCOMPARE(_l.getEnd().y(), y);
         }
         
         void Line2dTest::MethodEpsilonWorks() {
-            const Point2d p1(0.0, 3.0);
-            const Point2d p2(4.0, 0.0);
+            const Vec2d p1(0.0, 3.0);
+            const Vec2d p2(4.0, 0.0);
             const Line2d l(p1, p2);
             QCOMPARE(l.epislon(), 5e-6);
         }
         
         void Line2dTest::MethodPtSegProjectionWorks() {
-            const Point2d p1(0.0, 0.0);
-            const Point2d p2(4.0, 0.0);
+            const Vec2d p1(0.0, 0.0);
+            const Vec2d p2(4.0, 0.0);
             const Line2d l(p1, p2);
-            const Point2d ptToProject1(2.0, 3.1253);
-            Point2d projectedPt;
+            const Vec2d ptToProject1(2.0, 3.1253);
+            Vec2d projectedPt;
             QCOMPARE(l.ptSegProjection(ptToProject1, projectedPt), true);
             QCOMPARE(projectedPt.x(), 2.0);
             QCOMPARE(projectedPt.y(), 0.0);
-            const Point2d ptToProject2(4.0, 3.1253);
+            const Vec2d ptToProject2(4.0, 3.1253);
             QCOMPARE(l.ptSegProjection(ptToProject2, projectedPt), true);
             QCOMPARE(projectedPt.x(), 4.0);
             QCOMPARE(projectedPt.y(), 0.0);
-            const Point2d ptToProject3(4.01, 3.1253);
+            const Vec2d ptToProject3(4.01, 3.1253);
             QCOMPARE(l.ptSegProjection(ptToProject3, projectedPt), false);
             QCOMPARE(projectedPt.x(), 4.01);
             QCOMPARE(projectedPt.y(), 0.0);

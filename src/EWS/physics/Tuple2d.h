@@ -24,7 +24,7 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
-        const double EPSILON_FACTOR = 1e-6; 
+
         
         /**
          * @ingroup Physics
@@ -60,18 +60,7 @@ namespace ews {
              * Virtual destructor
              */
             virtual ~Tuple2d() { /* do nothing */ }
-            /**
-             * Calculate a scale invariant epsilon, i.e., one that varies with the distance between
-             * t1 and t2.
-             * @param t1 First Tuple2d
-             * @param t2 Second Tuple2d
-             * @return scale invariant epsilon
-             */
-            static double computeEpsilon(const Tuple2d& t1, const Tuple2d& t2) {
-                const double xDelta = (t1._x - t2._x);
-                const double yDelta = (t1._y - t2._y);
-                return sqrt(xDelta * xDelta + yDelta * yDelta) * EPSILON_FACTOR;
-            }
+
             /**
              * Get the x coordinate
              * @return x coordinate

@@ -26,6 +26,7 @@ using namespace ews::physics;
 
 namespace ews {
     namespace test {
+
         /**
          * @ingroup Test
          * Test harness for composite potentials.

@@ -20,13 +20,18 @@
 #define __SLITPOTENTIAL_H
 
 #include "WallPotential.h"
-#include "Point2d.h"
+#include <osg/Vec2d>
 #include <vector>
 using std::vector;
 
 namespace ews {
     namespace physics {
+        
+        using osg::Vec2d;
+        
         const double DEFAULT_SLIT_WIDTH = 3;
+        
+        
         /**
          * @ingroup Physics
          * Potential with a constant value everywhere.
@@ -37,7 +42,7 @@ namespace ews {
              * Constructor taking number of slits
              * @param numSlits how many slits to create
              */
-            SlitPotential(const Point2d& p1, const Point2d& p2, unsigned int numSlits = 0);
+            SlitPotential(const Vec2d& p1, const Vec2d& p2, unsigned int numSlits = 0);
             /**
              * Virtual destructor
              */
@@ -56,7 +61,9 @@ namespace ews {
                     _slitAlphas.erase(_slitAlphas.begin() + slitNumber);
                 }
             }
-            Point2d getSlitLocation(unsigned int slitNumber) const;
+            
+            Vec2d getSlitLocation(unsigned int slitNumber) const;
+            
             /**
              * Get the width of the slits
              */

@@ -21,11 +21,13 @@
 
 #include "Line2d.h"
 using namespace ews::physics;
-
+#include <osg/Vec2d>
 #include <QtTest/QtTest>
 
 namespace ews {
     namespace test {
+        using osg::Vec2d;
+        
         /**
          * @ingroup Test
          * Test harness for testing Line2d.
@@ -74,10 +76,10 @@ namespace ews {
         private:
             const double _x1;
             const double _y1;
-            const Point2d _p1;
+            const Vec2d _p1;
             const double _x2;
             const double _y2;
-            const Point2d _p2;
+            const Vec2d _p2;
             Line2d _l;
         };
     }

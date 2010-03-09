@@ -20,9 +20,12 @@
 #include "ConstantPotential.h"
 #include "WallPotential.h"
 #include "CompositePotential.h"
+#include <osg/Vec2>
 
 namespace ews {
     namespace test {
+        using osg::Vec2;
+        
         void PrecomputedPotentialTest::initTestCase() { /* do nothing */ }
         void PrecomputedPotentialTest::cleanupTestCase() { /* do nothing */ }
         void PrecomputedPotentialTest::init() { /* do nothing */ }
@@ -45,10 +48,10 @@ namespace ews {
         
         void PrecomputedPotentialTest::CanHandlePotentialOutsideItsBounds() {
             const double size = 50;
-            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Point2d(size, 0.0), Point2d(size, size)));
-            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, size), Point2d(size, size)));
-            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(size, 0.0)));
-            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Point2d(0.0, 0.0), Point2d(0.0, size)));
+            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2(size, 0.0), Vec2(size, size)));
+            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, size), Vec2(size, size)));
+            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0)));
+            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(0.0, size)));
             CompositePotential* northSouth = new CompositePotential();
             northSouth->addPotential(north);
             northSouth->addPotential(south);
