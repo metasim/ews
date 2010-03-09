@@ -59,12 +59,7 @@ namespace ews {
              * Gets the current value associated with the oscillator.
              */
             double getValue() const;
-            
-            /**
-             * Gets the velocity of the oscillator (CRUFT?)
-             */
-            double getVelocity() const;
-            
+             
             /**
              * Gets the radius the oscillator acts upon.
              * @return Oscillator radius
@@ -84,7 +79,7 @@ namespace ews {
              * Sets the period of the oscillator
              * @param p Oscillator period
              */
-            void setPeriod(double p) { _period = p; }
+            void setPeriod(double p) { _period = p > 0 ? p : 0; }
             /**
              * Sets the location of the oscillator.
              * @param x X location of oscillator
@@ -115,7 +110,7 @@ namespace ews {
              * Gets the amplitude of the oscillator.
              * @param a Oscillator amplitude.
              */
-            void setAmplitude(double a) { _amplitude = a; }
+            void setAmplitude(double a) { _amplitude = a > 0 ? a : 0; }
             /**
              * Gets the osillator's time state
              * @return time per the oscillator's perspective

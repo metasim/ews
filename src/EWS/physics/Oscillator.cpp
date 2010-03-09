@@ -74,9 +74,6 @@ namespace ews {
         double Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
         }
-        double Oscillator::getVelocity() const {
-            return _amplitude * sin(getCosArg() + _phase) * 2 * M_PI / _period;
-        }
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
             if (!_oscillating && shouldOscillate) {
                 resetPhase();

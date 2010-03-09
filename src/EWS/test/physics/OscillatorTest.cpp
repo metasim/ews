@@ -19,6 +19,7 @@
 #include "OscillatorTest.h"
 #include <cmath>
 using std::abs;
+using std::cos;
 
 namespace ews {
     namespace test {
@@ -28,10 +29,7 @@ namespace ews {
         void OscillatorTest::cleanup() { /* do nothing */ }
         
         void OscillatorTest::DefaultConstructor() {
-            unsigned int width = 50;
-            unsigned int length = 100;
-            WaveModel waveModel(width, length);
-            Oscillator testOscillator(waveModel);
+            Oscillator testOscillator(_waveModel);
 //            QCOMPARE(testOscillator.getValue(), 0.0);
             QVERIFY(abs(testOscillator.getValue()) < 1e-16);
             // I don't like that we're not precise enough for qtest's QCOMPARE
@@ -41,10 +39,81 @@ namespace ews {
             QCOMPARE(testOscillator.getRadius(), DEFAULT_RADIUS);
             QCOMPARE(testOscillator.getPeriod(), DEFAULT_PERIOD);            
             QCOMPARE(testOscillator.x(), DEFAULT_X);            
-            QCOMPARE(testOscillator.y(), length / 2);            
+            QCOMPARE(testOscillator.y(), _waveModel.getLength() / 2);            
             QCOMPARE(testOscillator.getAmplitude(), DEFAULT_AMPLITUDE);            
             QCOMPARE(testOscillator.getTime(), 0.0);            
-            QCOMPARE(testOscillator.getOscillateStatus(), false);            
+            QCOMPARE(testOscillator.getOscillateStatus(), false);         
+        }
+        void OscillatorTest::MethodSetRadiusWorks() {
+            Oscillator testOscillator(_waveModel);
+            double expected = 2.5;
+            testOscillator.setRadius(expected);
+            QCOMPARE(testOscillator.getRadius(), expected);
+            testOscillator.setRadius(0.0);
+            QCOMPARE(testOscillator.getRadius(), 0.0);
+            testOscillator.setRadius(-0.5);
+            QCOMPARE(testOscillator.getRadius(), 0.0);
+        }
+        void OscillatorTest::MethodSetPeriodWorks() {
+            Oscillator testOscillator(_waveModel);
+            double expected = 2.5;
+            testOscillator.setPeriod(expected);
+            QCOMPARE(testOscillator.getPeriod(), expected);            
+            testOscillator.setPeriod(0.0);
+            QCOMPARE(testOscillator.getPeriod(), 0.0);            
+            testOscillator.setPeriod(-0.5);
+            QCOMPARE(testOscillator.getPeriod(), 0.0);            
+        }
+        void OscillatorTest::MethodSetLocationWorks() {
+            Oscillator testOscillator(_waveModel);
+            unsigned int x = 5;
+            unsigned int y = 20;
+            testOscillator.setLocation(x, y);
+            QCOMPARE(testOscillator.x(), x);            
+            QCOMPARE(testOscillator.y(), y);            
+        }
+        void OscillatorTest::MethodComputeFrequencyWorks() {
+            Oscillator testOscillator(_waveModel);
+            double expected = 2;
+            testOscillator.setPeriod(expected);
+            QCOMPARE(testOscillator.computeFrequency(), 1 / expected);            
+        }
+        void OscillatorTest::MethodSetAmplitudeWorks() {
+            Oscillator testOscillator(_waveModel);
+            double expected = 2.5;
+            testOscillator.setAmplitude(expected);
+            QCOMPARE(testOscillator.getAmplitude(), expected);            
+            testOscillator.setAmplitude(0.0);
+            QCOMPARE(testOscillator.getAmplitude(), 0.0);            
+            testOscillator.setAmplitude(-0.5);
+            QCOMPARE(testOscillator.getAmplitude(), 0.0);
+        }
+        void OscillatorTest::MethodSetOscillateStatusWorks() {
+            Oscillator testOscillator(_waveModel);
+            QCOMPARE(testOscillator.getOscillateStatus(), false);         
+            testOscillator.setOscillateStatus(true);
+            QCOMPARE(testOscillator.getOscillateStatus(), true);         
+            testOscillator.setOscillateStatus(false);
+            QCOMPARE(testOscillator.getOscillateStatus(), false);         
+        }
+        void OscillatorTest::MethodFirePulseWorks() {
+            Oscillator testOscillator(_waveModel);
+            unsigned int x = 5;
+            unsigned int y = 5;
+            testOscillator.setLocation(x, y);
+            testOscillator.setRadius(2);
+            testOscillator.setPeriod(1);
+            testOscillator.setAmplitude(1);
+            double time = 100.0;
+            testOscillator.updateTimeAndOscillator(time);
+            testOscillator.firePulse();
+            const double deltaT = 0.1;
+            time += deltaT;
+            testOscillator.updateTimeAndOscillator(time);
+            LatticeVal expected = cos(2 * M_PI * deltaT + (M_PI / 2.0));
+            QCOMPARE(_waveModel.getValue(x, y), expected);
+            QCOMPARE(_waveModel.getValue(x + 1, y + 1), expected);
+            QCOMPARE(_waveModel.getValue(x + 2, y + 2), static_cast<LatticeVal>(0));
         }
     }
 }

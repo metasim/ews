@@ -33,7 +33,7 @@ namespace ews {
         class OscillatorTest: public QObject
         {
         public:
-            OscillatorTest() { /* do nothing */ }
+            OscillatorTest(): _waveModel(50, 100) { /* do nothing */ }
             virtual ~OscillatorTest() { /* do nothing */ }
             Q_OBJECT
             private slots:
@@ -49,6 +49,36 @@ namespace ews {
              * Tests that the Oscillator default constructor creates a valid object
              */
             void DefaultConstructor();
+            /**
+             * Tests that Oscillator's setRadius method works
+             */
+            void MethodSetRadiusWorks();
+            /**
+             * Tests that Oscillator's setPeriod method works
+             */
+            void MethodSetPeriodWorks();
+            /**
+             * Tests that Oscillator's setLocation method works
+             */
+            void MethodSetLocationWorks();
+            /**
+             * Tests that Oscillator's computeFrequency method works
+             */
+            void MethodComputeFrequencyWorks();
+            /**
+             * Tests that Oscillator's setAmplitude method works
+             */
+            void MethodSetAmplitudeWorks();
+            /**
+             * Tests that Oscillator's setOscillateStatus method works
+             */
+            void MethodSetOscillateStatusWorks();
+            /**
+             * Tests that Oscillator's firePulse method works (also tests updateTimeAndOscillator)
+             */
+            void MethodFirePulseWorks();
+        private:
+            WaveModel _waveModel;
         };
     }
 }
