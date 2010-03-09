@@ -21,8 +21,8 @@
 
 #include "Lattice.h"
 #include "WavePropagator.h"
-#include "counted_ptr.h"
-using ews::util::counted_ptr;
+#include <osg/ref_ptr>
+using osg::ref_ptr;
 
 /**
  * Parent namespace for all code specific to NVIDIA Foundation simulations
@@ -115,13 +115,13 @@ namespace ews {
             /**
              * Get the potential associated with this wave model.             
              */
-            const counted_ptr<const Potential>& getPotential() const {
+            const ref_ptr<Potential> getPotential() const {
                 return _wavePropagator->getPotential();
             }
             /**
              * Assign a new potential to be used by this wave model.
              */
-            void setPotential(counted_ptr<const Potential> p) { _wavePropagator->setPotential(p); }
+            void setPotential(Potential* p) { _wavePropagator->setPotential(p); }
             
             /**
              * Get direct access to the low level storage of the amplitude
@@ -146,7 +146,7 @@ namespace ews {
             static WavePropagator* createDefaultPropagator(unsigned int width, unsigned int length,
                                                            unsigned int dampX, unsigned int dampY);
             Lattice _lattice;
-            counted_ptr<WavePropagator> _wavePropagator;
+            ref_ptr<WavePropagator> _wavePropagator;
         };
     }
 }

@@ -44,6 +44,7 @@ namespace ews {
                 delete _ui;
             }
             
+            /** Update  controls with current widget state. */
             void BarrierEditor::syncUI() {
                 Barrier* b = selectedBarrier();
                 
@@ -62,6 +63,7 @@ namespace ews {
                 }
             }
 
+            /** Apply datamodel to editor. */
             void BarrierEditor::setDataModel(BarrierSet* barriers) {
                 _dataModel = barriers;
                 
@@ -84,14 +86,14 @@ namespace ews {
                     
                     
                     // Hide columns we don't want in the table.
-//                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
-//                        _ui->barrierTable->setColumnHidden(c, true);
-//                    }
+                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
+                        _ui->barrierTable->setColumnHidden(c, true);
+                    }
 
+                    // Register for selection changes so we can update the widgets. */
                     connect(_ui->barrierTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
                             this, SLOT(updateOnSelection()));
-                    
                 }
                 
                 syncUI();
@@ -173,6 +175,8 @@ namespace ews {
                             b->setNumSlits(Barrier::TWO);                            
                         }
                     }
+
+                    updateEnabled();
                 }
             }
             

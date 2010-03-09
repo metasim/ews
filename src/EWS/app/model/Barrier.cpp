@@ -24,6 +24,7 @@
 #include "SimulationState.h"
 #include "WaveModel.h"
 #include <osg/Vec2>
+#include <osg/ref_ptr>
 #include "EWSDebug.h"
 
 namespace ews {
@@ -47,18 +48,11 @@ namespace ews {
                 return qobject_cast<BarrierSet*>(obj);
             }
             Barrier::~Barrier() {
-//                if(_potential) {
-//                    delete _potential;
-//                }
+            
             }
+            
             void Barrier::updatePotentials() {
-                QTRACE;
-                
-//                if(_potential) {
-//                    delete _potential;
-//                }
-//                
-                
+
                 BarrierSet* barriers = getBarrierSet();
                 if(!barriers) {
                     qWarning() << "Unexpected missing barrier set.";
@@ -72,7 +66,8 @@ namespace ews {
                 }
                 
                 WaveModel& waveModel = state->getWaveMedium().getWaveModel();
-                SlitPotential* sp = new SlitPotential(getStart(), getEnd());
+                ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd());
+
                 sp->setSlitWidth(getSlitWidth());
                 if (getNumSlits() != ZERO) {
                     if (getNumSlits() == ONE) {
@@ -85,13 +80,9 @@ namespace ews {
                     }
                 }
                 
-                counted_ptr<const Potential> p(sp);
-                PrecomputedPotential* prePot = new PrecomputedPotential(p, waveModel.getWidth(),
-                                                                        waveModel.getLength());
-                counted_ptr<const Potential> ptrPrePot(prePot);
-                waveModel.setPotential(ptrPrePot);
-                
-//                _potential  = prePot;
+                ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(sp.get(), waveModel.getWidth(),
+                                                                                waveModel.getLength());
+                waveModel.setPotential(prePot.get());
             }
 
             

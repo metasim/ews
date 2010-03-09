@@ -66,16 +66,6 @@ namespace ews {
                 
                 setThreadingModel(osgViewer::Viewer::SingleThreaded);
                 
-                osg::ref_ptr<osgGA::KeySwitchMatrixManipulator> keyswitchManipulator = new osgGA::KeySwitchMatrixManipulator;
-                
-//                keyswitchManipulator->addMatrixManipulator( '1', "Default", new ews::app::drawable::CameraController);
-//                keyswitchManipulator->addMatrixManipulator( '2', "Terrain", new osgGA::TerrainManipulator() );
-//                keyswitchManipulator->addMatrixManipulator( '3', "Trackball", new osgGA::TrackballManipulator() );
-//                keyswitchManipulator->addMatrixManipulator( '3', "Flight", new osgGA::FlightManipulator() );
-//                keyswitchManipulator->addMatrixManipulator( '4', "Drive", new osgGA::DriveManipulator() );
-                
-//                setCameraManipulator(keyswitchManipulator.get());
-                
                 setCameraManipulator(new ews::app::drawable::CameraController);
                 addEventHandler(new osgViewer::StatsHandler);
                 

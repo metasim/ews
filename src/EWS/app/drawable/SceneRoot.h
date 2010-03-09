@@ -30,10 +30,10 @@ namespace ews {
                 explicit SceneRoot(QObject* parent = 0);
                 virtual ~SceneRoot();
                 
-                
             public slots:
                 void addDrawableFor(QObject& data);
                 void removeDrawableFor(QObject& data);
+                void centerScene();
                 
             private:    
                 Q_DISABLE_COPY(SceneRoot)

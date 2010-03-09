@@ -37,8 +37,8 @@ namespace ews {
         void CompositePotentialTest::CanHandleSingleConstantPotential() {
             CompositePotential p;
             const double value = 3.14159;
-            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
-            p.addPotential(constP);
+            ref_ptr<Potential> constP = new ConstantPotential(value);
+            p.addPotential(constP.get());
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
             QCOMPARE(p.getPotential(2, 2), value);
         }
@@ -46,9 +46,9 @@ namespace ews {
         void CompositePotentialTest::CanHandleTwoConstantPotentials() {
             CompositePotential p;
             const double value = 3.14159;
-            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
-            p.addPotential(constP);
-            p.addPotential(constP);
+            ref_ptr<Potential> constP = new ConstantPotential(value);
+            p.addPotential(constP.get());
+            p.addPotential(constP.get());
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
             QCOMPARE(p.getPotential(2, 2), 2 * value);            
         }
@@ -56,7 +56,7 @@ namespace ews {
         void CompositePotentialTest::MethodRemovePotentialWorks() {
             CompositePotential p;
             const double value = 3.14159;
-            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
+            ref_ptr<Potential> constP = new ConstantPotential(value);
             p.addPotential(constP);
             p.addPotential(constP);
             QCOMPARE(p.getPotential(2, 2), 2 * value);
@@ -66,21 +66,21 @@ namespace ews {
         
         void CompositePotentialTest::CanHandleCompositePotentialPotential() {
             const double size = 50;
-            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2d(size, 0.0), Vec2d(size, size)));
-            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, size), Vec2d(size, size)));
-            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, 0.0), Vec2d(size, 0.0)));
-            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2d(0.0, 0.0), Vec2d(0.0, size)));
-            CompositePotential* northSouth = new CompositePotential();
-            northSouth->addPotential(north);
-            northSouth->addPotential(south);
-            CompositePotential* eastWest = new CompositePotential();
-            eastWest->addPotential(east);
-            eastWest->addPotential(west);
+            ref_ptr<Potential> east = new WallPotential(Vec2d(size, 0.0), Vec2d(size, size));
+            ref_ptr<Potential> north = new WallPotential(Vec2d(0.0, size), Vec2d(size, size));
+            ref_ptr<Potential> south = new WallPotential(Vec2d(0.0, 0.0), Vec2d(size, 0.0));
+            ref_ptr<Potential> west = new WallPotential(Vec2d(0.0, 0.0), Vec2d(0.0, size));
+            ref_ptr<CompositePotential> northSouth = new CompositePotential();
+            northSouth->addPotential(north.get());
+            northSouth->addPotential(south.get());
+            ref_ptr<CompositePotential> eastWest = new CompositePotential();
+            eastWest->addPotential(east.get());
+            eastWest->addPotential(west.get());
             CompositePotential world;
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(northSouth);
-            world.addPotential(p);
-            p = counted_ptr<const Potential>(eastWest);
-            world.addPotential(p);
+            ref_ptr<Potential> p = northSouth;
+            world.addPotential(p.get());
+            p = eastWest;
+            world.addPotential(p.get());
             QCOMPARE(world.getPotential(0.0, size / 2), 100.0);
             QCOMPARE(world.getPotential(size / 2, 0.0), 100.0);
             QCOMPARE(world.getPotential(size / 2, size), 100.0);

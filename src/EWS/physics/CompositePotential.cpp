@@ -18,6 +18,7 @@
 
 #include "CompositePotential.h"
 
+#include <QtDebug>
 #include <algorithm>
 using std::find;
 
@@ -25,21 +26,27 @@ namespace ews {
     namespace physics {
         double CompositePotential::getPotential(unsigned int x, unsigned int y) const {
             double retval = 0.0;
-            for (vector<counted_ptr<const Potential> >::const_iterator i = _potentials.begin();
+            for (PotentialList::const_iterator i = _potentials.begin();
                  i != _potentials.end(); i++) {
                 retval += (*i)->getPotential(x, y);
             }
             return retval;
         }
-        void CompositePotential::addPotential(counted_ptr<const Potential>& p) {
+        void CompositePotential::addPotential(Potential* p) {
             _potentials.push_back(p);
         }
-        void CompositePotential::removePotential(counted_ptr<const Potential>& p) {
-            vector<counted_ptr<const Potential> >::iterator i = find(_potentials.begin(),
-                                                                     _potentials.end(), p);
+        void CompositePotential::removePotential(Potential* p) {
+            ref_ptr<Potential> ptr = p;
+            PotentialList::iterator i = find(_potentials.begin(),
+                                             _potentials.end(), ptr);
+            
             if (i != _potentials.end()) { // If found, remove
                 _potentials.erase(i);
             }
+            else {
+                qWarning() << "Tried to remove potential but didn't find it in list.";
+            }
+                
         }
     }
 }

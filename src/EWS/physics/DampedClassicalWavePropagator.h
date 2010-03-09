@@ -22,9 +22,12 @@
 #include "WavePropagator.h"
 #include "Potential.h"
 #include "Lattice.h"
+#include <osg/ref_ptr>
 
 namespace ews {
     namespace physics {
+        using osg::ref_ptr;
+        
         /**
          * @ingroup Physics
          * Wave Propagator using a damped classical model.
@@ -40,7 +43,7 @@ namespace ews {
              * @param dampX Dampening factor in the x direction
              * @param dampY Dampening factor in the y direction
              */
-            DampedClassicalWavePropagator(counted_ptr<const Potential>& p, unsigned int width, unsigned int length,
+            DampedClassicalWavePropagator(Potential* p, unsigned int width, unsigned int length,
                                           unsigned int dampX, unsigned int dampY);
             /**
              * Virtual destructor
@@ -72,12 +75,12 @@ namespace ews {
              * Returns the potential associated with this propagator.
              * @return Associated potential
              */
-            const counted_ptr<const Potential>& getPotential() const { return _potential; }
+            const ref_ptr<Potential> getPotential() const { return _potential; }
             /**
              * Assigns a new potential to this propagator.
              * @param p New potential
              */
-            void setPotential(const counted_ptr<const Potential>& p);
+            void setPotential(Potential* p);
             /**
              * Resets the immediate history to zero.
              */
@@ -90,8 +93,8 @@ namespace ews {
              */
             class PaddedPotential : public Potential {
             public:
-                PaddedPotential(const counted_ptr<const Potential>& p, unsigned int dampX, unsigned int dampY):
-                _innerP(p), _dampX(dampX), _dampY(dampY) {
+                PaddedPotential(Potential* p, unsigned int dampX, unsigned int dampY)
+                : _innerP(p), _dampX(dampX), _dampY(dampY) {
                     /* do nothing */
                 }
                 virtual ~PaddedPotential() { /* do nothing */ }
@@ -99,7 +102,7 @@ namespace ews {
                     return _innerP->getPotential(x - _dampX, y - _dampY);
                 }
             private:
-                counted_ptr<const Potential> _innerP;
+                ref_ptr<Potential> _innerP;
                 unsigned int _dampX;
                 unsigned int _dampY;
             };
@@ -109,7 +112,7 @@ namespace ews {
             void dampVertical(unsigned int x, int delta, unsigned int numDampPts);
             void dampScale();
             LatticeVal getDamp(unsigned int depthInDampRegion);
-            counted_ptr<const Potential> _potential;
+            ref_ptr<Potential> _potential;
             Lattice _largeLattice;
             Lattice _priorLattice;
             Lattice _priorPriorLattice;

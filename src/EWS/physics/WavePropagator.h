@@ -21,16 +21,18 @@
 
 #include "Potential.h"
 #include "Lattice.h"
-#include "counted_ptr.h"
-using ews::util::counted_ptr;
+#include <osg/Referenced>
+#include <osg/ref_ptr>
 
 namespace ews {
     namespace physics {
+        using osg::ref_ptr;
+        
         /**
          * @ingroup Physics
          * Interface for models describing wave propagation.
          */        
-        class WavePropagator {
+        class WavePropagator : public osg::Referenced {
         public:
             /**
              * Virtual destructor
@@ -61,12 +63,12 @@ namespace ews {
              * Returns the potential associated with this propagator.
              * @return Associated potential
              */
-            virtual const counted_ptr<const Potential>& getPotential() const = 0;
+            virtual const ref_ptr<Potential> getPotential() const = 0;
             /**
              * Assigns a new potential to this propagator.
              * @param p New potential
              */
-            virtual void setPotential(const counted_ptr<const Potential>& p) = 0;
+            virtual void setPotential(Potential* p) = 0;
             /**
              * Resets the immediate history to zero.
              */

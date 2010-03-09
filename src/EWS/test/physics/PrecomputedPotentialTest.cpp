@@ -39,7 +39,7 @@ namespace ews {
         
         void PrecomputedPotentialTest::CanHandleSingleConstantPotential() {
             const double value = 3.14159;
-            counted_ptr<const Potential> constP = counted_ptr<const Potential>(new ConstantPotential(value));
+            ref_ptr<Potential> constP = new ConstantPotential(value);
             PrecomputedPotential p(constP, 10, 10);
             QCOMPARE(p.getPotential(2, 2), value);
             QCOMPARE(p.getPotential(11, 2), 0.0);
@@ -49,24 +49,24 @@ namespace ews {
         void PrecomputedPotentialTest::CanHandlePotentialOutsideItsBounds() {
             const float size = 50;
             const float width = 6.f;
-            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2(size, 0.0), Vec2(size, size), width));
-            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, size), Vec2(size, size), width));
-            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0), width));
-            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(0.0, size), width));
-            CompositePotential* northSouth = new CompositePotential();
-            northSouth->addPotential(north);
-            northSouth->addPotential(south);
-            CompositePotential* eastWest = new CompositePotential();
-            eastWest->addPotential(east);
-            eastWest->addPotential(west);
-            CompositePotential* world = new CompositePotential();
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(northSouth);
-            world->addPotential(p);
-            p = counted_ptr<const Potential>(eastWest);
-            world->addPotential(p);
-            p = counted_ptr<const Potential>(world);
+            ref_ptr<Potential> east = new WallPotential(Vec2(size, 0.0), Vec2(size, size), width);
+            ref_ptr<Potential> north = new WallPotential(Vec2(0.0, size), Vec2(size, size), width);
+            ref_ptr<Potential> south = new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0), width);
+            ref_ptr<Potential> west = new WallPotential(Vec2(0.0, 0.0), Vec2(0.0, size), width);
+            ref_ptr<CompositePotential> northSouth = new CompositePotential();
+            northSouth->addPotential(north.get());
+            northSouth->addPotential(south.get());
+            ref_ptr<CompositePotential> eastWest = new CompositePotential();
+            eastWest->addPotential(east.get());
+            eastWest->addPotential(west.get());
+            ref_ptr<CompositePotential> world = new CompositePotential();
+            ref_ptr<Potential> p = northSouth;
+            world->addPotential(p.get());
+            p = eastWest;
+            world->addPotential(p.get());
+            p = world;
             // Notice that bounds are slightly smaller than potential being passed to it
-            PrecomputedPotential pre(p, static_cast<unsigned int>(size - 1), static_cast<unsigned int>(size - 1));
+            PrecomputedPotential pre(p.get(), static_cast<unsigned int>(size - 1), static_cast<unsigned int>(size - 1));
             QCOMPARE(pre.getPotential(0.0, size / 2), 100.0);
             QCOMPARE(pre.getPotential(size / 2, 0.0), 100.0);
             QCOMPARE(pre.getPotential(size / 2, size), 0.0); // Because this is outside the precomputed bounds

@@ -19,18 +19,17 @@
 #ifndef __POTENTIAL_H
 #define __POTENTIAL_H
 
+#include <osg/Referenced>
+
 namespace ews {
     namespace physics {
         /**
          * @ingroup Physics
          * Stores field potentials.
          */        
-        class Potential {
+        class Potential : public osg::Referenced {
         public:
-            /**
-             * Virtual destructor
-             */
-            virtual ~Potential() { /* do nothing */ }
+            
             /**
              * Returns the potential at location x, y
              * @param x X location to find potential for
@@ -40,6 +39,11 @@ namespace ews {
             virtual double getPotential(unsigned int x, unsigned int y) const = 0;
         protected:
             Potential() { /* do nothing */ }
+            /**
+             * Virtual destructor. Protected for intrusive pointer reference counting.
+             */
+            virtual ~Potential() { /* do nothing */ }
+            
         private:
             Potential(const Potential&) {} // Not allowed
             Potential& operator=(const Potential& l) { return *this; } // Not allowed

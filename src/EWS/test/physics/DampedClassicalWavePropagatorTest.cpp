@@ -27,15 +27,15 @@ namespace ews {
         void DampedClassicalWavePropagatorTest::init() { /* do nothing */ }
         void DampedClassicalWavePropagatorTest::cleanup() { /* do nothing */ }
         void DampedClassicalWavePropagatorTest::ConstructorWorks() {
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
+            ref_ptr<Potential> p = new ConstantPotential();
             DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, 50, 50, 20, 20);
         }
         void DampedClassicalWavePropagatorTest::MethodPropagateWorksInPlace() {
             unsigned int width = 50;
             unsigned int length = 50;
             Lattice lattice(width, length);
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
+            ref_ptr<Potential> p = new ConstantPotential();
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p.get(), width, length, 20, 20);
             LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
@@ -74,8 +74,8 @@ namespace ews {
             unsigned int width = 50;
             unsigned int length = 50;
             Lattice lattice(width, length);
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
+            ref_ptr<Potential> p = new ConstantPotential();
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p.get(), width, length, 20, 20);
             LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
@@ -100,8 +100,8 @@ namespace ews {
             unsigned int width = 500;
             unsigned int length = 500;
             Lattice lattice(width, length);
-            counted_ptr<const Potential> p = counted_ptr<const Potential>(new ConstantPotential());
-            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p, width, length, 20, 20);
+            ref_ptr<Potential> p = new ConstantPotential();
+            DampedClassicalWavePropagator testDampedClassicalWavePropagator(p.get(), width, length, 20, 20);
             LatticeVal expected = 1.0;
             unsigned int x = 10;
             unsigned int y = 10;
