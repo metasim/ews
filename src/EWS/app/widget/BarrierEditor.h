@@ -59,14 +59,21 @@ namespace ews {
                 void updateEnabled();
                 /** Update UI after the table seletion changes. */
                 void updateOnSelection();
+                /** Update the data model to reflect the selected number of slits.*/
+                void updateNumSlits();
+                /** Update the data model to reflect the give slit width.*/
+                void updateSlitWidth(int);
+                /** Update the data model to reflect the give slit separation.*/
+                void updateSlitSeparation(int);
                 
             private:
                 Barrier::NumSlits numSlitsSelected() const;
                 void select(Barrier* barrier);
                 Barrier* selectedBarrier() const;
+                void syncUI();
+                
 
                 Ui::BarrierEditorForm* _ui;
-                QDataWidgetMapper _mapper;
                 BarrierSet* _dataModel;
             };
         }
