@@ -23,18 +23,18 @@
 namespace ews {
     namespace physics {
         WaveModel::WaveModel(unsigned int width, unsigned length): _lattice(width, length),
-        _wavePropagator(counted_ptr<WavePropagator>(createDefaultPropagator(width, length, 20, 20))) {
+        _wavePropagator(createDefaultPropagator(width, length, 20, 20)) {
             /* do nothing */
         }
         WaveModel::WaveModel(unsigned int width, unsigned length, unsigned int dampX, unsigned int dampY):
         _lattice(width, length),
-        _wavePropagator(counted_ptr<WavePropagator>(createDefaultPropagator(width, length, dampX, dampY))) {
+        _wavePropagator(createDefaultPropagator(width, length, dampX, dampY)) {
             /* do nothing */
         }
         WavePropagator* WaveModel::createDefaultPropagator(unsigned int width, unsigned int length,
                                                        unsigned int dampX, unsigned int dampY) {
-            counted_ptr<const Potential> p(new ConstantPotential());
-            return new DampedClassicalWavePropagator(p, width, length, dampX, dampY);
+            ref_ptr<Potential> p = new ConstantPotential();
+            return new DampedClassicalWavePropagator(p.get(), width, length, dampX, dampY);
         }
     }
 }

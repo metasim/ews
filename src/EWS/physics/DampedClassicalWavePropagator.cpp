@@ -21,11 +21,10 @@
 
 namespace ews {
     namespace physics {
-        DampedClassicalWavePropagator::DampedClassicalWavePropagator(counted_ptr<const Potential>& p,
+        DampedClassicalWavePropagator::DampedClassicalWavePropagator(Potential* p,
                                                                      unsigned int width, unsigned int length,
-                                                                     unsigned int dampX, unsigned int dampY):
-        _potential(new PaddedPotential(p, dampX, dampY)),
-        _largeLattice(width + 2 * dampX, length + 2 * dampY),
+                                                                     unsigned int dampX, unsigned int dampY)
+        : _potential(new PaddedPotential(p, dampX, dampY)),  _largeLattice(width + 2 * dampX, length + 2 * dampY),
         _priorLattice(width + 2 * dampX, length + 2 * dampY),
         _priorPriorLattice(width + 2 * dampX, length + 2 * dampY), _dampX(dampX), _dampY(dampY) {
             /* do nothing */
@@ -35,8 +34,8 @@ namespace ews {
             _priorLattice.setValue(x + _dampX, y + _dampY, value );
             _priorPriorLattice.setValue(x + _dampX, y + _dampY, value );
         }
-        void DampedClassicalWavePropagator::setPotential(const counted_ptr<const Potential>& p) {
-            _potential = counted_ptr<const Potential>(new PaddedPotential(p, _dampX, _dampY));
+        void DampedClassicalWavePropagator::setPotential(Potential* p) {
+            _potential = new PaddedPotential(p, _dampX, _dampY);
         }
         void DampedClassicalWavePropagator::propagate(Lattice& lattice) {            
             unsigned int width = _largeLattice.getWidth() - 1;

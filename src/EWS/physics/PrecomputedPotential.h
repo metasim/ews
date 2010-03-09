@@ -20,13 +20,12 @@
 #define __PRECOMUPTEDPOTENTIAL_H
 
 #include "Potential.h"
-#include "counted_ptr.h"
-using ews::util::counted_ptr;
 #include <vector>
 using std::vector;
 
 namespace ews {
     namespace physics {
+        
         /**
          * @ingroup Physics
          * Potential that pre-calculates the values of another potential for all valid spatial locations.
@@ -43,7 +42,7 @@ namespace ews {
              * @param width Width of region where potential is valid (region is valid from 0 to width - 1)
              * @param length Length of region where potential is valid (region is valid from 0 to length - 1)
              */
-            PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width, unsigned int length);
+            PrecomputedPotential(Potential* p, unsigned int width, unsigned int length);
             /**
              * Virtual destructor
              */

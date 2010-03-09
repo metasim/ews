@@ -21,12 +21,14 @@
 
 #include "Potential.h"
 #include <vector>
+#include <osg/ref_ptr>
 using std::vector;
-#include "util/counted_ptr.h"
-using ews::util::counted_ptr;
 
 namespace ews {
     namespace physics {
+        using osg::ref_ptr;
+        typedef vector<ref_ptr<const Potential> > PotentialList;
+        
         /**
          * @ingroup Physics
          * Potential made up of the sum of other potentials.
@@ -52,17 +54,17 @@ namespace ews {
              * Add a potential to this composite list of potentials.
              * @param p Potential to add
              */
-            void addPotential(counted_ptr<const Potential>& p);
+            void addPotential(Potential* p);
             /**
              * Remove a potential from this composite list of potentials. If potential
              * is not in current list of potentials, nothing happens.
              * @param p Potential to remove
              */
-            void removePotential(counted_ptr<const Potential>& p);
+            void removePotential(Potential* p);
         private:
             CompositePotential(const CompositePotential&) {} // Not allowed
             CompositePotential& operator=(const CompositePotential& l) { return *this; } // Not allowed
-            vector<counted_ptr<const Potential> > _potentials;
+            PotentialList _potentials;
         };
     }
 }

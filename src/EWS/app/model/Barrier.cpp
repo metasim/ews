@@ -25,6 +25,7 @@
 #include "SimulationState.h"
 #include "WaveModel.h"
 #include <osg/Vec2>
+#include <osg/ref_ptr>
 #include "EWSDebug.h"
 
 namespace ews {
@@ -73,14 +74,12 @@ namespace ews {
                 }
                 
                 WaveModel& waveModel = state->getWaveMedium().getWaveModel();
-                SlitPotential* sp = new SlitPotential(getStart(), getEnd(), getNumSlits());
+                ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd(), getNumSlits());
                 sp->setSlitWidth(getSlitWidth());
                 
-                counted_ptr<const Potential> p(sp);
-                PrecomputedPotential* prePot = new PrecomputedPotential(p, waveModel.getWidth(),
+                ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(sp.get(), waveModel.getWidth(),
                                                                         waveModel.getLength());
-                counted_ptr<const Potential> ptrPrePot(prePot);
-                waveModel.setPotential(ptrPrePot);
+                waveModel.setPotential(prePot.get());
                 
 //                _potential  = prePot;
             }

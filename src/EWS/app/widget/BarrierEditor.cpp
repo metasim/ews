@@ -33,42 +33,9 @@ namespace ews {
             using ews::app::model::BarrierSet;
             using ews::app::model::Barrier;
             
-            class MapperDelegate : public QItemDelegate {
-//                Q_OBJECT
-            public:
-                MapperDelegate(QObject* parent) : QItemDelegate(parent) {}
-                virtual ~MapperDelegate() {}
-                
-                virtual void setEditorData(QWidget* editor,
-                                   const QModelIndex &index) const {
-
-                    QTRACE;
-                    qDebug() << *editor << index;
-                    QItemDelegate::setEditorData(editor, index);
-                }
-                
-                virtual void setModelData(QWidget* editor,
-                                  QAbstractItemModel* model,
-                                  const QModelIndex& index) const {
-                    
-                    QTRACE;
-                    qDebug() << (*editor) << index << model;
-                    
-                    
-                    QItemDelegate::setModelData(editor, model, index);
-                }
-                
-            private:
-                Q_DISABLE_COPY(MapperDelegate)
-            };
-            
             BarrierEditor::BarrierEditor(QWidget* parent) 
-            : QWidget(parent), _ui(new Ui::BarrierEditorForm), _mapper(this) {
+            : QWidget(parent), _ui(new Ui::BarrierEditorForm) {
                 _ui->setupUi(this);   
-                _mapper.setItemDelegate(new MapperDelegate(this));
-                _mapper.addMapping(_ui->slitWidth, BarrierTableModel::SLIT_WIDTH);
-                _mapper.addMapping(_ui->slitSeparation, BarrierTableModel::SLIT_SEPARATION);
-                _mapper.setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
                 updateEnabled();
             }
             
@@ -76,7 +43,27 @@ namespace ews {
                 _dataModel = NULL; // We don't own the data model
                 delete _ui;
             }
+            
+            /** Update  controls with current widget state. */
+            void BarrierEditor::syncUI() {
+                Barrier* b = selectedBarrier();
+                
+                if(b) {
+                    blockSignals(true);
+                    
+                    _ui->zeroSlits->setChecked(b->getNumSlits() == Barrier::ZERO);
+                    _ui->oneSlit->setChecked(b->getNumSlits() == Barrier::ONE);
+                    _ui->twoSlits->setChecked(b->getNumSlits() == Barrier::TWO);
+                    
+                    
+                    _ui->slitWidth->setValue(b->getSlitWidth());
+                    _ui->slitSeparation->setValue(b->getSlitSeparation());
+                    
+                    blockSignals(false);
+                }
+            }
 
+            /** Apply datamodel to editor. */
             void BarrierEditor::setDataModel(BarrierSet* barriers) {
                 _dataModel = barriers;
                 
@@ -99,18 +86,18 @@ namespace ews {
                     
                     
                     // Hide columns we don't want in the table.
-//                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
-//                        _ui->barrierTable->setColumnHidden(c, true);
-//                    }
-                    
-                    _mapper.setModel(newModel);
-                    _mapper.toFirst();
+                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
+                        _ui->barrierTable->setColumnHidden(c, true);
+                    }
 
+                    // Register for selection changes so we can update the widgets. */
                     connect(_ui->barrierTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
                             this, SLOT(updateOnSelection()));
+                    
                 }
                 
+                syncUI();
                 updateEnabled();
             }
             
@@ -123,17 +110,13 @@ namespace ews {
             }
             
             Barrier* BarrierEditor::selectedBarrier() const {
+                if(!_dataModel) return NULL;
                 QModelIndex idx = _ui->barrierTable->currentIndex();
                 return idx.row() >= 0 ? _dataModel->barrierAt(idx.row()) : NULL;
             }
             
             void BarrierEditor::updateOnSelection() {
-                QModelIndex idx = _ui->barrierTable->currentIndex();
-                qDebug() << "selected barrier:" << idx;
-                if(idx.row() >= 0) {
-                    _mapper.setCurrentIndex(idx.row());
-                }
-
+                syncUI();
                 updateEnabled();
             }
 
@@ -177,7 +160,39 @@ namespace ews {
                 _ui->slitWidth->setEnabled(canEditSlit);
                 _ui->slitSeparation->setEnabled(canEditSlit);
             }
+            
+            void BarrierEditor::updateNumSlits() {
+                Barrier* b = selectedBarrier();
+                if(b) {
+                    QObject* sender = QObject::sender();
+                    if(sender) {
+                        if(sender == _ui->zeroSlits) {
+                            b->setNumSlits(Barrier::ZERO);
+                        }
+                        else if(sender == _ui->oneSlit) {
+                            b->setNumSlits(Barrier::ONE);
+                        }
+                        else if(sender == _ui->twoSlits) {
+                            b->setNumSlits(Barrier::TWO);                            
+                        }
+                    }
+                    updateEnabled();
+                }
+            }
+            
+            void BarrierEditor::updateSlitWidth(int width) {
+                Barrier* b = selectedBarrier();
+                if(b) {
+                    b->setSlitWidth((unsigned int) width);
+                }
+            }
 
+            void BarrierEditor::updateSlitSeparation(int sep) {
+                Barrier* b = selectedBarrier();
+                if(b) {
+                    b->setSlitSeparation((unsigned int) sep);
+                }
+            }
         }
     }
 }

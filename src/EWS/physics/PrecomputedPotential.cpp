@@ -20,7 +20,7 @@
 
 namespace ews {
     namespace physics {
-        PrecomputedPotential::PrecomputedPotential(counted_ptr<const Potential> p, unsigned int width,
+        PrecomputedPotential::PrecomputedPotential(Potential* p, unsigned int width,
                                                    unsigned int length):
         _potentialValues(width, vector<double>(length, 0.0)) {
             for (unsigned int i = 0; i < width; i++) {
