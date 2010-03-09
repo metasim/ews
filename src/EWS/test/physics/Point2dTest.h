@@ -19,9 +19,6 @@
 #ifndef __CONSTANTPOTENTIALTEST_H
 #define __CONSTANTPOTENTIALTEST_H
 
-#include "Point2d.h"
-using namespace ews::physics;
-
 #include <QtTest/QtTest>
 
 namespace ews {

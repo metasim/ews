@@ -17,10 +17,12 @@
  */
 
 #include "Vector2dTest.h"
-#include "Point2d.h"
+#include <osg/Vec2d>
 
 namespace ews {
     namespace test {
+        using osg::Vec2d;
+        
         void Vector2dTest::initTestCase() { /* do nothing */ }
         void Vector2dTest::cleanupTestCase() { /* do nothing */ }
         void Vector2dTest::init() { /* do nothing */ }
@@ -29,31 +31,31 @@ namespace ews {
         void Vector2dTest::CopyConstructorTakesPoints() {
             const double x = -1234.51235;
             const double y = 3235235253.2343;
-            const Vector2d v(Point2d(x, y));
+            const Vec2d v(Vec2d(x, y));
             QCOMPARE(v.x(), x);
             QCOMPARE(v.y(), y);
         }
         
         void Vector2dTest::MethodLengthWorks() {
-            const Vector2d v(5.0, 12.0);
+            const Vec2d v(5.0, 12.0);
             QCOMPARE(v.length(), 13.0);
         }
         
         void Vector2dTest::MethodLengthSqWorks() {
-            const Vector2d v(1.0, 2.1);
-            QCOMPARE(v.lengthSq(), 5.41);
+            const Vec2d v(1.0, 2.1);
+            QCOMPARE(v.length2(), 5.41);
         }
         
         void Vector2dTest::MethodDotWorks() {
-            const Vector2d v1(0.0, 3.0);
-            const Vector2d v2(4.0, 0.0);
-            QCOMPARE(v1.dot(v2), 0.0);
-            const Vector2d v3(0.0, 4.0);
-            QCOMPARE(v1.dot(v3), 12.0);
-            const Vector2d v4(0.0, -4.0);
-            QCOMPARE(v1.dot(v4), -12.0);
-            const Vector2d v5(3.14159, -4.0);
-            QCOMPARE(v1.dot(v5), -12.0);
+            const Vec2d v1(0.0, 3.0);
+            const Vec2d v2(4.0, 0.0);
+            QCOMPARE(v1 * v2, 0.0);
+            const Vec2d v3(0.0, 4.0);
+            QCOMPARE(v1 * v3, 12.0);
+            const Vec2d v4(0.0, -4.0);
+            QCOMPARE(v1 * v4, -12.0);
+            const Vec2d v5(3.14159, -4.0);
+            QCOMPARE(v1 * v5, -12.0);
         }
     }
 }

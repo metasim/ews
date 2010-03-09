@@ -19,8 +19,6 @@
 #ifndef __CONSTANTPOTENTIALTEST_H
 #define __CONSTANTPOTENTIALTEST_H
 
-#include "Vector2d.h"
-using namespace ews::physics;
 
 #include <QtTest/QtTest>
 
