@@ -16,7 +16,6 @@
  * http://mseedsoft.com
  */
 
-#include <osg/Geode>
 #include <osg/Drawable>
 #include <osg/ShapeDrawable>
 #include <osg/PolygonMode>
@@ -33,7 +32,8 @@ namespace ews {
             using namespace osg;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float VISIBLE_BARRIER_HEIGHT = 20.f;
-            const Vec4 BARRIER_COLOR(.2f, .9f, .9f, 1.f);
+            const float BARRIER_OPACITY = .5f;
+            const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
             : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
@@ -41,7 +41,7 @@ namespace ews {
                 insertChild(0, geode.get());
                 updateData();
                 
-                setColor(this, BARRIER_COLOR); 
+                setColor(BARRIER_COLOR); 
 #if defined(GL_MULTISAMPLE_ARB)
                 ref_ptr<StateSet> state = getOrCreateStateSet();
                 state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
@@ -55,15 +55,24 @@ namespace ews {
                 
             }
             
-            void BarrierGeom::setColor(osg::Node *srcNode, const osg::Vec4& color) {
-                ref_ptr<StateSet> state = srcNode->getOrCreateStateSet(); 
+            void BarrierGeom::setColor(const osg::Vec4& color) {
+                ref_ptr<StateSet> state = getOrCreateStateSet(); 
                 ref_ptr<Material> mat = new osg::Material; 
                 mat->setDiffuse(Material::FRONT, color);
-                mat->setSpecular(Material::FRONT,
-                                 Vec4(0.8f, 0.8f, 0.8f, 0.8f)); 
-                mat->setShininess(Material::FRONT, 96.f); 
-                mat->setColorMode(osg::Material::AMBIENT_AND_DIFFUSE);
+                mat->setSpecular(Material::FRONT, Vec4(0.f, 0.f, 0.f, BARRIER_OPACITY));
+                mat->setAmbient(Material::FRONT, color);
+                mat->setShininess(Material::FRONT, 95.f);
                 state->setAttribute(mat.get());
+                state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
+            }
+            
+            void BarrierGeom::addBox(const ref_ptr<osg::Geode>& geode, float boxCenter, float boxLength) {
+                ref_ptr<osg::ShapeDrawable> d = new ShapeDrawable();
+                ref_ptr<osg::Shape> s = new osg::Box(osg::Vec3(boxCenter, 0.f, 0.f),
+                                                     boxLength, ews::physics::DEFAULT_WALL_THICKNESS,
+                                                     VISIBLE_BARRIER_HEIGHT);
+                d->setShape(s.get());
+                geode->addDrawable(d.get());
             }
             
             void BarrierGeom::updateData() {
@@ -71,7 +80,7 @@ namespace ews {
                 PositionAttitudeTransform::setPosition(osg::Vec3d(start.x(), start.y(), 0.f));
                 const osg::Vec2& end = _dataModel.getEnd();
                 const osg::Vec2 dir = (end - start);
-                const float barrierLength = dir.length();
+                const float barrierLength = _dataModel.length();
                 setScale(Vec3f(barrierLength, 1.f, 1.f));
                 const float angle = atan2(dir.y(), dir.x());
                 setAttitude(Quat(angle, Vec3f(0.f, 0.f, 1.f)));
@@ -82,49 +91,26 @@ namespace ews {
                 ref_ptr<osg::Drawable> d = dynamic_cast<osg::Drawable*>(new ShapeDrawable());
                 ref_ptr<osg::Shape> s = NULL;
                 if (_dataModel.getNumSlits() == Barrier::ZERO) {
-                    osg::Vec3 center(0.5f, 0.f, 0.f);
-                    s = new osg::Box(center, 1.f, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                    d->setShape(s.get());
-                    geode->addDrawable(d.get());
+                    addBox(geode, 0.5f, 1.f);
                 }
                 else {
                     const float slitAlpha = _dataModel.getSlitWidth() / barrierLength;
                     if (_dataModel.getNumSlits() == Barrier::ONE) {
                         float boxLength = 0.5f - (slitAlpha / 2);
-                        s = new osg::Box(osg::Vec3(boxLength / 2, 0.f, 0.f),
-                                         boxLength, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                        d->setShape(s.get());
-                        geode->addDrawable(d.get());
-                        s = new osg::Box(osg::Vec3(1 - (boxLength / 2), 0.f, 0.f),
-                                         boxLength, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                        d = new ShapeDrawable();
-                        d->setShape(s.get());
-                        geode->addDrawable(d.get());
+                        addBox(geode, boxLength / 2, boxLength);
+                        addBox(geode, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
-                        // TODO Make sure this is enforced
                         const float separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
                         // Box length for boxes at either end of barrier
                         float boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
-                        s = new osg::Box(osg::Vec3(boxLength / 2, 0.f, 0.f),
-                                         boxLength, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                        d->setShape(s.get());
-                        geode->addDrawable(d.get());
-                        s = new osg::Box(osg::Vec3(1 - (boxLength / 2), 0.f, 0.f),
-                                         boxLength, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                        d = new ShapeDrawable();
-                        d->setShape(s.get());
+                        addBox(geode, boxLength / 2, boxLength);
+                        addBox(geode, 1 - boxLength / 2, boxLength);
                         // Box between the two slits
-                        geode->addDrawable(d.get());                        
-                        s = new osg::Box(osg::Vec3(0.5f, 0.f, 0.f),
-                                         separationAlpha, VISIBLE_BARRIER_WIDTH, VISIBLE_BARRIER_HEIGHT);
-                        d = new ShapeDrawable();
-                        d->setShape(s.get());
-                        geode->addDrawable(d.get());                        
+                        addBox(geode, 0.5f, separationAlpha);
                     }
                 }
-                setColor(geode.get(), BARRIER_COLOR);
             }            
         }
     }

@@ -71,18 +71,18 @@ namespace ews {
         void SlitPotentialTest::MethodGetSlitWidthWorks() {
             SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
             QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
-            const double newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
+            const float newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
             p.setSlitWidth(newSlitWidth);
             QCOMPARE(p.getSlitWidth(), newSlitWidth);
         }
         void SlitPotentialTest::MethodSetSlitWidthWorks() {
             SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
             QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
-            const double newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
+            const float newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
             p.setSlitWidth(newSlitWidth);
             QCOMPARE(p.getSlitWidth(), newSlitWidth);
             p.setSlitWidth(-newSlitWidth);
-            QCOMPARE(p.getSlitWidth(), 0.0);
+            QCOMPARE(p.getSlitWidth(), 0.f);
         }
     }
 }

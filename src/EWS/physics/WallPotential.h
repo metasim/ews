@@ -27,8 +27,8 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
-        const double DEFAULT_THICKNESS_SQ = 3 * 3;
-        const double DEFAULT_POTENTIAL = 100.0;
+        const float DEFAULT_HALF_THICKNESS_SQ = 2 * 2;
+        const float DEFAULT_POTENTIAL = 100.0;
         using osg::Vec2d;
 
         /**
@@ -41,7 +41,7 @@ namespace ews {
              * Default constructor, with both points at origin (0, 0)
              */
             WallPotential():
-            _lineSegment(Vec2d(0.0, 0.0), Vec2d(0.0, 0.0)), _thicknessSq(DEFAULT_THICKNESS_SQ) {
+            _lineSegment(Vec2d(0.0, 0.0), Vec2d(0.0, 0.0)), _halfThicknessSq(DEFAULT_HALF_THICKNESS_SQ) {
                 /* do nothing */
             }
             /**
@@ -50,7 +50,17 @@ namespace ews {
              * @param p2 The other point of the wall
              */
             WallPotential(const Vec2d& p1, const Vec2d& p2):
-            _lineSegment(p1, p2), _thicknessSq(DEFAULT_THICKNESS_SQ) {
+            _lineSegment(p1, p2), _halfThicknessSq(DEFAULT_HALF_THICKNESS_SQ) {
+                /* do nothing */
+            }
+            /**
+             * Constructor for a wall with end points p1, p2 and thickness 3.
+             * @param p1 One point of the wall
+             * @param p2 The other point of the wall
+             * @param thickness How thick the wall is
+             */
+            WallPotential(const Vec2d& p1, const Vec2d& p2, float thickness):
+            _lineSegment(p1, p2), _halfThicknessSq(thickness * thickness / 4.f) {
                 /* do nothing */
             }
             /**
@@ -92,7 +102,7 @@ namespace ews {
              * Returns the thickness of the wall.
              * @return Wall thickness
              */
-            double getThickness() const { return sqrt(_thicknessSq); }
+            float getThickness() const { return sqrt(_halfThicknessSq * 4.f); }
             /**
              * Returns the length of the wall (i.e., the distance between its two end points.
              */
@@ -101,13 +111,13 @@ namespace ews {
              * Sets the thickness of the wall.
              * @param thickness New thickness for the wall.
              */
-            void setThickness(unsigned int thickness) { _thicknessSq = thickness * thickness; }
+            void setThickness(float thickness) { _halfThicknessSq = thickness * thickness / 4.f; }
         protected:
             WallPotential(const WallPotential&) {} // Not allowed
             WallPotential& operator=(const WallPotential& l) { return *this; } // Not allowed
             double alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
-            double _thicknessSq;
+            double _halfThicknessSq;
         };
     }
 }

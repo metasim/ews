@@ -20,7 +20,6 @@
 
 #include "Barrier.h"
 #include "BarrierSet.h"
-#include "SlitPotential.h"
 #include "PrecomputedPotential.h"
 #include "SimulationState.h"
 #include "WaveModel.h"
@@ -73,8 +72,18 @@ namespace ews {
                 }
                 
                 WaveModel& waveModel = state->getWaveMedium().getWaveModel();
-                SlitPotential* sp = new SlitPotential(getStart(), getEnd(), getNumSlits());
+                SlitPotential* sp = new SlitPotential(getStart(), getEnd());
                 sp->setSlitWidth(getSlitWidth());
+                if (getNumSlits() != ZERO) {
+                    if (getNumSlits() == ONE) {
+                        sp->addSlit(.5f);
+                    }
+                    else {
+                        float deltaAlpha = .5f * (getSlitSeparation() + getSlitWidth()) / length();
+                        sp->addSlit(.5f - deltaAlpha);
+                        sp->addSlit(.5f + deltaAlpha);
+                    }
+                }
                 
                 counted_ptr<const Potential> p(sp);
                 PrecomputedPotential* prePot = new PrecomputedPotential(p, waveModel.getWidth(),

@@ -47,11 +47,12 @@ namespace ews {
         }
         
         void PrecomputedPotentialTest::CanHandlePotentialOutsideItsBounds() {
-            const double size = 50;
-            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2(size, 0.0), Vec2(size, size)));
-            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, size), Vec2(size, size)));
-            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0)));
-            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(0.0, size)));
+            const float size = 50;
+            const float width = 6.f;
+            counted_ptr<const Potential> east = counted_ptr<const Potential>(new WallPotential(Vec2(size, 0.0), Vec2(size, size), width));
+            counted_ptr<const Potential> north = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, size), Vec2(size, size), width));
+            counted_ptr<const Potential> south = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0), width));
+            counted_ptr<const Potential> west = counted_ptr<const Potential>(new WallPotential(Vec2(0.0, 0.0), Vec2(0.0, size), width));
             CompositePotential* northSouth = new CompositePotential();
             northSouth->addPotential(north);
             northSouth->addPotential(south);

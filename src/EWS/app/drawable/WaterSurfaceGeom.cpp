@@ -31,7 +31,8 @@ namespace ews {
             using osg::ref_ptr;
             using namespace osg;
             
-            const Vec3 DEFAULT_VERTEX_COLOR(0.1f, 0.1f, 1.f);
+            const Vec3 WATER_COLOR(0.1f, 0.1f, 1.f);
+            const float WATER_OPACITY = .7f;
 
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
             DrawableQtAdapter(&settings), _settings(settings) {
@@ -41,12 +42,13 @@ namespace ews {
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
                 osg::ref_ptr<Material> mat = new Material; 
-                mat->setAmbient(Material::FRONT, Vec4(.6f, .6f, .8f, 1.f));
-                mat->setDiffuse(Material::FRONT, Vec4( .2f, .2f, .9f, 1.f)); 
-                mat->setSpecular(Material::FRONT, Vec4( 0.2f, 0.2f, 0.4f, 1.f)); 
-                mat->setShininess(Material::FRONT, 30.f ); 
-                mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
-                state->setAttribute( mat.get() );
+                mat->setAmbient(Material::FRONT, Vec4(WATER_COLOR, WATER_OPACITY));
+                mat->setDiffuse(Material::FRONT, Vec4(WATER_COLOR, WATER_OPACITY)); 
+                mat->setSpecular(Material::FRONT, Vec4(0.f, 0.f, 0.f, WATER_OPACITY)); 
+                mat->setShininess(Material::FRONT, 30.f); 
+                mat->setColorMode(osg::Material::AMBIENT_AND_DIFFUSE);
+                state->setAttribute(mat.get());
+                state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
                 
                 updateWaterGeometry();
             }
@@ -136,15 +138,14 @@ namespace ews {
                 }
                 
                 geom->setUseVertexBufferObjects(true);
-                
-                // Set default vertex color.
-                ref_ptr<Vec3Array> colors = new osg::Vec3Array(1);
-                (*colors)[0] = DEFAULT_VERTEX_COLOR;
-                geom->setColorArray(colors.get());
-                geom->setColorBinding(Geometry::BIND_OVERALL);
+//                
+//                // Set default vertex color.
+//                ref_ptr<Vec3Array> colors = new osg::Vec3Array(1);
+//                (*colors)[0] = WATER_COLOR;
+//                geom->setColorArray(colors.get());
+//                geom->setColorBinding(Geometry::BIND_OVERALL);
+//                geode->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
 
-                
-                
                 
                 // Register the delegate responsible for updating hight and 
                 // doing shading.
