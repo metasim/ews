@@ -18,6 +18,17 @@
 
 #include "BarrierSet.h"
 #include "SimulationState.h"
+#include "CompositePotential.h"
+using ews::physics::CompositePotential;
+#include "PrecomputedPotential.h"
+using ews::physics::PrecomputedPotential;
+#include <cstdlib>
+using std::srand;
+using std::rand;
+#include <ctime>
+using std::time;
+#include <osg/ref_ptr>
+using osg::ref_ptr;
 
 namespace ews {
     namespace app {
@@ -26,6 +37,8 @@ namespace ews {
             BarrierSet::BarrierSet(SimulationState* parent)  
             : QObject(parent), _barriers(), _potentials(NULL) {
                 _potentials = new CompositePotential();
+                // Initialize random seed - this will probably eventually disappear
+                srand(time(NULL));
             }
             
             BarrierSet::~BarrierSet() {
@@ -35,23 +48,39 @@ namespace ews {
             }
             
             
-            Barrier* BarrierSet::createBarrier() {
+            Barrier* BarrierSet::createBarrier() {                
                 Barrier* b = new Barrier(this);
-                int pos = _barriers.size();
+                const WaveMedium& water = getSimulationState()->getWaveMedium();
+                const osg::Vec2 start(rand() % water.getWidth(), rand() % water.getLength());
+                const osg::Vec2 end(rand() % water.getWidth(), rand() % water.getLength());
+                b->setStart(start);
+                b->setEnd(end);
+                const int pos = _barriers.size();
                 _barriers << b;
                                 
                 b->setObjectName(QString("Barrier %1").arg(pos+1));
-                
-                
+                QObject::connect(b, SIGNAL(dataChanged()), this, SLOT(updatePotentials()));
+                updatePotentials();
                 emit barrierAdded(pos, b);
                 return b;
             }
             
-            
+            void BarrierSet::updatePotentials() {
+                ref_ptr<CompositePotential> worldPot = new CompositePotential();
+                for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
+                    Barrier* b = *i;
+                    worldPot->addPotential(b->generatePotential().get());
+                }
+                WaveModel& waveModel = getSimulationState()->getWaveMedium().getWaveModel();
+                ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(worldPot.get(), waveModel.getWidth(),
+                                                                                waveModel.getLength());
+                waveModel.setPotential(prePot.get());
+            }
+
             void BarrierSet::removeBarrier(Barrier* b) {
-                int pos = indexOf(b);
+                const int pos = indexOf(b);
                 if(pos >= 0) {
-                    bool did = _barriers.removeOne(b);
+                    const bool did = _barriers.removeOne(b);
                     if(did) {
                         emit barrierRemoved(pos, b);
                     }

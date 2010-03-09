@@ -60,6 +60,9 @@ namespace ews {
                 void barrierAdded(int,Barrier*);
                 void barrierRemoved(int,Barrier*);
                 
+            private slots:
+                void updatePotentials();
+                
             private:
                 Q_DISABLE_COPY(BarrierSet)
                 QList<Barrier*> _barriers;

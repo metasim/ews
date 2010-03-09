@@ -24,6 +24,8 @@
 #include <QObject>
 #include <osg/Vec2>
 #include "SlitPotential.h"
+#include <osg/ref_ptr>
+using osg::ref_ptr;
 
 namespace ews {
     namespace app {
@@ -120,12 +122,10 @@ namespace ews {
                     _end = end;
                 }
 
+                ref_ptr<Potential> generatePotential();
 
             signals:
                 void dataChanged();
-                
-            private slots:
-                void updatePotentials();
                 
             private:
                 Q_DISABLE_COPY(Barrier)

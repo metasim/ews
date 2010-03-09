@@ -36,11 +36,7 @@ namespace ews {
             
             Barrier::Barrier(BarrierSet* parent) 
             : QObject(parent), _enabled(true), _numSlits(TWO), 
-            _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50), _potential(NULL) {
-                
-                QObject::connect(this, SIGNAL(dataChanged()), this, SLOT(updatePotentials()));
-                
-                updatePotentials();
+            _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50), _potential(NULL) {                
             }
             
             BarrierSet* Barrier::getBarrierSet() {
@@ -51,21 +47,20 @@ namespace ews {
             
             }
             
-            void Barrier::updatePotentials() {
+            ref_ptr<Potential> Barrier::generatePotential() {
 
                 BarrierSet* barriers = getBarrierSet();
                 if(!barriers) {
                     qWarning() << "Unexpected missing barrier set.";
-                    return;
+                    return ref_ptr<Potential>(NULL);
                 }
                 
                 SimulationState* state = barriers->getSimulationState();
                 if(!state) {
                     qWarning() << "Unexpected missing simulation state.";
-                    return;
+                    return ref_ptr<Potential>(NULL);
                 }
                 
-                WaveModel& waveModel = state->getWaveMedium().getWaveModel();
                 ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd());
 
                 sp->setSlitWidth(getSlitWidth());
@@ -79,13 +74,8 @@ namespace ews {
                         sp->addSlit(.5f + deltaAlpha);
                     }
                 }
-                
-                ref_ptr<PrecomputedPotential> prePot = new PrecomputedPotential(sp.get(), waveModel.getWidth(),
-                                                                                waveModel.getLength());
-                waveModel.setPotential(prePot.get());
-            }
-
-            
+                return sp;
+            }            
         }
     }
 }
