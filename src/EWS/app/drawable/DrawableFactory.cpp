@@ -23,6 +23,7 @@
 #include "WaveMedium.h"
 #include "WaterSurfaceGeom.h"
 #include "Barrier.h"
+#include "BarrierGeom.h"
 
 namespace ews {
     namespace app {
@@ -51,11 +52,10 @@ namespace ews {
                 }
 
                 else if(data.inherits(Barrier::staticMetaObject.className())) {
-                    // BarrierGeom creation.
-                    qDebug() << "*** Create BarrierGeom here:" << __FILE__ << __LINE__;
-                    
-                }
-                                    
+                    Barrier* barrier = qobject_cast<Barrier*>(&data);
+                    BarrierGeom* geom = new BarrierGeom(*barrier);
+                    return geom;
+                }                                    
                 
                 qWarning() << "No drawable found for" << name;
                 return NULL;
