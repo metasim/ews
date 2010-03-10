@@ -82,7 +82,7 @@ namespace ews {
                 const int pos = indexOf(b);
                 if(pos >= 0) {
                     const bool did = _barriers.removeOne(b);
-                    if(did) {
+                    if (did) {
                         updatePotentials();
                         emit barrierRemoved(pos, b);
                     }

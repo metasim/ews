@@ -51,7 +51,7 @@ namespace ews {
             
             
             BarrierGeom::~BarrierGeom() {
-                
+                removeChild(static_cast<unsigned int>(0), 1);
             }
             
             void BarrierGeom::setColor(const osg::Vec4& color) {

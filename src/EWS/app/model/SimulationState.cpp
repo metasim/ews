@@ -29,8 +29,10 @@ namespace ews {
                 // We need to forward/create objectAdded events
                 // from the BarrierSet.
                 
-                QObject::connect(&_barriers,SIGNAL(barrierAdded(int,Barrier*)),
-                                 this, SLOT(forwardBarrierSetChanges(int, Barrier*)));
+                QObject::connect(&_barriers, SIGNAL(barrierAdded(int,Barrier*)),
+                                 this, SLOT(forwardBarrierSetAddition(int, Barrier*)));
+                QObject::connect(&_barriers, SIGNAL(barrierRemoved(int,Barrier*)),
+                                 this, SLOT(forwardBarrierSetRemoval(int, Barrier*)));
                 
                 
                 _dripSource1.setObjectName("dripSource1");
@@ -54,8 +56,12 @@ namespace ews {
                 _waveMedium.setPaused(state);
             }
                                             
-            void SimulationState::forwardBarrierSetChanges(int index, Barrier* barrier) {
+            void SimulationState::forwardBarrierSetAddition(int index, Barrier* barrier) {
                 emit objectAdded(*barrier);
+            }
+            
+            void SimulationState::forwardBarrierSetRemoval(int index, Barrier* barrier) {
+                emit objectRemoved(*barrier);
             }
             
             void SimulationState::reset() {

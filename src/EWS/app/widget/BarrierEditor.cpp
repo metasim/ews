@@ -103,11 +103,16 @@ namespace ews {
             }
             
             void BarrierEditor::select(Barrier* barrier) {
-                int i = _dataModel->indexOf(barrier);
-                if(i >= 0) {
+                int i = barrier != NULL ? _dataModel->indexOf(barrier) : -1;
+                if (i >= 0) {
                     QModelIndex idx = _ui->barrierTable->model()->index(i, 0);
                     _ui->barrierTable->setCurrentIndex(idx);
                 }
+                else {
+                    QModelIndex idx = _ui->barrierTable->model()->index(0, 0);
+                    _ui->barrierTable->selectionModel()->setCurrentIndex(idx, QItemSelectionModel::Clear);
+                }
+
             }
             
             Barrier* BarrierEditor::selectedBarrier() const {
@@ -130,6 +135,15 @@ namespace ews {
             void BarrierEditor::removeBarrier() {
                 Barrier* b = selectedBarrier();
                 _dataModel->removeBarrier(b);
+                if (_dataModel->size() > 0) {
+                    QModelIndex idx = _ui->barrierTable->currentIndex();
+                    int row = (idx.row() < 0) ? 0 :
+                                 (idx.row() >= _dataModel->size()) ? _dataModel->size() - 1 : idx.row();
+                    select(_dataModel->barrierAt(row));
+                }
+                else {
+                    select(NULL);
+                }
                 updateEnabled();
             }
             
@@ -154,7 +168,7 @@ namespace ews {
                 
                 if (canEdit) {
                     Barrier* b = selectedBarrier();
-                    canEdit = b->isEnabled();
+                    canEdit = b != NULL && b->isEnabled();
                 }
                 qDebug() << "canEdit = " << canEdit;
                 _ui->removeBarrier->setEnabled(canEdit);

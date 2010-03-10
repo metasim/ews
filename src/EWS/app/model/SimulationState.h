@@ -102,7 +102,8 @@ namespace ews {
             public slots:
                 void setPaused(bool);
                 void reset();
-                void forwardBarrierSetChanges(int index, Barrier* barrier);
+                void forwardBarrierSetAddition(int index, Barrier* barrier);
+                void forwardBarrierSetRemoval(int index, Barrier* barrier);
 
             private:
                 Q_DISABLE_COPY(SimulationState)

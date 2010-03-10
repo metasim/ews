@@ -77,6 +77,7 @@ namespace ews {
             
             void SceneRoot::removeDrawableFor(QObject& data) {
                 osg::Node* geom = _drawables.take(&data);
+                qDebug() << "removing a drawable node";
                 if(geom) {
                     removeChild(geom);
                 }
