@@ -17,13 +17,15 @@
  */
 
 #include "SlitPotentialTest.h"
-#include <osg/Vec2d>
+#include <osg/Vec2>
 
 using namespace ews::physics;
 
 namespace ews {
     namespace test {
-        using osg::Vec2d;
+        using osg::Vec2;
+        const Real NO_POTENTIAL = 0;
+        const Real HAS_POTENTIAL = 100;
         
         void SlitPotentialTest::initTestCase() { /* do nothing */ }
         void SlitPotentialTest::cleanupTestCase() { /* do nothing */ }
@@ -31,52 +33,52 @@ namespace ews {
         void SlitPotentialTest::cleanup() { /* do nothing */ }
         
         void SlitPotentialTest::PreferredConstructorWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
-            QCOMPARE(p.getSlitLocation(0), Vec2d(2.0, 2.0));
-            QCOMPARE(p.getSlitLocation(1), Vec2d(4.0, 4.0));
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(6.0, 6.0), 2);
+            QCOMPARE(p.getSlitLocation(0), Vec2(2.0, 2.0));
+            QCOMPARE(p.getSlitLocation(1), Vec2(4.0, 4.0));
         }
         
         void SlitPotentialTest::MethodAddSlitWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(5.0, 5.0));
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
             p.addSlit(0.5);
-            QCOMPARE(p.getSlitLocation(0), Vec2d(2.5, 2.5));
+            QCOMPARE(p.getSlitLocation(0), Vec2(2.5, 2.5));
         }
         
         void SlitPotentialTest::MethodGetSlitLocationWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(5.0, 5.0));
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
             p.addSlit(0.5);
             p.addSlit(0.25);
             p.addSlit(0.75);
-            QCOMPARE(p.getSlitLocation(0), Vec2d(1.25, 1.25));
-            QCOMPARE(p.getSlitLocation(1), Vec2d(2.5, 2.5));
-            QCOMPARE(p.getSlitLocation(2), Vec2d(3.75, 3.75));
+            QCOMPARE(p.getSlitLocation(0), Vec2(1.25, 1.25));
+            QCOMPARE(p.getSlitLocation(1), Vec2(2.5, 2.5));
+            QCOMPARE(p.getSlitLocation(2), Vec2(3.75, 3.75));
         }
         
         void SlitPotentialTest::MethodGetPotentialWorks() {
-            SlitPotential p(Vec2d(60.0, 0.0), Vec2d(60.0, 60.0), 2);
-            QCOMPARE(p.getPotential(60.0, 10.0), 100.0);
-            QCOMPARE(p.getPotential(60.0, 20.0), 0.0);
-            QCOMPARE(p.getPotential(50.0, 10.0), 0.0);
+            SlitPotential p(Vec2(60.0, 0.0), Vec2(60.0, 60.0), 2);
+            QCOMPARE(p.getPotential(60.0, 10.0), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(60.0, 20.0), NO_POTENTIAL);
+            QCOMPARE(p.getPotential(50.0, 10.0), NO_POTENTIAL);
         }
         
         void SlitPotentialTest::MethodRemoveSlitWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
-            QCOMPARE(p.getSlitLocation(0), Vec2d(2.0, 2.0));
-            QCOMPARE(p.getSlitLocation(1), Vec2d(4.0, 4.0));
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(6.0, 6.0), 2);
+            QCOMPARE(p.getSlitLocation(0), Vec2(2.0, 2.0));
+            QCOMPARE(p.getSlitLocation(1), Vec2(4.0, 4.0));
             p.removeSlit(0);
-            QCOMPARE(p.getSlitLocation(0), Vec2d(4.0, 4.0));
+            QCOMPARE(p.getSlitLocation(0), Vec2(4.0, 4.0));
             p.removeSlit(1); // Should do nothing since we now only have one slit
-            QCOMPARE(p.getSlitLocation(0), Vec2d(4.0, 4.0));
+            QCOMPARE(p.getSlitLocation(0), Vec2(4.0, 4.0));
         }
         void SlitPotentialTest::MethodGetSlitWidthWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(6.0, 6.0), 2);
             QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
             const float newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
             p.setSlitWidth(newSlitWidth);
             QCOMPARE(p.getSlitWidth(), newSlitWidth);
         }
         void SlitPotentialTest::MethodSetSlitWidthWorks() {
-            SlitPotential p(Vec2d(0.0, 0.0), Vec2d(6.0, 6.0), 2);
+            SlitPotential p(Vec2(0.0, 0.0), Vec2(6.0, 6.0), 2);
             QCOMPARE(p.getSlitWidth(), DEFAULT_SLIT_WIDTH);
             const float newSlitWidth = 1.1 * DEFAULT_SLIT_WIDTH;
             p.setSlitWidth(newSlitWidth);

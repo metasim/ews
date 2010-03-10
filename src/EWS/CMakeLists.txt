@@ -28,7 +28,7 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS physics/*.h util/*.h)
+file(GLOB EWS_HDRS physics/*.h util/*.h EWSDefine.h)
 
 
 #--------------------------------------------------------------------------------

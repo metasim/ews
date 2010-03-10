@@ -23,6 +23,7 @@
 #include <vector>
 #include <osg/ref_ptr>
 using std::vector;
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
@@ -49,7 +50,7 @@ namespace ews {
              * @param y Y location to find potential for
              * @return Potential
              */
-            double getPotential(unsigned int x, unsigned int y) const;
+            Real getPotential(unsigned int x, unsigned int y) const;
             /**
              * Add a potential to this composite list of potentials.
              * @param p Potential to add

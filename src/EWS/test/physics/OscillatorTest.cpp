@@ -23,6 +23,8 @@ using std::cos;
 
 namespace ews {
     namespace test {
+        const Real NADA = 0;
+        
         void OscillatorTest::initTestCase() { /* do nothing */ }
         void OscillatorTest::cleanupTestCase() { /* do nothing */ }
         void OscillatorTest::init() { /* do nothing */ }
@@ -41,28 +43,28 @@ namespace ews {
             QCOMPARE(testOscillator.x(), DEFAULT_X);            
             QCOMPARE(testOscillator.y(), _waveModel.getLength() / 2);            
             QCOMPARE(testOscillator.getAmplitude(), DEFAULT_AMPLITUDE);            
-            QCOMPARE(testOscillator.getTime(), 0.0);            
+            QCOMPARE(testOscillator.getTime(), NADA);            
             QCOMPARE(testOscillator.getOscillateStatus(), false);         
         }
         void OscillatorTest::MethodSetRadiusWorks() {
             Oscillator testOscillator(_waveModel);
-            double expected = 2.5;
+            Real expected = 2.5;
             testOscillator.setRadius(expected);
             QCOMPARE(testOscillator.getRadius(), expected);
             testOscillator.setRadius(0.0);
-            QCOMPARE(testOscillator.getRadius(), 0.0);
+            QCOMPARE(testOscillator.getRadius(), NADA);
             testOscillator.setRadius(-0.5);
-            QCOMPARE(testOscillator.getRadius(), 0.0);
+            QCOMPARE(testOscillator.getRadius(), NADA);
         }
         void OscillatorTest::MethodSetPeriodWorks() {
             Oscillator testOscillator(_waveModel);
-            double expected = 2.5;
+            Real expected = 2.5;
             testOscillator.setPeriod(expected);
             QCOMPARE(testOscillator.getPeriod(), expected);            
             testOscillator.setPeriod(0.0);
-            QCOMPARE(testOscillator.getPeriod(), 0.0);            
+            QCOMPARE(testOscillator.getPeriod(), NADA);            
             testOscillator.setPeriod(-0.5);
-            QCOMPARE(testOscillator.getPeriod(), 0.0);            
+            QCOMPARE(testOscillator.getPeriod(), NADA);            
         }
         void OscillatorTest::MethodSetLocationWorks() {
             Oscillator testOscillator(_waveModel);
@@ -74,19 +76,19 @@ namespace ews {
         }
         void OscillatorTest::MethodComputeFrequencyWorks() {
             Oscillator testOscillator(_waveModel);
-            double expected = 2;
+            Real expected = 2;
             testOscillator.setPeriod(expected);
             QCOMPARE(testOscillator.computeFrequency(), 1 / expected);            
         }
         void OscillatorTest::MethodSetAmplitudeWorks() {
             Oscillator testOscillator(_waveModel);
-            double expected = 2.5;
+            Real expected = 2.5;
             testOscillator.setAmplitude(expected);
             QCOMPARE(testOscillator.getAmplitude(), expected);            
             testOscillator.setAmplitude(0.0);
-            QCOMPARE(testOscillator.getAmplitude(), 0.0);            
+            QCOMPARE(testOscillator.getAmplitude(), NADA);            
             testOscillator.setAmplitude(-0.5);
-            QCOMPARE(testOscillator.getAmplitude(), 0.0);
+            QCOMPARE(testOscillator.getAmplitude(), NADA);
         }
         void OscillatorTest::MethodSetOscillateStatusWorks() {
             Oscillator testOscillator(_waveModel);
@@ -104,10 +106,10 @@ namespace ews {
             testOscillator.setRadius(2);
             testOscillator.setPeriod(1);
             testOscillator.setAmplitude(1);
-            double time = 100.0;
+            Real time = 100.0;
             testOscillator.updateTimeAndOscillator(time);
             testOscillator.firePulse();
-            const double deltaT = 0.1;
+            const Real deltaT = 0.1;
             time += deltaT;
             testOscillator.updateTimeAndOscillator(time);
             LatticeVal expected = cos(2 * M_PI * deltaT + (M_PI / 2.0));

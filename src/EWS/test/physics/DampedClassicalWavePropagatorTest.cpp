@@ -59,7 +59,7 @@ namespace ews {
             prior = expected;
             expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
             QCOMPARE(lattice.getValue(x, y), expected);
-            double priorNeigh = neighbor;
+            LatticeVal priorNeigh = neighbor;
             neighbor = (prior + 2 * diagNeigh) * w1 + priorNeigh * (2 * w2 + w3);
             QCOMPARE(lattice.getValue(x, y + 1), neighbor);
             diagNeigh = 2 * priorNeigh * w1 + prior * w2 + diagNeigh * w3;

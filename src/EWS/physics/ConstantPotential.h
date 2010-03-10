@@ -20,6 +20,7 @@
 #define __CONSTANTPOTENTIAL_H
 
 #include "Potential.h"
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
@@ -36,10 +37,10 @@ namespace ews {
             explicit ConstantPotential(): _value(0.0) { /* do nothing */ }
             /**
              * Constructor, assigning value to the constant potential everywhere. Explicit to prevent
-             * automatic conversions from doubles to ConstantPotentials.
+             * automatic conversions from reals to ConstantPotentials.
              * @param value Constant potential
              */
-            explicit ConstantPotential(double value): _value(value) { /* do nothing */ }
+            explicit ConstantPotential(Real value): _value(value) { /* do nothing */ }
             /**
              * Virtual destructor
              */
@@ -50,13 +51,13 @@ namespace ews {
              * @param y ignored
              * @return Constant potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y) const {
+            virtual Real getPotential(unsigned int x, unsigned int y) const {
                 return _value;
             }
         private:
             ConstantPotential(const ConstantPotential&) {} // Not allowed
             ConstantPotential& operator=(const ConstantPotential& l) { return *this; } // Not allowed
-            double _value;
+            Real _value;
         };
     }
 }

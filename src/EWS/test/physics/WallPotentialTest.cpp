@@ -21,6 +21,9 @@
 
 namespace ews {
     namespace test {
+        const Real NO_POTENTIAL = 0;
+        const Real HAS_POTENTIAL = 100;
+        
         using osg::Vec2;
         void WallPotentialTest::initTestCase() { /* do nothing */ }
         void WallPotentialTest::cleanupTestCase() { /* do nothing */ }
@@ -30,33 +33,33 @@ namespace ews {
         void WallPotentialTest::DefaultConstructorIsPointWall() {
             WallPotential p;
             // Tests that the potential is zero away from origin
-            QCOMPARE(p.getPotential(2, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), NO_POTENTIAL);
             // Tests that the potential is 100 at origin
-            QCOMPARE(p.getPotential(0, 0), 100.0);
+            QCOMPARE(p.getPotential(0, 0), HAS_POTENTIAL);
         }
         
         void WallPotentialTest::PreferredConstructorWorks() {
             WallPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
-            QCOMPARE(p.getPotential(2, 2), 100.0);
-            QCOMPARE(p.getPotential(6, 6), 0.0);
-            QCOMPARE(p.getPotential(2, 3), 100.0);
-            QCOMPARE(p.getPotential(3, 2), 100.0);
-            QCOMPARE(p.getPotential(4, 2), 100.0);
-            QCOMPARE(p.getPotential(5, 0), 0.0);
+            QCOMPARE(p.getPotential(2, 2), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(6, 6), NO_POTENTIAL);
+            QCOMPARE(p.getPotential(2, 3), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(3, 2), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(4, 2), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(5, 0), NO_POTENTIAL);
         }
         
         void WallPotentialTest::MethodsGetSetSrcPointWork() {
             WallPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
             p.setSrcPoint(Vec2(10.0, -10.0));
-            QCOMPARE(p.getSrcPoint().x(), 10.0);
-            QCOMPARE(p.getSrcPoint().y(), -10.0);
+            QCOMPARE(p.getSrcPoint().x(), 10.0f);
+            QCOMPARE(p.getSrcPoint().y(), -10.0f);
         }
         
         void WallPotentialTest::MethodsGetSetDstPointWork() {
             WallPotential p(Vec2(0.0, 0.0), Vec2(5.0, 5.0));
             p.setDstPoint(Vec2(10.0, -10.0));
-            QCOMPARE(p.getDstPoint().x(), 10.0);
-            QCOMPARE(p.getDstPoint().y(), -10.0);
+            QCOMPARE(p.getDstPoint().x(), 10.0f);
+            QCOMPARE(p.getDstPoint().y(), -10.0f);
         }
         
         void WallPotentialTest::MethodGetSetThicknessWorks() {
@@ -64,9 +67,9 @@ namespace ews {
             const float expected = 2.f;
             p.setThickness(expected);
             QCOMPARE(p.getThickness(), expected);
-            QCOMPARE(p.getPotential(2, 2), 100.0);
-            QCOMPARE(p.getPotential(3, 2), 100.0);
-            QCOMPARE(p.getPotential(4, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(3, 2), HAS_POTENTIAL);
+            QCOMPARE(p.getPotential(4, 2), NO_POTENTIAL);
         }
     }
 }

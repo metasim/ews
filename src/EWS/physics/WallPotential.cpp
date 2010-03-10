@@ -17,20 +17,20 @@
  */
 
 #include "WallPotential.h"
-#include <osg/Vec2d>
+#include <osg/Vec2>
 
 namespace ews {
     namespace physics {
-        using osg::Vec2d;
+        using osg::Vec2;
         
-        double WallPotential::getPotential(unsigned int x, unsigned int y) const {
-            Vec2d pointToProject(static_cast<double>(x), static_cast<double>(y));
-            Vec2d projectedPoint;            
+        Real WallPotential::getPotential(unsigned int x, unsigned int y) const {
+            Vec2 pointToProject(static_cast<Real>(x), static_cast<Real>(y));
+            Vec2 projectedPoint;            
             if (!_lineSegment.ptSegProjection(pointToProject, projectedPoint)) return 0.0;
-            return Vec2d(pointToProject - projectedPoint).length2() < _halfThicknessSq ? DEFAULT_POTENTIAL : 0.0;
+            return (pointToProject - projectedPoint).length2() < _halfThicknessSq ? DEFAULT_POTENTIAL : 0.0;
         }
-        double WallPotential::alpha(unsigned int x, unsigned int y) const {
-            Vec2d pointToProject(static_cast<double>(x), static_cast<double>(y));
+        Real WallPotential::alpha(unsigned int x, unsigned int y) const {
+            Vec2 pointToProject(static_cast<Real>(x), static_cast<Real>(y));
             return _lineSegment.alpha(pointToProject);
         }
     }

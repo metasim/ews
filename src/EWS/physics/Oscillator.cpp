@@ -39,10 +39,10 @@ namespace ews {
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
         }
-        void Oscillator::updateTimeAndOscillator(double time) {
+        void Oscillator::updateTimeAndOscillator(Real time) {
             _time = time;
             if (_oscillating) {
-                const double value = getValue();
+                const Real value = getValue();
                 // Making these int here so that subtraction doesn't wrap around
                 const int x = static_cast<int>(_x);
                 const int y = static_cast<int>(_y);
@@ -53,7 +53,7 @@ namespace ews {
                 const int maxY = min(static_cast<int>(_waveModel.getLength() - 1), y + r);
                 for (int i = minX; i <= maxX; i++) {
                     for (int j = minY; j <= maxY; j++) {
-                        if (sqrt(static_cast<double>((i - x) * (i - x)  + (j - y) * (j - y))) < _radius) {
+                        if (sqrt(static_cast<Real>((i - x) * (i - x)  + (j - y) * (j - y))) < _radius) {
                             _waveModel.setSourceValue(i, j, value);
                         }
                     }
@@ -71,7 +71,7 @@ namespace ews {
             _oscillating = true;
             _inPulse = true;
         }
-        double Oscillator::getValue() const {
+        Real Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
         }
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
@@ -84,7 +84,7 @@ namespace ews {
             _phase = -getCosArg() + M_PI/2.0; // Puts getValue at its minimum
         }
         
-        double Oscillator::getCosArg() const {
+        Real Oscillator::getCosArg() const {
             return 2 * M_PI * _time / _period;
         }
     }

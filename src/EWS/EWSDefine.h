@@ -16,18 +16,14 @@
  * http://mseedsoft.com
  */
 
-#include "PrecomputedPotential.h"
+#ifndef __EWSDEFINE_H
+#define __EWSDEFINE_H
 
 namespace ews {
-    namespace physics {
-        PrecomputedPotential::PrecomputedPotential(Potential* p, unsigned int width,
-                                                   unsigned int length):
-        _potentialValues(width, vector<Real>(length, 0.0)) {
-            for (unsigned int i = 0; i < width; i++) {
-                for (unsigned int j = 0; j < length; j++) {
-                    _potentialValues[i][j] = p->getPotential(i, j);
-                }
-            }
-        }
-    }
+    /**
+     * Default precision to use for real numbers
+     */
+    typedef float Real;
 }
+
+#endif // __EWSDEFINE_H

@@ -17,11 +17,12 @@
  */
 
 #include "Point2dTest.h"
-#include <osg/Vec2d>
+#include <osg/Vec2>
+#include "EWSDefine.h"
 
 namespace ews {
     namespace test {
-        using osg::Vec2d;
+        using osg::Vec2;
         
         void Point2dTest::initTestCase() { /* do nothing */ }
         void Point2dTest::cleanupTestCase() { /* do nothing */ }
@@ -29,9 +30,9 @@ namespace ews {
         void Point2dTest::cleanup() { /* do nothing */ }
         
         void Point2dTest::CopyConstructorTakesVector() {
-            double x = 1235.352534;
-            double y = -235.234165;
-            const Vec2d p(Vec2d(x, y));
+            Real x = 1235.352534;
+            Real y = -235.234165;
+            const Vec2 p(Vec2(x, y));
             QCOMPARE(p.x(), x);
             QCOMPARE(p.y(), y);
         }

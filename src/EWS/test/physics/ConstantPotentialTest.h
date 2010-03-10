@@ -50,7 +50,7 @@ namespace ews {
              */
             void DefaultConstructorIsZero();
             /**
-             * Tests that the ConstantPotential::ConstantPotential(double value) constructor works
+             * Tests that the ConstantPotential::ConstantPotential(Real value) constructor works
              */
             void ValueConstructorYieldsValue();
         };

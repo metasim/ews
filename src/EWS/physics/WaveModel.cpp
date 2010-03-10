@@ -22,11 +22,11 @@
 
 namespace ews {
     namespace physics {
-        WaveModel::WaveModel(unsigned int width, unsigned length): _lattice(width, length),
+        WaveModel::WaveModel(unsigned int width, unsigned int length): _lattice(width, length),
         _wavePropagator(createDefaultPropagator(width, length, 20, 20)) {
             /* do nothing */
         }
-        WaveModel::WaveModel(unsigned int width, unsigned length, unsigned int dampX, unsigned int dampY):
+        WaveModel::WaveModel(unsigned int width, unsigned int length, unsigned int dampX, unsigned int dampY):
         _lattice(width, length),
         _wavePropagator(createDefaultPropagator(width, length, dampX, dampY)) {
             /* do nothing */

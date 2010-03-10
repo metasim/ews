@@ -28,11 +28,11 @@ namespace ews {
         void ConstantPotentialTest::DefaultConstructorIsZero() {
             ConstantPotential p;
             // Tests that the potential is zero (unsigned int values shouldn't matter)
-            QCOMPARE(p.getPotential(2, 2), 0.0);
+            QCOMPARE(p.getPotential(2, 2), static_cast<Real>(0.0));
         }
         
         void ConstantPotentialTest::ValueConstructorYieldsValue() {
-            double value = 3.14159;
+            Real value = 3.14159;
             ConstantPotential p(value);
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
             QCOMPARE(p.getPotential(2, 2), value);

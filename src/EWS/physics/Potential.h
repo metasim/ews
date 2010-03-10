@@ -20,6 +20,7 @@
 #define __POTENTIAL_H
 
 #include <osg/Referenced>
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
@@ -36,8 +37,8 @@ namespace ews {
              * @param y Y location to find potential for
              * @return Potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y) const = 0;
-        protected:
+            virtual Real getPotential(unsigned int x, unsigned int y) const = 0;
+//        protected:
             Potential() { /* do nothing */ }
             /**
              * Virtual destructor. Protected for intrusive pointer reference counting.

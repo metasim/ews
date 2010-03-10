@@ -23,6 +23,7 @@
 #include "Potential.h"
 #include "Lattice.h"
 #include <osg/ref_ptr>
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
@@ -98,7 +99,7 @@ namespace ews {
                     /* do nothing */
                 }
                 virtual ~PaddedPotential() { /* do nothing */ }
-                double getPotential(unsigned int x, unsigned int y) const {
+                Real getPotential(unsigned int x, unsigned int y) const {
                     return _innerP->getPotential(x - _dampX, y - _dampY);
                 }
             private:

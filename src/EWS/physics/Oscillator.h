@@ -20,13 +20,14 @@
 #define __OSCILLATOR_H
 
 #include "WaveModel.h"
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
-        const double DEFAULT_PERIOD = 0.3;
-        const double DEFAULT_AMPLITUDE = 1.0;
-        const double MAX_AMPLITUDE = 2.0;
-        const double DEFAULT_RADIUS = 2.0;
+        const Real DEFAULT_PERIOD = 0.3;
+        const Real DEFAULT_AMPLITUDE = 1.0;
+        const Real MAX_AMPLITUDE = 2.0;
+        const Real DEFAULT_RADIUS = 2.0;
         const unsigned int DEFAULT_X = 8;
         /**
          * @ingroup Physics
@@ -50,7 +51,7 @@ namespace ews {
              * Updates the time value of the oscillator and oscillates the attached wave model.
              * @param time Current time
              */
-            void updateTimeAndOscillator(double time);
+            void updateTimeAndOscillator(Real time);
             /**
              * Reconfigures the oscillator with a new pulse
              */
@@ -58,28 +59,28 @@ namespace ews {
             /**
              * Gets the current value associated with the oscillator.
              */
-            double getValue() const;
+            Real getValue() const;
              
             /**
              * Gets the radius the oscillator acts upon.
              * @return Oscillator radius
              */
-            double getRadius() const { return _radius; }
+            Real getRadius() const { return _radius; }
             /**
              * Sets the radius the oscillator acts upon.
              * @param r Oscillator radius
              */
-			void setRadius(double r) { _radius = r > 0 ? r : 0; }
+			void setRadius(Real r) { _radius = r > 0 ? r : 0; }
             /**
              * Gets the period of the oscillator
              * @return Oscillator period
              */
-            double getPeriod() const { return _period; }
+            Real getPeriod() const { return _period; }
             /**
              * Sets the period of the oscillator
              * @param p Oscillator period
              */
-            void setPeriod(double p) { _period = p > 0 ? p : 0; }
+            void setPeriod(Real p) { _period = p > 0 ? p : 0; }
             /**
              * Sets the location of the oscillator.
              * @param x X location of oscillator
@@ -100,22 +101,22 @@ namespace ews {
              * Computes the frequency of the oscillator.
              * @return Oscillator frequency.
              */
-            double computeFrequency() const { return 1 / _period; }
+            Real computeFrequency() const { return 1 / _period; }
             /**
              * Gets the amplitude of the oscillator.
              * @return Oscillator amplitude.
              */
-            double getAmplitude() const { return _amplitude; }
+            Real getAmplitude() const { return _amplitude; }
             /**
              * Gets the amplitude of the oscillator.
              * @param a Oscillator amplitude.
              */
-            void setAmplitude(double a) { _amplitude = a > 0 ? a : 0; }
+            void setAmplitude(Real a) { _amplitude = a > 0 ? a : 0; }
             /**
              * Gets the osillator's time state
              * @return time per the oscillator's perspective
              */
-            double getTime() const { return _time; }
+            Real getTime() const { return _time; }
             /**
              * Sets whether the oscillator should oscillate.
              */
@@ -131,15 +132,15 @@ namespace ews {
             Oscillator(const Oscillator&): _waveModel(*(new WaveModel(0, 0))) {}
             Oscillator& operator=(const Oscillator& l) { return *this; } // Not allowed
             void resetPhase();
-            double getCosArg() const;
+            Real getCosArg() const;
             WaveModel& _waveModel;
             unsigned int _x;
             unsigned int _y;
-            double _radius;
-            double _amplitude;
-            double _period;
-            double _time;
-            double _phase;
+            Real _radius;
+            Real _amplitude;
+            Real _period;
+            Real _time;
+            Real _phase;
             bool _oscillating;
             bool _inPulse;
         };

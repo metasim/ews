@@ -20,14 +20,15 @@
 #define __SLITPOTENTIAL_H
 
 #include "WallPotential.h"
-#include <osg/Vec2d>
+#include <osg/Vec2>
 #include <vector>
 using std::vector;
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
         
-        using osg::Vec2d;
+        using osg::Vec2;
         
         const float DEFAULT_SLIT_WIDTH = 3.f;
         const float DEFAULT_WALL_THICKNESS = 4.f;
@@ -42,7 +43,7 @@ namespace ews {
              * Constructor taking number of slits
              * @param numSlits how many slits to create
              */
-            SlitPotential(const Vec2d& p1, const Vec2d& p2, unsigned int numSlits = 0);
+            SlitPotential(const Vec2& p1, const Vec2& p2, unsigned int numSlits = 0);
             /**
              * Virtual destructor
              */
@@ -62,7 +63,7 @@ namespace ews {
                 }
             }
             
-            Vec2d getSlitLocation(unsigned int slitNumber) const;
+            Vec2 getSlitLocation(unsigned int slitNumber) const;
             
             /**
              * Get the width of the slits
@@ -72,20 +73,20 @@ namespace ews {
              * Set the width of the slits
              * @param slitWidth New slit width (values less than zero will use zero instead)
              */
-            void setSlitWidth(double slitWidth) { _slitWidth = slitWidth > 0 ? slitWidth : 0.0; }
+            void setSlitWidth(Real slitWidth) { _slitWidth = slitWidth > 0 ? slitWidth : 0.0; }
             /**
              * Returns the potential at x, y
              * @param x X location to check
              * @param y Y location to check
              * @return Potential
              */
-            virtual double getPotential(unsigned int x, unsigned int y) const;
+            virtual Real getPotential(unsigned int x, unsigned int y) const;
         private:
             SlitPotential(const SlitPotential&) {} // Not allowed
             SlitPotential& operator=(const SlitPotential& l) { return *this; } // Not allowed
-            double _slitWidth;
+            Real _slitWidth;
             // Fraction that each slit is along the wall
-            vector<double> _slitAlphas;
+            vector<Real> _slitAlphas;
         };
     }
 }

@@ -21,15 +21,16 @@
 
 #include "Potential.h"
 #include "Line2d.h"
-#include <osg/Vec2d>
+#include <osg/Vec2>
 #include <cmath>
 using std::sqrt;
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
         const float DEFAULT_HALF_THICKNESS_SQ = 2 * 2;
         const float DEFAULT_POTENTIAL = 100.0;
-        using osg::Vec2d;
+        using osg::Vec2;
 
         /**
          * @ingroup Physics
@@ -41,7 +42,7 @@ namespace ews {
              * Default constructor, with both points at origin (0, 0)
              */
             WallPotential():
-            _lineSegment(Vec2d(0.0, 0.0), Vec2d(0.0, 0.0)), _halfThicknessSq(DEFAULT_HALF_THICKNESS_SQ) {
+            _lineSegment(Vec2(0.0, 0.0), Vec2(0.0, 0.0)), _halfThicknessSq(DEFAULT_HALF_THICKNESS_SQ) {
                 /* do nothing */
             }
             /**
@@ -49,7 +50,7 @@ namespace ews {
              * @param p1 One point of the wall
              * @param p2 The other point of the wall
              */
-            WallPotential(const Vec2d& p1, const Vec2d& p2):
+            WallPotential(const Vec2& p1, const Vec2& p2):
             _lineSegment(p1, p2), _halfThicknessSq(DEFAULT_HALF_THICKNESS_SQ) {
                 /* do nothing */
             }
@@ -59,7 +60,7 @@ namespace ews {
              * @param p2 The other point of the wall
              * @param thickness How thick the wall is
              */
-            WallPotential(const Vec2d& p1, const Vec2d& p2, float thickness):
+            WallPotential(const Vec2& p1, const Vec2& p2, float thickness):
             _lineSegment(p1, p2), _halfThicknessSq(thickness * thickness / 4.f) {
                 /* do nothing */
             }
@@ -73,29 +74,29 @@ namespace ews {
              * @param y Y location to check for wall
              * @return 100 if x, y lie within wall, 0 otherwise
              */
-            virtual double getPotential(unsigned int x, unsigned int y) const;
+            virtual Real getPotential(unsigned int x, unsigned int y) const;
             /**
              * Returns one of the wall's end points
              * @Return wall end point
              */
-            const Vec2d& getSrcPoint() const { return _lineSegment.getStart(); }
+            const Vec2& getSrcPoint() const { return _lineSegment.getStart(); }
             /**
              * Changes one of the wall's end points
              * @param p New end point to use
              */
-            void setSrcPoint(const Vec2d& p) {
+            void setSrcPoint(const Vec2& p) {
                 _lineSegment.setStart(p);
             }
             /**
              * Returns the wall's other end point
              * @Return other wall end point
              */
-            const Vec2d& getDstPoint() const { return _lineSegment.getEnd(); }
+            const Vec2& getDstPoint() const { return _lineSegment.getEnd(); }
             /**
              * Changes the wall's other end point
              * @param p New end point to use
              */
-            void setDstPoint(const Vec2d& p) {
+            void setDstPoint(const Vec2& p) {
                 _lineSegment.setEnd(p);
             }
             /**
@@ -106,7 +107,7 @@ namespace ews {
             /**
              * Returns the length of the wall (i.e., the distance between its two end points.
              */
-            double length() const { return _lineSegment.length(); }
+            Real length() const { return _lineSegment.length(); }
             /**
              * Sets the thickness of the wall.
              * @param thickness New thickness for the wall.
@@ -115,9 +116,9 @@ namespace ews {
         protected:
             WallPotential(const WallPotential&) {} // Not allowed
             WallPotential& operator=(const WallPotential& l) { return *this; } // Not allowed
-            double alpha(unsigned int x, unsigned int y) const;
+            Real alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
-            double _halfThicknessSq;
+            Real _halfThicknessSq;
         };
     }
 }

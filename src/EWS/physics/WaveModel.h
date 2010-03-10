@@ -43,7 +43,7 @@ namespace ews {
              * @param width Width of the wave model's valid field.
              * @param length Length of the wave model's valid field.
              */
-            WaveModel(unsigned int width, unsigned length);
+            WaveModel(unsigned int width, unsigned int length);
             /**
              * Constructor assigning dampening factors and a valid region to a wave model.
              * @param width Width of the wave model's valid field.
@@ -51,7 +51,7 @@ namespace ews {
              * @param dampX Dampening in the x-direction
              * @param dampY Dampening in the y-direction
              */
-            WaveModel(unsigned int width, unsigned length, unsigned int dampX, unsigned int dampY);
+            WaveModel(unsigned int width, unsigned int length, unsigned int dampX, unsigned int dampY);
             /**
              * Virtual destructor
              */

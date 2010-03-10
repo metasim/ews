@@ -21,12 +21,13 @@
 
 #include "Line2d.h"
 using namespace ews::physics;
-#include <osg/Vec2d>
+#include <osg/Vec2>
 #include <QtTest/QtTest>
+#include "EWSDefine.h"
 
 namespace ews {
     namespace test {
-        using osg::Vec2d;
+        using osg::Vec2;
         
         /**
          * @ingroup Test
@@ -74,12 +75,12 @@ namespace ews {
              */
             void MethodPtSegProjectionWorks();
         private:
-            const double _x1;
-            const double _y1;
-            const Vec2d _p1;
-            const double _x2;
-            const double _y2;
-            const Vec2d _p2;
+            const Real _x1;
+            const Real _y1;
+            const Vec2 _p1;
+            const Real _x2;
+            const Real _y2;
+            const Vec2 _p2;
             Line2d _l;
         };
     }

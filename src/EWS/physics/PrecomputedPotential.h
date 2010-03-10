@@ -22,6 +22,7 @@
 #include "Potential.h"
 #include <vector>
 using std::vector;
+#include "EWSDefine.h"
 
 namespace ews {
     namespace physics {
@@ -53,7 +54,7 @@ namespace ews {
              * @param y Y location to find potential for
              * @return Precomputed potential
              */
-            double getPotential(unsigned int x, unsigned int y) const {
+            Real getPotential(unsigned int x, unsigned int y) const {
                 return (x < getWidth()) && (y < getLength()) ? _potentialValues[x][y] : 0.0;
             }
         private:
@@ -63,7 +64,7 @@ namespace ews {
             unsigned int getLength() const {
                 return _potentialValues.size() > 0 ? _potentialValues[0].size() : 0;
             }
-            vector<vector<double> > _potentialValues;
+            vector<vector<Real> > _potentialValues;
         };
     }
 }

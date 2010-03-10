@@ -50,11 +50,11 @@ namespace ews {
              */
             void DefaultConstructorIsZero();
             /**
-             * Tests that the Tuple2d::Tuple2d(double x, double y) constructor works
+             * Tests that the Tuple2d::Tuple2d(Real x, Real y) constructor works
              */
             void XYConstructorYieldsXY();
             /**
-             * Tests that the Tuple2d::Tuple2d(Tuple2d t1, Tuple2d t2, double alpha) constructor works
+             * Tests that the Tuple2d::Tuple2d(Tuple2d t1, Tuple2d t2, Real alpha) constructor works
              */
             void InterpolatedConstructorIsInterpolated();
             /**

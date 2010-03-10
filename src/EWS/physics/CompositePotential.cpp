@@ -24,8 +24,8 @@ using std::find;
 
 namespace ews {
     namespace physics {
-        double CompositePotential::getPotential(unsigned int x, unsigned int y) const {
-            double retval = 0.0;
+        Real CompositePotential::getPotential(unsigned int x, unsigned int y) const {
+            Real retval = 0.0;
             for (PotentialList::const_iterator i = _potentials.begin();
                  i != _potentials.end(); i++) {
                 retval += (*i)->getPotential(x, y);
