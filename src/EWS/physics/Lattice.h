@@ -23,7 +23,7 @@
 using std::vector;
 // Needed if asserts are turned back on
 //#include <cassert>
-//#include <cstring>
+#include <cstring> // Needed for memcpy
 
 namespace ews {
     namespace physics {
