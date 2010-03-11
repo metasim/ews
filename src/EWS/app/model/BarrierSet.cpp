@@ -78,6 +78,13 @@ namespace ews {
                 waveModel.setPotential(prePot.get());
             }
 
+            void BarrierSet::removeAllBarriers() {
+                int count = _barriers.size();
+                _barriers.clear();
+                emit allBarriersRemoved(count);
+                updatePotentials();
+            }
+
             void BarrierSet::removeBarrier(Barrier* b) {
                 const int pos = indexOf(b);
                 if(pos >= 0) {

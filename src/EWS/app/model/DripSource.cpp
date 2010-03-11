@@ -84,6 +84,9 @@ namespace ews {
                     setPosition(osg::Vec2(20 < maxWidth ? 20 : maxWidth / 4, 20 < maxLength ? 20 : maxLength / 4));
                     setEnabled(false);
                 }
+                setFrequency(0);
+                setPaused(false);
+                setAmplitude(50);
             }
         }
     }

@@ -64,6 +64,8 @@ namespace ews {
             
             void SimulationState::reset() {
                 _waveMedium.getWaveModel().clear();
+                _dripSource1.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
+                _dripSource2.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
                 
                 if(isPaused()) {
                     _waveMedium.getWaveModel().propagate();

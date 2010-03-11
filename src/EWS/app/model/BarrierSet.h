@@ -32,35 +32,87 @@ namespace ews {
             
             class SimulationState;
             
+            /**
+             * Collection of Barrier objects.
+             */
             class BarrierSet : public QObject {
                 Q_OBJECT
             public:
-                BarrierSet(SimulationState* parent = 0);
+                /**
+                 * Default constructor
+                 */
+                explicit BarrierSet(SimulationState* parent = 0);
+                /**
+                 * Virtual destructor
+                 */
                 virtual ~BarrierSet();
                 
+                /**
+                 * Creates a new Barrier and adds it to the collection.
+                 * @return Created Barrier
+                 */
                 Barrier* createBarrier(); 
                 
+                /**
+                 * Gets the SimulationState associated with this collection of Barrier objects.
+                 * @return Parent SimulationState.
+                 */
                 SimulationState* getSimulationState() const;
                 
+                /**
+                 * Gets the number of Barrier objects in this collection.
+                 * @return Number of existing Barrier objects (including disabled)
+                 */
                 int size() const {
                     return _barriers.size();
                 }
-                
+
+                /**
+                 * Remove all Barrier objects (e.g., to start over).
+                 */
+                void removeAllBarriers();
+
+                /**
+                 * Remove the given Barrier from this collection.
+                 * @param b Barrier to remove
+                 */
                 void removeBarrier(Barrier* b);
                 
-                int indexOf(Barrier* b) {
+                /**
+                 * Find the index corresponding to the given Barrier.
+                 * @param b Barrier to search for
+                 */
+                int indexOf(Barrier* b) const {
                     return _barriers.indexOf(b);
                 }
                 
+                /**
+                 * Find the Barrier at the given index.
+                 * @param index Index to return the Barrier for
+                 * @return Requested Barrier
+                 */
                 Barrier* barrierAt(unsigned int index) const {
                     return _barriers[index];
                 }
                 
             signals:
+                /**
+                 * Signals that a barrier has been added.
+                 */
                 void barrierAdded(int,Barrier*);
+                /**
+                 * Signals that a barrier has been removed.
+                 */
                 void barrierRemoved(int,Barrier*);
+                /**
+                 * Signals that all barriers have been removed.
+                 */
+                void allBarriersRemoved(int);
                 
             private slots:
+                /**
+                 * Calculates a CompositePotential using its Barrier objects.
+                 */
                 void updatePotentials();
                 
             private:

@@ -131,7 +131,14 @@ namespace ews {
                 select(b);
                 _ui->barrierTable->resizeRowsToContents();
             }
-            
+
+            void BarrierEditor::removeAllBarriers() {
+                _dataModel->removeAllBarriers();
+                select(NULL);
+                updateEnabled();
+                _ui->barrierTable->resizeRowsToContents();
+            }
+
             void BarrierEditor::removeBarrier() {
                 Barrier* b = selectedBarrier();
                 _dataModel->removeBarrier(b);
@@ -170,7 +177,6 @@ namespace ews {
                     Barrier* b = selectedBarrier();
                     canEdit = b != NULL && b->isEnabled();
                 }
-                qDebug() << "canEdit = " << canEdit;
                 _ui->removeBarrier->setEnabled(canEdit);
                 _ui->slitNumSelect->setEnabled(canEdit);
                 

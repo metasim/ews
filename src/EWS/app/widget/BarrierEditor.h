@@ -52,6 +52,9 @@ namespace ews {
                 
                 /** Connect the data model instance with the editor. */
                 void setDataModel(BarrierSet* barriers);
+                
+                /** Remove all Barrier objects (e.g., to start over). */
+                void removeAllBarriers();
 
             public slots:
                 /** Slot to create a new barrier and add it to the end of the list.*/

@@ -40,6 +40,7 @@ namespace ews {
                 : QAbstractTableModel(), _barriers(barriers) {
                     connect(barriers, SIGNAL(barrierAdded(int,Barrier*)), this, SLOT(rowsAdded(int)));
                     connect(barriers, SIGNAL(barrierRemoved(int,Barrier*)), this, SLOT(rowsRemoved(int)));
+                    connect(barriers, SIGNAL(allBarriersRemoved(int)), this, SLOT(removeAll(int)));
                 }
                 
                 /** Standard dtor. */
@@ -187,6 +188,13 @@ namespace ews {
                 }
                 bool rowsRemoved(int position) {
                     beginRemoveRows(QModelIndex(), position, position);
+                    // Rows already removed in model.
+                    endRemoveRows();
+                    return true;
+                }
+                bool removeAll(int count) {
+                    qDebug() << "Removed " << count;
+                    beginRemoveRows(QModelIndex(), 0, count - 1);
                     // Rows already removed in model.
                     endRemoveRows();
                     return true;

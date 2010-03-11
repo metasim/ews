@@ -37,7 +37,6 @@ namespace ews {
         
         void LatticeTest::DefaultConstructorWorks() {
             Lattice nada;
-            unsigned int zero = 0;
             QCOMPARE(nada.getLength(), UNSIGNED_ZERO);
             QCOMPARE(nada.getWidth(), UNSIGNED_ZERO);
         }

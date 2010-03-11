@@ -68,12 +68,13 @@ namespace ews {
                         _dataModel->setFrequency(val);
                     }
                 }
-                
+
+                void syncUI();
+
             private slots:
                 void throb();
                 
             private:
-                void syncUI();
                 Ui::DripSourceEditorForm* _ui;
                 DripSource* _dataModel;
             };
