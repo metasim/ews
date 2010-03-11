@@ -32,6 +32,9 @@ namespace ews {
             
             using ews::app::model::DripSource;
             
+            /**
+             * Generates 3-dimensional openGL representations of faucets/teapots.
+             */
             class FaucetGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:

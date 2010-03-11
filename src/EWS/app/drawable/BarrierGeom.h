@@ -39,6 +39,9 @@ namespace ews {
             
             using ews::app::model::Barrier;
             
+            /**
+             * Generates 3-dimensional openGL representations of barriers.
+             */
             class BarrierGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:

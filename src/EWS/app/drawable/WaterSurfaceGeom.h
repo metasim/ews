@@ -27,6 +27,9 @@ namespace ews {
         namespace drawable {
             using ews::app::model::WaveMedium;
             
+            /**
+             * Generates a 3-dimensional openGL representation of the water surface.
+             */
             class WaterSurfaceGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:

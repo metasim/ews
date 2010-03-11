@@ -23,6 +23,9 @@
 namespace ews {
     namespace app {
         namespace drawable {
+            /**
+             * Factory pattern for managing drawable objects associated with objects.
+             */
             class DrawableFactory {
             public:
                 static DrawableFactory& instance();
