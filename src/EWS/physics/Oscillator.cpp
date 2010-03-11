@@ -39,7 +39,7 @@ namespace ews {
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
         }
-        void Oscillator::updateTimeAndOscillator(Real time) {
+        void Oscillator::updateTimeAndOscillator(OscillatorVal time) {
             _time = time;
             if (_oscillating) {
                 const OscillatorVal value = getValue();

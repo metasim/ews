@@ -53,7 +53,7 @@ namespace ews {
              * Updates the time value of the oscillator and oscillates the attached wave model.
              * @param time Current time
              */
-            void updateTimeAndOscillator(Real time);
+            void updateTimeAndOscillator(OscillatorVal time);
             /**
              * Reconfigures the oscillator with a new pulse
              */
@@ -118,7 +118,7 @@ namespace ews {
              * Gets the osillator's time state
              * @return time per the oscillator's perspective
              */
-            Real getTime() const { return _time; }
+            OscillatorVal getTime() const { return _time; }
             /**
              * Sets whether the oscillator should oscillate.
              */

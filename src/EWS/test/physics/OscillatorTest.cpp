@@ -43,8 +43,7 @@ namespace ews {
             QCOMPARE(testOscillator.x(), DEFAULT_X);
             QCOMPARE(testOscillator.y(), _waveModel.getLength() / 2);            
             QCOMPARE(testOscillator.getAmplitude(), DEFAULT_AMPLITUDE);
-            Real expectedTime = NADA;
-            QCOMPARE(testOscillator.getTime(), expectedTime);            
+            QCOMPARE(testOscillator.getTime(), NADA);            
             QCOMPARE(testOscillator.getOscillateStatus(), false);         
         }
         void OscillatorTest::MethodSetRadiusWorks() {
@@ -107,10 +106,10 @@ namespace ews {
             testOscillator.setRadius(2);
             testOscillator.setPeriod(1);
             testOscillator.setAmplitude(1);
-            Real time = 100.0;
+            OscillatorVal time = 100.0;
             testOscillator.updateTimeAndOscillator(time);
             testOscillator.firePulse();
-            const Real deltaT = 0.1;
+            const OscillatorVal deltaT = 0.1;
             time += deltaT;
             testOscillator.updateTimeAndOscillator(time);
             LatticeVal expected = cos(2 * M_PI * deltaT + (M_PI / 2.0));
