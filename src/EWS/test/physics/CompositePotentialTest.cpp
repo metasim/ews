@@ -68,7 +68,7 @@ namespace ews {
         }
         
         void CompositePotentialTest::CanHandleCompositePotentialPotential() {
-            const Real size = 50f;
+            const Real size = 50.f;
             ref_ptr<Potential> east = new WallPotential(Vec2(size, 0.0), Vec2(size, size));
             ref_ptr<Potential> north = new WallPotential(Vec2(0.0, size), Vec2(size, size));
             ref_ptr<Potential> south = new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0));
