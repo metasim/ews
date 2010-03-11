@@ -287,9 +287,9 @@ else()
         # where CPackConfig.cmake is created by including CPack
         # And then there's ways to customize this as well
         set(CPACK_BINARY_DRAGNDROP ON)
-        include(CPack)
     endif()
 endif()
+include(CPack)
 
 ############################################################
 # C++ tests built with standard compiler flags.
