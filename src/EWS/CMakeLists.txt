@@ -288,8 +288,8 @@ else()
         # And then there's ways to customize this as well
         set(CPACK_BINARY_DRAGNDROP ON)
         include(CPack)
-    end()
-end()
+    endif()
+endif()
 
 ############################################################
 # C++ tests built with standard compiler flags.
