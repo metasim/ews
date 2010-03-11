@@ -30,7 +30,7 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            const float VISIBLE_BARRIER_HEIGHT = 10.f;
+            const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float BARRIER_OPACITY = .5f;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             
@@ -65,9 +65,9 @@ namespace ews {
                 state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
             }
             
-            void BarrierGeom::addBox(const ref_ptr<osg::Geode>& geode, float boxCenter, float boxLength) {
+            void BarrierGeom::addBox(const ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength) {
                 ref_ptr<osg::ShapeDrawable> d = new ShapeDrawable();
-                const float boxWidth = _dataModel.width();
+                const Real boxWidth = _dataModel.width();
                 ref_ptr<osg::Shape> s = new osg::Box(osg::Vec3(boxCenter, 0.f, 0.f),
                                                      boxLength, boxWidth,
                                                      VISIBLE_BARRIER_HEIGHT);
@@ -80,9 +80,9 @@ namespace ews {
                 PositionAttitudeTransform::setPosition(osg::Vec3d(start.x(), start.y(), 0.f));
                 const osg::Vec2& end = _dataModel.getEnd();
                 const osg::Vec2 dir = (end - start);
-                const float barrierLength = _dataModel.length();
+                const Real barrierLength = _dataModel.length();
                 setScale(Vec3f(barrierLength, 1.f, 1.f));
-                const float angle = atan2(dir.y(), dir.x());
+                const Real angle = atan2(dir.y(), dir.x());
                 setAttitude(Quat(angle, Vec3f(0.f, 0.f, 1.f)));
                 
                 // Create geometric representation
@@ -94,17 +94,17 @@ namespace ews {
                     addBox(geode, 0.5f, 1.f);
                 }
                 else {
-                    const float slitAlpha = _dataModel.getSlitWidth() / barrierLength;
+                    const Real slitAlpha = _dataModel.getSlitWidth() / barrierLength;
                     if (_dataModel.getNumSlits() == Barrier::ONE) {
-                        float boxLength = 0.5f - (slitAlpha / 2);
+                        Real boxLength = 0.5f - (slitAlpha / 2);
                         addBox(geode, boxLength / 2, boxLength);
                         addBox(geode, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
-                        const float separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
+                        const Real separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
                         // Box length for boxes at either end of barrier
-                        float boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
+                        Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
                         addBox(geode, boxLength / 2, boxLength);
                         addBox(geode, 1 - boxLength / 2, boxLength);
                         // Box between the two slits

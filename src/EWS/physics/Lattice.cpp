@@ -24,7 +24,7 @@ using std::min;
 namespace ews {
     namespace physics {
         LatticeVal Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
-            double sum = 0.0;
+            LatticeVal sum = 0.0;
             if (getSize() == 0) return sum;
             const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
             const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(getWidth()) - 1);

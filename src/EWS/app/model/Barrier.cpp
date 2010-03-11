@@ -66,12 +66,12 @@ namespace ews {
                 sp->setSlitWidth(getSlitWidth());
                 if (getNumSlits() != ZERO) {
                     if (getNumSlits() == ONE) {
-                        sp->addSlit(.5f);
+                        sp->addSlit(.5);
                     }
                     else {
-                        float deltaAlpha = .5f * (getSlitSeparation() + getSlitWidth()) / length();
-                        sp->addSlit(.5f - deltaAlpha);
-                        sp->addSlit(.5f + deltaAlpha);
+                        Real deltaAlpha = .5 * (getSlitSeparation() + getSlitWidth()) / length();
+                        sp->addSlit(.5 - deltaAlpha);
+                        sp->addSlit(.5 + deltaAlpha);
                     }
                 }
                 return sp;

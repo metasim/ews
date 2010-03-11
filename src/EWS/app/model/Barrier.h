@@ -72,11 +72,11 @@ namespace ews {
                     return _slitSeparation;
                 }
                 
-                float length() const {
+                Real length() const {
                     return (_end - _start).length();
                 }
                 
-                float width() const {
+                Real width() const {
                     return ews::physics::DEFAULT_WALL_THICKNESS;
                 }
                 

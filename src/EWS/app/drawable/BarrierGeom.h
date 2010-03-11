@@ -50,7 +50,7 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(BarrierGeom)
-                void addBox(const osg::ref_ptr<osg::Geode>& geode, float boxCenter, float boxLength);
+                void addBox(const osg::ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength);
                 Barrier& _dataModel;
             };
         }

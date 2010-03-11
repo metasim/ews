@@ -48,7 +48,7 @@ namespace ews {
                     if(!geom->getDataModel().isPaused()) {
                     
                         const osg::FrameStamp* fs = nv->getFrameStamp();
-                        float value = fs->getSimulationTime();
+                        Real value = fs->getSimulationTime();
                         
                         Oscillator& o = geom->getDataModel().getOscillator();
                         o.updateTimeAndOscillator(value);
