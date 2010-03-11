@@ -42,7 +42,7 @@ namespace ews {
         void Oscillator::updateTimeAndOscillator(Real time) {
             _time = time;
             if (_oscillating) {
-                const Real value = getValue();
+                const OscillatorVal value = getValue();
                 // Making these int here so that subtraction doesn't wrap around
                 const int x = static_cast<int>(_x);
                 const int y = static_cast<int>(_y);
@@ -71,7 +71,7 @@ namespace ews {
             _oscillating = true;
             _inPulse = true;
         }
-        Real Oscillator::getValue() const {
+        OscillatorVal Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
         }
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
@@ -84,7 +84,7 @@ namespace ews {
             _phase = -getCosArg() + M_PI/2.0; // Puts getValue at its minimum
         }
         
-        Real Oscillator::getCosArg() const {
+        OscillatorVal Oscillator::getCosArg() const {
             return 2 * M_PI * _time / _period;
         }
     }

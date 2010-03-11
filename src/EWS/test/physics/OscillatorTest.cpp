@@ -23,7 +23,7 @@ using std::cos;
 
 namespace ews {
     namespace test {
-        const Real NADA = 0;
+        const OscillatorVal NADA = 0;
         
         void OscillatorTest::initTestCase() { /* do nothing */ }
         void OscillatorTest::cleanupTestCase() { /* do nothing */ }
@@ -40,15 +40,16 @@ namespace ews {
             }
             QCOMPARE(testOscillator.getRadius(), DEFAULT_RADIUS);
             QCOMPARE(testOscillator.getPeriod(), DEFAULT_PERIOD);            
-            QCOMPARE(testOscillator.x(), DEFAULT_X);            
+            QCOMPARE(testOscillator.x(), DEFAULT_X);
             QCOMPARE(testOscillator.y(), _waveModel.getLength() / 2);            
-            QCOMPARE(testOscillator.getAmplitude(), DEFAULT_AMPLITUDE);            
-            QCOMPARE(testOscillator.getTime(), NADA);            
+            QCOMPARE(testOscillator.getAmplitude(), DEFAULT_AMPLITUDE);
+            Real expectedTime = NADA;
+            QCOMPARE(testOscillator.getTime(), expectedTime);            
             QCOMPARE(testOscillator.getOscillateStatus(), false);         
         }
         void OscillatorTest::MethodSetRadiusWorks() {
             Oscillator testOscillator(_waveModel);
-            Real expected = 2.5;
+            OscillatorVal expected = 2.5;
             testOscillator.setRadius(expected);
             QCOMPARE(testOscillator.getRadius(), expected);
             testOscillator.setRadius(0.0);
@@ -58,7 +59,7 @@ namespace ews {
         }
         void OscillatorTest::MethodSetPeriodWorks() {
             Oscillator testOscillator(_waveModel);
-            Real expected = 2.5;
+            OscillatorVal expected = 2.5;
             testOscillator.setPeriod(expected);
             QCOMPARE(testOscillator.getPeriod(), expected);            
             testOscillator.setPeriod(0.0);
@@ -76,13 +77,13 @@ namespace ews {
         }
         void OscillatorTest::MethodComputeFrequencyWorks() {
             Oscillator testOscillator(_waveModel);
-            Real expected = 2;
+            OscillatorVal expected = 2;
             testOscillator.setPeriod(expected);
             QCOMPARE(testOscillator.computeFrequency(), 1 / expected);            
         }
         void OscillatorTest::MethodSetAmplitudeWorks() {
             Oscillator testOscillator(_waveModel);
-            Real expected = 2.5;
+            OscillatorVal expected = 2.5;
             testOscillator.setAmplitude(expected);
             QCOMPARE(testOscillator.getAmplitude(), expected);            
             testOscillator.setAmplitude(0.0);

@@ -24,10 +24,12 @@
 
 namespace ews {
     namespace physics {
-        const Real DEFAULT_PERIOD = 0.3;
-        const Real DEFAULT_AMPLITUDE = 1.0;
-        const Real MAX_AMPLITUDE = 2.0;
-        const Real DEFAULT_RADIUS = 2.0;
+        typedef double OscillatorVal;
+        
+        const OscillatorVal DEFAULT_PERIOD = 0.3;
+        const OscillatorVal DEFAULT_AMPLITUDE = 1.0;
+        const OscillatorVal MAX_AMPLITUDE = 2.0;
+        const OscillatorVal DEFAULT_RADIUS = 2.0;
         const unsigned int DEFAULT_X = 8;
         /**
          * @ingroup Physics
@@ -59,28 +61,28 @@ namespace ews {
             /**
              * Gets the current value associated with the oscillator.
              */
-            Real getValue() const;
+            OscillatorVal getValue() const;
              
             /**
              * Gets the radius the oscillator acts upon.
              * @return Oscillator radius
              */
-            Real getRadius() const { return _radius; }
+            OscillatorVal getRadius() const { return _radius; }
             /**
              * Sets the radius the oscillator acts upon.
              * @param r Oscillator radius
              */
-			void setRadius(Real r) { _radius = r > 0 ? r : 0; }
+			void setRadius(OscillatorVal r) { _radius = r > 0 ? r : 0; }
             /**
              * Gets the period of the oscillator
              * @return Oscillator period
              */
-            Real getPeriod() const { return _period; }
+            OscillatorVal getPeriod() const { return _period; }
             /**
              * Sets the period of the oscillator
              * @param p Oscillator period
              */
-            void setPeriod(Real p) { _period = p > 0 ? p : 0; }
+            void setPeriod(OscillatorVal p) { _period = p > 0 ? p : 0; }
             /**
              * Sets the location of the oscillator.
              * @param x X location of oscillator
@@ -101,17 +103,17 @@ namespace ews {
              * Computes the frequency of the oscillator.
              * @return Oscillator frequency.
              */
-            Real computeFrequency() const { return 1 / _period; }
+            OscillatorVal computeFrequency() const { return 1 / _period; }
             /**
              * Gets the amplitude of the oscillator.
              * @return Oscillator amplitude.
              */
-            Real getAmplitude() const { return _amplitude; }
+            OscillatorVal getAmplitude() const { return _amplitude; }
             /**
              * Gets the amplitude of the oscillator.
              * @param a Oscillator amplitude.
              */
-            void setAmplitude(Real a) { _amplitude = a > 0 ? a : 0; }
+            void setAmplitude(OscillatorVal a) { _amplitude = a > 0 ? a : 0; }
             /**
              * Gets the osillator's time state
              * @return time per the oscillator's perspective
@@ -132,15 +134,15 @@ namespace ews {
             Oscillator(const Oscillator&): _waveModel(*(new WaveModel(0, 0))) {}
             Oscillator& operator=(const Oscillator& l) { return *this; } // Not allowed
             void resetPhase();
-            Real getCosArg() const;
+            OscillatorVal getCosArg() const;
             WaveModel& _waveModel;
             unsigned int _x;
             unsigned int _y;
-            Real _radius;
-            Real _amplitude;
-            Real _period;
-            Real _time;
-            Real _phase;
+            OscillatorVal _radius;
+            OscillatorVal _amplitude;
+            OscillatorVal _period;
+            OscillatorVal _time;
+            OscillatorVal _phase;
             bool _oscillating;
             bool _inPulse;
         };
