@@ -45,3 +45,9 @@ vs:
 
 clean:
 	rm -rf $(BLD) $(XBLD) $(VSBLD) $(XBLDT)
+
+install:
+	(mkdir -p $(BLD); cd $(BLD); cmake $(CMAKE_FLAGS) ..;  make install)
+
+package:
+	(mkdir -p $(BLD); cd $(BLD); cmake $(CMAKE_FLAGS) ..;  make package)

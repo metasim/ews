@@ -228,10 +228,10 @@ set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/\${EXE_NAME}")
 if(APPLE)
   set(plugin_dest_dir ${EXE_NAME}.app/Contents/MacOS)
   set(qtconf_dest_dir ${EXE_NAME}.app/Contents/Resources)
-  set(APPS "\${CMAKE_INSTALL_PREFIX}/\${EXE_NAME}.app")
+  set(APPS "\${CMAKE_INSTALL_PREFIX}/${EXE_NAME}.app")
 endif(APPLE)
 if(WIN32)
-  set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/\${EXE_NAME}.exe")
+  set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${EXE_NAME}.exe")
 endif(WIN32)
 
 #--------------------------------------------------------------------------------
