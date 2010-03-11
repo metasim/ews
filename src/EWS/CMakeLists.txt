@@ -13,7 +13,7 @@ cmake_minimum_required(VERSION 2.8)
 
 option(TESTING "build unit tests and include 'test' target" ON)
 
-set(EWS_MODULES app/widget app/drawable app/model physics util test)
+set(EWS_MODULES app/widget app/drawable app/model physics geometry util test)
 
 #--------------------------------------------------------------------------------
 # This is the list of source files that make up the physics engine
@@ -28,7 +28,7 @@ file(GLOB EWS_SRCS main.cpp app/widget/*.cpp app/model/*.cpp app/drawable/*.cpp 
 #--------------------------------------------------------------------------------
 # Regular (non-qt) header files
 #--------------------------------------------------------------------------------
-file(GLOB EWS_HDRS physics/*.h util/*.h EWSDefine.h)
+file(GLOB EWS_HDRS physics/*.h util/*.h geometry/*.h EWSDefine.h)
 
 
 #--------------------------------------------------------------------------------

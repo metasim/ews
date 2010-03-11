@@ -24,7 +24,7 @@
 #include <osg/NodeCallback>
 #include "FaucetGeom.h"
 #include "Oscillator.h"
-#include "demo/Teapot.h"
+#include "Teapot.h"
 #include <QtGlobal>
 
 
