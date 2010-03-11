@@ -49,8 +49,8 @@ namespace ews {
         }
         
         void PrecomputedPotentialTest::CanHandlePotentialOutsideItsBounds() {
-            const float size = 50;
-            const float width = 6.f;
+            const Real size = 50;
+            const Real width = 6.f;
             ref_ptr<Potential> east = new WallPotential(Vec2(size, 0.0), Vec2(size, size), width);
             ref_ptr<Potential> north = new WallPotential(Vec2(0.0, size), Vec2(size, size), width);
             ref_ptr<Potential> south = new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0), width);

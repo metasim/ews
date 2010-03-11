@@ -34,7 +34,7 @@ namespace ews {
                 _slitAlphas[i] = alpha;
             }
         }
-        void SlitPotential::addSlit(float alphaVal) {
+        void SlitPotential::addSlit(Real alphaVal) {
             _slitAlphas.push_back(alphaVal);
             sort(_slitAlphas.begin(), _slitAlphas.end());
         }

@@ -28,8 +28,8 @@ using std::sqrt;
 
 namespace ews {
     namespace physics {
-        const float DEFAULT_HALF_THICKNESS_SQ = 2 * 2;
-        const float DEFAULT_POTENTIAL = 100.0;
+        const Real DEFAULT_HALF_THICKNESS_SQ = 2 * 2;
+        const Real DEFAULT_POTENTIAL = 100.0;
         using osg::Vec2;
 
         /**
@@ -60,7 +60,7 @@ namespace ews {
              * @param p2 The other point of the wall
              * @param thickness How thick the wall is
              */
-            WallPotential(const Vec2& p1, const Vec2& p2, float thickness):
+            WallPotential(const Vec2& p1, const Vec2& p2, Real thickness):
             _lineSegment(p1, p2), _halfThicknessSq(thickness * thickness / 4.f) {
                 /* do nothing */
             }
@@ -103,7 +103,7 @@ namespace ews {
              * Returns the thickness of the wall.
              * @return Wall thickness
              */
-            float getThickness() const { return sqrt(_halfThicknessSq * 4.f); }
+            Real getThickness() const { return sqrt(_halfThicknessSq * 4.f); }
             /**
              * Returns the length of the wall (i.e., the distance between its two end points.
              */
@@ -112,7 +112,7 @@ namespace ews {
              * Sets the thickness of the wall.
              * @param thickness New thickness for the wall.
              */
-            void setThickness(float thickness) { _halfThicknessSq = thickness * thickness / 4.f; }
+            void setThickness(Real thickness) { _halfThicknessSq = thickness * thickness / 4.f; }
         protected:
             WallPotential(const WallPotential&) {} // Not allowed
             WallPotential& operator=(const WallPotential& l) { return *this; } // Not allowed
