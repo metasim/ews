@@ -276,11 +276,20 @@ install(CODE "
     " COMPONENT Runtime)
 
 
-# To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-# where CPackConfig.cmake is created by including CPack
-# And then there's ways to customize this as well
-set(CPACK_BINARY_DRAGNDROP ON)
-include(CPack)
+if(WIN32)
+    set(CPACK_GENERATOR ZIP)
+    set(CPACK_SOURCE_GENERATOR ZIP)
+else()
+    set(CPACK_GENERATOR TGZ)
+    set(CPACK_SOURCE_GENERATOR TGZ)
+    if(APPLE)
+        # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
+        # where CPackConfig.cmake is created by including CPack
+        # And then there's ways to customize this as well
+        set(CPACK_BINARY_DRAGNDROP ON)
+        include(CPack)
+    end()
+end()
 
 ############################################################
 # C++ tests built with standard compiler flags.
