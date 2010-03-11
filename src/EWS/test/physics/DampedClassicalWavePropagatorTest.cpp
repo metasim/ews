@@ -97,8 +97,8 @@ namespace ews {
             }
         }
         void DampedClassicalWavePropagatorTest::BenchmarkPropagate() {
-            unsigned int width = 500;
-            unsigned int length = 500;
+            unsigned int width = 1000;
+            unsigned int length = 1000;
             Lattice lattice(width, length);
             ref_ptr<Potential> p = new ConstantPotential();
             DampedClassicalWavePropagator testDampedClassicalWavePropagator(p.get(), width, length, 20, 20);
