@@ -32,6 +32,9 @@ namespace Ui
 
 namespace ews {
     namespace app {
+        /**
+         * Contains classes responsible for displaying forms and gathering input from the user.
+         */
         namespace widget {
             
             using ews::app::model::BarrierSet;

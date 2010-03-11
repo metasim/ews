@@ -29,6 +29,9 @@
 
 namespace ews {
     namespace app {
+        /**
+         * Contains classes responsible for business logic associated with drawable objects.
+         */
         namespace model {
             using ews::physics::SlitPotential;
             using ews::physics::Potential;

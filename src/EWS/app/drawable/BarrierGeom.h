@@ -28,7 +28,13 @@
 #include "DrawableQtAdapter.h"
 
 namespace ews {
+    /**
+     * Parent namespace for GUI-related code.
+     */
     namespace  app {
+        /**
+         * Contains classes responsible for generating 3-dimensional openGL representations.
+         */
         namespace drawable {
             
             using ews::app::model::Barrier;

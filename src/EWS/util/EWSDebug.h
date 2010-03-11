@@ -27,9 +27,14 @@
 #include "Barrier.h"
 #include "DripSource.h"
 
-
 namespace ews {
+    /**
+     * Parent namespace for utility classes independent of physics and UI.
+     */
     namespace util {
+        /**
+	 * Contains classes and methods used for gathering debug information.
+	 */
         namespace debug {
             
             /** Character to use for indentation. */
