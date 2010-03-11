@@ -24,6 +24,10 @@
 
 namespace ews {
     namespace physics {
+
+        /**
+         * Value type to use for Oscillator class. Increased precision is needed for trigonometric functions.
+         */
         typedef double OscillatorVal;
         
         const OscillatorVal DEFAULT_PERIOD = 0.3;

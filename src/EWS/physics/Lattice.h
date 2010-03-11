@@ -26,7 +26,10 @@ using std::vector;
 
 namespace ews {
     namespace physics {
-        
+
+        /**
+         * Value type to use for operations that will be rendered by openGL.
+         */
         typedef float LatticeVal;
         
         

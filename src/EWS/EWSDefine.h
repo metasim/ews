@@ -21,7 +21,7 @@
 
 namespace ews {
     /**
-     * Default precision to use for real numbers
+     * Default precision to use for real numbers.
      */
     typedef float Real;
 }
