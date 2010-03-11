@@ -35,13 +35,11 @@ namespace ews {
                                  this, SLOT(forwardBarrierSetRemoval(int, Barrier*)));
                 
                 
-                _dripSource1.setObjectName("dripSource1");
-                _dripSource1.setPosition(osg::Vec2(_waveMedium.getWidth()/2,_waveMedium.getLength()/2));
-                _dripSource1.setEnabled(true);
+                _dripSource1.setObjectName(ews::app::model::DRIPSOURCE1);
+                _dripSource1.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
                 
-                _dripSource2.setObjectName("dripSource2");
-                _dripSource2.setPosition(osg::Vec2(20, 20));
-                _dripSource2.setEnabled(false);
+                _dripSource2.setObjectName(ews::app::model::DRIPSOURCE2);
+                _dripSource2.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
                 
                 _waveMedium.setObjectName("waveMedium");
                 setPaused(true);

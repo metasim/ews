@@ -25,10 +25,14 @@
 #include <osg/Vec2>
 #include "WaveModel.h"
 #include "Oscillator.h"
+#include "EWSDefine.h"
 
 namespace ews {
     namespace app {
         namespace model {
+            const QString DRIPSOURCE1("dripSource1");
+            const QString DRIPSOURCE2("dripSource2");
+
             using ews::physics::WaveModel;
             using ews::physics::Oscillator;
             using osg::Vec2;
@@ -91,6 +95,11 @@ namespace ews {
                 bool isPaused() const {
                     return _paused;
                 }
+                
+                /**
+                 * Initializes (or resets) the drip soruce according to its objectName.
+                 */
+                void initialize(Real maxWidth, Real maxLength);
                     
                 
             public slots:

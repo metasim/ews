@@ -17,7 +17,7 @@
  */
 
 #include "DripSource.h"
-
+#include <QString>
 
 namespace ews {
     namespace app {
@@ -73,6 +73,17 @@ namespace ews {
             void DripSource::pokeOscillator() {
                 qDebug() << "triggering oscillator";
                 _oscillator.firePulse();
+            }
+            
+            void DripSource::initialize(Real maxWidth, Real maxLength) {
+                if (objectName() != DRIPSOURCE2) {
+                    setPosition(osg::Vec2(maxWidth / 2, maxLength / 2));
+                    setEnabled(true);
+                }
+                else {
+                    setPosition(osg::Vec2(20 < maxWidth ? 20 : maxWidth / 4, 20 < maxLength ? 20 : maxLength / 4));
+                    setEnabled(false);
+                }
             }
         }
     }

@@ -21,8 +21,9 @@
 
 #include <vector>
 using std::vector;
-#include <cassert>
-#include <cstring>
+// Needed if asserts are turned back on
+//#include <cassert>
+//#include <cstring>
 
 namespace ews {
     namespace physics {
