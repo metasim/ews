@@ -46,10 +46,6 @@ namespace ews {
             // Code here will be called after each test case finishes
             void cleanup();
             /**
-             * Tests that the PrecomputedPotential::PrecomputedPotential() constructor works
-             */
-            void DefaultConstructorIsZero();
-            /**
              * Tests that the PrecomputedPotential can handle a single constant potential
              */
             void CanHandleSingleConstantPotential();

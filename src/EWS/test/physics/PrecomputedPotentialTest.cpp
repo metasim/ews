@@ -33,12 +33,6 @@ namespace ews {
         void PrecomputedPotentialTest::init() { /* do nothing */ }
         void PrecomputedPotentialTest::cleanup() { /* do nothing */ }
         
-        void PrecomputedPotentialTest::DefaultConstructorIsZero() {
-            PrecomputedPotential p;
-            // Tests that the potential is zero (unsigned int values shouldn't matter)
-            QCOMPARE(p.getPotential(2, 2), NO_POTENTIAL);
-        }
-        
         void PrecomputedPotentialTest::CanHandleSingleConstantPotential() {
             const Real value = 3.14159;
             ref_ptr<Potential> constP = new ConstantPotential(value);

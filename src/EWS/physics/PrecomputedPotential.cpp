@@ -22,7 +22,7 @@ namespace ews {
     namespace physics {
         PrecomputedPotential::PrecomputedPotential(Potential* p, unsigned int width,
                                                    unsigned int length):
-        _potentialValues(width, vector<Real>(length, 0.0)) {
+        _potentialValues(width, vector<Real>(length, 0.0)), _width(width), _length(length) {
             for (unsigned int i = 0; i < width; i++) {
                 for (unsigned int j = 0; j < length; j++) {
                     _potentialValues[i][j] = p->getPotential(i, j);

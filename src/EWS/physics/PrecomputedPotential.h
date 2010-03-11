@@ -34,10 +34,6 @@ namespace ews {
         class PrecomputedPotential : public Potential {
         public:
             /**
-             * Default constructor
-             */
-            PrecomputedPotential(): _potentialValues() { /* do nothing */ }
-            /**
              * Constructor that actually calculates a potential
              * @param p Potential to precompute
              * @param width Width of region where potential is valid (region is valid from 0 to width - 1)
@@ -58,13 +54,14 @@ namespace ews {
                 return (x < getWidth()) && (y < getLength()) ? _potentialValues[x][y] : 0.0;
             }
         private:
+            PrecomputedPotential(): _potentialValues(), _width(0), _length(0) {} // Not allowed
             PrecomputedPotential(const PrecomputedPotential&) {} // Not allowed
             PrecomputedPotential& operator=(const PrecomputedPotential& l) { return *this; } // Not allowed
-            unsigned int getWidth() const { return _potentialValues.size(); }
-            unsigned int getLength() const {
-                return _potentialValues.size() > 0 ? _potentialValues[0].size() : 0;
-            }
+            inline unsigned int getWidth() const { return _width; }
+            inline unsigned int getLength() const { return _length; }
             vector<vector<Real> > _potentialValues;
+            unsigned int _width;
+            unsigned int _length;
         };
     }
 }
