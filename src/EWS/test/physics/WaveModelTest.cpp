@@ -40,10 +40,10 @@ namespace ews {
             testWaveModel.propagate();
             LatticeVal prior = expected;
             LatticeVal priorPrior = prior;
-            const LatticeVal w1 = 0.14;
-            const LatticeVal w2 = 0.06;
-            const LatticeVal w3 = 1.1;
-            const LatticeVal w4 = -0.95;
+            const LatticeVal w1 = 0.14f;
+            const LatticeVal w2 = 0.06f;
+            const LatticeVal w3 = 1.1f;
+            const LatticeVal w4 = -0.95f;
             expected = w3 * prior + w4 * priorPrior;
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             LatticeVal neighbor = w1 * prior;
@@ -68,14 +68,14 @@ namespace ews {
         }
         void WaveModelTest::MethodPropagateWorksAcrossSpace() {
             WaveModel testWaveModel(50, 50);
-            LatticeVal expected = 1.0;
+            LatticeVal expected = 1.0f;
             unsigned int x = 10;
             unsigned int y = 10;
             testWaveModel.setSourceValue(x, y, expected);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             x++;
-            const LatticeVal w1 = 0.14;
-            const LatticeVal w2 = 0.06;
+            const LatticeVal w1 = 0.14f;
+            const LatticeVal w2 = 0.06f;
             QBENCHMARK {
                 for (; x < testWaveModel.getWidth(); x++) {
                     QCOMPARE(testWaveModel.getValue(x, y), 0.0f);

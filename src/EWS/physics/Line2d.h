@@ -24,7 +24,7 @@
 
 namespace ews {
     namespace physics {
-        const Real EPSILON_FACTOR = 1e-6; 
+        const Real EPSILON_FACTOR = 1e-6f;
         
         using osg::Vec2;
         

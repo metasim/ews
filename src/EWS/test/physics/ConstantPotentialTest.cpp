@@ -32,7 +32,7 @@ namespace ews {
         }
         
         void ConstantPotentialTest::ValueConstructorYieldsValue() {
-            Real value = 3.14159;
+            Real value = 3.14159f;
             ConstantPotential p(value);
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
             QCOMPARE(p.getPotential(2, 2), value);

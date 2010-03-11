@@ -30,8 +30,8 @@ namespace ews {
         void Point2dTest::cleanup() { /* do nothing */ }
         
         void Point2dTest::CopyConstructorTakesVector() {
-            Real x = 1235.352534;
-            Real y = -235.234165;
+            Real x = 1235.352534f;
+            Real y = -235.234165f;
             const Vec2 p(Vec2(x, y));
             QCOMPARE(p.x(), x);
             QCOMPARE(p.y(), y);

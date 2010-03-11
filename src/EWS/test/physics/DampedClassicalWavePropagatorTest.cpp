@@ -44,10 +44,10 @@ namespace ews {
             testDampedClassicalWavePropagator.propagate(lattice);
             LatticeVal prior = expected;
             LatticeVal priorPrior = prior;
-            const LatticeVal w1 = 0.14;
-            const LatticeVal w2 = 0.06;
-            const LatticeVal w3 = 1.1;
-            const LatticeVal w4 = -0.95;
+            const LatticeVal w1 = 0.14f;
+            const LatticeVal w2 = 0.06f;
+            const LatticeVal w3 = 1.1f;
+            const LatticeVal w4 = -0.95f;
             expected = w3 * prior + w4 * priorPrior;
             QCOMPARE(lattice.getValue(x, y), expected);
             LatticeVal neighbor = w1 * prior;
@@ -82,8 +82,8 @@ namespace ews {
             lattice.setValue(x, y, expected);
             testDampedClassicalWavePropagator.setBoundaryCondition(x, y, expected);
             x++;
-            const LatticeVal w1 = 0.14;
-            const LatticeVal w2 = 0.06;
+            const LatticeVal w1 = 0.14f;
+            const LatticeVal w2 = 0.06f;
             const LatticeVal zero = 0.0f;
             for (; x < lattice.getWidth(); x++) {
                 QCOMPARE(lattice.getValue(x, y), zero);

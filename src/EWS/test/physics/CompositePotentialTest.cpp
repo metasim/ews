@@ -39,7 +39,7 @@ namespace ews {
         
         void CompositePotentialTest::CanHandleSingleConstantPotential() {
             CompositePotential p;
-            const Real value = 3.14159;
+            const Real value = 3.14159f;
             ref_ptr<Potential> constP = new ConstantPotential(value);
             p.addPotential(constP.get());
             // Tests that the potential is what we assigned it (unsigned int values shouldn't matter)
@@ -48,7 +48,7 @@ namespace ews {
 
         void CompositePotentialTest::CanHandleTwoConstantPotentials() {
             CompositePotential p;
-            const Real value = 3.14159;
+            const Real value = 3.14159f;
             ref_ptr<Potential> constP = new ConstantPotential(value);
             p.addPotential(constP.get());
             p.addPotential(constP.get());
@@ -58,7 +58,7 @@ namespace ews {
         
         void CompositePotentialTest::MethodRemovePotentialWorks() {
             CompositePotential p;
-            const Real value = 3.14159;
+            const Real value = 3.14159f;
             ref_ptr<Potential> constP = new ConstantPotential(value);
             p.addPotential(constP);
             p.addPotential(constP);
@@ -68,7 +68,7 @@ namespace ews {
         }
         
         void CompositePotentialTest::CanHandleCompositePotentialPotential() {
-            const Real size = 50;
+            const Real size = 50f;
             ref_ptr<Potential> east = new WallPotential(Vec2(size, 0.0), Vec2(size, size));
             ref_ptr<Potential> north = new WallPotential(Vec2(0.0, size), Vec2(size, size));
             ref_ptr<Potential> south = new WallPotential(Vec2(0.0, 0.0), Vec2(size, 0.0));

@@ -34,7 +34,7 @@ namespace ews {
         void PrecomputedPotentialTest::cleanup() { /* do nothing */ }
         
         void PrecomputedPotentialTest::CanHandleSingleConstantPotential() {
-            const Real value = 3.14159;
+            const Real value = 3.14159f;
             ref_ptr<Potential> constP = new ConstantPotential(value);
             PrecomputedPotential p(constP, 10, 10);
             QCOMPARE(p.getPotential(2, 2), value);
@@ -43,7 +43,7 @@ namespace ews {
         }
         
         void PrecomputedPotentialTest::CanHandlePotentialOutsideItsBounds() {
-            const Real size = 50;
+            const Real size = 50f;
             const Real width = 6.f;
             ref_ptr<Potential> east = new WallPotential(Vec2(size, 0.0), Vec2(size, size), width);
             ref_ptr<Potential> north = new WallPotential(Vec2(0.0, size), Vec2(size, size), width);

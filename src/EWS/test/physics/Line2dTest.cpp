@@ -35,8 +35,8 @@ namespace ews {
         }
         
         void Line2dTest::MethodsGetSetStartWork() {
-            Real x = 13542.523;
-            Real y = -99922.3452;
+            Real x = 13542.523f;
+            Real y = -99922.3452f;
             Vec2 newStart(x, y);
             _l.setStart(newStart);
             QCOMPARE(_l.getStart().x(), x);
@@ -44,8 +44,8 @@ namespace ews {
         }
         
         void Line2dTest::MethodsGetSetEndWork() {
-            Real x = 13542.523;
-            Real y = -99922.3452;
+            Real x = 13542.523f;
+            Real y = -99922.3452f;
             Vec2 newEnd(x, y);
             _l.setEnd(newEnd);
             QCOMPARE(_l.getEnd().x(), x);
@@ -53,26 +53,26 @@ namespace ews {
         }
         
         void Line2dTest::MethodEpsilonWorks() {
-            const Vec2 p1(0.0, 3.0);
-            const Vec2 p2(4.0, 0.0);
+            const Vec2 p1(0.0f, 3.0f);
+            const Vec2 p2(4.0f, 0.0f);
             const Line2d l(p1, p2);
             QCOMPARE(l.epislon(), 5 * ews::physics::EPSILON_FACTOR);
         }
         
         void Line2dTest::MethodPtSegProjectionWorks() {
-            const Vec2 p1(0.0, 0.0);
-            const Vec2 p2(4.0, 0.0);
+            const Vec2 p1(0.0f, 0.0f);
+            const Vec2 p2(4.0f, 0.0f);
             const Line2d l(p1, p2);
-            const Vec2 ptToProject1(2.0, 3.1253);
+            const Vec2 ptToProject1(2.0f, 3.1253f);
             Vec2 projectedPt;
             QCOMPARE(l.ptSegProjection(ptToProject1, projectedPt), true);
             QCOMPARE(projectedPt.x(), 2.0f);
             QCOMPARE(projectedPt.y(), 0.0f);
-            const Vec2 ptToProject2(4.0, 3.1253);
+            const Vec2 ptToProject2(4.0f, 3.1253f);
             QCOMPARE(l.ptSegProjection(ptToProject2, projectedPt), true);
             QCOMPARE(projectedPt.x(), 4.0f);
             QCOMPARE(projectedPt.y(), 0.0f);
-            const Vec2 ptToProject3(4.01, 3.1253);
+            const Vec2 ptToProject3(4.01f, 3.1253f);
             QCOMPARE(l.ptSegProjection(ptToProject3, projectedPt), false);
             QCOMPARE(projectedPt.x(), 4.01f);
             QCOMPARE(projectedPt.y(), 0.0f);

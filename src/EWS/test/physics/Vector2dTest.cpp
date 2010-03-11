@@ -30,32 +30,32 @@ namespace ews {
         void Vector2dTest::cleanup() { /* do nothing */ }
         
         void Vector2dTest::CopyConstructorTakesPoints() {
-            const Real x = -1234.51235;
-            const Real y = 3235235253.2343;
+            const Real x = -1234.51235f;
+            const Real y = 3235235253.2343f;
             const Vec2 v(Vec2(x, y));
             QCOMPARE(v.x(), x);
             QCOMPARE(v.y(), y);
         }
         
         void Vector2dTest::MethodLengthWorks() {
-            const Vec2 v(5.0, 12.0);
+            const Vec2 v(5.0f, 12.0f);
             QCOMPARE(v.length(), 13.0f);
         }
         
         void Vector2dTest::MethodLengthSqWorks() {
-            const Vec2 v(1.0, 2.1);
+            const Vec2 v(1.0f, 2.1f);
             QCOMPARE(v.length2(), 5.41f);
         }
         
         void Vector2dTest::MethodDotWorks() {
-            const Vec2 v1(0.0, 3.0);
-            const Vec2 v2(4.0, 0.0);
+            const Vec2 v1(0.0f, 3.0f);
+            const Vec2 v2(4.0f, 0.0f);
             QCOMPARE(v1 * v2, 0.0f);
-            const Vec2 v3(0.0, 4.0);
+            const Vec2 v3(0.0f, 4.0f);
             QCOMPARE(v1 * v3, 12.0f);
-            const Vec2 v4(0.0, -4.0);
+            const Vec2 v4(0.0f, -4.0f);
             QCOMPARE(v1 * v4, -12.0f);
-            const Vec2 v5(3.14159, -4.0);
+            const Vec2 v5(3.14159f, -4.0f);
             QCOMPARE(v1 * v5, -12.0f);
         }
     }

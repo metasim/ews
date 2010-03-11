@@ -41,8 +41,10 @@ namespace ews {
             unsigned int width = _largeLattice.getWidth() - 1;
             unsigned int length = _largeLattice.getLength() - 1;
             _largeLattice = _priorLattice; // At this point, largeLattice and priorLattice should already be the same
-            const LatticeVal w1 = 0.14;
-            const LatticeVal w2 = 0.06;
+            const LatticeVal w1 = 0.14f;
+            const LatticeVal w2 = 0.06f;
+	    const LatticeVal w3 = 1.1f;
+	    const LatticeVal w4 = 0.95f;
             for (unsigned int i = 1; i < width; i++) {
                 LatticeVal* priorRow = _priorLattice.getRow(i - 1);
                 LatticeVal* row = _priorLattice.getRow(i);
@@ -51,12 +53,12 @@ namespace ews {
                 LatticeVal* newRow = _largeLattice.getRow(i);
                 for (unsigned int j = 1; j < length; j++) {
                     if (_potential->getPotential(i, j) != 0) {
-                        newRow[j] = 0.0;
+                        newRow[j] = 0.0f;
                     }
                     else {
                         const LatticeVal neigh = (priorRow[j] + row[j-1] + row[j+1] + nextRow[j]) * w1 +
                                              (priorRow[j-1] + priorRow[j+1] + nextRow[j-1] + nextRow[j+1]) * w2;
-                        newRow[j] = row[j] * 1.1 - oldRow[j] * 0.95 + neigh;
+                        newRow[j] = row[j] * w3 - oldRow[j] * w4 + neigh;
                     }
                 }
             }
