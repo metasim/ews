@@ -50,6 +50,8 @@ endmacro()
 unmoc(DrawableFactory.h)
 unmoc(CameraController.h)
 unmoc(VertexHeightUpdater.h)
+unmoc(MouseEventHandler.h)
+unmoc(Teapot.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
 

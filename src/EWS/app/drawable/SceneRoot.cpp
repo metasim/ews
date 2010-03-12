@@ -17,17 +17,22 @@
  */
 
 #include "SceneRoot.h"
-#include "DrawableFactory.h"
+
 #include <osg/Light>
 #include <osg/LightSource>
-
+#include <osg/Node>
+#include <osgManipulator/Dragger>
+#include "DrawableFactory.h"
+#include "PickHandler.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
+            using namespace osgManipulator;
+            
             SceneRoot::SceneRoot(QObject* parent) 
-            : QObject(parent), osg::PositionAttitudeTransform(), _drawables(), _manipCommander() {
+            : QObject(parent), osg::MatrixTransform(), _drawables(), _manipCommander() {
                 // Set up some basic lighting.
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
@@ -41,84 +46,56 @@ namespace ews {
                 light->setAmbient(Vec4(0.1f, 0.1f, 0.1f, 1.0f)); 
                 light->setDiffuse(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
                 light->setSpecular(Vec4(0.8f, 0.8f, 0.8f, 1.0f)); 
-//                light->setDirection(Vec3(0.0f, 0.0f, 0.0f));
-//                light->setSpotCutoff(25.f );
                 
                 ref_ptr<LightSource> lSource = new LightSource;
                 lSource->setLight(light.get());
                 lSource->setReferenceFrame(LightSource::ABSOLUTE_RF );
                 addChild(lSource.get());
                 
-                
                 _manipCommander = new osgManipulator::CommandManager;
+                
+                addEventCallback(new PickHandler);
             }
             
             
             SceneRoot::~SceneRoot() {
             }
             
-            void SceneRoot::centerScene() {
-                setPosition(Vec3(0, 0, 0));
-                const BoundingSphere& bounds = getBound();
-                Vec3d center = bounds.center();
-                center.z() = 0;
-                setPosition(-center);
-            }
-            
-            osg::Node* SceneRoot::setupManipulator(DrawableQtAdapter* drawable) {
+            Node* SceneRoot::setupManipulator(DrawableQtAdapter* drawable) {
                 
-                Dragger* dragger = drawable->createDragger();
+                ref_ptr<Dragger> dragger = drawable->createDragger();
                 if(!dragger) {
                     return drawable;
                 }
                 
-                /** The Geometry for the TabBoxDragger  **/
-                osg::ref_ptr<osg::Geode> geom2 = new osg::Geode();
-                osg::ref_ptr<osg::ShapeDrawable> shape = 
-                new osg::ShapeDrawable(new osg::Cone(osg::Vec3(-100.0,0.0,30.0), 20.0f, 50.0f));
-                shape->setColor(osg::Vec4(0.2f, 0.6f, 0.2f, 1.0f));
-                geom2->addDrawable(shape.get());
-                
                 /** osg::Group node **/
-                group = new osg::Group();
-                arTransform->addChild(group.get());    
+                Group* group = new Group;
                 
                 /** Selection Node **/
-                selection =  new osgManipulator::Selection();
+                ref_ptr<Selection> selection =  new Selection;
                 group->addChild(selection.get());
-                selection->addChild(geom2);
+                selection->addChild(drawable);
                 
-                /** Dragger Node:
-                 * This one is a TabBoxDragger for both scaling and translation **/
-                dragger = new osgManipulator::TabBoxDragger();
-                dragger->setupDefaultGeometry();
-                group->addChild(dragger.get());
+                group->addChild(dragger);
                 
                 /** Starting matrix for the Dragger **/
-                scale = geom2->getBound().radius() * 1.5f;
-                mat = osg::Matrix::scale(scale, scale, scale) * osg::Matrix::translate(geom2->getBound().center());
+                BoundingSphere bounds = drawable->getBound();
+                float scale =  bounds.radius() * 1.5f;
+                Matrixd mat = Matrix::scale(scale, scale, scale) * Matrix::translate(bounds.center());
                 dragger->setMatrix(mat);
                 
                 /** Command Manager - connects Dragger objects with Selection objects **/
-                commandManager->connect(*(dragger.get()), *(selection.get()));                
-                
-                
-                
+                _manipCommander->connect(*(dragger.get()), *(selection.get()));
+                return group;
             }
             
             void SceneRoot::addDrawableFor(QObject& data) {
                 DrawableQtAdapter* drawable = DrawableFactory::instance().createDrawableFor(data);
                 if(drawable) {
-                    osg::Node* parent = setupManipulator(drawable);
+                    Node* parent = setupManipulator(drawable);
                     
                     addChild(parent);
-                    _drawables.insert(&data, geom);
-                }
-
-                // HACK: Process of centering scene at origin needs to be 
-                // better handled outside of here
-                if(_drawables.size() == 1) {
-                    centerScene();
+                    _drawables.insert(&data, parent);
                 }
             }
             
@@ -129,6 +106,7 @@ namespace ews {
                     removeChild(geom);
                 }
             }
+
         }
     }
 }

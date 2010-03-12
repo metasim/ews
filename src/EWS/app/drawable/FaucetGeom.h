@@ -44,11 +44,7 @@ namespace ews {
                 
                 /** Create the type of dragger this geometry type supports. */
                 virtual osgManipulator::Dragger* createDragger() {
-                    Translate2DDragger* dragger = 
-                        new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), osg::Vec3f(0, 0, 0)));
-                    
-                    dragger->setupDefaultGeometry();
-                    return dragger;
+                    return _dragger.get();
                 }
                 
                 
@@ -71,7 +67,10 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(FaucetGeom)
+                void createGeom();
+                
                 DripSource& _dataModel;
+                ref_ptr<Translate2DDragger> _dragger;
             };
         }
     }

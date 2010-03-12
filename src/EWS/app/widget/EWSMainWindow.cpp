@@ -58,6 +58,9 @@ namespace ews {
                 
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
+
+                // Make sure all consituents know we're getting ready to start.
+                reset();
                 
                 // Start simulation.
                 start();

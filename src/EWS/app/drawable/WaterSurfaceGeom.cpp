@@ -137,15 +137,7 @@ namespace ews {
                     if (ebo) elements->setElementBufferObject(ebo.get());   
                 }
                 
-                geom->setUseVertexBufferObjects(true);
-//                
-//                // Set default vertex color.
-//                ref_ptr<Vec3Array> colors = new osg::Vec3Array(1);
-//                (*colors)[0] = WATER_COLOR;
-//                geom->setColorArray(colors.get());
-//                geom->setColorBinding(Geometry::BIND_OVERALL);
-//                geode->getOrCreateStateSet()->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
-
+                // geom->setUseVertexBufferObjects(true);
                 
                 // Register the delegate responsible for updating hight and 
                 // doing shading.

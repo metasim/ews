@@ -20,17 +20,13 @@
 #include "QOSGWidget.h"
 #include <QtGui/QKeyEvent>
 #include <osgGA/StateSetManipulator>
-
+#include <osgGA/MatrixManipulator>
 #include <osg/Geometry>
 #include <osg/Shape>
 #include <osg/ShapeDrawable>
 #include <osgViewer/Viewer>
 #include <osgViewer/ViewerEventHandlers>
 #include <osg/MatrixTransform>
-
-//#include <osgAnimation/BasicAnimationManager>
-//#include <osgAnimation/Channel>
-//#include <osgAnimation/UpdateCallback>
 
 #include "CameraController.h"
 
@@ -89,10 +85,17 @@ namespace ews {
             void QOSGWidget::setSceneData(osg::Node* node) {
                 osgViewer::Viewer::setSceneData(node);
                 getCameraManipulator()->setNode(node);
-                
             }
             
             void QOSGWidget::homePosition() {
+                using ews::app::drawable::CameraController;
+                
+                osgGA::MatrixManipulator* mat = getCameraManipulator();
+                CameraController* ctrl;
+                if(ctrl = dynamic_cast<CameraController*> (mat)) {
+                    ctrl->computeHomePosition();
+                }
+                
                 // HACK: Happen to know that the CameraController responds
                 // to the space key for a camera reset, which seems to need to be 
                 // called inside the event loop.
