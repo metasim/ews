@@ -26,7 +26,8 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::PositionAttitudeTransform(), _drawables() {
+            SceneRoot::SceneRoot(QObject* parent) 
+            : QObject(parent), osg::PositionAttitudeTransform(), _drawables(), _manipCommander() {
                 // Set up some basic lighting.
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
@@ -47,6 +48,9 @@ namespace ews {
                 lSource->setLight(light.get());
                 lSource->setReferenceFrame(LightSource::ABSOLUTE_RF );
                 addChild(lSource.get());
+                
+                
+                _manipCommander = new osgManipulator::CommandManager;
             }
             
             
@@ -61,13 +65,56 @@ namespace ews {
                 setPosition(-center);
             }
             
-            void SceneRoot::addDrawableFor(QObject& data) {
-                osg::Node* geom = DrawableFactory::instance().createDrawableFor(data);
-                if(geom) {
-                    addChild(geom);
-                    _drawables.insert(&data, geom);
+            osg::Node* SceneRoot::setupManipulator(DrawableQtAdapter* drawable) {
+                
+                Dragger* dragger = drawable->createDragger();
+                if(!dragger) {
+                    return drawable;
                 }
                 
+                /** The Geometry for the TabBoxDragger  **/
+                osg::ref_ptr<osg::Geode> geom2 = new osg::Geode();
+                osg::ref_ptr<osg::ShapeDrawable> shape = 
+                new osg::ShapeDrawable(new osg::Cone(osg::Vec3(-100.0,0.0,30.0), 20.0f, 50.0f));
+                shape->setColor(osg::Vec4(0.2f, 0.6f, 0.2f, 1.0f));
+                geom2->addDrawable(shape.get());
+                
+                /** osg::Group node **/
+                group = new osg::Group();
+                arTransform->addChild(group.get());    
+                
+                /** Selection Node **/
+                selection =  new osgManipulator::Selection();
+                group->addChild(selection.get());
+                selection->addChild(geom2);
+                
+                /** Dragger Node:
+                 * This one is a TabBoxDragger for both scaling and translation **/
+                dragger = new osgManipulator::TabBoxDragger();
+                dragger->setupDefaultGeometry();
+                group->addChild(dragger.get());
+                
+                /** Starting matrix for the Dragger **/
+                scale = geom2->getBound().radius() * 1.5f;
+                mat = osg::Matrix::scale(scale, scale, scale) * osg::Matrix::translate(geom2->getBound().center());
+                dragger->setMatrix(mat);
+                
+                /** Command Manager - connects Dragger objects with Selection objects **/
+                commandManager->connect(*(dragger.get()), *(selection.get()));                
+                
+                
+                
+            }
+            
+            void SceneRoot::addDrawableFor(QObject& data) {
+                DrawableQtAdapter* drawable = DrawableFactory::instance().createDrawableFor(data);
+                if(drawable) {
+                    osg::Node* parent = setupManipulator(drawable);
+                    
+                    addChild(parent);
+                    _drawables.insert(&data, geom);
+                }
+
                 // HACK: Process of centering scene at origin needs to be 
                 // better handled outside of here
                 if(_drawables.size() == 1) {

@@ -21,6 +21,7 @@
 namespace ews {
     namespace app {
         namespace model {
+            
             SimulationState::SimulationState(QObject * parent) 
             : QObject(parent), _waveMedium(128, 128, 2, this),
             _dripSource1(_waveMedium.getWaveModel(), this), 

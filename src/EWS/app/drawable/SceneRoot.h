@@ -20,6 +20,7 @@
 
 #include <QtCore>
 #include <osg/PositionAttitudeTransform>
+#include <osgManipulator/CommandManager>
 
 namespace ews {
     namespace app {
@@ -38,8 +39,9 @@ namespace ews {
             private:    
                 Q_DISABLE_COPY(SceneRoot)
                 
-                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
+                typedef QMap<QObject*,osg::ref_ptr<osg::Node>> Qt2OSGMap;
                 Qt2OSGMap _drawables;
+                osg::ref_ptr<osgManipulator::CommandManager> _manipCommander;
             };
         }
     }

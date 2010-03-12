@@ -23,6 +23,7 @@
 
 #include <osg/Vec2>
 #include <osg/Group>
+#include <osgManipulator/Translate2DDragger>
 #include "DripSource.h"
 #include "DrawableQtAdapter.h"
 
@@ -31,6 +32,7 @@ namespace ews {
         namespace drawable {
             
             using ews::app::model::DripSource;
+            using osgManipulator::Translate2DDragger;            
             
             /**
              * Generates 3-dimensional openGL representations of faucets/teapots.
@@ -39,7 +41,16 @@ namespace ews {
                 Q_OBJECT
             public:
                 explicit FaucetGeom(DripSource& dataModel);
-                virtual ~FaucetGeom();
+                
+                /** Create the type of dragger this geometry type supports. */
+                virtual osgManipulator::Dragger* createDragger() {
+                    Translate2DDragger* dragger = 
+                        new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), osg::Vec3f(0, 0, 0)));
+                    
+                    dragger->setupDefaultGeometry();
+                    return dragger;
+                }
+                
                 
                 DripSource& getDataModel() {
                     return _dataModel;
@@ -47,10 +58,16 @@ namespace ews {
                 
                 void setColor(osg::Vec4 color);
                 
+                
+                
             public slots:
                 void drip();
                 void setEnabled(bool enabled) ;
                 void setPosition(const osg::Vec2& pos);
+               
+            protected:
+                /** Protected to encourage use with ref_ptr. */
+                virtual ~FaucetGeom();
                 
             private:
                 Q_DISABLE_COPY(FaucetGeom)
