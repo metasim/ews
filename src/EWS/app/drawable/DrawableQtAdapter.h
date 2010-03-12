@@ -21,12 +21,13 @@
 
 #include <QtCore>
 #include <osg/PositionAttitudeTransform>
+#include <osgManipulator/Dragger>
 
 namespace ews {
     namespace app {
         namespace drawable {
             /**
-             *  Adapter between the Qt and OSG worlds.
+             *  Abstract base class for all geometry, serving as an adapter between the Qt and OSG worlds.
              */
             class DrawableQtAdapter : public QObject, public osg::PositionAttitudeTransform {
                 Q_OBJECT
@@ -36,7 +37,19 @@ namespace ews {
                  * Standard ctor.
                  */
                 explicit DrawableQtAdapter(QObject* peer);
+                
+                /** If the geometry supports user interaction, the subclass
+                 *  should return a dragger instance that will be registered
+                 *  with the SceneRoot. Reiver takes responsibility for 
+                 *  instance memory.
+                 * @return Dragger to register, or NULL for none.
+                 */
+                virtual osgManipulator::Dragger* createDragger() = 0;
+                
+            protected:
+                /** Protected to encourage use with ref_ptr. */
                 virtual ~DrawableQtAdapter();
+                
                 
             private:
                 Q_DISABLE_COPY(DrawableQtAdapter)

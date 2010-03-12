@@ -24,6 +24,7 @@
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/ref_ptr>
+#include <osgManipulator/Translate2DDragger>
 #include "Barrier.h"
 #include "DrawableQtAdapter.h"
 
@@ -38,29 +39,51 @@ namespace ews {
         namespace drawable {
             
             using ews::app::model::Barrier;
+            using osgManipulator::Translate2DDragger;
             
-            /**
-             * Generates 3-dimensional openGL representations of barriers.
-             */
+            
+            /** A 3-D geometric representation of a barrier, with or without slits. */
             class BarrierGeom : public DrawableQtAdapter {
                 Q_OBJECT
             public:
+                /** Standard ctor. */
                 explicit BarrierGeom(Barrier& dataModel);
-                virtual ~BarrierGeom();
                 
+                /** Create the type of dragger this geometry type supports. */
+                virtual osgManipulator::Dragger* createDragger() {
+                    Translate2DDragger* dragger = 
+                        new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), osg::Vec3f(0, 0, 0)));
+
+                    dragger->setupDefaultGeometry();
+                    return dragger;
+                }
+                
+                
+                /** Get the data object this reflects. */
                 Barrier& getDataModel() {
                     return _dataModel;
                 }
-
+                
+                /** Set barrier color. */
                 void setColor(const osg::Vec4& color);
                 
-            public slots:
-                void updateData();
+                /** Set whether barrier is visible. */
+                void setEnabled(bool enabled);
+                
+            private slots:
+                void updateGeom();
+                
+            protected:
+                /** Protected to enforce use with ref_ptr. */
+                virtual ~BarrierGeom();
                 
             private:
                 Q_DISABLE_COPY(BarrierGeom)
+
                 void addBox(const osg::ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength);
+
                 Barrier& _dataModel;
+                osg::ref_ptr<osg::Geode> _barrierGeom;
             };
         }
     }

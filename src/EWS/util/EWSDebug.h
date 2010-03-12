@@ -24,6 +24,10 @@
 #include <QWidget>
 #include <QDebug>
 #include <osg/Vec2>
+#include <osg/Vec3>
+#include <osg/Matrix>
+#include <sstream>
+
 #include "Barrier.h"
 #include "DripSource.h"
 
@@ -49,57 +53,7 @@ namespace ews {
                 return QString(INDENT_WIDTH*i, INDENT_CHAR); 
             }
             
-            
-            inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
-                dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
-                return dbg.space();
-            }
-            
-            /**
-             * Debug output operator for Barrier.
-             */
-            inline QDebug operator<<(QDebug dbg, const ews::app::model::Barrier &b) {
-                dbg << b.metaObject()->className() << '{';
-                dbg << "name=" << b.objectName() << ',';
-                dbg << "enabled=" << b.isEnabled() << ',';
-                dbg << "numSlits=" << b.getNumSlits() << ',';
-                dbg << "slitWidth=" << b.getSlitWidth() << ',';
-                dbg << "slitSeparation=" << b.getSlitSeparation() << ',';
-                dbg << "start=" << b.getStart() << ',';
-                dbg << "end=" << b.getEnd();
-                dbg << "}";
-                return dbg;
-            }
-            
-            /**
-             * Debug output operator for DripSource.
-             */
-            inline QDebug operator<<(QDebug dbg, const ews::app::model::DripSource &ds) {
-                dbg << ds.metaObject()->className() << "{";
-                dbg << "name=" << ds.objectName() << ",";
-                dbg << "enabled=" << ds.isEnabled() << ",";
-                dbg << "frequency=" << ds.getFrequency() << ",";
-                dbg << "amplitude=" << ds.getAmplitude();
-                dbg << "}";
-                return dbg;
-            }
-            
-            inline QDebug operator<<(QDebug dbg, const QWidget &w) {
-                dbg << w.metaObject()->className() << "{";
-                dbg << "name=" << w.objectName() << ",";
-                dbg << "enabled=" << w.isEnabled();
-                dbg << "}";
-                return dbg;
-            }
-            
-//            inline QDebug operator<<(QDebug dbg, const QModelIndex &i) {
-//                dbg << "QModelIndex" << "{";
-//                dbg << "name=" << i.objectName() << ",";
-//                dbg << "row=" << i.row() << ",";
-//                dbg << "column=" << i.row() << ",";
-//                dbg << "}";
-//                return dbg;
-//            }
+
             
             class Tracer {
             public:
@@ -172,5 +126,92 @@ namespace ews {
 #else
 # define QTRACE2
 #endif
+
+
+
+// These QDebug debugging output operators are declared in the global
+// scope to simplify usage and detection by compiler.
+
+/** 2-D Vector debug output operator. */
+inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
+    dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
+    return dbg.space();
+}
+
+/** 3-D Vector debug output operator. */
+inline QDebug operator<<(QDebug dbg, const osg::Vec3& v) {
+    dbg.nospace() << '(' << v.x() << ',' << v.y() << ',' << v.z() << ')';
+    return dbg.space();
+}
+
+/** Quaternion debug output operator. */
+inline QDebug operator<<(QDebug dbg, const osg::Quat& q) {
+    dbg.nospace() << '{' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w() << '}';
+    return dbg.space();
+}
+
+/** 4x4 Matrix debug output operator. */
+inline QDebug operator<<(QDebug dbg, const osg::Matrix& m) {
+    osg::Vec3 trans, scale;
+    osg::Quat rot, scaleRot;
+    m.decompose(trans, rot, scale, scaleRot);
+    dbg << " postion:" << trans << '\n';
+    dbg << "rotation:" << rot << '\n';
+    dbg << "   scale:" << scale << '\n';
+    
+    return dbg.space();
+}
+
+/**
+ * Debug output operator for Barrier.
+ */
+inline QDebug operator<<(QDebug dbg, const ews::app::model::Barrier &b) {
+    dbg << b.metaObject()->className() << '{';
+    dbg << "name=" << b.objectName() << ',';
+    dbg << "enabled=" << b.isEnabled() << ',';
+    dbg << "numSlits=" << b.getNumSlits() << ',';
+    dbg << "slitWidth=" << b.getSlitWidth() << ',';
+    dbg << "slitSeparation=" << b.getSlitSeparation() << ',';
+    dbg << "start=" << b.getStart() << ',';
+    dbg << "end=" << b.getEnd();
+    dbg << "}";
+    return dbg;
+}
+
+/**
+ * Debug output operator for DripSource.
+ */
+inline QDebug operator<<(QDebug dbg, const ews::app::model::DripSource &ds) {
+    dbg << ds.metaObject()->className() << "{";
+    dbg << "name=" << ds.objectName() << ",";
+    dbg << "enabled=" << ds.isEnabled() << ",";
+    dbg << "frequency=" << ds.getFrequency() << ",";
+    dbg << "amplitude=" << ds.getAmplitude();
+    dbg << "}";
+    return dbg;
+}
+
+inline QDebug operator<<(QDebug dbg, const QWidget &w) {
+    dbg << w.metaObject()->className() << "{";
+    dbg << "name=" << w.objectName() << ",";
+    dbg << "enabled=" << w.isEnabled();
+    dbg << "}";
+    return dbg;
+}
+
+/** Fallback default QDebug output operator for 
+ * types that have an ostream operator. If compiler fails here
+ * then either QDebug::operator<< or ostream::operator<< needs
+ * to be defined. */
+template<typename T> inline
+QDebug operator<<(QDebug dbg, const T& t) {
+    std::ostringstream oss;
+    oss.operator<< (t);
+    dbg << oss.str();
+    return dbg;
+}
+
+
+
 
 #endif // __EWSDEBUG_H

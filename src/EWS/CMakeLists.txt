@@ -45,13 +45,19 @@ file(GLOB EWS_TEST_MOC_HDRS test/physics/*.h)
 # Move the given file from the EWS_MOC_HDRS list to the EWS_HDRS list
 macro(unmoc FILENAME)
     file(GLOB_RECURSE MOCKERY ${FILENAME})
-    list(REMOVE_ITEM EWS_MOC_HDRS ${MOCKERY})
-    list(APPEND EWS_HDRS ${MOCKERY})
+    if(NOT MOCKERY)
+        message(FATAL_ERROR "Couldn't find ${FILENAME} to unmoc.")    
+    else()    
+        list(REMOVE_ITEM EWS_MOC_HDRS ${MOCKERY})
+        list(APPEND EWS_HDRS ${MOCKERY})
+    endif()
 endmacro()    
 
 unmoc(DrawableFactory.h)
 unmoc(CameraController.h)
 unmoc(VertexHeightUpdater.h)
+unmoc(PickHandler.h)
+unmoc(Teapot.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
 
@@ -113,7 +119,7 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA)
+    COMPONENTS osg osgUtil osgViewer osgGA osgManipulator)
 
 #CRUFT?
 #add_library(${OSG_LIBRARY} SHARED IMPORTED)
@@ -233,9 +239,9 @@ target_link_libraries (${EXE_NAME}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
-    ${OSG_LIBRARY} osgUtil osgViewer osgGA
+#    ${OSG_LIBRARY} osgUtil osgViewer osgGA
     ${OPENTHREADS_LIBRARY}
-#    ${OPENSCENEGRAPH_LIBRARIES} 
+    ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}
 )
 
