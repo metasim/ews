@@ -67,24 +67,23 @@ namespace ews {
                 if(!dragger) {
                     return drawable;
                 }
-                
-                /** osg::Group node **/
-                Group* group = new Group;
-                
-                /** Selection Node **/
+
+                // Create selection type to contain our drawable.
                 ref_ptr<Selection> selection =  new Selection;
-                group->addChild(selection.get());
                 selection->addChild(drawable);
                 
-                group->addChild(dragger);
+                // Put selection and dragger under same group
+                Group* group = new Group;
+                group->addChild(selection.get());
+                group->addChild(dragger.get());
                 
-                /** Starting matrix for the Dragger **/
+                // Starting matrix for the Dragger
                 BoundingSphere bounds = drawable->getBound();
                 float scale =  bounds.radius() * 1.5f;
                 Matrixd mat = Matrix::scale(scale, scale, scale) * Matrix::translate(bounds.center());
                 dragger->setMatrix(mat);
                 
-                /** Command Manager - connects Dragger objects with Selection objects **/
+                // Command Manager - connects Dragger objects with Selection objects
                 _manipCommander->connect(*(dragger.get()), *(selection.get()));
                 return group;
             }

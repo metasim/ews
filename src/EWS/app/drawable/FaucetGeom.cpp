@@ -91,7 +91,7 @@ namespace ews {
             };
             
             FaucetGeom::FaucetGeom(DripSource& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _dragger() {
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _dragger(NULL) {
                 
                 _dragger = new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), 0));
                 _dragger->setupDefaultGeometry();
@@ -164,7 +164,9 @@ namespace ews {
                 // they affect different types of node visitors
                 setNodeMask(enabled ? 0xffffffff : 0);
                 // Hack... really need to change to a switch node arragement.
-                _dragger->setNodeMask(enabled ? 0xffffffff : 0);
+                if(_dragger) {
+                    _dragger->setNodeMask(enabled ? 0xffffffff : 0);
+                }
             }
             
             void FaucetGeom::drip()  {

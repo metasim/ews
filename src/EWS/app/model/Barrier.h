@@ -55,41 +55,109 @@ namespace ews {
                 /** Get the owner of this. */
                 BarrierSet* getBarrierSet();
 
-                
+                /**
+                 * Gets enabled state of barrier. 
+                 * @return true if active, false if inactive and invisible.
+                 */
                 bool isEnabled() const {
                     return _enabled;
                 }
                 
+                /**
+                 * Number of slits in barrer {0,1,2}
+                 */
                 NumSlits getNumSlits() const {
                     return _numSlits;
                 }
                 
+                /**
+                 * Size of the slit when one or more slits
+                 */
                 unsigned int getSlitWidth() const {
                     return _slitWidth;
                 }
                 
+                /**
+                 * Distance between slits when more than one slit.
+                 */
                 unsigned int getSlitSeparation() const {
                     return _slitSeparation;
                 }
                 
+                /**
+                 * Distance between start and end points. 
+                 * @return |end - start|
+                 */
                 Real length() const {
                     return (_end - _start).length();
                 }
                 
-                Real width() const {
+                /**
+                 * Fixed wall thickness.
+                 */
+                static Real width() {
                     return ews::physics::DEFAULT_WALL_THICKNESS;
                 }
                 
+                /**
+                 * Get the barrier start point (2-D water surface coordinates).
+                 */
                 const osg::Vec2& getStart() const {
                     return _start;
                 }
                 
+                /**
+                 * Get the barrier end point (2-D water surface coordinates).
+                 */
                 const osg::Vec2& getEnd() const {
                     return _end;
+                }
+
+                /**
+                 * Get the computed potential for the current settings.
+                 * It is updated when any of the parameters of this are
+                 * changed. When the potential changes, the potentialChanged()
+                 * signal is fired (after dataChanged() signal).
+                 * @return pointer to current potential. Memory owned is by this.
+                 */
+                Potential* getPotential() const {
+                    return _potential;
+                }
+                
+                /**
+                 * Set all the configurable parameters at once, resulting in a single
+                 * dataChanged() signal and a recomputed potential.
+                 * @param start start point in 2-D water suface coordinates
+                 * @param end end point in 2-D water suface coordinates
+                 * @param numSlits number of slits
+                 * @param slitWidth size of slit(s)
+                 * @param slitSeparation distance between slit edges when numSlits > ONE.
+                 */
+                void set(Vec2 start, Vec2 end, NumSlits numSlits, unsigned int slitWidth, unsigned int slitSeparation) {
+                    _start = start;
+                    _end = end;
+                    _numSlits = numSlits;
+                    if(_numSlits < TWO || validSettings(slitWidth, slitSeparation)) {
+                        _slitWidth = slitWidth;
+                        _slitSeparation = slitSeparation;
+                    }
+                    else {
+                        unsigned int val = std::min(width(), length());
+                        _slitWidth = val;
+                        _slitSeparation = val;
+                    }
+                    
+                    emit dataChanged();
                 }
                 
             public slots:
                 
+                /**
+                 * Change the enabled state of this.
+                 * @param enabled True to make barrier visible and active
+                 * in simulation, false to hide and remove from simulation.
+                 * @signals dataChanged()
+                 */
                 void setEnabled(bool enabled) {
                     _enabled = enabled;
                     emit dataChanged();
@@ -116,29 +184,34 @@ namespace ews {
                 
                 void setStart(const osg::Vec2& start) {
                     _start = start;
+                    emit dataChanged();
                 }
                 
                 void setEnd(const osg::Vec2& end) {
                     _end = end;
+                    emit dataChanged();
                 }
-
-                ref_ptr<Potential> generatePotential();
 
             signals:
                 void dataChanged();
+                void potentialChanged();
+            
+            private slots:
+                void generatePotential();
                 
             private:
                 Q_DISABLE_COPY(Barrier)
                 bool validSettings(unsigned int slitWidth, unsigned int slitSeparation) {
                     return slitWidth > 0 && slitSeparation > 0 && length() > slitSeparation + 2 * slitWidth;
                 }
+
                 bool _enabled;
                 NumSlits _numSlits;
                 unsigned int _slitWidth;
                 unsigned int _slitSeparation;
                 osg::Vec2 _start;
                 osg::Vec2 _end;
-                Potential* _potential;
+                osg::ref_ptr<Potential> _potential;
             };
         }
     }

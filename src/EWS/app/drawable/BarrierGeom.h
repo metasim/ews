@@ -23,7 +23,7 @@
 #include <osg/Vec2>
 #include <osg/Group>
 #include <osg/Geode>
-#include <osg/ref_ptr>
+#include <osg/Plane>
 #include <osgManipulator/Translate2DDragger>
 #include "Barrier.h"
 #include "DrawableQtAdapter.h"
@@ -37,10 +37,15 @@ namespace ews {
          * Contains classes responsible for generating 3-dimensional openGL representations.
          */
         namespace drawable {
-            
             using ews::app::model::Barrier;
-            using osgManipulator::Translate2DDragger;
+            using namespace osg;
             
+            /** The plane where the barriers reside. */
+            extern const Plane BARRIER_PLANE;
+            /** Normalized/local coordinate of barrier start position. */
+            extern const Vec3 BARRIER_START_ALPHA;
+            /** Normalized/local coordinate of barrier end position. */
+            extern const Vec3 BARRIER_END_ALPHA;
             
             /** A 3-D geometric representation of a barrier, with or without slits. */
             class BarrierGeom : public DrawableQtAdapter {
@@ -50,13 +55,7 @@ namespace ews {
                 explicit BarrierGeom(Barrier& dataModel);
                 
                 /** Create the type of dragger this geometry type supports. */
-                virtual osgManipulator::Dragger* createDragger() {
-                    Translate2DDragger* dragger = 
-                        new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), osg::Vec3f(0, 0, 0)));
-
-                    dragger->setupDefaultGeometry();
-                    return dragger;
-                }
+                virtual osgManipulator::Dragger* createDragger();
                 
                 
                 /** Get the data object this reflects. */
@@ -77,13 +76,21 @@ namespace ews {
                 /** Protected to enforce use with ref_ptr. */
                 virtual ~BarrierGeom();
                 
+                
             private:
                 Q_DISABLE_COPY(BarrierGeom)
 
+                /** Turn on/off whether this responds to signals. */
+                void respondToSignals(bool respond);
+                /** Convenience method for creating a box in local coordinates. */
                 void addBox(const osg::ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength);
 
                 Barrier& _dataModel;
                 osg::ref_ptr<osg::Geode> _barrierGeom;
+                osg::ref_ptr<osgManipulator::Dragger> _dragger;
+                
+                /** For access to respondsToSignals(bool). */
+                friend class PotentialUpdater;
             };
         }
     }

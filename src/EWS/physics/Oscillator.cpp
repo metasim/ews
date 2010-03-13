@@ -59,8 +59,8 @@ namespace ews {
                     }
                 }
             }
-//            if (_inPulse && (getCosArg() + _phase >= 2 * M_PI)) {
-            if (_inPulse && (getCosArg() + _phase >= M_PI)) {
+            if (_inPulse && (getCosArg() + _phase >= 2 * M_PI)) {
+//            if (_inPulse && (getCosArg() + _phase >=  M_PI)) {
                 _inPulse = false;
                 _oscillating = false;
                 _phase = 0;

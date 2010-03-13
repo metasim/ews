@@ -21,34 +21,47 @@
 #include <osg/PolygonMode>
 #include <osg/MatrixTransform>
 #include <osg/Material>
-#include <osg/NodeCallback>
+
 #include <osgManipulator/Translate2DDragger>
-#include <osgManipulator/CommandManager>
+
 #include "BarrierGeom.h"
-#include <QtGlobal>
+#include "BarrierDragger.h"
+#include "PotentialUpdater.h"
+#include "EWSDebug.h"
 
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            const Real VISIBLE_BARRIER_HEIGHT = 10;
-
             using namespace osgManipulator;
             
             
+            const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float BARRIER_OPACITY = .5f;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
+            const Plane BARRIER_PLANE(Vec3(0, 0, 1), 0);
             
+            const Vec3 BARRIER_START_ALPHA(0, 0, 0);
+            const Vec3 BARRIER_END_ALPHA(1, 0, 0);
+            
+            /** Primary constructor. */
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _barrierGeom(new Geode) {
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), 
+            _barrierGeom(new Geode), _dragger(NULL) {
+                
                 setColor(BARRIER_COLOR); 
                 
                 addChild(_barrierGeom);
                 updateGeom();
                 
-                QObject::connect(&_dataModel, SIGNAL(dataChanged()), this, SLOT(updateGeom()));
+                
+                // Callback to detect when we've been moved
+                // and update the databmodel.
+                setUpdateCallback(new PotentialUpdater);
+                
+                respondToSignals(true);
             }
             
             
@@ -56,6 +69,14 @@ namespace ews {
                 removeChild(static_cast<unsigned int>(0), 1);
             }
             
+            void BarrierGeom::respondToSignals(bool respond) {
+                if(respond) {
+                    connect(&_dataModel, SIGNAL(dataChanged()), SLOT(updateGeom()), Qt::UniqueConnection);
+                }
+                else {
+                    _dataModel.disconnect(this);
+                }
+            }
             
             void BarrierGeom::setColor(const Vec4& color) {
                 ref_ptr<StateSet> state = getOrCreateStateSet(); 
@@ -80,6 +101,10 @@ namespace ews {
             
             void BarrierGeom::setEnabled(bool enabled) {
                 setNodeMask(enabled ? 0xffffffff : 0);
+                // Hack... really need to change to a switch node arragement.
+                if(_dragger) {
+                    _dragger->setNodeMask(enabled ? 0xffffffff : 0);
+                }
             }
             
             void BarrierGeom::updateGeom() {
@@ -118,7 +143,17 @@ namespace ews {
                     }
                 }
                 setEnabled(_dataModel.isEnabled());
-            }            
+            }
+            
+            
+            osgManipulator::Dragger* BarrierGeom::createDragger() {
+                
+                // If there was a previous dragger, the ref_ptr assignment
+                // operator will take care of deleting it.
+                _dragger = new BarrierDragger;
+                
+                return _dragger;
+            }
         }
     }
 }
