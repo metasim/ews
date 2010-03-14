@@ -37,6 +37,10 @@ namespace ews {
             using ews::physics::Oscillator;
             using osg::Vec2;
             
+            /**
+             * Contains the business logic for DripSource objects to be drawn on the screen, as well as
+             * a reference to the Oscillator necessary for physics calculations.
+             */
             // cond/endcond is used to tell Doxygen to ignore what's in between
             class DripSource : /** @cond */ public QObject /** @endcond */ {
                 

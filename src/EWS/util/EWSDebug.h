@@ -37,8 +37,8 @@ namespace ews {
      */
     namespace util {
         /**
-	 * Contains classes and methods used for gathering debug information.
-	 */
+         * Contains classes and methods used for gathering debug information.
+         */
         namespace debug {
             
             /** Character to use for indentation. */
@@ -53,8 +53,9 @@ namespace ews {
                 return QString(INDENT_WIDTH*i, INDENT_CHAR); 
             }
             
-
-            
+            /**
+             * Utility class for tracking program flow for debugging purposes.
+             */
             class Tracer {
             public:
                 Tracer(const QString& file, int line, const QString& func, const QString& msg) : _file(file), _line(line), _func(func) {
