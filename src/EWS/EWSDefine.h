@@ -24,6 +24,10 @@ namespace ews {
      * Default precision to use for real numbers.
      */
     typedef float Real;
+    /**
+     * Unsigned integer. Not using UInt as that might conflict with other definitions.
+     */
+    typedef unsigned int Uint;
 }
 
 #endif // __EWSDEFINE_H

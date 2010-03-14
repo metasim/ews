@@ -91,7 +91,7 @@ namespace ews {
                  * @param index Index to return the Barrier for
                  * @return Requested Barrier
                  */
-                Barrier* barrierAt(unsigned int index) const {
+                Barrier* barrierAt(Uint index) const {
                     return _barriers[index];
                 }
                 

@@ -42,8 +42,8 @@ namespace ews {
                 Q_OBJECT
                 Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
                 Q_PROPERTY(bool paused READ isPaused WRITE setPaused)
-                Q_PROPERTY(unsigned int frequency READ getFrequency WRITE setFrequency)
-                Q_PROPERTY(unsigned int amplitude READ getAmplitude WRITE setAmplitude)
+                Q_PROPERTY(Uint frequency READ getFrequency WRITE setFrequency)
+                Q_PROPERTY(Uint amplitude READ getAmplitude WRITE setAmplitude)
                 Q_PROPERTY(Vec2 position READ getPosition WRITE setPosition)
                 
             public:
@@ -64,16 +64,16 @@ namespace ews {
                 /**
                  * Get the drip frequency in millihertz. 
                  */
-                unsigned int getFrequency() const {
+                Uint getFrequency() const {
                     return _frequency;
-//                    return (unsigned int) (1000.0/_oscillator.getPeriod());
+//                    return (Uint) (1000.0/_oscillator.getPeriod());
                 }
                 
                 
                 /**
                  * Get the amplitude, (0, 100]
                  */
-                unsigned int getAmplitude() const {
+                Uint getAmplitude() const {
                     return (int) (_oscillator.getAmplitude() / ews::physics::MAX_AMPLITUDE * 100);
                 }
                 
@@ -125,7 +125,7 @@ namespace ews {
                  * Set the amplitude percentage
                  * @param amplitude value in (0, 100]
                  */
-                void setAmplitude(unsigned int amplitude) {
+                void setAmplitude(Uint amplitude) {
                     _oscillator.setAmplitude(amplitude/100.0 * ews::physics::MAX_AMPLITUDE);
                     emit amplitudeChanged(amplitude);
                 }
@@ -133,7 +133,7 @@ namespace ews {
                 /**
                  * Set the frequency in of drops in millihertz
                  */
-                void setFrequency(unsigned int frequency) {
+                void setFrequency(Uint frequency) {
 //                    _oscillator.setPeriod(1000.0/frequency);
                     _frequency = frequency;
                     emit frequencyChanged(frequency);
@@ -144,7 +144,8 @@ namespace ews {
                  * coordinates.
                  */
                 void setPosition(const osg::Vec2& pos) {
-                    _oscillator.setLocation((unsigned int) pos.x(), (unsigned int) pos.y());
+                    _oscillator.setLocation(static_cast<Uint>(pos.x()),
+                                            static_cast<Uint>(pos.y()));
                     emit positionChanged(pos);
                 }
                 
@@ -179,12 +180,12 @@ namespace ews {
                 Oscillator _oscillator;
                 /** This timer is only responsible for giving the user
                  *  feedback that the source is active. The Oscillator
-                 *  takes care of it's own triggering when it's updated with
+                 *  takes care of its own triggering when it's updated with
                  *  the current time. */
                 QTimer _timer;
                 bool _paused;
                 bool _enabled;
-                unsigned int _frequency;
+                Uint _frequency;
             };
         }
     }

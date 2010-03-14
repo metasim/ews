@@ -26,6 +26,7 @@
 #include "SlitPotential.h"
 #include <osg/ref_ptr>
 using osg::ref_ptr;
+#include "EWSDefine.h"
 
 namespace ews {
     namespace app {
@@ -41,8 +42,8 @@ namespace ews {
                 Q_PROPERTY(Vec2 start READ getStart WRITE setStart)
                 Q_PROPERTY(Vec2 end READ getEnd WRITE setEnd)
                 Q_PROPERTY(NumSlits numSlits READ getNumSlits WRITE setNumSlits)
-                Q_PROPERTY(unsigned int slitWidth READ getSlitWidth WRITE setSlitWidth)
-                Q_PROPERTY(unsigned int slitSeparation READ getSlitSeparation WRITE setSlitSeparation)
+                Q_PROPERTY(Uint slitWidth READ getSlitWidth WRITE setSlitWidth)
+                Q_PROPERTY(Uint slitSeparation READ getSlitSeparation WRITE setSlitSeparation)
                 
             public:
                 enum NumSlits { ZERO, ONE, TWO };
@@ -64,11 +65,11 @@ namespace ews {
                     return _numSlits;
                 }
                 
-                unsigned int getSlitWidth() const {
+                Uint getSlitWidth() const {
                     return _slitWidth;
                 }
                 
-                unsigned int getSlitSeparation() const {
+                Uint getSlitSeparation() const {
                     return _slitSeparation;
                 }
                 
@@ -100,14 +101,14 @@ namespace ews {
                     emit dataChanged();
                 }
                 
-                void setSlitWidth(unsigned int slitWidth) {
+                void setSlitWidth(Uint slitWidth) {
                     if (validSettings(slitWidth, _slitSeparation)) {
                         _slitWidth = slitWidth;
                         emit dataChanged();
                     }
                 }
                 
-                void setSlitSeparation(unsigned int slitSeparation) {
+                void setSlitSeparation(Uint slitSeparation) {
                     if (validSettings(_slitWidth, slitSeparation)) {
                         _slitSeparation = slitSeparation;
                         emit dataChanged();
@@ -129,13 +130,13 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(Barrier)
-                bool validSettings(unsigned int slitWidth, unsigned int slitSeparation) {
+                bool validSettings(Uint slitWidth, Uint slitSeparation) {
                     return slitWidth > 0 && slitSeparation > 0 && length() > slitSeparation + 2 * slitWidth;
                 }
                 bool _enabled;
                 NumSlits _numSlits;
-                unsigned int _slitWidth;
-                unsigned int _slitSeparation;
+                Uint _slitWidth;
+                Uint _slitSeparation;
                 osg::Vec2 _start;
                 osg::Vec2 _end;
                 Potential* _potential;
