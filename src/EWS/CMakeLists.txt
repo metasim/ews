@@ -240,7 +240,7 @@ target_link_libraries (${EXE_NAME}
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
 #    ${OSG_LIBRARY} osgUtil osgViewer osgGA
-    ${OPENTHREADS_LIBRARY}
+#    ${OPENTHREADS_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}
 )
