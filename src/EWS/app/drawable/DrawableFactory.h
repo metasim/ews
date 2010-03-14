@@ -20,6 +20,8 @@
 
 #include <QtCore>
 #include <osg/Node>
+#include "DrawableQtAdapter.h"
+
 namespace ews {
     namespace app {
         namespace drawable {
@@ -28,9 +30,15 @@ namespace ews {
              */
             class DrawableFactory {
             public:
+                /** Get the singleton instance of the DrawableFactory. */
                 static DrawableFactory& instance();
                 
-                osg::Node* createDrawableFor(QObject& model);
+                /** 
+                 * Determine if there is a geometric association for
+                 * the given data object. 
+                 * @return geometric representation, or \c NULL if none.
+                 */
+                DrawableQtAdapter* createDrawableFor(QObject& model);
                 
             private:
                 DrawableFactory() {}

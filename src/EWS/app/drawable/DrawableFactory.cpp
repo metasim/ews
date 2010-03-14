@@ -35,30 +35,36 @@ namespace ews {
                 return singleton;
             }
             
-            osg::Node* DrawableFactory::createDrawableFor(QObject& data)  {
+            DrawableQtAdapter* DrawableFactory::createDrawableFor(QObject& data)  {
                 // Currently only a loose mapping between object data and drawable type is
                 // maintained, hense the switching on type.
                 QString name(data.metaObject()->className());
                 qDebug() << "Selecting drawable for" << name;
+                
+                DrawableQtAdapter* retval = NULL;
+                
                 if(data.inherits(DripSource::staticMetaObject.className())) {
                     DripSource* source = qobject_cast<DripSource*>(&data);
                     FaucetGeom* geom = new FaucetGeom(*source);
-                    return geom;
+                    retval = geom;
                 }
                 else if(data.inherits(WaveMedium::staticMetaObject.className())) {
                     WaveMedium* waves = qobject_cast<WaveMedium*>(&data);
                     WaterSurfaceGeom* geom = new WaterSurfaceGeom(*waves);
-                    return geom;
+                    retval = geom;
                 }
 
                 else if(data.inherits(Barrier::staticMetaObject.className())) {
                     Barrier* barrier = qobject_cast<Barrier*>(&data);
                     BarrierGeom* geom = new BarrierGeom(*barrier);
-                    return geom;
+                    retval = geom;
                 }                                    
                 
-                qWarning() << "No drawable found for" << name;
-                return NULL;
+                if(!retval) {
+                    qWarning() << "No drawable found for" << name;
+                }
+                
+                return retval;
             }
         }
     }

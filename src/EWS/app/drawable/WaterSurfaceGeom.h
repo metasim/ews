@@ -34,6 +34,12 @@ namespace ews {
                 Q_OBJECT
             public:
                 explicit WaterSurfaceGeom(WaveMedium& settings);
+                
+                /** Dragger not supported. */
+                virtual osgManipulator::Dragger* createDragger() { return NULL; }
+
+            protected:
+                /** Protected to encourage use with ref_ptr. */
                 virtual ~WaterSurfaceGeom() {}
                 
             private slots:

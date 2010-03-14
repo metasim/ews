@@ -17,16 +17,22 @@
  */
 
 #include "SceneRoot.h"
-#include "DrawableFactory.h"
+
 #include <osg/Light>
 #include <osg/LightSource>
-
+#include <osg/Node>
+#include <osgManipulator/Dragger>
+#include "DrawableFactory.h"
+#include "PickHandler.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-            SceneRoot::SceneRoot(QObject* parent) : QObject(parent), osg::PositionAttitudeTransform(), _drawables() {
+            using namespace osgManipulator;
+            
+            SceneRoot::SceneRoot(QObject* parent) 
+            : QObject(parent), osg::MatrixTransform(), _drawables(), _manipCommander() {
                 // Set up some basic lighting.
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
@@ -40,38 +46,56 @@ namespace ews {
                 light->setAmbient(Vec4(0.1f, 0.1f, 0.1f, 1.0f)); 
                 light->setDiffuse(Vec4(0.5f, 0.5f, 0.5f, 1.0f));
                 light->setSpecular(Vec4(0.8f, 0.8f, 0.8f, 1.0f)); 
-//                light->setDirection(Vec3(0.0f, 0.0f, 0.0f));
-//                light->setSpotCutoff(25.f );
                 
                 ref_ptr<LightSource> lSource = new LightSource;
                 lSource->setLight(light.get());
                 lSource->setReferenceFrame(LightSource::ABSOLUTE_RF );
                 addChild(lSource.get());
+                
+                _manipCommander = new osgManipulator::CommandManager;
+                
+                addEventCallback(new PickHandler);
             }
             
             
             SceneRoot::~SceneRoot() {
             }
             
-            void SceneRoot::centerScene() {
-                setPosition(Vec3(0, 0, 0));
-                const BoundingSphere& bounds = getBound();
-                Vec3d center = bounds.center();
-                center.z() = 0;
-                setPosition(-center);
+            Node* SceneRoot::setupManipulator(DrawableQtAdapter* drawable) {
+                
+                ref_ptr<Dragger> dragger = drawable->createDragger();
+                if(!dragger) {
+                    return drawable;
+                }
+                
+                /** osg::Group node **/
+                Group* group = new Group;
+                
+                /** Selection Node **/
+                ref_ptr<Selection> selection =  new Selection;
+                group->addChild(selection.get());
+                selection->addChild(drawable);
+                
+                group->addChild(dragger);
+                
+                /** Starting matrix for the Dragger **/
+                BoundingSphere bounds = drawable->getBound();
+                float scale =  bounds.radius() * 1.5f;
+                Matrixd mat = Matrix::scale(scale, scale, scale) * Matrix::translate(bounds.center());
+                dragger->setMatrix(mat);
+                
+                /** Command Manager - connects Dragger objects with Selection objects **/
+                _manipCommander->connect(*(dragger.get()), *(selection.get()));
+                return group;
             }
             
             void SceneRoot::addDrawableFor(QObject& data) {
-                osg::Node* geom = DrawableFactory::instance().createDrawableFor(data);
-                if(geom) {
-                    addChild(geom);
-                    _drawables.insert(&data, geom);
-                }
-                
-                // HACK: Process of centering scene at origin needs to be 
-                // better handled outside of here
-                if(_drawables.size() == 1) {
-                    centerScene();
+                DrawableQtAdapter* drawable = DrawableFactory::instance().createDrawableFor(data);
+                if(drawable) {
+                    Node* parent = setupManipulator(drawable);
+                    
+                    addChild(parent);
+                    _drawables.insert(&data, parent);
                 }
             }
             
@@ -82,6 +106,7 @@ namespace ews {
                     removeChild(geom);
                 }
             }
+
         }
     }
 }

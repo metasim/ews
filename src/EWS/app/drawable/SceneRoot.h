@@ -19,12 +19,14 @@
 #define __SCENE_ROOT_H
 
 #include <QtCore>
-#include <osg/PositionAttitudeTransform>
+#include <osg/MatrixTransform>
+#include <osgManipulator/CommandManager>
+#include "DrawableQtAdapter.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
-            class SceneRoot : public QObject, public osg::PositionAttitudeTransform {
+            class SceneRoot : public QObject, public osg::MatrixTransform {
                 Q_OBJECT
             public:
                 explicit SceneRoot(QObject* parent = 0);
@@ -33,13 +35,13 @@ namespace ews {
             public slots:
                 void addDrawableFor(QObject& data);
                 void removeDrawableFor(QObject& data);
-                void centerScene();
                 
             private:    
                 Q_DISABLE_COPY(SceneRoot)
-                
-                typedef QMap<QObject*,osg::Node*> Qt2OSGMap;
+                Node* setupManipulator(DrawableQtAdapter* drawable);
+                typedef QMap<QObject*,osg::ref_ptr<osg::Node> > Qt2OSGMap;
                 Qt2OSGMap _drawables;
+                osg::ref_ptr<osgManipulator::CommandManager> _manipCommander;
             };
         }
     }

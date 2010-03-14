@@ -22,6 +22,8 @@
 #include <osg/MatrixTransform>
 #include <osg/Material>
 #include <osg/NodeCallback>
+#include <osgManipulator/Translate2DDragger>
+#include <osgManipulator/CommandManager>
 #include "BarrierGeom.h"
 #include <QtGlobal>
 
@@ -31,22 +33,22 @@ namespace ews {
         namespace drawable {
             using namespace osg;
             const Real VISIBLE_BARRIER_HEIGHT = 10;
+
+            using namespace osgManipulator;
+            
+            
+            const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float BARRIER_OPACITY = .5f;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel) {
-                ref_ptr<osg::Geode> geode = new osg::Geode;
-                insertChild(0, geode.get());
-                updateData();
-                
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _barrierGeom(new Geode) {
                 setColor(BARRIER_COLOR); 
-#if defined(GL_MULTISAMPLE_ARB)
-                ref_ptr<StateSet> state = getOrCreateStateSet();
-                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
-#endif
                 
-                QObject::connect(&_dataModel, SIGNAL(dataChanged()), this, SLOT(updateData()));
+                addChild(_barrierGeom);
+                updateGeom();
+                
+                QObject::connect(&_dataModel, SIGNAL(dataChanged()), this, SLOT(updateGeom()));
             }
             
             
@@ -54,64 +56,68 @@ namespace ews {
                 removeChild(static_cast<Uint>(0), 1);
             }
             
-            void BarrierGeom::setColor(const osg::Vec4& color) {
+            
+            void BarrierGeom::setColor(const Vec4& color) {
                 ref_ptr<StateSet> state = getOrCreateStateSet(); 
-                ref_ptr<Material> mat = new osg::Material; 
+                ref_ptr<Material> mat = new Material; 
                 mat->setDiffuse(Material::FRONT, color);
                 mat->setSpecular(Material::FRONT, Vec4(0.f, 0.f, 0.f, BARRIER_OPACITY));
                 mat->setAmbient(Material::FRONT, color);
                 mat->setShininess(Material::FRONT, 95.f);
                 state->setAttribute(mat.get());
-                state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
+                state->setMode(GL_BLEND, StateAttribute::ON); // Activate blending (for transparency)
             }
             
-            void BarrierGeom::addBox(const ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength) {
-                ref_ptr<osg::ShapeDrawable> d = new ShapeDrawable();
+            void BarrierGeom::addBox(const ref_ptr<Geode>& geode, Real boxCenter, Real boxLength) {
+                ref_ptr<ShapeDrawable> d = new ShapeDrawable();
                 const Real boxWidth = _dataModel.width();
-                ref_ptr<osg::Shape> s = new osg::Box(osg::Vec3(boxCenter, 0.f, 0.f),
+                ref_ptr<Shape> s = new Box(Vec3(boxCenter, 0.f, 0.f),
                                                      boxLength, boxWidth,
                                                      VISIBLE_BARRIER_HEIGHT);
                 d->setShape(s.get());
                 geode->addDrawable(d.get());
             }
             
-            void BarrierGeom::updateData() {
-                const osg::Vec2& start = _dataModel.getStart();
-                PositionAttitudeTransform::setPosition(osg::Vec3d(start.x(), start.y(), 0.f));
-                const osg::Vec2& end = _dataModel.getEnd();
-                const osg::Vec2 dir = (end - start);
+            void BarrierGeom::setEnabled(bool enabled) {
+                setNodeMask(enabled ? 0xffffffff : 0);
+            }
+            
+            void BarrierGeom::updateGeom() {
+                const Vec2& start = _dataModel.getStart();
+                PositionAttitudeTransform::setPosition(Vec3d(start.x(), start.y(), 0.f));
+                const Vec2& end = _dataModel.getEnd();
+                const Vec2 dir = (end - start);
                 const Real barrierLength = _dataModel.length();
                 setScale(Vec3f(barrierLength, 1.f, 1.f));
                 const Real angle = atan2(dir.y(), dir.x());
                 setAttitude(Quat(angle, Vec3f(0.f, 0.f, 1.f)));
                 
                 // Create geometric representation
-                ref_ptr<osg::Geode> geode = dynamic_cast<osg::Geode*>(getChild(0));
-                geode->removeDrawables(0, geode->getNumDrawables());
-                ref_ptr<osg::Drawable> d = dynamic_cast<osg::Drawable*>(new ShapeDrawable());
-                ref_ptr<osg::Shape> s = NULL;
+                _barrierGeom->removeDrawables(0, _barrierGeom->getNumDrawables());
+                ref_ptr<Drawable> d = dynamic_cast<Drawable*>(new ShapeDrawable());
+                ref_ptr<Shape> s = NULL;
                 if (_dataModel.getNumSlits() == Barrier::ZERO) {
-                    addBox(geode, 0.5f, 1.f);
+                    addBox(_barrierGeom, 0.5f, 1.f);
                 }
                 else {
                     const Real slitAlpha = _dataModel.getSlitWidth() / barrierLength;
                     if (_dataModel.getNumSlits() == Barrier::ONE) {
                         Real boxLength = 0.5f - (slitAlpha / 2);
-                        addBox(geode, boxLength / 2, boxLength);
-                        addBox(geode, 1 - boxLength / 2, boxLength);
+                        addBox(_barrierGeom, boxLength / 2, boxLength);
+                        addBox(_barrierGeom, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
                         const Real separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
                         // Box length for boxes at either end of barrier
                         Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
-                        addBox(geode, boxLength / 2, boxLength);
-                        addBox(geode, 1 - boxLength / 2, boxLength);
+                        addBox(_barrierGeom, boxLength / 2, boxLength);
+                        addBox(_barrierGeom, 1 - boxLength / 2, boxLength);
                         // Box between the two slits
-                        addBox(geode, 0.5f, separationAlpha);
+                        addBox(_barrierGeom, 0.5f, separationAlpha);
                     }
                 }
-                setNodeMask(_dataModel.isEnabled() ? 0xffffffff : 0);
+                setEnabled(_dataModel.isEnabled());
             }            
         }
     }
