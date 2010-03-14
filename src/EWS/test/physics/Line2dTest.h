@@ -33,8 +33,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for testing Line2d.
          */        
-        class Line2dTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class Line2dTest : /** @cond */ public QObject /** @endcond */ {
         public:
             Line2dTest():
             _x1(2.0f), _y1(3.0f), _p1(2.0f, 3.0f),

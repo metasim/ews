@@ -37,7 +37,8 @@ namespace ews {
             using ews::physics::Oscillator;
             using osg::Vec2;
             
-            class DripSource : public QObject {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class DripSource : /** @cond */ public QObject /** @endcond */ {
                 
                 Q_OBJECT
                 Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)

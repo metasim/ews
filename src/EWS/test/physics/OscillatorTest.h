@@ -30,8 +30,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for Oscillator.
          */        
-        class OscillatorTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class OscillatorTest : /** @cond */ public QObject /** @endcond */ {
         public:
             OscillatorTest(): _waveModel(50, 100) { /* do nothing */ }
             virtual ~OscillatorTest() { /* do nothing */ }

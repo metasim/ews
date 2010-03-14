@@ -29,7 +29,8 @@ namespace ews {
             /**
              *  Abstract base class for all geometry, serving as an adapter between the Qt and OSG worlds.
              */
-            class DrawableQtAdapter : public QObject, public osg::PositionAttitudeTransform {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class DrawableQtAdapter : /** @cond */ public QObject, public osg::PositionAttitudeTransform /** @endcond */ {
                 Q_OBJECT
                 
             public:

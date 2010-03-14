@@ -27,8 +27,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for Point2d.
          */        
-        class Point2dTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class Point2dTest : /** @cond */ public QObject /** @endcond */ {
         public:
             Point2dTest() { /* do nothing */ }
             virtual ~Point2dTest() { /* do nothing */ }

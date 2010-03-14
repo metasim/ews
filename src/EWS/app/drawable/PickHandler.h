@@ -27,11 +27,6 @@
 #include <osgViewer/View>
 #include "EWSDebug.h"
 
-/**
- * Provides a basic interface for any class which wants to handle a GUI Events.
- */
-class osgGA::GUIEventHandler;
-
 namespace ews {
     namespace app {
         namespace drawable {
@@ -41,8 +36,8 @@ namespace ews {
             using namespace osgManipulator;
             typedef LineSegmentIntersector::Intersections::iterator IntersectIterator;
             
-            
-            class PickHandler : public osgGA::GUIEventHandler {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class PickHandler : /** @cond */ public osgGA::GUIEventHandler /** @endcond */ {
                 
             public:
                 

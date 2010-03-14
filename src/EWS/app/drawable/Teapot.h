@@ -65,16 +65,6 @@
  OpenGL(TM) is a trademark of Silicon Graphics, Inc.
  */
 
-/**
- * The core osg library provides the basic scene graph classes such as Nodes, State and Drawables, and maths and general helper classes.
- */
-namespace osg {
-    /**
-     * Pure virtual base class for drawable geometry.
-     */
-    class Drawable;
-}
-
 namespace ews {
     namespace app {
         namespace drawable {
@@ -226,7 +216,8 @@ namespace ews {
             /**
              * An OSG wrapper for the classic OpenGL teapot.
              */
-            class Teapot : public osg::Drawable {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class Teapot : /** @cond */ public osg::Drawable /** @endcond */ {
             public:
                 Teapot() {}
                 

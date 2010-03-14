@@ -27,10 +27,12 @@
 #include "SceneRoot.h"
 
 
+/** @cond */
 /** Forward declaration of generated UI class. */
 namespace Ui {
     class EWSMainWindowForm;
 }
+/** @endcond */
 
 namespace ews {
     namespace app {
@@ -38,7 +40,8 @@ namespace ews {
             using ews::app::model::SimulationState;
             using ews::app::drawable::SceneRoot;
             
-            class EWSMainWindow : public QMainWindow {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class EWSMainWindow : /** @cond */ public QMainWindow /** @endcond */ {
                 Q_OBJECT
                 
             public:

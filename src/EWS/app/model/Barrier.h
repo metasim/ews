@@ -36,7 +36,8 @@ namespace ews {
             class BarrierSet;
             using ews::physics::Potential;
             
-            class Barrier : public QObject {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class Barrier : /** @cond */ public QObject /** @endcond */ {
                 Q_OBJECT
                 Q_ENUMS(NumSlits)
                 Q_PROPERTY(Vec2 start READ getStart WRITE setStart)

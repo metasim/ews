@@ -30,8 +30,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for precomputed potentials.
          */        
-        class PrecomputedPotentialTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class PrecomputedPotentialTest : /** @cond */ public QObject /** @endcond */ {
         public:
             PrecomputedPotentialTest() { /* do nothing */ }
             virtual ~PrecomputedPotentialTest() { /* do nothing */ }
