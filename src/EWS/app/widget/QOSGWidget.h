@@ -61,14 +61,11 @@ namespace ews {
                 virtual void mouseMoveEvent( QMouseEvent* event );
                 virtual void closeEvent( QCloseEvent * event );
                 virtual void destroyEvent( bool destroyWindow = true, bool destroySubWindows = true);
-                
-                
-                osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
-                
+
             private:
                 Q_DISABLE_COPY(QOSGWidget)
+                osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
                 QTimer _timer;
-                
             };
         }
     }
