@@ -28,6 +28,10 @@
 #include "WaveModel.h"
 #include "Lattice.h"
 
+/**
+ * Provides callback capability for an osg Object.
+ */
+class osg::NodeCallback;
 
 namespace ews {
     namespace app {
@@ -39,7 +43,7 @@ namespace ews {
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
-            class VertexHeightUpdater : public NodeCallback {
+            class VertexHeightUpdater : public osg::NodeCallback {
             public:
                 VertexHeightUpdater(WaveMedium& model, Geometry* geom) :
                 _model(model), _heightMap(0) {

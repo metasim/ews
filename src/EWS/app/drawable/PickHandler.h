@@ -27,6 +27,10 @@
 #include <osgViewer/View>
 #include "EWSDebug.h"
 
+/**
+ * Provides a basic interface for any class which wants to handle a GUI Events.
+ */
+class osgGA::GUIEventHandler;
 
 namespace ews {
     namespace app {
@@ -38,7 +42,7 @@ namespace ews {
             typedef LineSegmentIntersector::Intersections::iterator IntersectIterator;
             
             
-            class PickHandler : public GUIEventHandler {
+            class PickHandler : public osgGA::GUIEventHandler {
                 
             public:
                 

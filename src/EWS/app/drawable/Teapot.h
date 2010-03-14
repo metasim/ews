@@ -65,6 +65,10 @@
  OpenGL(TM) is a trademark of Silicon Graphics, Inc.
  */
 
+/**
+ * Pure virtual base class for drawable geometry.
+ */
+class osg::Drawable;
 
 namespace ews {
     namespace app {
@@ -217,8 +221,7 @@ namespace ews {
             /**
              * An OSG wrapper for the classic OpenGL teapot.
              */
-            class Teapot : public osg::Drawable
-            {
+            class Teapot : public osg::Drawable {
             public:
                 Teapot() {}
                 
