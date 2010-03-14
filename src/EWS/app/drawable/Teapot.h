@@ -66,9 +66,14 @@
  */
 
 /**
- * Pure virtual base class for drawable geometry.
+ * The core osg library provides the basic scene graph classes such as Nodes, State and Drawables, and maths and general helper classes.
  */
-class osg::Drawable;
+namespace osg {
+    /**
+     * Pure virtual base class for drawable geometry.
+     */
+    class Drawable;
+}
 
 namespace ews {
     namespace app {
