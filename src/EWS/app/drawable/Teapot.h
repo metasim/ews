@@ -22,7 +22,7 @@
 
 /* Copyright (c) Mark J. Kilgard, 1994. */
 
-/**
+/*
  (c) Copyright 1993, Silicon Graphics, Inc.
  
  ALL RIGHTS RESERVED
