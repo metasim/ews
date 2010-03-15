@@ -27,6 +27,7 @@
 #include <osg/Vec3>
 #include <osg/Matrix>
 #include <osgDB/WriteFile>
+#include <osgManipulator/Dragger>
 #include <sstream>
 
 #include "Barrier.h"
@@ -133,6 +134,14 @@ namespace ews {
 // These QDebug debugging output operators are declared in the global
 // scope to simplify usage and detection by compiler.
 
+/** Standard String compatibility output operator. */
+inline QDebug operator<<(QDebug dbg, const std::string& str) {
+    dbg.nospace() << str.c_str();
+    return dbg.space();
+}
+
+
+
 /** 2-D Vector debug output operator. */
 inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
     dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
@@ -163,6 +172,14 @@ inline QDebug operator<<(QDebug dbg, const osg::Matrix& m) {
     return dbg.space();
 }
 
+/** Pick info record output debug operator. */
+inline QDebug operator<<(QDebug dbg, const osgManipulator::PointerInfo& pi) {
+    dbg << "PointerInfo" << '{';
+    dbg << "intersectPoint=" << pi.getLocalIntersectPoint();
+    dbg << '}';
+    return dbg;
+}
+
 /**
  * Debug output operator for Barrier.
  */
@@ -175,7 +192,7 @@ inline QDebug operator<<(QDebug dbg, const ews::app::model::Barrier &b) {
     dbg << "slitSeparation=" << b.getSlitSeparation() << ',';
     dbg << "start=" << b.getStart() << ',';
     dbg << "end=" << b.getEnd();
-    dbg << "}";
+    dbg << '}';
     return dbg;
 }
 
@@ -213,7 +230,7 @@ inline QDebug operator<<(QDebug dbg, const osg::Node* n) {
         qWarning() << "Writer for 'osg' not found";
     }
             
-    dbg << oss.str().c_str();
+    dbg << oss.str();
     return dbg;
 }
 
@@ -225,7 +242,7 @@ template<typename T> inline
 QDebug operator<<(QDebug dbg, const T& t) {
     std::ostringstream oss;
     oss.operator<< (t);
-    dbg << oss.str().c_str();
+    dbg << oss.str();
     return dbg;
 }
 

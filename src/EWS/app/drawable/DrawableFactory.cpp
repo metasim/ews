@@ -59,11 +59,13 @@ namespace ews {
                     Barrier* barrier = qobject_cast<Barrier*>(&data);
                     BarrierGeom* geom = new BarrierGeom(*barrier);
                     retval = geom;
-                    qDebug() << "Adding:" << static_cast<const osg::Node*>(geom);
                 }                                    
                 
                 if(!retval) {
                     qWarning() << "No drawable found for" << name;
+                }
+                else {
+                    retval->setName((data.objectName() + "Geom").toStdString());
                 }
                 
                 return retval;

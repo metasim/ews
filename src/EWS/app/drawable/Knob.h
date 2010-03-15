@@ -19,9 +19,8 @@
 #ifndef __KNOB_H
 #define __KNOB_H
 
+#include <osg/MatrixTransform>
 #include <osgManipulator/Dragger>
-#include <osgManipulator/Translate2DDragger>
-#include <osg/Plane>
 
 namespace ews {
     namespace app {
@@ -32,14 +31,14 @@ namespace ews {
             /** The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
              * (i.e. sphere) as a child of the selection. */
-            class Knob : public Group {
+            class Knob : public MatrixTransform {
             public:
                 Knob();
                 
                 Vec2d currLocation() const;
                 
                 void setPosition(Vec3 pos) {
-                    _selectionNode->setMatrix(Matrix::translate(pos));
+                    setMatrix(Matrix::translate(pos));
                 }
                 
                 
