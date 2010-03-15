@@ -18,6 +18,8 @@
 
 
 #include "DrawableQtAdapter.h"
+#include <osgManipulator/CommandManager>
+
 namespace ews {
     namespace app {
         namespace drawable {
@@ -31,7 +33,11 @@ namespace ews {
                 
             }
             
-            
+            osgManipulator::CommandManager& DrawableQtAdapter::manipCommandManager() {
+                static osg::ref_ptr<osgManipulator::CommandManager> _manipCommander = new osgManipulator::CommandManager;
+                
+                return *(_manipCommander.get());
+            }
         }
     }
 }

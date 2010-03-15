@@ -48,14 +48,19 @@ namespace ews {
             
             /** Primary constructor. */
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), 
-            _barrierGeom(new Geode), _dragger(NULL) {
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _switch(new Switch),
+            _barrierGeom(new PositionAttitudeTransform), _startKnob(new Knob), _endKnob(new Knob) {
                 
                 setColor(BARRIER_COLOR); 
                 
-                addChild(_barrierGeom);
-                updateGeom();
+                _switch->setNewChildDefaultValue(true);
+                addChild(_switch.get());
+                _switch->addChild(_barrierGeom.get());
                 
+                _switch->addChild(_startKnob.get());
+                _switch->addChild(_endKnob.get());
+                
+                updateGeom();
                 
                 // Callback to detect when we've been moved
                 // and update the databmodel.
@@ -100,59 +105,57 @@ namespace ews {
             }
             
             void BarrierGeom::setEnabled(bool enabled) {
-                setNodeMask(enabled ? 0xffffffff : 0);
-                // Hack... really need to change to a switch node arragement.
-                if(_dragger) {
-                    _dragger->setNodeMask(enabled ? 0xffffffff : 0);
+                if(enabled) {
+                    _switch->setAllChildrenOn();
+                }
+                else {
+                    _switch->setAllChildrenOff();
                 }
             }
             
             void BarrierGeom::updateGeom() {
+                _barrierGeom->removeChildren(0, _barrierGeom->getNumChildren());
                 const Vec2& start = _dataModel.getStart();
-                PositionAttitudeTransform::setPosition(Vec3d(start.x(), start.y(), 0.f));
+                _barrierGeom->setPosition(Vec3d(start.x(), start.y(), 0.f));
                 const Vec2& end = _dataModel.getEnd();
                 const Vec2 dir = (end - start);
                 const Real barrierLength = _dataModel.length();
-                setScale(Vec3f(barrierLength, 1.f, 1.f));
+                _barrierGeom->setScale(Vec3f(barrierLength, 1.f, 1.f));
                 const Real angle = atan2(dir.y(), dir.x());
-                setAttitude(Quat(angle, Vec3f(0.f, 0.f, 1.f)));
+                _barrierGeom->setAttitude(Quat(angle, Vec3f(0.f, 0.f, 1.f)));
                 
                 // Create geometric representation
-                _barrierGeom->removeDrawables(0, _barrierGeom->getNumDrawables());
-                ref_ptr<Drawable> d = dynamic_cast<Drawable*>(new ShapeDrawable());
-                ref_ptr<Shape> s = NULL;
+                ref_ptr<Geode> geom = new Geode;
+                _barrierGeom->addChild(geom);
                 if (_dataModel.getNumSlits() == Barrier::ZERO) {
-                    addBox(_barrierGeom, 0.5f, 1.f);
+                    addBox(geom, 0.5f, 1.f);
                 }
                 else {
                     const Real slitAlpha = _dataModel.getSlitWidth() / barrierLength;
                     if (_dataModel.getNumSlits() == Barrier::ONE) {
                         Real boxLength = 0.5f - (slitAlpha / 2);
-                        addBox(_barrierGeom, boxLength / 2, boxLength);
-                        addBox(_barrierGeom, 1 - boxLength / 2, boxLength);
+                        addBox(geom, boxLength / 2, boxLength);
+                        addBox(geom, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
                         const Real separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
                         // Box length for boxes at either end of barrier
                         Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
-                        addBox(_barrierGeom, boxLength / 2, boxLength);
-                        addBox(_barrierGeom, 1 - boxLength / 2, boxLength);
+                        addBox(geom, boxLength / 2, boxLength);
+                        addBox(geom, 1 - boxLength / 2, boxLength);
                         // Box between the two slits
-                        addBox(_barrierGeom, 0.5f, separationAlpha);
+                        addBox(geom, 0.5f, separationAlpha);
                     }
                 }
+                updateKnobs();
+                
                 setEnabled(_dataModel.isEnabled());
             }
             
-            
-            osgManipulator::Dragger* BarrierGeom::createDragger() {
-                
-                // If there was a previous dragger, the ref_ptr assignment
-                // operator will take care of deleting it.
-                _dragger = new BarrierDragger;
-                
-                return _dragger;
+            void BarrierGeom::updateKnobs() {
+                _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
+                _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
             }
         }
     }

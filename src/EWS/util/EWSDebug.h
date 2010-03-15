@@ -26,6 +26,7 @@
 #include <osg/Vec2>
 #include <osg/Vec3>
 #include <osg/Matrix>
+#include <osgDB/WriteFile>
 #include <sstream>
 
 #include "Barrier.h"
@@ -199,6 +200,23 @@ inline QDebug operator<<(QDebug dbg, const QWidget &w) {
     return dbg;
 }
 
+inline QDebug operator<<(QDebug dbg, const osg::Node* n) {
+    std::ostringstream oss;
+    osgDB::ReaderWriter* io = osgDB::Registry::instance()->getReaderWriterForExtension("osg");
+    if(io) {
+        osgDB::ReaderWriter::WriteResult wr = io->writeNode(*n, oss);
+        if(wr.error()) {
+            qWarning() << wr.message().c_str();
+        }
+    }
+    else {
+        qWarning() << "Writer for 'osg' not found";
+    }
+            
+    dbg << oss.str().c_str();
+    return dbg;
+}
+
 /** Fallback default QDebug output operator for 
  * types that have an ostream operator. If compiler fails here
  * then either QDebug::operator<< or ostream::operator<< needs
@@ -207,7 +225,7 @@ template<typename T> inline
 QDebug operator<<(QDebug dbg, const T& t) {
     std::ostringstream oss;
     oss.operator<< (t);
-    dbg << oss.str();
+    dbg << oss.str().c_str();
     return dbg;
 }
 

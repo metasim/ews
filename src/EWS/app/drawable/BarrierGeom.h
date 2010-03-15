@@ -21,11 +21,13 @@
 #define __BARRIER_GEOM_H
 
 #include <osg/Vec2>
-#include <osg/Group>
-#include <osg/Geode>
 #include <osg/Plane>
+#include <osg/Group>
+#include <osg/Switch>
+#include <osg/Geode>
 #include <osgManipulator/Translate2DDragger>
 #include "Barrier.h"
+#include "Knob.h"
 #include "DrawableQtAdapter.h"
 
 namespace ews {
@@ -54,9 +56,6 @@ namespace ews {
                 /** Standard ctor. */
                 explicit BarrierGeom(Barrier& dataModel);
                 
-                /** Create the type of dragger this geometry type supports. */
-                virtual osgManipulator::Dragger* createDragger();
-                
                 
                 /** Get the data object this reflects. */
                 Barrier& getDataModel() {
@@ -66,10 +65,11 @@ namespace ews {
                 /** Set barrier color. */
                 void setColor(const osg::Vec4& color);
                 
-                /** Set whether barrier is visible. */
+                /** Set whether barrier is visible and active. */
                 void setEnabled(bool enabled);
                 
             private slots:
+                /** Recompute geometric representation to match data model. */
                 void updateGeom();
                 
             protected:
@@ -84,10 +84,15 @@ namespace ews {
                 void respondToSignals(bool respond);
                 /** Convenience method for creating a box in local coordinates. */
                 void addBox(const osg::ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength);
+                
+                /** Move dragging knobs to ends of barrier. */
+                void updateKnobs();
 
                 Barrier& _dataModel;
-                osg::ref_ptr<osg::Geode> _barrierGeom;
-                osg::ref_ptr<osgManipulator::Dragger> _dragger;
+                ref_ptr<Switch> _switch;
+                ref_ptr<PositionAttitudeTransform> _barrierGeom;
+                ref_ptr<Knob> _startKnob;
+                ref_ptr<Knob> _endKnob;
                 
                 /** For access to respondsToSignals(bool). */
                 friend class PotentialUpdater;

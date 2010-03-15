@@ -24,6 +24,7 @@
 #include "WaterSurfaceGeom.h"
 #include "Barrier.h"
 #include "BarrierGeom.h"
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
@@ -58,6 +59,7 @@ namespace ews {
                     Barrier* barrier = qobject_cast<Barrier*>(&data);
                     BarrierGeom* geom = new BarrierGeom(*barrier);
                     retval = geom;
+                    qDebug() << "Adding:" << static_cast<const osg::Node*>(geom);
                 }                                    
                 
                 if(!retval) {

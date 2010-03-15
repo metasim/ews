@@ -76,6 +76,7 @@ namespace ews {
                                         if (Dragger* dragger = dynamic_cast<Dragger*>(*iter)) {
                                             dragger->handle(pointerInfo, ea, aa);
                                             activeDragger = dragger;
+                                            qDebug() << "Active dragger is:" << activeDragger->className() << activeDragger->getName().c_str();
                                             return false;
                                         }
                                     }

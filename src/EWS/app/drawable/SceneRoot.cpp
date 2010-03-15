@@ -32,7 +32,7 @@ namespace ews {
             using namespace osgManipulator;
             
             SceneRoot::SceneRoot(QObject* parent) 
-            : QObject(parent), osg::MatrixTransform(), _drawables(), _manipCommander() {
+            : QObject(parent), osg::MatrixTransform(), _drawables() {
                 // Set up some basic lighting.
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
@@ -52,49 +52,19 @@ namespace ews {
                 lSource->setReferenceFrame(LightSource::ABSOLUTE_RF );
                 addChild(lSource.get());
                 
-                _manipCommander = new osgManipulator::CommandManager;
-                
                 addEventCallback(new PickHandler);
             }
             
             
             SceneRoot::~SceneRoot() {
             }
-            
-            Node* SceneRoot::setupManipulator(DrawableQtAdapter* drawable) {
-                
-                ref_ptr<Dragger> dragger = drawable->createDragger();
-                if(!dragger) {
-                    return drawable;
-                }
 
-                // Create selection type to contain our drawable.
-                ref_ptr<Selection> selection =  new Selection;
-                selection->addChild(drawable);
-                
-                // Put selection and dragger under same group
-                Group* group = new Group;
-                group->addChild(selection.get());
-                group->addChild(dragger.get());
-                
-                // Starting matrix for the Dragger
-                BoundingSphere bounds = drawable->getBound();
-                float scale =  bounds.radius() * 1.5f;
-                Matrixd mat = Matrix::scale(scale, scale, scale) * Matrix::translate(bounds.center());
-                dragger->setMatrix(mat);
-                
-                // Command Manager - connects Dragger objects with Selection objects
-                _manipCommander->connect(*(dragger.get()), *(selection.get()));
-                return group;
-            }
             
             void SceneRoot::addDrawableFor(QObject& data) {
                 DrawableQtAdapter* drawable = DrawableFactory::instance().createDrawableFor(data);
                 if(drawable) {
-                    Node* parent = setupManipulator(drawable);
-                    
-                    addChild(parent);
-                    _drawables.insert(&data, parent);
+                    addChild(drawable);
+                    _drawables.insert(&data, drawable);
                 }
             }
             
