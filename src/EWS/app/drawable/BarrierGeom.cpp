@@ -40,6 +40,7 @@ namespace ews {
             const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float BARRIER_OPACITY = .3f;
+            const float KNOB_OFFSET = 10;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             const Plane BARRIER_PLANE(osg::X_AXIS, 0);
 
@@ -56,8 +57,8 @@ namespace ews {
                 _switch->addChild(_barrierGeom.get());
                 
                 // Knob locations are in gobal coordinates.
-                _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
-                _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
+                _startKnob->setPosition(Vec3(_dataModel.getStart(), KNOB_OFFSET));
+                _endKnob->setPosition(Vec3(_dataModel.getEnd(), KNOB_OFFSET));
                 
                 _startKnob->setName("startBarrierKnob");
                 _switch->addChild(_startKnob.get());
@@ -156,7 +157,6 @@ namespace ews {
             }
 
             void BarrierGeom::checkKnobs() {
-//                _dataModel.blockSignals(true);
                 if(_startKnob->isDirty()) {
                     Vec2 kStart = _startKnob->currXYLocation();
                     _dataModel.setStart(kStart);
@@ -167,8 +167,6 @@ namespace ews {
                     _dataModel.setEnd(kend);
                     _endKnob->setDirty(false);
                 }
-//                _dataModel.blockSignals(false);
-                
             }
         }
     }

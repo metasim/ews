@@ -19,6 +19,7 @@
 #include <osg/ShapeDrawable>
 #include <osg/Shape>
 #include <osg/Plane>
+#include <osg/Material>
 #include <osgManipulator/Translate2DDragger>
 #include "DrawableQtAdapter.h"
 #include "Knob.h"
@@ -34,6 +35,7 @@ namespace ews {
                 KnobDragger(Knob& knob) : Translate2DDragger(Plane(osg::Z_AXIS, 0)), _knob(knob) {
                     setName("knobDragger");
                     setColor(Vec4(0.9, 0.9, 0.9, 1));
+                    osgManipulator::setMaterialColor(getColor(), *this);
                     setPickColor(Vec4(1, 1, 0, 1));
                 }
                 virtual ~KnobDragger() {}
@@ -51,6 +53,7 @@ namespace ews {
                         default:
                             break;
                     }
+
                     return retval;
                 }
 
@@ -61,7 +64,7 @@ namespace ews {
             /** The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
              * (i.e. sphere) as a child of the selection. */
-            Knob::Knob() : _dirty(true) {
+            Knob::Knob(unsigned int radius) : _dirty(true) {
                 setName("knob");
                 // Create selection type to contain our drawable.
                 _selectionNode = new Selection;
@@ -75,12 +78,15 @@ namespace ews {
                 ref_ptr<Geode> geom = new Geode;
                 geom->setName("knobGeometry");
                 _dragger->addChild(geom.get());
-                ref_ptr<Sphere> sphere = new Sphere(Vec3(0, 0, 0), 5);
+                ref_ptr<Sphere> sphere = new Sphere(Vec3(0, 0, 0), radius);
                 ref_ptr<ShapeDrawable> sphereGeom = new ShapeDrawable(sphere.get());
                 geom->addDrawable(sphereGeom.get());
                 
+//                geom->getOrCreateStateSet()->setMode(GL_LIGHTING, StateAttribute::OFF);
+//                geom->setDataVariance(DYNAMIC);
+                
                 // Create another copy that will be invisible for the pick region. 
-                sphere = new Sphere(Vec3(0, 0, 0), 7);
+                sphere = new Sphere(Vec3(0, 0, 0), radius*1.25);
                 sphereGeom = new ShapeDrawable(sphere.get());                
                 osgManipulator::setDrawableToAlwaysCull(*sphereGeom);
                 geom = new Geode;
@@ -88,7 +94,6 @@ namespace ews {
                 geom->addDrawable(sphereGeom.get());
                 _dragger->addChild(geom.get());
                 
-                geom->getOrCreateStateSet()->setMode(GL_LIGHTING, StateAttribute::OFF);
                 
                 // The command manager is requred to connect Dragger objects with Selection objects
                 DrawableQtAdapter::manipCommandManager().connect(*(_dragger.get()), *(_selectionNode.get()));

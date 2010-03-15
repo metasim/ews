@@ -34,17 +34,13 @@ namespace ews {
              * (i.e. sphere) as a child of the selection. */
             class Knob : public MatrixTransform {
             public:
-                Knob();
-                
+                Knob(unsigned int radius = 3);
+
+                /** Get the knob's current location in global coordinates. */
                 Vec2 currXYLocation() const {
-                    using ews::util::debug::qstr;
                     MatrixList transforms = _selectionNode->getWorldMatrices();
                     Matrix toWorld = transforms[0];
-                    
                     Vec3 translation = toWorld.getTrans();
-
-                    QTRACE1(qstr(getName()) + qstr(": curr=") + qstr(translation));
-
                     return Vec2(translation.x(), translation.y());
                 }
                 void setPosition(Vec3 pos) {
@@ -53,10 +49,14 @@ namespace ews {
                     setMatrix(Matrix::translate(pos));
                 }
                 
+                /** Control the dirty flag. */
                 void setDirty(bool state) {
                     _dirty = state;
                 }
                 
+                /** Determine if the dirty flag has been set, which is the
+                 * case after a drag operation has occurred. It is up to
+                 * the client code to reset the dirty flag when appropriate. */
                 bool isDirty() const {
                     return _dirty;
                 }
