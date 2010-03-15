@@ -28,38 +28,11 @@ namespace ews {
         namespace drawable {
             using namespace osg;
             using namespace osgManipulator;
-
             
             /**
              * Class responsible for updating the potential data model when BarrierGeom changes.
              */
             class PotentialUpdater : public NodeCallback {
-                
-            private:
-                void detectAndHandleMove(BarrierGeom* geom, NodeVisitor* nv) {
-                    const NodePath& nodePath = nv->getNodePath();
-                    Matrix currMat = osg::computeLocalToWorld(nodePath);
-                    
-                    // If the barrier has moved we need to recompute the start
-                    // and end locations.
-                    if(currMat != _localToWorld) {
-                        _localToWorld = currMat;
-                        
-                        Vec3 start = BARRIER_START_ALPHA * _localToWorld;
-                        Vec3 end = BARRIER_END_ALPHA * _localToWorld;
-                        
-                        qDebug() << "movement happened:" << start << end; 
-                        
-                        Barrier& dm = geom->getDataModel();
-                        geom->respondToSignals(false);
-                        dm.setStart(Vec2(start.x(), start.y()));
-                        dm.setEnd(Vec2(end.x(), end.y()));
-                        geom->respondToSignals(true);
-                    }
-                    
-                }
-                
-                Matrix _localToWorld;
                 
             public:
                 
@@ -67,7 +40,7 @@ namespace ews {
                 virtual void operator()(Node* node, NodeVisitor* nv) { 
                     BarrierGeom* geom = dynamic_cast<BarrierGeom*>(node);
                     if(geom) {
-                        detectAndHandleMove(geom, nv);
+                        geom->checkKnobs();
                     }
                     else {
                         notify(osg::WARN) << "PotentialUpdater didn't receieve the right geometry type";

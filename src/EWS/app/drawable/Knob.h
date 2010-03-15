@@ -21,6 +21,7 @@
 
 #include <osg/MatrixTransform>
 #include <osgManipulator/Dragger>
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
@@ -35,10 +36,29 @@ namespace ews {
             public:
                 Knob();
                 
-                Vec2d currLocation() const;
-                
+                Vec2 currXYLocation() const {
+                    using ews::util::debug::qstr;
+                    MatrixList transforms = _selectionNode->getWorldMatrices();
+                    Matrix toWorld = transforms[0];
+                    
+                    Vec3 translation = toWorld.getTrans();
+
+                    QTRACE1(qstr(getName()) + qstr(": curr=") + qstr(translation));
+
+                    return Vec2(translation.x(), translation.y());
+                }
                 void setPosition(Vec3 pos) {
+                    using ews::util::debug::qstr;
+                    QTRACE1(qstr(getName()) + qstr(": pos=") + qstr(pos));
                     setMatrix(Matrix::translate(pos));
+                }
+                
+                void setDirty(bool state) {
+                    _dirty = state;
+                }
+                
+                bool isDirty() const {
+                    return _dirty;
                 }
                 
                 
@@ -49,7 +69,8 @@ namespace ews {
             private:
                 ref_ptr<Dragger> _dragger;
                 ref_ptr<Selection> _selectionNode;
-                
+                bool _dirty;
+
             };
             
         }

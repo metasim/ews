@@ -44,10 +44,6 @@ namespace ews {
             
             /** The plane where the barriers reside. */
             extern const Plane BARRIER_PLANE;
-            /** Normalized/local coordinate of barrier start position. */
-            extern const Vec3 BARRIER_START_ALPHA;
-            /** Normalized/local coordinate of barrier end position. */
-            extern const Vec3 BARRIER_END_ALPHA;
             
             /** A 3-D geometric representation of a barrier, with or without slits. */
             class BarrierGeom : public DrawableQtAdapter {
@@ -55,7 +51,6 @@ namespace ews {
             public:
                 /** Standard ctor. */
                 explicit BarrierGeom(Barrier& dataModel);
-                
                 
                 /** Get the data object this reflects. */
                 Barrier& getDataModel() {
@@ -85,8 +80,8 @@ namespace ews {
                 /** Convenience method for creating a box in local coordinates. */
                 void addBox(const osg::ref_ptr<osg::Geode>& geode, Real boxCenter, Real boxLength);
                 
-                /** Move dragging knobs to ends of barrier. */
-                void updateKnobs();
+                /** Check to see if the knobs have moved, and update data model if needed. */
+                void checkKnobs();
 
                 Barrier& _dataModel;
                 ref_ptr<Switch> _switch;
@@ -94,7 +89,7 @@ namespace ews {
                 ref_ptr<Knob> _startKnob;
                 ref_ptr<Knob> _endKnob;
                 
-                /** For access to respondsToSignals(bool). */
+                /** For access to checkKnobs() */
                 friend class PotentialUpdater;
             };
         }

@@ -39,12 +39,10 @@ namespace ews {
             
             const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
-            const float BARRIER_OPACITY = .5f;
+            const float BARRIER_OPACITY = .3f;
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
-            const Plane BARRIER_PLANE(Vec3(0, 0, 1), 0);
-            
-            const Vec3 BARRIER_START_ALPHA(0, 0, 0);
-            const Vec3 BARRIER_END_ALPHA(1, 0, 0);
+            const Plane BARRIER_PLANE(osg::X_AXIS, 0);
+
             
             /** Primary constructor. */
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
@@ -57,7 +55,13 @@ namespace ews {
                 addChild(_switch.get());
                 _switch->addChild(_barrierGeom.get());
                 
+                // Knob locations are in gobal coordinates.
+                _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
+                _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
+                
+                _startKnob->setName("startBarrierKnob");
                 _switch->addChild(_startKnob.get());
+                _endKnob->setName("endBarrierKnob");
                 _switch->addChild(_endKnob.get());
                 
                 updateGeom();
@@ -71,7 +75,6 @@ namespace ews {
             
             
             BarrierGeom::~BarrierGeom() {
-                removeChild(static_cast<unsigned int>(0), 1);
             }
             
             void BarrierGeom::respondToSignals(bool respond) {
@@ -148,14 +151,24 @@ namespace ews {
                         addBox(geom, 0.5f, separationAlpha);
                     }
                 }
-                updateKnobs();
                 
                 setEnabled(_dataModel.isEnabled());
             }
-            
-            void BarrierGeom::updateKnobs() {
-                _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
-                _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
+
+            void BarrierGeom::checkKnobs() {
+//                _dataModel.blockSignals(true);
+                if(_startKnob->isDirty()) {
+                    Vec2 kStart = _startKnob->currXYLocation();
+                    _dataModel.setStart(kStart);
+                    _startKnob->setDirty(false);
+                }
+                if(_endKnob->isDirty()) {
+                    Vec2 kend = _endKnob->currXYLocation();
+                    _dataModel.setEnd(kend);
+                    _endKnob->setDirty(false);
+                }
+//                _dataModel.blockSignals(false);
+                
             }
         }
     }

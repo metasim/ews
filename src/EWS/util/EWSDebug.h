@@ -23,12 +23,11 @@
 #include <QString>
 #include <QWidget>
 #include <QDebug>
-#include <osg/Vec2>
-#include <osg/Vec3>
-#include <osg/Matrix>
+#include <osg/io_utils>
 #include <osgDB/WriteFile>
 #include <osgManipulator/Dragger>
 #include <sstream>
+#include <vector>
 
 #include "Barrier.h"
 #include "DripSource.h"
@@ -55,8 +54,55 @@ namespace ews {
                 return QString(INDENT_WIDTH*i, INDENT_CHAR); 
             }
             
-
             
+            /** Convert a character array into a QString. */
+            inline QString qstr(const char* s) {
+                return QString(s);
+            }
+            
+            /** Convert an stl string into a QString. */
+            inline QString qstr(const std::string& s) {
+                return qstr(s.c_str());
+            }
+            
+            /** Convert an stl vector of some type into a QString*/
+            template<typename T> 
+            inline QString qstr(const std::vector<T>& v) {
+                QString retval("[");
+                typename std::vector<T>::const_iterator it;
+                it = v.begin();
+                while(it != v.end()) {
+                    retval += qstr(*it) + ", ";
+                    ++it;
+                }
+                retval += "]";
+                return retval;
+            }
+            
+            inline QString qstr(const osg::Node* n) {
+                std::ostringstream oss;
+                osgDB::ReaderWriter* io = osgDB::Registry::instance()->getReaderWriterForExtension("osg");
+                if(io) {
+                    osgDB::ReaderWriter::WriteResult wr = io->writeNode(*n, oss);
+                    if(wr.error()) {
+                        qWarning() << wr.message().c_str();
+                    }
+                }
+                else {
+                    qWarning() << "Writer for 'osg' not found";
+                }
+                
+                return qstr(oss.str());
+            }
+            
+            /** Convert a generic type supporting the output operator into a QString. */
+            template<typename T>
+            inline QString qstr(const T& t) {
+                std::ostringstream oss;
+                oss << t;
+                return QString(oss.str().c_str());
+            }
+
             class Tracer {
             public:
                 Tracer(const QString& file, int line, const QString& func, const QString& msg) : _file(file), _line(line), _func(func) {
@@ -133,6 +179,7 @@ namespace ews {
 
 // These QDebug debugging output operators are declared in the global
 // scope to simplify usage and detection by compiler.
+using namespace osg;
 
 /** Standard String compatibility output operator. */
 inline QDebug operator<<(QDebug dbg, const std::string& str) {
@@ -140,37 +187,50 @@ inline QDebug operator<<(QDebug dbg, const std::string& str) {
     return dbg.space();
 }
 
-
-
-/** 2-D Vector debug output operator. */
-inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
-    dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
-    return dbg.space();
+/** Fallback default QDebug output operator for 
+ * types that have an ostream operator. If compiler fails here
+ * then either QDebug::operator<< or ostream::operator<< needs
+ * to be defined. */
+template<typename T> inline
+QDebug operator<<(QDebug dbg, const T& t) {
+    std::ostringstream oss;
+    oss << t;
+    dbg << oss.str();
+    return dbg;
 }
 
-/** 3-D Vector debug output operator. */
-inline QDebug operator<<(QDebug dbg, const osg::Vec3& v) {
-    dbg.nospace() << '(' << v.x() << ',' << v.y() << ',' << v.z() << ')';
-    return dbg.space();
-}
 
-/** Quaternion debug output operator. */
-inline QDebug operator<<(QDebug dbg, const osg::Quat& q) {
-    dbg.nospace() << '{' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w() << '}';
-    return dbg.space();
-}
-
-/** 4x4 Matrix debug output operator. */
-inline QDebug operator<<(QDebug dbg, const osg::Matrix& m) {
-    osg::Vec3 trans, scale;
-    osg::Quat rot, scaleRot;
-    m.decompose(trans, rot, scale, scaleRot);
-    dbg << " postion:" << trans << '\n';
-    dbg << "rotation:" << rot << '\n';
-    dbg << "   scale:" << scale << '\n';
-    
-    return dbg.space();
-}
+// Found iostream operators in osg/io_utils.
+//
+///** 2-D Vector debug output operator. */
+//inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
+//    dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
+//    return dbg.space();
+//}
+//
+///** 3-D Vector debug output operator. */
+//inline QDebug operator<<(QDebug dbg, const osg::Vec3& v) {
+//    dbg.nospace() << '(' << v.x() << ',' << v.y() << ',' << v.z() << ')';
+//    return dbg.space();
+//}
+//
+///** Quaternion debug output operator. */
+//inline QDebug operator<<(QDebug dbg, const osg::Quat& q) {
+//    dbg.nospace() << '{' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w() << '}';
+//    return dbg.space();
+//}
+//
+///** 4x4 Matrix debug output operator. */
+//inline QDebug operator<<(QDebug dbg, const osg::Matrix& m) {
+//    osg::Vec3 trans, scale;
+//    osg::Quat rot, scaleRot;
+//    m.decompose(trans, rot, scale, scaleRot);
+//    dbg << " postion:" << trans << '\n';
+//    dbg << "rotation:" << rot << '\n';
+//    dbg << "   scale:" << scale << '\n';
+//    
+//    return dbg.space();
+//}
 
 /** Pick info record output debug operator. */
 inline QDebug operator<<(QDebug dbg, const osgManipulator::PointerInfo& pi) {
@@ -218,33 +278,10 @@ inline QDebug operator<<(QDebug dbg, const QWidget &w) {
 }
 
 inline QDebug operator<<(QDebug dbg, const osg::Node* n) {
-    std::ostringstream oss;
-    osgDB::ReaderWriter* io = osgDB::Registry::instance()->getReaderWriterForExtension("osg");
-    if(io) {
-        osgDB::ReaderWriter::WriteResult wr = io->writeNode(*n, oss);
-        if(wr.error()) {
-            qWarning() << wr.message().c_str();
-        }
-    }
-    else {
-        qWarning() << "Writer for 'osg' not found";
-    }
-            
-    dbg << oss.str();
+    dbg << ews::util::debug::qstr(n);
     return dbg;
 }
 
-/** Fallback default QDebug output operator for 
- * types that have an ostream operator. If compiler fails here
- * then either QDebug::operator<< or ostream::operator<< needs
- * to be defined. */
-template<typename T> inline
-QDebug operator<<(QDebug dbg, const T& t) {
-    std::ostringstream oss;
-    oss.operator<< (t);
-    dbg << oss.str();
-    return dbg;
-}
 
 
 

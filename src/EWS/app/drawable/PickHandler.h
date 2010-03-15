@@ -63,7 +63,7 @@ namespace ews {
                                     pointerInfo.setCamera(view->getCamera());
                                     pointerInfo.setMousePosition(ea.getX(), ea.getY());
                                     
-                                    qDebug() << "PointerInfo:" << pointerInfo;
+                                    // qDebug() << "PointerInfo:" << pointerInfo;
                                     
                                     for (IntersectIterator iter = intersections.begin(); 
                                          iter != intersections.end(); 
@@ -75,7 +75,7 @@ namespace ews {
                                          iter != pointerInfo._hitList.front().first.end(); 
                                          ++iter) {	
                                         
-                                        qDebug() << "hit" << (*iter)->getName();
+                                        // qDebug() << "hit" << (*iter)->getName();
                                         if (Dragger* dragger = dynamic_cast<Dragger*>(*iter)) {
                                             dragger->handle(pointerInfo, ea, aa);
                                             activeDragger = dragger;
@@ -89,6 +89,12 @@ namespace ews {
                                 
                             case GUIEventAdapter::RELEASE:
                                 activeDragger = NULL;
+                                if (activeDragger) {
+                                    pointerInfo._hitIter = pointerInfo._hitList.begin();
+                                    pointerInfo.setCamera(view->getCamera());
+                                    pointerInfo.setMousePosition(ea.getX(), ea.getY());
+                                    activeDragger->handle(pointerInfo, ea, aa);
+                                }
                                 return false;
                             case GUIEventAdapter::DRAG:
                                 if (activeDragger) {
