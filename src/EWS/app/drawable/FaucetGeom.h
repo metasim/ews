@@ -23,6 +23,7 @@
 
 #include <osg/Vec2>
 #include <osg/Group>
+#include <osgManipulator/Constraint>
 #include "DripSource.h"
 #include "DrawableQtAdapter.h"
 #include "Knob.h"
@@ -63,6 +64,7 @@ namespace ews {
                 DripSource& _dataModel;
                 ref_ptr<Knob> _dragger;
                 ref_ptr<PositionAttitudeTransform> _geom;
+                ref_ptr<Constraint> _constraint;
             };
         }
     }

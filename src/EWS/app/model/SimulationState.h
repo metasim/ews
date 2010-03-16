@@ -101,8 +101,12 @@ namespace ews {
                 }
                 
             public slots:
+                /** Pause the simulation, whereby the wave propagation is stopped. */
                 void setPaused(bool);
+                /** Reset the simulation and view to the default view. */
                 void reset();
+                
+                
                 void forwardBarrierSetAddition(int index, Barrier* barrier);
                 void forwardBarrierSetRemoval(int index, Barrier* barrier);
 

@@ -37,6 +37,8 @@ namespace ews {
             using ews::physics::Oscillator;
             using osg::Vec2;
             
+            class SimulationState;
+            
             /**
              * Contains the business logic for DripSource objects to be drawn on the screen, as well as
              * a reference to the Oscillator necessary for physics calculations.
@@ -55,7 +57,7 @@ namespace ews {
                 /**
                  * Standard ctor.
                  */
-                explicit DripSource(WaveModel& model, QObject * parent = 0);
+                explicit DripSource(WaveModel& model, SimulationState * parent);
                 
                 /**
                  * Determine if this source is enabled or not.
@@ -101,10 +103,16 @@ namespace ews {
                 }
                 
                 /**
-                 * Initializes (or resets) the drip soruce according to its objectName.
+                 * Reset drip source to default configuration.
                  */
-                void initialize(Real maxWidth, Real maxLength);
-                    
+                void reset();
+                
+                
+                /**
+                 * Gets the SimulationState associated with this drip source.
+                 * @return Parent SimulationState.
+                 */
+                SimulationState* getSimulationState() const;
                 
             public slots:
                 

@@ -21,7 +21,7 @@
 
 #include <osg/MatrixTransform>
 #include <osgManipulator/Dragger>
-#include "EWSDebug.h"
+#include <osgManipulator/Constraint>
 
 namespace ews {
     namespace app {
@@ -52,8 +52,6 @@ namespace ews {
                     return Vec2(translation.x(), translation.y());
                 }
                 void setPosition(Vec3 pos) {
-                    using ews::util::debug::qstr;
-                    QTRACE1(qstr(getName()) + qstr(": pos=") + qstr(pos));
                     setMatrix(Matrix::translate(pos));
                 }
                 
@@ -69,6 +67,11 @@ namespace ews {
                     return _dirty;
                 }
                 
+                /** Set the constraint for the dragger that limits the dragging
+                 * to a controlled region.
+                 */
+                void setConstraint(Constraint& constraint);
+                
                 
             protected:
                 virtual ~Knob();
@@ -78,7 +81,6 @@ namespace ews {
                 ref_ptr<Dragger> _dragger;
                 ref_ptr<Selection> _selectionNode;
                 bool _dirty;
-
             };
             
         }

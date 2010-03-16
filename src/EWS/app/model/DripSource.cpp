@@ -18,13 +18,15 @@
 
 #include "DripSource.h"
 #include <QString>
+#include "WaveMedium.h"
+#include "SimulationState.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using ews::physics::WaveModel;
             
-            DripSource::DripSource(WaveModel& model, QObject * parent)
+            DripSource::DripSource(WaveModel& model, SimulationState * parent)
             :  QObject(parent), _oscillator(model), _timer(), _paused(false), _enabled(false), _frequency(0) {
                 
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
@@ -74,7 +76,18 @@ namespace ews {
                 _oscillator.firePulse();
             }
             
-            void DripSource::initialize(Real maxWidth, Real maxLength) {
+            SimulationState* DripSource::getSimulationState() const  {
+                QObject* obj = parent();
+                return qobject_cast<SimulationState*>(obj);
+            }
+
+            void DripSource::reset() {
+                _oscillator.reset();
+                WaveMedium& medium = getSimulationState()->getWaveMedium();
+                Uint maxWidth = medium.getWidth();
+                Uint maxLength = medium.getLength();
+                
+                
                 if (objectName() != DRIPSOURCE2) {
                     setPosition(osg::Vec2(maxWidth / 2, maxLength / 2));
                     setEnabled(true);

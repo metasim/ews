@@ -96,6 +96,11 @@ namespace ews {
                     return _barriers[index];
                 }
                 
+                /** Reset data to initial conditions. */
+                void reset() {
+                    removeAllBarriers();
+                }
+                
             signals:
                 /**
                  * Signals that a barrier has been added.

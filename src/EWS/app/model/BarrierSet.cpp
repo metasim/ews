@@ -89,12 +89,10 @@ namespace ews {
             }
 
             void BarrierSet::removeAllBarriers() {
-                // TODO: Need to disconnect from signals and delete
-                // Barriers. We should be responsible for the memory
-                int count = _barriers.size();
-                _barriers.clear();
-                emit allBarriersRemoved(count);
-                updatePotentials();
+                for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
+                    Barrier* b = *i;
+                    removeBarrier(b);
+                }
             }
 
             void BarrierSet::removeBarrier(Barrier* b) {

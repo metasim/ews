@@ -24,15 +24,19 @@
 #include <osg/NodeCallback>
 #include "FaucetGeom.h"
 #include "Oscillator.h"
+#include "WaveMedium.h"
 #include "Teapot.h"
+#include "SimulationState.h"
 #include <QtGlobal>
 #include "EWSDebug.h"
+#include "WaterBoundaryDragConstraint.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-                using ews::physics::Oscillator;
+            using ews::physics::Oscillator;
+            using ews::app::model::WaveMedium;
             
             /**
              * Private class responsible for updating the oscillator simulation
@@ -88,14 +92,21 @@ namespace ews {
             _dragger(new Knob(Vec3(-20,0,5), 12, false)), _geom(new PositionAttitudeTransform) {
                 
                 addChild(_dragger.get());
-                addChild(_geom.get());
-
-                setPosition(_dataModel.getPosition());
                 
+                addChild(_geom.get());
                 createGeom();
+                setPosition(_dataModel.getPosition());
                 
                 // Make sure the dragger starts off at the same location as geom
                 _dragger->setPosition(_geom->getPosition());
+                
+                WaveMedium& waves = _dataModel.getSimulationState()->getWaveMedium();
+                BoundingBox waterArea(0, 0, 0, waves.getWidth(), waves.getLength(), 0);
+                
+                _constraint = new WaterBoundaryDragConstraint(*this, waterArea);
+                qDebug() << "1 constraint ref count is: " << _constraint->referenceCount();
+                _dragger->setConstraint(*(_constraint.get()));
+                qDebug() << "2 constraint ref count is: " << _constraint->referenceCount();
                 
                 setColor(Vec4(.2f, .9f, .9f, 1.f)); 
 
@@ -107,8 +118,6 @@ namespace ews {
                 QObject::connect(&_dataModel, SIGNAL(positionChanged(osg::Vec2)), this, SLOT(setPosition(const osg::Vec2&)));
                 
                 setEnabled(_dataModel.isEnabled());
-
-
             }
             
             FaucetGeom::~FaucetGeom() {
@@ -153,7 +162,6 @@ namespace ews {
 
             void FaucetGeom::setPosition(const osg::Vec2& pos) {
                 Vec3 newPos(pos.x(), pos.y(), 50);
-
                 _geom->setPosition(newPos);
             }
             

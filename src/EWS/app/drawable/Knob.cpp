@@ -24,6 +24,7 @@
 #include "DrawableQtAdapter.h"
 #include "Knob.h"
 
+
 namespace ews {
     namespace app {
         namespace drawable {
@@ -104,6 +105,10 @@ namespace ews {
             
             Knob::~Knob() {
                 
+            }
+            
+            void Knob::setConstraint(Constraint& constraint) {
+                DrawableQtAdapter::manipCommandManager().connect(*(_dragger.get()), constraint);
             }
         }
     }
