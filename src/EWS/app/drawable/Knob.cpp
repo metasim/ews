@@ -64,7 +64,7 @@ namespace ews {
             /** The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
              * (i.e. sphere) as a child of the selection. */
-            Knob::Knob(Vec3 geomOffset, unsigned int radius) : _dirty(true) {
+            Knob::Knob(Vec3 geomOffset, unsigned int radius, bool showGeom) : _dirty(true) {
                 setName("knob");
                 // Create selection type to contain our drawable.
                 _selectionNode = new Selection;
@@ -76,17 +76,19 @@ namespace ews {
                 addChild(_selectionNode.get());
                 addChild(_dragger.get());
                 
-                ref_ptr<Geode> geom = new Geode;
-                geom->setName("knobGeometry");
-                _dragger->addChild(geom.get());
-                ref_ptr<Sphere> sphere = new Sphere(Vec3(0, 0, 0), radius);
-                ref_ptr<ShapeDrawable> sphereGeom = new ShapeDrawable(sphere.get());
-                geom->addDrawable(sphereGeom.get());
+                ref_ptr<Geode> geom;
+                ref_ptr<Sphere> sphere;
+                ref_ptr<ShapeDrawable> sphereGeom;                
+                if(showGeom) {
+                    geom = new Geode;
+                    geom->setName("knobGeometry");
+                    _dragger->addChild(geom.get());
+                    sphere = new Sphere(Vec3(0, 0, 0), radius);
+                    sphereGeom = new ShapeDrawable(sphere.get());
+                    geom->addDrawable(sphereGeom.get());
+                }
                 
-//                geom->getOrCreateStateSet()->setMode(GL_LIGHTING, StateAttribute::OFF);
-//                geom->setDataVariance(DYNAMIC);
-                
-                // Create another copy that will be invisible for the pick region. 
+                // Echo geometry for a pick region.
                 sphere = new Sphere(Vec3(0, 0, 0), radius*1.25);
                 sphereGeom = new ShapeDrawable(sphere.get());                
                 osgManipulator::setDrawableToAlwaysCull(*sphereGeom);

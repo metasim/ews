@@ -61,19 +61,15 @@ namespace ews {
                  * Determine if this source is enabled or not.
                  */
                 bool isEnabled() const {
-//                    return _oscillator.getOscillateStatus();
                     return _enabled;
                 }
-                
                 
                 /**
                  * Get the drip frequency in millihertz. 
                  */
                 Uint getFrequency() const {
                     return _frequency;
-//                    return (Uint) (1000.0/_oscillator.getPeriod());
                 }
-                
                 
                 /**
                  * Get the amplitude, (0, 100]
@@ -97,6 +93,9 @@ namespace ews {
                     return _oscillator;
                 }
                 
+                /**
+                 * Is drip pulsing active.
+                 */
                 bool isPaused() const {
                     return _paused;
                 }
@@ -113,7 +112,6 @@ namespace ews {
                  * Set the enabled state of this drip source.
                  */
                 void setEnabled(bool state) {
-//                    _oscillator.setOscillateStatus(state);
                     _enabled = state;
                     emit enabledChanged(state);
                 }
@@ -139,7 +137,6 @@ namespace ews {
                  * Set the frequency in of drops in millihertz
                  */
                 void setFrequency(Uint frequency) {
-//                    _oscillator.setPeriod(1000.0/frequency);
                     _frequency = frequency;
                     emit frequencyChanged(frequency);
                 }
@@ -162,7 +159,9 @@ namespace ews {
                 }
                 
             private slots:
+                /** Propagate data model values to timer. */
                 void updateTimer();
+                /** Fire a drip from oscillator. */
                 void pokeOscillator();
                 
             signals:
