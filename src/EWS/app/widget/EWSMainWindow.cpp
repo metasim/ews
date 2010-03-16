@@ -89,7 +89,7 @@ namespace ews {
                 _ui->renderer->homePosition();
                 _ui->dripSource1->syncUI();
                 _ui->dripSource2->syncUI();
-                _ui->barrierEditor->removeAllBarriers();
+//                _ui->barrierEditor->removeAllBarriers();
             }
         }
     }

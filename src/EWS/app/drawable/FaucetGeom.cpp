@@ -24,15 +24,19 @@
 #include <osg/NodeCallback>
 #include "FaucetGeom.h"
 #include "Oscillator.h"
+#include "WaveMedium.h"
 #include "Teapot.h"
+#include "SimulationState.h"
 #include <QtGlobal>
 #include "EWSDebug.h"
+#include "WaterBoundaryDragConstraint.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
-                using ews::physics::Oscillator;
+            using ews::physics::Oscillator;
+            using ews::app::model::WaveMedium;
             
             /**
              * Private class responsible for updating the oscillator simulation
@@ -53,27 +57,15 @@ namespace ews {
                 }
                 
                 void detectAndHandleMove(FaucetGeom* geom, NodeVisitor* nv) {
-                    const NodePath& nodePath = nv->getNodePath();
-                    Matrix currMat = osg::computeLocalToWorld(nodePath);
-                    if(currMat != _localToWorld) {
-                        _localToWorld = currMat;
-                        
-                        Vec3 loc = _localToWorld.getTrans();
-                        
-                        qDebug() << "movement happened, new pos: " << loc;
-                        
-                        DripSource& dm = geom->getDataModel();
-                        dm.blockSignals(true);
-                        dm.setPosition(Vec2(loc.x(), loc.y()));
-                        dm.blockSignals(false);
-                        
+                    if(_dragger.isDirty()) {
+                        geom->getDataModel().setPosition(_dragger.currXYLocation());
+                        _dragger.setDirty(false);
                     }
-                    
                 }
                 
-                Matrix _localToWorld;
-                
             public:
+                FaucetUpdater(Knob& dragger) : _dragger(dragger) {
+                }
                 
                 /** Callback method. */
                 virtual void operator()(Node* node, NodeVisitor* nv) { 
@@ -89,35 +81,44 @@ namespace ews {
                     
                     traverse(node,nv);
                 }
+                
+                Knob& _dragger;
             };
             
+            
+            /** Standard ctor. */
             FaucetGeom::FaucetGeom(DripSource& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _dragger(NULL) {
+            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), 
+            _dragger(new Knob(Vec3(-20,0,5), 12, false)), _geom(new PositionAttitudeTransform) {
                 
-                _dragger = new Translate2DDragger(osg::Plane(osg::Vec3f(0, 0, 1), 0));
-                _dragger->setupDefaultGeometry();
+                addChild(_dragger.get());
                 
+                addChild(_geom.get());
+                createGeom();
                 setPosition(_dataModel.getPosition());
                 
-                createGeom();
-
+                // Make sure the dragger starts off at the same location as geom
+                _dragger->setPosition(_geom->getPosition());
+                
+                WaveMedium& waves = _dataModel.getSimulationState()->getWaveMedium();
+                BoundingBox waterArea(0, 0, 0, waves.getWidth(), waves.getLength(), 0);
+                
+                _constraint = new WaterBoundaryDragConstraint(*this, waterArea);
+                qDebug() << "1 constraint ref count is: " << _constraint->referenceCount();
+                _dragger->setConstraint(*(_constraint.get()));
+                qDebug() << "2 constraint ref count is: " << _constraint->referenceCount();
+                
+                setColor(Vec4(.2f, .9f, .9f, 1.f)); 
 
                 // Attach render-loop callback to update oscillator.
-                setUpdateCallback(new FaucetUpdater);
+                setUpdateCallback(new FaucetUpdater(*_dragger));
                 
                 QObject::connect(&_dataModel, SIGNAL(drip(int)), this, SLOT(drip()));
                 QObject::connect(&_dataModel, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
                 QObject::connect(&_dataModel, SIGNAL(positionChanged(osg::Vec2)), this, SLOT(setPosition(const osg::Vec2&)));
                 
                 setEnabled(_dataModel.isEnabled());
-
-                // Antialias faucet.
-#if defined(GL_MULTISAMPLE_ARB)
-                ref_ptr<StateSet> state = getOrCreateStateSet();
-                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
-#endif
             }
-            
             
             FaucetGeom::~FaucetGeom() {
             }
@@ -126,22 +127,21 @@ namespace ews {
             void FaucetGeom::createGeom() {
                 // Create geometric representation
 
-                ref_ptr<PositionAttitudeTransform> trans = new PositionAttitudeTransform;
-                addChild(trans.get());
+                ref_ptr<PositionAttitudeTransform> facetOrient = new PositionAttitudeTransform;
+                _geom->addChild(facetOrient.get());
                 
                 ref_ptr<Geode> geode = new Geode;
-                trans->addChild(geode.get());
+                facetOrient->addChild(geode.get());
                 
                 ref_ptr<osg::Drawable> d = new Teapot;
                 geode->addDrawable(d.get());
 
                 // Orient the teapot so it looks like the source of drips
                 // is at the spout.
-                trans->setAttitude(Quat(osg::DegreesToRadians(50.0f), Vec3f(0, 1, 0)));
-                trans->setPosition(Vec3(-24, 0, 0));
-                trans->setScale(Vec3(5, 5, 5));
-                
-                setColor(Vec4(.2f, .9f, .9f, 1.f)); 
+                facetOrient->setAttitude(Quat(osg::DegreesToRadians(50.0f), Vec3f(0, 1, 0)));
+                facetOrient->setPosition(Vec3(-24, 0, 0));
+                facetOrient->setScale(Vec3(5, 5, 5));
+
             }
             
             void FaucetGeom::setColor(osg::Vec4 color) {
@@ -153,10 +153,16 @@ namespace ews {
                 mat->setShininess(Material::FRONT, 96.f ); 
                 mat->setColorMode( osg::Material::AMBIENT_AND_DIFFUSE );
                 state->setAttribute( mat.get() );
+
+#if defined(GL_MULTISAMPLE_ARB)
+                // Antialias faucet.
+                state->setMode(GL_MULTISAMPLE_ARB, StateAttribute::ON);
+#endif                
             }
 
             void FaucetGeom::setPosition(const osg::Vec2& pos) {
-                PositionAttitudeTransform::setPosition(osg::Vec3d(pos.x(), pos.y(), 50));
+                Vec3 newPos(pos.x(), pos.y(), 50);
+                _geom->setPosition(newPos);
             }
             
             

@@ -36,18 +36,19 @@ namespace ews {
         namespace widget {
             QOSGWidget::QOSGWidget(QWidget* parent)
             : QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer() {
-                
-                osg::setNotifyLevel(osg::INFO);
+#if defined(QT_DEBUG)                
+                osg::setNotifyLevel(osg::WARN);
+#endif                
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
-                setFocusPolicy(Qt::ClickFocus);
+                setFocusPolicy(Qt::StrongFocus);
                 
-                if(true) {
-                    QGLFormat fmt; 
-                    QGLFormat::setDefaultFormat(fmt); 
-                    fmt.setSamples(4); 
-                    fmt.setSampleBuffers(true); 
-                    setFormat(fmt);                    
-                }
+#if defined(GL_MULTISAMPLE_ARB)
+                QGLFormat fmt; 
+                QGLFormat::setDefaultFormat(fmt); 
+                fmt.setSamples(4); 
+                fmt.setSampleBuffers(true); 
+                setFormat(fmt);                    
+#endif
                 
                 osg::Camera* c = getCamera();
                 c->setViewport(new osg::Viewport(0,0,width(),height()));
@@ -85,9 +86,10 @@ namespace ews {
             void QOSGWidget::setSceneData(osg::Node* node) {
                 osgViewer::Viewer::setSceneData(node);
                 getCameraManipulator()->setNode(node);
+                computeHomePosition();
             }
             
-            void QOSGWidget::homePosition() {
+            void QOSGWidget::computeHomePosition() {
                 using ews::app::drawable::CameraController;
                 
                 osgGA::MatrixManipulator* mat = getCameraManipulator();
@@ -95,7 +97,9 @@ namespace ews {
                 if(ctrl = dynamic_cast<CameraController*> (mat)) {
                     ctrl->computeHomePosition();
                 }
-                
+            }
+            
+            void QOSGWidget::homePosition() {
                 // HACK: Happen to know that the CameraController responds
                 // to the space key for a camera reset, which seems to need to be 
                 // called inside the event loop.

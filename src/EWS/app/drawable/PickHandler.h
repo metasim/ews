@@ -87,12 +87,12 @@ namespace ews {
                                 break;
                                 
                             case GUIEventAdapter::RELEASE:
-                                activeDragger = NULL;
                                 if (activeDragger) {
                                     pointerInfo._hitIter = pointerInfo._hitList.begin();
                                     pointerInfo.setCamera(view->getCamera());
                                     pointerInfo.setMousePosition(ea.getX(), ea.getY());
                                     activeDragger->handle(pointerInfo, ea, aa);
+                                    activeDragger = NULL;
                                 }
                                 return false;
                             case GUIEventAdapter::DRAG:

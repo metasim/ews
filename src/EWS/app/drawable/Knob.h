@@ -21,7 +21,7 @@
 
 #include <osg/MatrixTransform>
 #include <osgManipulator/Dragger>
-#include "EWSDebug.h"
+#include <osgManipulator/Constraint>
 
 namespace ews {
     namespace app {
@@ -34,7 +34,15 @@ namespace ews {
              * (i.e. sphere) as a child of the selection. */
             class Knob : public MatrixTransform {
             public:
-                Knob(Vec3 geomOffset = Vec3(0, 0, 0), unsigned int radius = 3);
+                /**
+                 * Standard ctor.
+                 * @param geomOffset translation offset applied to the dragger 
+                 * geometry. The selection geometry remains uneffected.
+                 * @param radius dragger geometry and hit region radius.
+                 * @param showGeom if true, then a sphere is shown as the selection
+                 * geometry. If false, the geometry is hidden.
+                 */
+                Knob(Vec3 geomOffset = Vec3(0, 0, 0), unsigned int radius = 3, bool showGeom = true);
 
                 /** Get the knob's current location in global coordinates. */
                 Vec2 currXYLocation() const {
@@ -44,8 +52,6 @@ namespace ews {
                     return Vec2(translation.x(), translation.y());
                 }
                 void setPosition(Vec3 pos) {
-                    using ews::util::debug::qstr;
-                    QTRACE1(qstr(getName()) + qstr(": pos=") + qstr(pos));
                     setMatrix(Matrix::translate(pos));
                 }
                 
@@ -61,6 +67,11 @@ namespace ews {
                     return _dirty;
                 }
                 
+                /** Set the constraint for the dragger that limits the dragging
+                 * to a controlled region.
+                 */
+                void setConstraint(Constraint& constraint);
+                
                 
             protected:
                 virtual ~Knob();
@@ -70,7 +81,6 @@ namespace ews {
                 ref_ptr<Dragger> _dragger;
                 ref_ptr<Selection> _selectionNode;
                 bool _dirty;
-
             };
             
         }

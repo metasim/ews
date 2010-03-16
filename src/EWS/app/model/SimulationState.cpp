@@ -30,17 +30,17 @@ namespace ews {
                 // We need to forward/create objectAdded events
                 // from the BarrierSet.
                 
-                QObject::connect(&_barriers, SIGNAL(barrierAdded(int,Barrier*)),
-                                 this, SLOT(forwardBarrierSetAddition(int, Barrier*)));
-                QObject::connect(&_barriers, SIGNAL(barrierRemoved(int,Barrier*)),
-                                 this, SLOT(forwardBarrierSetRemoval(int, Barrier*)));
+                connect(&_barriers, SIGNAL(barrierAdded(int,Barrier*)),
+                        SLOT(forwardBarrierSetAddition(int, Barrier*)));
+                connect(&_barriers, SIGNAL(barrierRemoved(int,Barrier*)),
+                        SLOT(forwardBarrierSetRemoval(int, Barrier*)));
                 
                 
                 _dripSource1.setObjectName(ews::app::model::DRIPSOURCE1);
-                _dripSource1.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
+                _dripSource1.reset();
                 
                 _dripSource2.setObjectName(ews::app::model::DRIPSOURCE2);
-                _dripSource2.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
+                _dripSource2.reset();
                 
                 _waveMedium.setObjectName("waveMedium");
                 setPaused(true);
@@ -65,9 +65,11 @@ namespace ews {
             
             void SimulationState::reset() {
                 _waveMedium.getWaveModel().clear();
-                _dripSource1.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
-                _dripSource2.initialize(_waveMedium.getWidth(), _waveMedium.getLength());
+                _dripSource1.reset();
+                _dripSource2.reset();
+                _barriers.reset();
                 
+                // Hack to make sure cleared wave model gets rendered.
                 if(isPaused()) {
                     _waveMedium.getWaveModel().propagate();
                 }

@@ -65,6 +65,7 @@ namespace ews {
 
             private:
                 Q_DISABLE_COPY(QOSGWidget)
+                void computeHomePosition();
                 osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
                 QTimer _timer;
             };

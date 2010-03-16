@@ -132,6 +132,14 @@ namespace ews {
              * @return oscillating status
              */
             bool getOscillateStatus() const { return _oscillating; }
+
+            /** Clear any ongoing oscillation. */
+            void reset() {
+                _time = 0;
+                resetPhase();
+                _oscillating = false;
+                _inPulse = false;
+            }
             
         private:
             // Not allowed, so don't worry about leaked memory
