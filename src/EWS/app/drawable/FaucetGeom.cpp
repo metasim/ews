@@ -104,9 +104,7 @@ namespace ews {
                 BoundingBox waterArea(0, 0, 0, waves.getWidth(), waves.getLength(), 0);
                 
                 _constraint = new WaterBoundaryDragConstraint(*this, waterArea);
-                qDebug() << "1 constraint ref count is: " << _constraint->referenceCount();
                 _dragger->setConstraint(*(_constraint.get()));
-                qDebug() << "2 constraint ref count is: " << _constraint->referenceCount();
                 
                 setColor(Vec4(.2f, .9f, .9f, 1.f)); 
 
@@ -177,7 +175,8 @@ namespace ews {
             }
             
             void FaucetGeom::drip()  {
-//                qDebug() << "drip" << __FILE__ << __LINE__;
+                // Put drip animation trigger here.
+                // qDebug() << "drip" << __FILE__ << __LINE__;
             }
         };
     }
