@@ -32,7 +32,7 @@ namespace ews {
             using namespace osg;
             
             const Vec3 WATER_COLOR(0.1f, 0.1f, 1.f);
-            const float WATER_OPACITY = .7f;
+            const float WATER_OPACITY = 1.f;
 
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
             DrawableQtAdapter(&settings), _settings(settings) {

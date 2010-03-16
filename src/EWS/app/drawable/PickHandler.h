@@ -62,6 +62,8 @@ namespace ews {
                                     pointerInfo.setCamera(view->getCamera());
                                     pointerInfo.setMousePosition(ea.getX(), ea.getY());
                                     
+                                    // qDebug() << "PointerInfo:" << pointerInfo;
+                                    
                                     for (IntersectIterator iter = intersections.begin(); 
                                          iter != intersections.end(); 
                                          ++iter) {
@@ -72,9 +74,11 @@ namespace ews {
                                          iter != pointerInfo._hitList.front().first.end(); 
                                          ++iter) {	
                                         
+                                        // qDebug() << "hit" << (*iter)->getName();
                                         if (Dragger* dragger = dynamic_cast<Dragger*>(*iter)) {
                                             dragger->handle(pointerInfo, ea, aa);
                                             activeDragger = dragger;
+                                            qDebug() << "Active dragger is:" << activeDragger->className() << activeDragger->getName().c_str();
                                             return false;
                                         }
                                     }
@@ -84,6 +88,12 @@ namespace ews {
                                 
                             case GUIEventAdapter::RELEASE:
                                 activeDragger = NULL;
+                                if (activeDragger) {
+                                    pointerInfo._hitIter = pointerInfo._hitList.begin();
+                                    pointerInfo.setCamera(view->getCamera());
+                                    pointerInfo.setMousePosition(ea.getX(), ea.getY());
+                                    activeDragger->handle(pointerInfo, ea, aa);
+                                }
                                 return false;
                             case GUIEventAdapter::DRAG:
                                 if (activeDragger) {

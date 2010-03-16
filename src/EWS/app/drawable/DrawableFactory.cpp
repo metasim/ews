@@ -24,6 +24,7 @@
 #include "WaterSurfaceGeom.h"
 #include "Barrier.h"
 #include "BarrierGeom.h"
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
@@ -62,6 +63,9 @@ namespace ews {
                 
                 if(!retval) {
                     qWarning() << "No drawable found for" << name;
+                }
+                else {
+                    retval->setName((data.objectName() + "Geom").toStdString());
                 }
                 
                 return retval;

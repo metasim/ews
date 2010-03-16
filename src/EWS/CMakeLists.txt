@@ -58,6 +58,9 @@ unmoc(CameraController.h)
 unmoc(VertexHeightUpdater.h)
 unmoc(PickHandler.h)
 unmoc(Teapot.h)
+unmoc(Knob.h)
+unmoc(PotentialUpdater.h)
+unmoc(BarrierDragger.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
 
@@ -119,13 +122,8 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
 find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA osgManipulator)
+    COMPONENTS osg osgUtil osgViewer osgGA osgManipulator osgDB)
 
-#CRUFT?
-#add_library(${OSG_LIBRARY} SHARED IMPORTED)
-#add_library(osgUtil SHARED IMPORTED)
-#add_library(osgViewer SHARED IMPORTED)
-#add_library(osgGA SHARED IMPORTED)
    
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
@@ -239,8 +237,7 @@ target_link_libraries (${EXE_NAME}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY} 
-#    ${OSG_LIBRARY} osgUtil osgViewer osgGA
-#    ${OPENTHREADS_LIBRARY}
+    ${OPENTHREADS_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}
 )

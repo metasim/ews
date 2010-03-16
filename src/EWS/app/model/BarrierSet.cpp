@@ -22,9 +22,6 @@
 using ews::physics::CompositePotential;
 #include "PrecomputedPotential.h"
 using ews::physics::PrecomputedPotential;
-#include <cstdlib>
-using std::srand;
-using std::rand;
 #include <ctime>
 using std::time;
 #include <osg/ref_ptr>
@@ -33,12 +30,15 @@ using osg::ref_ptr;
 namespace ews {
     namespace app {
         namespace model {
+            
         
             BarrierSet::BarrierSet(SimulationState* parent)  
             : QObject(parent), _barriers(), _potentials(NULL) {
                 _potentials = new CompositePotential();
-                // Initialize random seed - this will probably eventually disappear
-                srand(time(NULL));
+                
+                // When barriers are added we need to recompute the PrecomputedPotential.
+                QObject::connect(this, SIGNAL(barrierAdded(int, Barrier*)), this, SLOT(updatePotentials()));
+                
             }
             
             BarrierSet::~BarrierSet() {
@@ -47,19 +47,29 @@ namespace ews {
                 }
             }
             
-            Barrier* BarrierSet::createBarrier() {                
-                Barrier* b = new Barrier(this);
+            Barrier* BarrierSet::createBarrier() {        
+                static unsigned int count = 1;
+                const int pos = _barriers.size();
                 const WaveMedium& water = getSimulationState()->getWaveMedium();
-                const osg::Vec2 start(rand() % water.getWidth(), rand() % water.getLength());
-                const osg::Vec2 end(rand() % water.getWidth(), rand() % water.getLength());
+                const unsigned int initX = (int) (count * Barrier::width() * 2) % water.getWidth();
+                const Vec2 start(initX, 0);
+                const Vec2 end(initX, water.getLength());
+                
+                Barrier* b = new Barrier(this);
                 b->setStart(start);
                 b->setEnd(end);
-                const int pos = _barriers.size();
+                
+                // Default name
+                b->setObjectName(QString("Barrier %1").arg(count++));
+                
+                
+                // Add to our list of barriers.
                 _barriers << b;
-                                
-                b->setObjectName(QString("Barrier %1").arg(pos+1));
-                QObject::connect(b, SIGNAL(dataChanged()), this, SLOT(updatePotentials()));
-                updatePotentials();
+                
+                // When a barriers parameters are changed we need to update
+                // the PrecomputedPotential.
+                QObject::connect(b, SIGNAL(potentialChanged()), this, SLOT(updatePotentials()));
+                
                 emit barrierAdded(pos, b);
                 return b;
             }
@@ -69,7 +79,7 @@ namespace ews {
                 for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
                     Barrier* b = *i;
                     if (b->isEnabled()) {
-                        worldPot->addPotential(b->generatePotential().get());
+                        worldPot->addPotential(b->getPotential());
                     }
                 }
                 WaveModel& waveModel = getSimulationState()->getWaveMedium().getWaveModel();
@@ -79,6 +89,8 @@ namespace ews {
             }
 
             void BarrierSet::removeAllBarriers() {
+                // TODO: Need to disconnect from signals and delete
+                // Barriers. We should be responsible for the memory
                 int count = _barriers.size();
                 _barriers.clear();
                 emit allBarriersRemoved(count);
@@ -90,8 +102,10 @@ namespace ews {
                 if(pos >= 0) {
                     const bool did = _barriers.removeOne(b);
                     if (did) {
+                        b->disconnect(this);
                         updatePotentials();
                         emit barrierRemoved(pos, b);
+                        delete b;
                     }
                 }
             }

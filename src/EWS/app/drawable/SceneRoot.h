@@ -42,7 +42,7 @@ namespace ews {
                 Node* setupManipulator(DrawableQtAdapter* drawable);
                 typedef QMap<QObject*,osg::ref_ptr<osg::Node> > Qt2OSGMap;
                 Qt2OSGMap _drawables;
-                osg::ref_ptr<osgManipulator::CommandManager> _manipCommander;
+
             };
         }
     }

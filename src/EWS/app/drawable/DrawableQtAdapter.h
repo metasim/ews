@@ -21,7 +21,7 @@
 
 #include <QtCore>
 #include <osg/PositionAttitudeTransform>
-#include <osgManipulator/Dragger>
+#include <osgManipulator/CommandManager>
 
 namespace ews {
     namespace app {
@@ -39,13 +39,8 @@ namespace ews {
                  */
                 explicit DrawableQtAdapter(QObject* peer);
                 
-                /** If the geometry supports user interaction, the subclass
-                 *  should return a dragger instance that will be registered
-                 *  with the SceneRoot. Reiver takes responsibility for 
-                 *  instance memory.
-                 * @return Dragger to register, or NULL for none.
-                 */
-                virtual osgManipulator::Dragger* createDragger() = 0;
+                /** Get access to the singleton instance of the command manager. */
+                static osgManipulator::CommandManager& manipCommandManager();
                 
             protected:
                 /** Protected to encourage use with ref_ptr. */

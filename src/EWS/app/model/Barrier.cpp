@@ -39,31 +39,20 @@ namespace ews {
             
             Barrier::Barrier(BarrierSet* parent) 
             : QObject(parent), _enabled(true), _numSlits(TWO), 
-            _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50), _potential(NULL) {                
+            _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50), _potential(NULL) {    
+                
+                QObject::connect(this, SIGNAL(dataChanged()), this, SLOT(generatePotential()));
             }
             
             BarrierSet* Barrier::getBarrierSet() {
                 QObject* obj = parent();
                 return qobject_cast<BarrierSet*>(obj);
             }
-            Barrier::~Barrier() {
             
+            Barrier::~Barrier() {
             }
             
-            ref_ptr<Potential> Barrier::generatePotential() {
-
-                BarrierSet* barriers = getBarrierSet();
-                if(!barriers) {
-                    qWarning() << "Unexpected missing barrier set.";
-                    return ref_ptr<Potential>(NULL);
-                }
-                
-                SimulationState* state = barriers->getSimulationState();
-                if(!state) {
-                    qWarning() << "Unexpected missing simulation state.";
-                    return ref_ptr<Potential>(NULL);
-                }
-                
+            void Barrier::generatePotential() {
                 ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd());
 
                 sp->setSlitWidth(getSlitWidth());
@@ -77,7 +66,9 @@ namespace ews {
                         sp->addSlit(.5 + deltaAlpha);
                     }
                 }
-                return sp;
+                
+                _potential = sp;
+                emit potentialChanged();
             }            
         }
     }
