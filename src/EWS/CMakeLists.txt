@@ -60,6 +60,7 @@ unmoc(PickHandler.h)
 unmoc(Teapot.h)
 unmoc(Knob.h)
 unmoc(PotentialUpdater.h)
+unmoc(BarrierDragger.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
 

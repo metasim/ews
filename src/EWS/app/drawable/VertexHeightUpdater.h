@@ -28,7 +28,6 @@
 #include "WaveModel.h"
 #include "Lattice.h"
 
-
 namespace ews {
     namespace app {
         namespace drawable {
@@ -39,7 +38,8 @@ namespace ews {
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
-            class VertexHeightUpdater : public NodeCallback {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class VertexHeightUpdater : /** @cond */ public osg::NodeCallback /** @endcond */ {
             public:
                 VertexHeightUpdater(WaveMedium& model, Geometry* geom) :
                 _model(model), _heightMap(0) {

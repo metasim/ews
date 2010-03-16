@@ -114,9 +114,28 @@ namespace ews {
              */
             void setThickness(Real thickness) { _halfThicknessSq = thickness * thickness / 4.f; }
         protected:
+            /**
+             * Calculates an alpha value from projecting an (x, y) coordinate on to the associated wall.
+             * Values outside of (0, 1) do not "hit" the wall.
+             * @param x X-value of coordinate
+             * @param y Y-value of coordinate
+             * @return Calculated alpha value
+             */
+            Real alpha(unsigned int x, unsigned int y) const;
+            /**
+             * Calculates an interpolated point a fraction of the distance from the beginning to the
+             * end of the associated wall.
+             * @param alphaVal fractional distance to calculate for
+             * @return Interpolated point
+             */
+            inline Vec2 interpolate(Real alphaVal) const {
+                Vec2 interpolatedPoint;
+                _lineSegment.interpolate(alphaVal, interpolatedPoint);
+                return interpolatedPoint;
+            }
+        private:
             WallPotential(const WallPotential&) {} // Not allowed
             WallPotential& operator=(const WallPotential& l) { return *this; } // Not allowed
-            Real alpha(unsigned int x, unsigned int y) const;
             Line2d _lineSegment;
             Real _halfThicknessSq;
         };

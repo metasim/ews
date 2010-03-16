@@ -36,7 +36,8 @@ namespace ews {
              * Hack of osgGA::TerrainManipulator for
              * setting up some defaults and limiting movement to some degree.
              */
-            class CameraController : public osgGA::TerrainManipulator {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class CameraController : /** @cond */ public osgGA::TerrainManipulator /** @endcond */ {
             public:
                 CameraController();
                 virtual void computeHomePosition();

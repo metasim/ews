@@ -31,8 +31,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for DampedClassicalWavePropagator.
          */        
-        class DampedClassicalWavePropagatorTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class DampedClassicalWavePropagatorTest : /** @cond */ public QObject /** @endcond */ {
         public:
             DampedClassicalWavePropagatorTest() { /* do nothing */ }
             virtual ~DampedClassicalWavePropagatorTest() { /* do nothing */ }

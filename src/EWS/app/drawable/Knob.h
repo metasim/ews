@@ -34,7 +34,7 @@ namespace ews {
              * (i.e. sphere) as a child of the selection. */
             class Knob : public MatrixTransform {
             public:
-                Knob(unsigned int radius = 3);
+                Knob(Vec3 geomOffset = Vec3(0, 0, 0), unsigned int radius = 3);
 
                 /** Get the knob's current location in global coordinates. */
                 Vec2 currXYLocation() const {

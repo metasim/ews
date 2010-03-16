@@ -35,7 +35,8 @@ namespace ews {
             /**
              * Collection of Barrier objects.
              */
-            class BarrierSet : public QObject {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class BarrierSet : /** @cond */ public QObject /** @endcond */ {
                 Q_OBJECT
             public:
                 /**
@@ -91,7 +92,7 @@ namespace ews {
                  * @param index Index to return the Barrier for
                  * @return Requested Barrier
                  */
-                Barrier* barrierAt(unsigned int index) const {
+                Barrier* barrierAt(Uint index) const {
                     return _barriers[index];
                 }
                 

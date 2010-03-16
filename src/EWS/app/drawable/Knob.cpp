@@ -64,12 +64,13 @@ namespace ews {
             /** The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
              * (i.e. sphere) as a child of the selection. */
-            Knob::Knob(unsigned int radius) : _dirty(true) {
+            Knob::Knob(Vec3 geomOffset, unsigned int radius) : _dirty(true) {
                 setName("knob");
                 // Create selection type to contain our drawable.
                 _selectionNode = new Selection;
                 _selectionNode->setName("knobSelection");
                 _dragger = new KnobDragger(*this);
+                _dragger->setMatrix(Matrix::translate(geomOffset));
 
                 // Put selection and dragger under same group
                 addChild(_selectionNode.get());

@@ -25,6 +25,7 @@
 #include <QItemDelegate>
 #include <QItemSelectionModel>
 #include "ui_BarrierEditor.h"
+#include "EWSDefine.h"
 
 namespace ews {
     namespace app {
@@ -86,7 +87,7 @@ namespace ews {
                     
                     
                     // Hide columns we don't want in the table.
-                    for(unsigned int c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
+                    for(Uint c = BarrierTableModel::NAME + 1; c < BarrierTableModel::NUM_COLS; c++) {
                         _ui->barrierTable->setColumnHidden(c, true);
                     }
 
@@ -211,14 +212,14 @@ namespace ews {
             void BarrierEditor::updateSlitWidth(int width) {
                 Barrier* b = selectedBarrier();
                 if(b) {
-                    b->setSlitWidth((unsigned int) width);
+                    b->setSlitWidth(static_cast<Uint>(width));
                 }
             }
 
             void BarrierEditor::updateSlitSeparation(int sep) {
                 Barrier* b = selectedBarrier();
                 if(b) {
-                    b->setSlitSeparation((unsigned int) sep);
+                    b->setSlitSeparation(static_cast<Uint>(sep));
                 }
             }
         }

@@ -30,8 +30,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for Tuple2d.
          */        
-        class Tuple2dTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class Tuple2dTest : /** @cond */ public QObject /** @endcond */ {
         public:
             Tuple2dTest() { /* do nothing */ }
             virtual ~Tuple2dTest() { /* do nothing */ }

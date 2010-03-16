@@ -22,12 +22,12 @@
 #include <QtGui/QWidget>
 #include "DripSource.h"
 
+/** @cond */
 /** Forward declaration of UI implementation class. */
-
-namespace Ui
-{
+namespace Ui {
     class DripSourceEditorForm;
 }
+/** @endcond */
 
 namespace ews {
     namespace app {
@@ -35,7 +35,12 @@ namespace ews {
             
             using ews::app::model::DripSource;
             
-            class DripSourceEditor : public QWidget {
+            /**
+             * Provides a UI for the end-user to be able to manipulate DripSource objects, as well
+             * as a reference to those DripSource objects.
+             */
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class DripSourceEditor : /** @cond */ public QWidget /** @endcond */ {
                 Q_OBJECT
                 
             public:

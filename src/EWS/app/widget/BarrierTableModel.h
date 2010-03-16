@@ -33,7 +33,8 @@ namespace ews {
             /**
              * Mapping wrapper between BarrierSet and Barrier into Qt table and item models. 
              */
-            class BarrierTableModel : public QAbstractTableModel {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class BarrierTableModel : /** @cond */ public QAbstractTableModel /** @endcond */ {
                 Q_OBJECT
             public:
                 BarrierTableModel(BarrierSet* barriers) 

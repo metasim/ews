@@ -30,8 +30,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for the wall potential.
          */        
-        class WallPotentialTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class WallPotentialTest : /** @cond */ public QObject /** @endcond */ {
         public:
             WallPotentialTest() { /* do nothing */ }
             virtual ~WallPotentialTest() { /* do nothing */ }

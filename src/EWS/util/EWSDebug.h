@@ -38,8 +38,8 @@ namespace ews {
      */
     namespace util {
         /**
-	 * Contains classes and methods used for gathering debug information.
-	 */
+         * Contains classes and methods used for gathering debug information.
+         */
         namespace debug {
             
             /** Character to use for indentation. */
@@ -53,7 +53,6 @@ namespace ews {
             inline QString makeIndent(int i) {
                 return QString(INDENT_WIDTH*i, INDENT_CHAR); 
             }
-            
             
             /** Convert a character array into a QString. */
             inline QString qstr(const char* s) {
@@ -103,6 +102,9 @@ namespace ews {
                 return QString(oss.str().c_str());
             }
 
+            /**
+             * Utility class for tracking program flow for debugging purposes.
+             */
             class Tracer {
             public:
                 Tracer(const QString& file, int line, const QString& func, const QString& msg) : _file(file), _line(line), _func(func) {
@@ -199,39 +201,6 @@ QDebug operator<<(QDebug dbg, const T& t) {
     return dbg;
 }
 
-
-// Found iostream operators in osg/io_utils.
-//
-///** 2-D Vector debug output operator. */
-//inline QDebug operator<<(QDebug dbg, const osg::Vec2& v) {
-//    dbg.nospace() << '(' << v.x() << ',' << v.y() << ')';
-//    return dbg.space();
-//}
-//
-///** 3-D Vector debug output operator. */
-//inline QDebug operator<<(QDebug dbg, const osg::Vec3& v) {
-//    dbg.nospace() << '(' << v.x() << ',' << v.y() << ',' << v.z() << ')';
-//    return dbg.space();
-//}
-//
-///** Quaternion debug output operator. */
-//inline QDebug operator<<(QDebug dbg, const osg::Quat& q) {
-//    dbg.nospace() << '{' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w() << '}';
-//    return dbg.space();
-//}
-//
-///** 4x4 Matrix debug output operator. */
-//inline QDebug operator<<(QDebug dbg, const osg::Matrix& m) {
-//    osg::Vec3 trans, scale;
-//    osg::Quat rot, scaleRot;
-//    m.decompose(trans, rot, scale, scaleRot);
-//    dbg << " postion:" << trans << '\n';
-//    dbg << "rotation:" << rot << '\n';
-//    dbg << "   scale:" << scale << '\n';
-//    
-//    return dbg.space();
-//}
-
 /** Pick info record output debug operator. */
 inline QDebug operator<<(QDebug dbg, const osgManipulator::PointerInfo& pi) {
     dbg << "PointerInfo" << '{';
@@ -281,9 +250,5 @@ inline QDebug operator<<(QDebug dbg, const osg::Node* n) {
     dbg << ews::util::debug::qstr(n);
     return dbg;
 }
-
-
-
-
 
 #endif // __EWSDEBUG_H

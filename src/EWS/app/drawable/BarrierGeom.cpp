@@ -39,8 +39,9 @@ namespace ews {
             
             const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
-            const float BARRIER_OPACITY = .3f;
-            const float KNOB_OFFSET = 10;
+            const float BARRIER_OPACITY = .6f;
+            const Vec3 START_KNOB_OFFSET(0, 3, 7);
+            const Vec3 END_KNOB_OFFSET(0, -3, 7);
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             const Plane BARRIER_PLANE(osg::X_AXIS, 0);
 
@@ -48,7 +49,8 @@ namespace ews {
             /** Primary constructor. */
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
             : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _switch(new Switch),
-            _barrierGeom(new PositionAttitudeTransform), _startKnob(new Knob), _endKnob(new Knob) {
+            _barrierGeom(new PositionAttitudeTransform), 
+            _startKnob(new Knob(START_KNOB_OFFSET)), _endKnob(new Knob(END_KNOB_OFFSET)) {
                 
                 setColor(BARRIER_COLOR); 
                 
@@ -57,8 +59,8 @@ namespace ews {
                 _switch->addChild(_barrierGeom.get());
                 
                 // Knob locations are in gobal coordinates.
-                _startKnob->setPosition(Vec3(_dataModel.getStart(), KNOB_OFFSET));
-                _endKnob->setPosition(Vec3(_dataModel.getEnd(), KNOB_OFFSET));
+                _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
+                _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
                 
                 _startKnob->setName("startBarrierKnob");
                 _switch->addChild(_startKnob.get());

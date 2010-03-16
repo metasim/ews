@@ -28,8 +28,8 @@ namespace ews {
          * @ingroup Test
          * Test harness for Vector2d.
          */        
-        class Vector2dTest: public QObject
-        {
+        // cond/endcond is used to tell Doxygen to ignore what's in between
+        class Vector2dTest : /** @cond */ public QObject /** @endcond */ {
         public:
             Vector2dTest() { /* do nothing */ }
             virtual ~Vector2dTest() { /* do nothing */ }

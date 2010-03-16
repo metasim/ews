@@ -40,10 +40,7 @@ namespace ews {
         }
         Vec2 SlitPotential::getSlitLocation(unsigned int slitNumber) const {
             if (slitNumber >= _slitAlphas.size()) return getDstPoint();
-            const Real alphaVal = _slitAlphas[slitNumber];
-            Vec2 interpolatedPoint;
-            _lineSegment.interpolate(alphaVal, interpolatedPoint);
-            return interpolatedPoint;
+            return interpolate(_slitAlphas[slitNumber]);
         }
         Real SlitPotential::getPotential(unsigned int x, unsigned int y) const {
             const Real wallPotential = WallPotential::getPotential(x, y);

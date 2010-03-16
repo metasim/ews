@@ -27,7 +27,6 @@
 #include <osgViewer/View>
 #include "EWSDebug.h"
 
-
 namespace ews {
     namespace app {
         namespace drawable {
@@ -37,8 +36,8 @@ namespace ews {
             using namespace osgManipulator;
             typedef LineSegmentIntersector::Intersections::iterator IntersectIterator;
             
-            
-            class PickHandler : public GUIEventHandler {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class PickHandler : /** @cond */ public osgGA::GUIEventHandler /** @endcond */ {
                 
             public:
                 

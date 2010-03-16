@@ -29,7 +29,8 @@
 namespace ews {
     namespace app {
         namespace widget {
-            class QOSGWidget : public QGLWidget, public osgViewer::Viewer {
+            // cond/endcond is used to tell Doxygen to ignore what's in between
+            class QOSGWidget : /** @cond */ public QGLWidget, public osgViewer::Viewer /** @endcond */ {
                 Q_OBJECT
             public:
                 explicit QOSGWidget(QWidget* parent = 0);
@@ -61,14 +62,11 @@ namespace ews {
                 virtual void mouseMoveEvent( QMouseEvent* event );
                 virtual void closeEvent( QCloseEvent * event );
                 virtual void destroyEvent( bool destroyWindow = true, bool destroySubWindows = true);
-                
-                
-                osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
-                
+
             private:
                 Q_DISABLE_COPY(QOSGWidget)
+                osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;
                 QTimer _timer;
-                
             };
         }
     }
