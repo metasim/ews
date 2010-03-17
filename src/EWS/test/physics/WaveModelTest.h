@@ -34,8 +34,7 @@ namespace ews {
          * @ingroup Test
          * Test harness for WaveModel.
          */        
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class WaveModelTest : /** @cond */ public QObject /** @endcond */ {
+        class WaveModelTest :  public QObject  {
         public:
             WaveModelTest() { /* do nothing */ }
             virtual ~WaveModelTest() { /* do nothing */ }

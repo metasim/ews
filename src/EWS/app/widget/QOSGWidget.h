@@ -29,8 +29,11 @@
 namespace ews {
     namespace app {
         namespace widget {
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class QOSGWidget : /** @cond */ public QGLWidget, public osgViewer::Viewer /** @endcond */ {
+            /**
+             * Class responsible for rendering the scene graph. It combines the QT OpenGL support
+             * with OpenSceneGraph.
+             */
+            class QOSGWidget :  public QGLWidget, public osgViewer::Viewer  {
                 Q_OBJECT
             public:
                 explicit QOSGWidget(QWidget* parent = 0);

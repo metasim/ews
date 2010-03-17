@@ -32,8 +32,7 @@ namespace ews {
             /** This class is the root of the simulation state; all transient data
              *  should be available from the class and or its children.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class SimulationState : /** @cond */ public QObject /** @endcond */ {
+            class SimulationState :  public QObject  {
                 Q_OBJECT
                 
             public:

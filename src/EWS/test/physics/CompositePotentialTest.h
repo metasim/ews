@@ -31,8 +31,7 @@ namespace ews {
          * @ingroup Test
          * Test harness for composite potentials.
          */        
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class CompositePotentialTest : /** @cond */ public QObject /** @endcond */ {
+        class CompositePotentialTest :  public QObject  {
         public:
             CompositePotentialTest() { /* do nothing */ }
             virtual ~CompositePotentialTest() { /* do nothing */ }

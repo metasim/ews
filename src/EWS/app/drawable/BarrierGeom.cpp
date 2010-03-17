@@ -25,7 +25,6 @@
 #include <osgManipulator/Translate2DDragger>
 
 #include "BarrierGeom.h"
-#include "BarrierDragger.h"
 #include "PotentialUpdater.h"
 #include "EWSDebug.h"
 #include "BarrierSet.h"

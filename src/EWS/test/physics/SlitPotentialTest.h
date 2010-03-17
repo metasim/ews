@@ -30,8 +30,7 @@ namespace ews {
          * @ingroup Test
          * Test harness for the slit potential.
          */        
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class SlitPotentialTest : /** @cond */ public QObject /** @endcond */ {
+        class SlitPotentialTest :  public QObject  {
         public:
             SlitPotentialTest() { /* do nothing */ }
             virtual ~SlitPotentialTest() { /* do nothing */ }

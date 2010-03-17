@@ -41,8 +41,7 @@ namespace ews {
             /**
              * Private class responsible for updating the oscillator simulation
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class FaucetUpdater : /** @cond */ public NodeCallback /** @endcond */ {
+            class FaucetUpdater :  public NodeCallback  {
                 
             private:
                 void updateOscillator(FaucetGeom* geom, NodeVisitor* nv) {

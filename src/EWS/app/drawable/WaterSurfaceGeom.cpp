@@ -88,7 +88,7 @@ namespace ews {
                 Vec3 row(0.0f, 0.0f,0.0f);
                 Vec2 rowTex(0, 0);
                 
-                // Concice way of allocating grid vertices with texture coordinates.
+                // Concise way of allocating grid vertices with texture coordinates.
                 unsigned int vertIndex = 0;
                 for(unsigned int y = 0; y < numY; ++y) {
                     Vec3 column = row;
@@ -106,7 +106,7 @@ namespace ews {
                     row.y() += dy;
                 }
                 
-                // Add the verticies to the geometry, and tag them as 
+                // Add the vertices to the geometry, and tag them as 
                 // being stored as a VBO.
                 geom->setVertexArray(vertices.get());
                 ref_ptr<VertexBufferObject> vbObject = new VertexBufferObject;
@@ -139,7 +139,7 @@ namespace ews {
                 
                 // geom->setUseVertexBufferObjects(true);
                 
-                // Register the delegate responsible for updating hight and 
+                // Register the delegate responsible for updating height and 
                 // doing shading.
                 setUpdateCallback(new VertexHeightUpdater(_settings, geom));
             }

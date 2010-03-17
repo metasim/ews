@@ -30,7 +30,7 @@ namespace ews {
             using namespace osgManipulator;
             
             /**
-             * Class responsible for updating the potential data model when BarrierGeom changes.
+             * Class responsible for updating the potential data %model when BarrierGeom changes.
              */
             class PotentialUpdater : public NodeCallback {
                 

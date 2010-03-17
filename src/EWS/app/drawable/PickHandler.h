@@ -36,8 +36,10 @@ namespace ews {
             using namespace osgManipulator;
             typedef LineSegmentIntersector::Intersections::iterator IntersectIterator;
             
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class PickHandler : /** @cond */ public osgGA::GUIEventHandler /** @endcond */ {
+            /**
+             * Class responsible for determining which object in a scene graph has been clicked on.
+             */
+            class PickHandler :  public osgGA::GUIEventHandler  {
                 
             public:
                 

@@ -26,8 +26,10 @@
 namespace ews {
     namespace app {
         namespace drawable {
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class SceneRoot : /** @cond */ public QObject, public osg::MatrixTransform /** @endcond */ {
+            /**
+             * First ancestor for all objects in the scene graph.
+             */
+            class SceneRoot :  public QObject, public osg::MatrixTransform  {
                 Q_OBJECT
             public:
                 explicit SceneRoot(QObject* parent = 0);

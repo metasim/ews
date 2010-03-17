@@ -28,8 +28,7 @@ namespace ews {
          * @ingroup Physics
          * Stores field potentials.
          */
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class Potential : /** @cond */ public osg::Referenced /** @endcond */ {
+        class Potential :  public osg::Referenced  {
         public:
             
             /**

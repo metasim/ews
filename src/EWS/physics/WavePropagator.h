@@ -32,8 +32,7 @@ namespace ews {
          * @ingroup Physics
          * Interface for models describing wave propagation.
          */        
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class WavePropagator : /** @cond */ public osg::Referenced /** @endcond */ {
+        class WavePropagator :  public osg::Referenced  {
         public:
             /**
              * Virtual destructor
