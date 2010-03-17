@@ -133,21 +133,21 @@ namespace ews {
                 // Create geometric representation
                 ref_ptr<Geode> geom = new Geode;
                 _barrierGeom->addChild(geom);
-                if (_dataModel.getNumSlits() == Barrier::ZERO) {
+                if (_dataModel.getNumSlits() == Barrier::ZERO_SLITS) {
                     addBox(geom, 0.5f, 1.f);
                 }
                 else {
-                    const Real slitAlpha = _dataModel.getSlitWidth() / barrierLength;
-                    if (_dataModel.getNumSlits() == Barrier::ONE) {
-                        Real boxLength = 0.5f - (slitAlpha / 2);
+                    const Real slitAlpha = _dataModel.calculateSlitWidthAlpha();
+                    if (_dataModel.getNumSlits() == Barrier::ONE_SLIT) {
+                        const Real boxLength = 0.5f - (slitAlpha / 2);
                         addBox(geom, boxLength / 2, boxLength);
                         addBox(geom, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
-                        const Real separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
+                        const Real separationAlpha = _dataModel.calculateSlitSeparationAlpha();
                         // Box length for boxes at either end of barrier
-                        Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
+                        const Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
                         addBox(geom, boxLength / 2, boxLength);
                         addBox(geom, 1 - boxLength / 2, boxLength);
                         // Box between the two slits

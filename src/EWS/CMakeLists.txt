@@ -236,8 +236,10 @@ target_link_libraries (${EXE_NAME}
     ${QT_LIBRARIES}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
-    ${QT_QTOPENGL_LIBRARY} 
-    ${OPENTHREADS_LIBRARY}
+    ${QT_QTOPENGL_LIBRARY}
+#CRUFT? Not needed (and not wanted) by Macs, but leaving in as comment until it can be determined 
+# that it is also unnecessary on Linux/Windows
+#    ${OPENTHREADS_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}
 )

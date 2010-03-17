@@ -27,14 +27,17 @@
 #include <osg/ref_ptr>
 using osg::ref_ptr;
 #include "EWSDefine.h"
+#include "MathUtils.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using osg::Vec2;
-            
-            class BarrierSet;
             using ews::physics::Potential;
+            using ews::util::imposeBounds;
+            using ews::util::scale;
+                        
+            class BarrierSet;
             
             /**
              * Contains the business logic for barrier objects to be drawn on the screen, as well as
@@ -51,9 +54,16 @@ namespace ews {
                 Q_PROPERTY(Uint slitSeparation READ getSlitSeparation WRITE setSlitSeparation)
                 
             public:
-                enum NumSlits { ZERO, ONE, TWO };
+                /**
+                 * Possible slit configurations.
+                 */
+                enum NumSlits { ZERO_SLITS, ONE_SLIT, TWO_SLITS };
                 
-                explicit Barrier(BarrierSet* parent = 0); 
+                /**
+                 * Default constructor.
+                 * @param parent BarrierSet this Barrier belongs to.
+                 */
+                explicit Barrier(BarrierSet* parent/*CRUFT? = 0*/);
                 
                 virtual ~Barrier();
 
@@ -77,18 +87,42 @@ namespace ews {
                 }
                 
                 /**
-                 * Size of the slit when one or more slits
+                 * Size of the slit when one or more slits, where 0 is the smallest possible
+                 * width for this configuration, and 100 is the maximum possible width for this 
+                 * configuration. I.e., for one slit, 100 corresponds to a width just short of the
+                 * wall length, and for two slits, 100 corresponds to a width just short of half the
+                 * wall length.
                  */
                 Uint getSlitWidth() const {
                     return _slitWidth;
                 }
                 
                 /**
-                 * Distance between slits when more than one slit.
+                 * Calculates the slit width as a percentage of the barrier length.
+                 */
+                Real calculateSlitWidthAlpha() const {
+                    // Two slits need to allow for a tiny bit of wall on either end and one in the middle
+                    Real maxVal = (_numSlits == TWO_SLITS) ? (.5f - 3 * minAlpha())
+                                : (1.f - 2 * minAlpha());
+                    return scale(minAlpha(), static_cast<Real>(_slitWidth) / 100.f, maxVal);
+                }
+                
+                /**
+                 * Distance between slits when more than one slit, where 0 is the smallest possible
+                 * separation, and 100 is the maximum possible separation. I.e., 100 corresponds to
+                 * a slit separation just short of the wall length less two slit widths.
                  */
                 Uint getSlitSeparation() const {
-
                     return _slitSeparation;
+                }
+                
+                /**
+                 * Calculates the slit separation as a percentage of the barrier length.
+                 */
+                Real calculateSlitSeparationAlpha() const {
+                    // Two slits need to allow for a tiny bit of wall on either end and one in the middle
+                    Real maxVal = 1.f - 2 * calculateSlitWidthAlpha() - 3 * minAlpha();
+                    return scale(minAlpha(), static_cast<Real>(_slitSeparation) / 100.f, maxVal);
                 }
                 
                 /**
@@ -138,22 +172,14 @@ namespace ews {
                  * @param end end point in 2-D water suface coordinates
                  * @param numSlits number of slits
                  * @param slitWidth size of slit(s)
-                 * @param slitSeparation distance between slit edges when numSlits > ONE.
+                 * @param slitSeparation distance between slit edges when numSlits > ONE
                  */
-                void set(Vec2 start, Vec2 end, NumSlits numSlits, unsigned int slitWidth, unsigned int slitSeparation) {
+                void set(Vec2 start, Vec2 end, NumSlits numSlits, Uint slitWidth, Uint slitSeparation) {
                     _start = start;
                     _end = end;
                     _numSlits = numSlits;
-                    if(_numSlits < TWO || validSettings(slitWidth, slitSeparation)) {
-                        _slitWidth = slitWidth;
-                        _slitSeparation = slitSeparation;
-                    }
-                    else {
-                        unsigned int val = std::min(width(), length());
-                        _slitWidth = val;
-                        _slitSeparation = val;
-                    }
-                    
+                    _slitWidth = slitWidth;
+                    _slitSeparation = slitSeparation;
                     emit dataChanged();
                 }
                 
@@ -170,30 +196,49 @@ namespace ews {
                     emit dataChanged();
                 }
                 
+                /**
+                 * Set the number of slits for this Barrier.
+                 */
                 void setNumSlits(NumSlits num) {
                     _numSlits = num;
                     emit dataChanged();
                 }
                 
+                /**
+                 * Set the slit width from 0 to 100, where 0 is the smallest possible width for this
+                 * configuration, and 100 is the maximum possible width for this configuration.
+                 * I.e., for one slit, 100 corresponds to a width just short of the wall length, and
+                 * for two slits, 100 corresponds to a width just short of half the wall length.                 
+                 */
                 void setSlitWidth(Uint slitWidth) {
-                    if (validSettings(slitWidth, _slitSeparation)) {
-                        _slitWidth = slitWidth;
-                        emit dataChanged();
-                    }
+                    _slitWidth = slitWidth;
+                    emit dataChanged();
                 }
                 
+                /**
+                 * Set the distance between slits when more than one slit, where 0 is the smallest
+                 * possible separation, and 100 is the maximum possible separation. I.e., 100
+                 * corresponds to a slit separation just short of the wall length less two slit
+                 * widths.
+                 */                
                 void setSlitSeparation(Uint slitSeparation) {
-                    if (validSettings(_slitWidth, slitSeparation)) {
-                        _slitSeparation = slitSeparation;
-                        emit dataChanged();
-                    }
+                    _slitSeparation = slitSeparation;
+                    emit dataChanged();
                 }
                 
+                /**
+                 * Set the starting point for this barrier. There is no practical difference
+                 * between the starting point and ending point of a barrier.
+                 */
                 void setStart(const osg::Vec2& start) {
                     _start = start;
                     emit dataChanged();
                 }
                 
+                /**
+                 * Set the ending point for this barrier. There is no practical difference
+                 * between the starting point and ending point of a barrier.
+                 */
                 void setEnd(const osg::Vec2& end) {
                     _end = end;
                     emit dataChanged();
@@ -208,10 +253,14 @@ namespace ews {
                 
             private:
                 Q_DISABLE_COPY(Barrier)
-                bool validSettings(Uint slitWidth, Uint slitSeparation) {
-                    return slitWidth > 0 && slitSeparation > 0 && length() > slitSeparation + 2 * slitWidth;
+                /**
+                 * Returns the smallest possible alpha for this barrier. Larger walls can have a
+                 * smaller alpha.
+                 */
+                Real minAlpha() const {
+                    // Basically, the minimum alpha corresponds to approximately a single "unit"
+                    return 1.f / (_end - _start).length();
                 }
-
                 bool _enabled;
                 NumSlits _numSlits;
                 Uint _slitWidth;

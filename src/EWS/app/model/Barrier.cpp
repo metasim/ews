@@ -38,9 +38,8 @@ namespace ews {
             using ews::physics::PrecomputedPotential;
             
             Barrier::Barrier(BarrierSet* parent) 
-            : QObject(parent), _enabled(true), _numSlits(TWO), 
+            : QObject(parent), _enabled(true), _numSlits(TWO_SLITS), 
             _slitWidth(3), _slitSeparation(5), _start(10, 10), _end(10, 50), _potential(NULL) {    
-                
                 QObject::connect(this, SIGNAL(dataChanged()), this, SLOT(generatePotential()));
             }
             
@@ -55,15 +54,18 @@ namespace ews {
             void Barrier::generatePotential() {
                 ref_ptr<SlitPotential> sp = new SlitPotential(getStart(), getEnd());
 
-                sp->setSlitWidth(getSlitWidth());
-                if (getNumSlits() != ZERO) {
-                    if (getNumSlits() == ONE) {
-                        sp->addSlit(.5);
+                sp->setSlitWidth(calculateSlitWidthAlpha() * sp->length());
+                if (getNumSlits() != ZERO_SLITS) {
+                    if (getNumSlits() == ONE_SLIT) {
+                        qDebug() << "There are five lights";
+                        sp->addSlit(.5f);
                     }
                     else {
-                        Real deltaAlpha = .5 * (getSlitSeparation() + getSlitWidth()) / length();
-                        sp->addSlit(.5 - deltaAlpha);
-                        sp->addSlit(.5 + deltaAlpha);
+                        Real deltaAlpha = .5f * (calculateSlitSeparationAlpha() + 
+                                                 calculateSlitWidthAlpha());
+                        qDebug() << "deltaAlpha = " << deltaAlpha;
+                        sp->addSlit(.5f - deltaAlpha);
+                        sp->addSlit(.5f + deltaAlpha);
                     }
                 }
                 
