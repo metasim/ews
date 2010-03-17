@@ -7,11 +7,13 @@
 # For example: "export CMAKE_PREFIX_PATH=/usr/local/trolltech/qt4.3.5"
 #  
 
-PROJECT (EWS)
-set(EXE_NAME "Visualize_STEM-Wave")
-set(APP_NAME "Visualize STEM - Wave")
-set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
+project(EWS)
 cmake_minimum_required(VERSION 2.8)
+
+set(EXE_TARGET_NAME "VisualizeSTEM-Wave")
+set(APP_NAME "Visualize STEM - Wave")
+set(VERSION "0.1")
+set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
 
 option(TESTING "build unit tests and include 'test' target" ON)
 
@@ -129,25 +131,21 @@ include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 find_package(OpenGL REQUIRED)
 
 #--------------------------------------------------------------------------------
-# this fixes 64-bit problems on Snow Leopard
+# Make application compabilble with MacOS X Leopard.
 if(APPLE)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.5")
-    #Option -arch is only available with apple compilers
-    include(CheckCXXCompilerFlag)
-    check_cxx_compiler_flag("-arch i386" HAS_ARCH_FLAG)
-#    if(HAS_ARCH_FLAG)
-        if(${CMAKE_GENERATOR} STREQUAL "Xcode")
-            set(CMAKE_OSX_ARCHITECTURES "i386;")
-        else()
-            # Build for single architecture. Using this flag requires more than one
-            # architecture in the list, so this hack of only providing one forces
-            # a single architecture compile.
-            set(CMAKE_OSX_ARCHITECTURES "i386;i386")
-        endif()
-#    endif()
+
+    if(${CMAKE_GENERATOR} STREQUAL "Xcode")
+        set(CMAKE_OSX_ARCHITECTURES "i386;")
+    else()
+        # Build for single architecture. Using this flag requires more than one
+        # architecture in the list, so this hack of only providing one forces
+        # a single architecture compile.
+        set(CMAKE_OSX_ARCHITECTURES "i386;i386")
+    endif()
 endif()    
 
 #--------------------------------------------------------------------------------
@@ -178,9 +176,9 @@ if(APPLE)
   # Set additional application metadata.
   set(MACOSX_BUNDLE_BUNDLE_NAME ${APP_NAME})
   set(MACOSX_BUNDLE_IDENTIFIER com.mseedsoft.ews) # Doesn't seem to work in cmake 2.6
-  set(MACOSX_BUNDLE_INFO_STRING "NVIDIA Wave Interference Simulation")
-  set(MACOSX_BUNDLE_SHORT_VERSION_STRING 0.1)
-  set(MACOSX_BUNDLE_BUNDLE_VERSION 0.1)
+  set(MACOSX_BUNDLE_INFO_STRING "${APP_NAME} - Version ${VERSION}")
+  set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VERSION})
+  set(MACOSX_BUNDLE_BUNDLE_VERSION ${VERSION})
   set(MACOSX_BUNDLE_COPYRIGHT "2010 NVIDIA Foundation")  
 elseif(WIN32)
   # Set the executable wrapper type
@@ -188,17 +186,17 @@ elseif(WIN32)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
-#    source_group("Headers" FILES ${EWS_HDRS})
-#    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
+    source_group("Headers" FILES ${EWS_HDRS})
+    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
     source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
-#    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
     source_group("Shaders" FILES ${EWS_SHADERS})
 endif()
 
 
 #--------------------------------------------------------------------------------
 #  CMake's way of creating an executable
-add_executable( ${EXE_NAME} ${EXE_TYPE} 
+add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE} 
   ${EWS_SRCS}
   ${EWS_GEN_MOC_HDRS} 
   ${EWS_GEN_UIS}
@@ -206,32 +204,23 @@ add_executable( ${EXE_NAME} ${EXE_TYPE}
   ${EWS_HDRS}
 )
 
-##  ${EWS_MOC_HDRS}
-
-set_property(
-    TARGET ${EXE_NAME} 
-    APPEND
-    PROPERTY XCODE_ATTRIBUTE_DYLD_IMAGE_SUFFIX _debug
-)
 
 # If we are build a "Debug" version then put that on the built Application
 set(EXE_DEBUG_EXTENSION "_debug")
+
 #-- Set the Debug and Release names for the libraries
-SET_TARGET_PROPERTIES(${EXE_NAME} 
+set_target_properties(${EXE_TARGET_NAME} 
     PROPERTIES
     DEBUG_OUTPUT_NAME ${APP_NAME}${EXE_DEBUG_EXTENSION}
     RELEASE_OUTPUT_NAME ${APP_NAME}
 )
-#CRUFT?
-### Change the output name to something a little less embarassing
-#set_target_properties(${EXE_NAME} PROPERTIES OUTPUT_NAME ${APP_NAME})
 
 # This shouldn't be necessary, but bits aren't getting compiled when the UI files are updated.
-add_dependencies(${EXE_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} ${EWS_SHADERS})
+add_dependencies(${EXE_TARGET_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} ${EWS_SHADERS})
 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
-target_link_libraries (${EXE_NAME}
+target_link_libraries (${EXE_TARGET_NAME}
     ${QT_LIBRARIES}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
@@ -243,131 +232,96 @@ target_link_libraries (${EXE_NAME}
     ${OPENGL_LIBRARIES}
 )
 
-
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
 # Now the installation stuff below
 #--------------------------------------------------------------------------------
-set(plugin_dest_dir bin)
-set(qtconf_dest_dir bin)
-set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${EXE_NAME}")
+set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXE_TARGET_NAME}")
+SET(QT_CONF_DEST "bin")
+set(QT_PLUGIN_DEST "bin")
 if(APPLE)
-  set(plugin_dest_dir ${EXE_NAME}.app/Contents/MacOS)
-  set(qtconf_dest_dir ${EXE_NAME}.app/Contents/Resources)
-  set(APPS "\${CMAKE_INSTALL_PREFIX}/${EXE_NAME}.app")
-endif(APPLE)
-if(WIN32)
-  set(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${EXE_NAME}.exe")
-endif(WIN32)
+    set(CMAKE_INSTALL_PREFIX "/Applications")
+    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
+    set(QT_PLUGIN_DEST "${EXE_TARGET_NAME}.app/Contents/MacOS/plugins")  
+    set(QT_CONF_DEST "${EXE_TARGET_NAME}.app/Contents/Resources")  
+elseif(WIN32)
+    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXE_TARGET_NAME}.exe")
+endif()
 
 #--------------------------------------------------------------------------------
 # Install the EWS application, on Apple, the bundle is at the root of the
 # install tree, and on other platforms it'll go into the bin directory.
 
-#--------------------------------------------------------------------------------
-# Install the Qt Libraries on NON Apple Platforms
-#--------------------------------------------------------------------------------
-IF(NOT APPLE)
-    INCLUDE (${SCRIPT_DIR}/NonOSX/InstallSupportLibraries.cmake)
-ENDIF()
-
-#--------------------------------------------------------------------------------
-# If we are on OS X copy all the embedded libraries to the app bundle
-#--------------------------------------------------------------------------------
-IF(APPLE)
-  # -------- Function to build OS X Stand Alone Bundles -----------------
-  function(MakeOSXBundleApp target binary_dir)
-
-    SET (OSX_MAKE_STANDALONE_BUNDLE_CMAKE_SCRIPT "${binary_dir}/${target}_OSX_MakeStandAloneBundle.cmake")
-    SET (OSX_MAKE_STANDALONE_BUNDLE_BASH_SCRIPT "${binary_dir}/${target}_OSX_MakeStandAloneBundle.sh")
-
-    CONFIGURE_FILE("${SCRIPT_DIR}/OSX/CompleteBundle.cmake.in"
-      "${OSX_MAKE_STANDALONE_BUNDLE_CMAKE_SCRIPT}" @ONLY IMMEDIATE)
-    CONFIGURE_FILE("${SCRIPT_DIR}/OSX/CreateBundle.sh.in"
-      "${OSX_MAKE_STANDALONE_BUNDLE_BASH_SCRIPT}" @ONLY IMMEDIATE)
- 
-   install(SCRIPT "${OSX_MAKE_STANDALONE_BUNDLE_CMAKE_SCRIPT}")
-                    
-  endfunction(MakeOSXBundleApp)
-
-  IF(CMAKE_BUILD_TYPE MATCHES "Debug")
-      MakeOSXBundleApp("${APP_NAME}${EXE_DEBUG_EXTENSION}" ${CMAKE_CURRENT_BINARY_DIR})
-  ELSE()
-      MakeOSXBundleApp(${APP_NAME} ${CMAKE_CURRENT_BINARY_DIR})
-  ENDIF()
-
-ENDIF()
-
-IF (WIN32)
-  INSTALL(TARGETS ${EXE_NAME} 
-#      LIBRARY DESTINATION lib
-#      ARCHIVE DESTINATION lib
-#      RUNTIME DESTINATION bin
-      LIBRARY DESTINATION .
-      ARCHIVE DESTINATION .
-      RUNTIME DESTINATION .
-      COMPONENT Runtime
-  )   
-ENDIF()
-
-#CRUFT?
-#install(TARGETS ${EXE_NAME} #${OSG_LIBRARY} #${OPENSCENEGRAPH_LIBRARIES} ${OPENTHREADS_LIBRARY} ${QT_LIBRARIES}
-#    BUNDLE DESTINATION .
-#    RUNTIME DESTINATION .
-#    LIBRARY DESTINATION .
-#    ARCHIVE DESTINATION .
-#    RESOURCE DESTINATION .
-#    FRAMEWORK DESTINATION .
-#)
+install(TARGETS ${EXE_TARGET_NAME} 
+    BUNDLE DESTINATION . COMPONENT Runtime
+    RUNTIME DESTINATION bin COMPONENT Runtime
+)
 
 #--------------------------------------------------------------------------------
 # Install needed Qt plugins by copying directories from the qt installation
-# One can cull what gets copied by using 'REGEX "..." EXCLUDE'
-install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${plugin_dest_dir}/plugins COMPONENT Runtime)
+# One can cull what gets copied by using 'REGEX "..." EXCLUDE' 
+# NB: this is important because icon loading, etc. need image plugins.
+install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${QT_PLUGIN_DEST} COMPONENT Runtime)
+
 
 #--------------------------------------------------------------------------------
 # install a qt.conf file
 # this inserts some cmake code into the install script to write the file
-install(CODE "
-    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"\")
+# This is needed so Qt can find search path for plugins.
+INSTALL(CODE "
+    message(\"Creating \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
+    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\" \"\")
     " COMPONENT Runtime)
+    
+
+if(APPLE)
+    #--------------------------------------------------------------------------------
+    # Use BundleUtilities to get all other dependencies for the application to work.
+    # It takes a bundle or executable along with possible plugins and inspects it
+    # for dependencies.  
+
+
+    # directories to look for dependencies
+    get_filename_component(OSG_LIBRARY_DIR ${OSG_LIBRARY} PATH)
+    set(FIXUP_LIBRARY_SEARCH_PATH ${QT_LIBRARY_DIR} ${OSG_LIBRARY_DIR} ${QT_PLUGINS_DIR}/imageformats)
+    ##message("FIXUP_LIBRARY_SEARCH_PATH = ${FIXUP_LIBRARY_SEARCH_PATH}")
+
+    # Now the work of copying dependencies into the bundle/package
+    # The quotes are escaped and variables to use at install time have their $ escaped
+    # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
+    # over.
+    install(CODE "
+        include(InstallRequiredSystemLibraries)
+        file(GLOB_RECURSE QTPLUGINS
+            \"\${CMAKE_INSTALL_PREFIX}/${QT_PLUGIN_DEST}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+        message(\"plugins: \${QTPLUGINS}\")
+        set(FIXUP_EXTRA_LIBS ${OPENSCENEGRAPH_LIBRARIES};\${QTPLUGINS})
+        include(BundleUtilities)
+        fixup_bundle(\"${APP_INSTALL_PATH}\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
+        " COMPONENT Runtime)
+endif()
 
 
 #--------------------------------------------------------------------------------
-# Use BundleUtilities to get all other dependencies for the application to work.
-# It takes a bundle or executable along with possible plugins and inspects it
-# for dependencies.  If they are not system dependencies, they are copied.
-
-# directories to look for dependencies
-set(DIRS ${QT_LIBRARY_DIRS})
-
-# Now the work of copying dependencies into the bundle/package
-# The quotes are escaped and variables to use at install time have their $ escaped
-# An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
-# Note that the image plugins depend on QtSvg and QtXml, and it got those copied
-# over.
-install(CODE "
-    file(GLOB_RECURSE QTPLUGINS
-      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-    include(BundleUtilities)
-    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
-    " COMPONENT Runtime)
-
-
-if(WIN32)
-    set(CPACK_GENERATOR ZIP)
-    set(CPACK_SOURCE_GENERATOR ZIP)
-else()
-    set(CPACK_GENERATOR DMG)
-    set(CPACK_SOURCE_GENERATOR DMG)
-    if(APPLE)
-        # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-        # where CPackConfig.cmake is created by including CPack
-        # And then there's ways to customize this as well
-        set(CPACK_BINARY_DRAGNDROP ON)
-    endif()
+#--------------------------------------------------------------------------------
+# CPack configuration
+#--------------------------------------------------------------------------------
+set(CPACK_PACKAGE_NAME ${EXE_TARGET_NAME})
+set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
+set(CPACK_GENERATOR ZIP)
+set(CPACK_SOURCE_GENERATOR ZIP)
+set(CPACK_MONOLITHIC_INSTALL TRUE)
+#  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
+# set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
+if(APPLE)
+    # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
+    # where CPackConfig.cmake is created by including CPack
+    # And then there's ways to customize this as well
+    set(CPACK_GENERATOR DragNDrop)
 endif()
+
 include(CPack)
+
 
 ############################################################
 # C++ tests built with standard compiler flags.
