@@ -23,17 +23,20 @@ IF(NOT Q_WS_MAC)
   ENDFOREACH()
 ENDIF()
 
-# ---------- Find/Install the needed Qt4 libraries. 
+# ---------- Find/Install the needed OpenSceneGraph libraries. 
 IF(WIN32)
-  FOREACH(osglib ${OPENSCENEGRAPH_LIBRARIES})
-    GET_FILENAME_COMPONENT(OSG_DLL_PATH_tmp ${OSG_LIBRARY} PATH)
-    INSTALL(FILES ${OSG_DLL_PATH_tmp}/${osglib}d4.dll 
-          DESTINATION bin 
-          CONFIGURATIONS Debug 
-          COMPONENT Runtime)
-    INSTALL(FILES ${OSG_DLL_PATH_tmp}/${osglib}4.dll 
-          DESTINATION bin 
-          CONFIGURATIONS Release 
-          COMPONENT Runtime)
+  SET(OSGPKGS ${OPENSCENEGRAPH_LIBRARIES} ${OPENTHREADS_LIBRARY} ${OPENGL_LIBRARIES})
+  FOREACH(osgpkg ${OSGPKGS})
+    FOREACH(osglib ${osgpkg})
+      GET_FILENAME_COMPONENT(OSG_DLL_PATH_tmp ${OSG_LIBRARY} PATH)
+      INSTALL(FILES ${OSG_DLL_PATH_tmp}/${osglib}d.dll 
+            DESTINATION bin 
+            CONFIGURATIONS Debug 
+            COMPONENT Runtime)
+      INSTALL(FILES ${OSG_DLL_PATH_tmp}/${osglib}.dll 
+            DESTINATION bin 
+            CONFIGURATIONS Release 
+            COMPONENT Runtime)
+    ENDFOREACH()
   ENDFOREACH()
 ENDIF()

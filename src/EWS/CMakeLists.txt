@@ -7,13 +7,13 @@
 # For example: "export CMAKE_PREFIX_PATH=/usr/local/trolltech/qt4.3.5"
 #  
 
-PROJECT (EWS)
+project(EWS)
+cmake_minimum_required(VERSION 2.8)
+
 set(EXE_TARGET_NAME "VisualizeSTEM-Wave")
 set(APP_NAME "Visualize STEM - Wave")
 set(VERSION "0.1")
 set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
-
-cmake_minimum_required(VERSION 2.8)
 
 option(TESTING "build unit tests and include 'test' target" ON)
 
@@ -232,7 +232,6 @@ target_link_libraries (${EXE_TARGET_NAME}
     ${OPENGL_LIBRARIES}
 )
 
-
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
 # Now the installation stuff below
@@ -302,24 +301,26 @@ if(APPLE)
         " COMPONENT Runtime)
 endif()
 
-    
 
-if(WIN32)
-    set(CPACK_GENERATOR ZIP)
-    set(CPACK_SOURCE_GENERATOR ZIP)
-else()
-    set(CPACK_GENERATOR DMG)
-    set(CPACK_SOURCE_GENERATOR DMG)
-    if(APPLE)
-        # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-        # where CPackConfig.cmake is created by including CPack
-        # And then there's ways to customize this as well
-        set(CPACK_BINARY_DRAGNDROP ON)
-    endif()
+#--------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------
+# CPack configuration
+#--------------------------------------------------------------------------------
+set(CPACK_PACKAGE_NAME ${EXE_TARGET_NAME})
+set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
+set(CPACK_GENERATOR ZIP)
+set(CPACK_SOURCE_GENERATOR ZIP)
+set(CPACK_MONOLITHIC_INSTALL TRUE)
+#  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
+# set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
+if(APPLE)
+    # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
+    # where CPackConfig.cmake is created by including CPack
+    # And then there's ways to customize this as well
+    set(CPACK_GENERATOR DragNDrop)
 endif()
+
 include(CPack)
-
-
 
 
 ############################################################
