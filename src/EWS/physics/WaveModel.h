@@ -34,7 +34,7 @@ namespace ews {
     namespace physics {
         /**
          * @ingroup Physics
-         * Model for waves.
+         * Model for waves using the DampedClassicalWavePropagator.
          */        
         class WaveModel {
         public:

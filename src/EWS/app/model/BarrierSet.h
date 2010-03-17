@@ -35,8 +35,7 @@ namespace ews {
             /**
              * Collection of Barrier objects.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class BarrierSet : /** @cond */ public QObject /** @endcond */ {
+            class BarrierSet :  public QObject  {
                 Q_OBJECT
             public:
                 /**

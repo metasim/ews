@@ -30,8 +30,7 @@ namespace ews {
          * @ingroup Test
          * Test harness for testing the Lattice class.
          */        
-        // cond/endcond is used to tell Doxygen to ignore what's in between
-        class LatticeTest : /** @cond */ public QObject /** @endcond */ {
+        class LatticeTest :  public QObject  {
         public:
             LatticeTest() { /* do nothing */ }
             virtual ~LatticeTest() { /* do nothing */ }

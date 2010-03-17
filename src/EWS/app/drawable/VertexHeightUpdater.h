@@ -38,8 +38,10 @@ namespace ews {
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class VertexHeightUpdater : /** @cond */ public osg::NodeCallback /** @endcond */ {
+            /**
+             * Callback class used by WaterSurfaceGeom to update the water surface height.
+             */
+            class VertexHeightUpdater :  public osg::NodeCallback  {
             public:
                 VertexHeightUpdater(WaveMedium& model, Geometry* geom) :
                 _model(model), _heightMap(0) {
@@ -76,8 +78,6 @@ namespace ews {
                     gridSize->setDataVariance(Object::STATIC);
                     state->addUniform(gridSize.get());
                                              
-                    // TODO figure out how to extract the right texture ID out of
-                    // Texture2D. It's in the TextureObject, but private.
                     ref_ptr<Uniform> heightMapID = new Uniform("heightMap", TEX_ID);
                     heightMapID->setDataVariance(Object::STATIC);
                     state->addUniform(heightMapID.get());
@@ -86,13 +86,13 @@ namespace ews {
                 virtual ~VertexHeightUpdater() {
                 }
                     
-                /** Callback method called by the NodeVisitor when visiting a node.
+                /**
+                 *  Callback method called by the NodeVisitor when visiting a node.
                  *  TODO: Consider moving the propagate stage of this
                  *  out of this class and into someghitn more general, such
                  *  as a parent decorator node for simulation update. See
                  *  corresponding code in FaucetGeom.
                  */
-                
                 virtual void operator()(Node* node, NodeVisitor* nv) { 
                     /** If the simulation is paused then we don't propagate
                      *  the wave model nor update the deformation texture.

@@ -23,12 +23,12 @@
 #include <QDataWidgetMapper>
 #include "BarrierSet.h"
 
-/** @cond */
+
 /** Forward declaration of UI implementation class. */
 namespace Ui {
     class BarrierEditorForm;
 }
-/** @endcond */
+
 
 namespace ews {
     namespace app {
@@ -43,8 +43,7 @@ namespace ews {
             /**
              * Form controller for editing barriers.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class BarrierEditor : /** @cond */ public QWidget /** @endcond */ {
+            class BarrierEditor :  public QWidget  {
                 Q_OBJECT
                 
             public:

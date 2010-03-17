@@ -60,7 +60,6 @@ unmoc(PickHandler.h)
 unmoc(Teapot.h)
 unmoc(Knob.h)
 unmoc(PotentialUpdater.h)
-unmoc(BarrierDragger.h)
 
 #message("moc files: ${EWS_MOC_HDRS}")
 
@@ -237,8 +236,8 @@ target_link_libraries (${EXE_NAME}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY}
-#CRUFT? Not needed (and not wanted) by Macs, but leaving in as comment until it can be determined 
-# that it is also unnecessary on Linux/Windows
+#CRUFT? Not needed (and not wanted) by Macs/Linux, but leaving in as comment until it can be
+# determined that it is also unnecessary on Windows
 #    ${OPENTHREADS_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
     ${OPENGL_LIBRARIES}

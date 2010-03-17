@@ -30,6 +30,10 @@ namespace ews {
             using namespace osg;
             using namespace osgManipulator;
 
+            /**
+             * Constraint class used to prevent Barrier and DripSource objects from being moved
+             * out-of-bounds.
+             */
             class WaterBoundaryDragConstraint : public Constraint {
             public:
                 

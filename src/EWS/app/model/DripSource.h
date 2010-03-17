@@ -43,8 +43,7 @@ namespace ews {
              * Contains the business logic for DripSource objects to be drawn on the screen, as well as
              * a reference to the Oscillator necessary for physics calculations.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class DripSource : /** @cond */ public QObject /** @endcond */ {
+            class DripSource :  public QObject  {
                 
                 Q_OBJECT
                 Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)

@@ -37,7 +37,7 @@ namespace ews {
         const unsigned int DEFAULT_X = 8;
         /**
          * @ingroup Physics
-         * Oscillator
+         * Sets wave motion in action at the DripSource.
          */        
         class Oscillator {
         public:

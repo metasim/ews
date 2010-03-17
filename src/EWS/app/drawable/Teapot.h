@@ -216,8 +216,7 @@ namespace ews {
             /**
              * An OSG wrapper for the classic OpenGL teapot.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class Teapot : /** @cond */ public osg::Drawable /** @endcond */ {
+            class Teapot :  public osg::Drawable  {
             public:
                 Teapot() {}
                 

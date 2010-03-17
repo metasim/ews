@@ -32,8 +32,7 @@ namespace ews {
              * Encapsulation of the state data associated with configuring
              * and updating the wave model.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class WaveMedium : /** @cond */ public QObject /** @endcond */ {
+            class WaveMedium :  public QObject  {
                 Q_OBJECT
                 Q_PROPERTY(bool paused READ isPaused WRITE setPaused)
                 Q_PROPERTY(int width READ getWidth WRITE setWidth)

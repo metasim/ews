@@ -31,6 +31,9 @@ namespace ews {
             using namespace osg;
             using namespace osgManipulator;
             
+            /**
+             * Private class used by Knob to provide dragging functionality to Knob objects
+             */
             class KnobDragger : public Translate2DDragger {
             public:
                 KnobDragger(Knob& knob) : Translate2DDragger(Plane(osg::Z_AXIS, 0)), _knob(knob) {

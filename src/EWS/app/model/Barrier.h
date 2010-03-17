@@ -43,8 +43,7 @@ namespace ews {
              * Contains the business logic for barrier objects to be drawn on the screen, as well as
              * a reference to the SlitPotential necessary for physics calculations.
              */
-            // cond/endcond is used to tell Doxygen to ignore what's in between
-            class Barrier : /** @cond */ public QObject /** @endcond */ {
+            class Barrier :  public QObject  {
                 Q_OBJECT
                 Q_ENUMS(NumSlits)
                 Q_PROPERTY(Vec2 start READ getStart WRITE setStart)

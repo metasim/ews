@@ -29,9 +29,13 @@ namespace ews {
             using namespace osg;
             using namespace osgManipulator;
             
-            /** The ctor creates a mini-hierarchy with a Dragger and Selection
+            /**
+             * Provides functionality for picking and dragging screen objects. 
+             *
+             * The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
-             * (i.e. sphere) as a child of the selection. */
+             * (i.e. sphere) as a child of the selection.
+             */
             class Knob : public MatrixTransform {
             public:
                 /**
