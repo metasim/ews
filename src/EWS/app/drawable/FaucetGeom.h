@@ -64,7 +64,6 @@ namespace ews {
                 DripSource& _dataModel;
                 ref_ptr<Knob> _dragger;
                 ref_ptr<PositionAttitudeTransform> _geom;
-                ref_ptr<Constraint> _constraint;
             };
         }
     }

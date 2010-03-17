@@ -103,8 +103,8 @@ namespace ews {
                 WaveMedium& waves = _dataModel.getSimulationState()->getWaveMedium();
                 BoundingBox waterArea(0, 0, 0, waves.getWidth(), waves.getLength(), 0);
                 
-                _constraint = new WaterBoundaryDragConstraint(*this, waterArea);
-                _dragger->setConstraint(*(_constraint.get()));
+                ref_ptr<Constraint> constraint = new WaterBoundaryDragConstraint(*this, waterArea);
+                _dragger->setConstraint(*(constraint.get()));
                 
                 setColor(Vec4(.2f, .9f, .9f, 1.f)); 
 
