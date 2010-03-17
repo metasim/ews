@@ -1,0 +1,51 @@
+/* Copyright 2010 NVIDIA Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Developed by Mustard Seed Software, LLC 
+ * http://mseedsoft.com
+ */
+
+#ifndef __MATHUTILS_H
+#define __MATHUTILS_H
+
+#include "EWSDefine.h"
+#include <limits>
+
+namespace ews {
+    namespace util {
+        /**
+         * Return x if x is between min and max (inclusive), else return min if x is less than min
+         * or max if x is greater than max
+         * @param min Minimum allowable value
+         * @param x Value to impose bounds on
+         * @param max Maximum allowable value
+         * @return Bounded x
+         */
+        inline Real imposeBounds(Real min, Real x, Real max) {
+            return std::min(std::max(min, x), max);
+        }
+        /**
+         * Return a value frac distance between min and max.
+         * @param min Minimum allowable value (if frac is between 0 and 1)
+         * @param frac Fractional distance from min to max (usually between 0 and 1)
+         * @param max Maximum allowable value (if frac is between 0 and 1)
+         * @return Value scaled between min and max
+         */
+        inline Real scale(Real min, Real frac, Real max) {
+            return (frac * (max - min)) + min;
+        }
+    }
+}
+
+#endif //__MATHUTILS_H

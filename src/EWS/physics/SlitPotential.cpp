@@ -19,11 +19,11 @@
 #include "SlitPotential.h"
 #include <algorithm>
 #include <osg/Vec2>
-using std::sort;
 
 namespace ews {
     namespace physics {
         using osg::Vec2;
+        using std::sort;
         
         SlitPotential::SlitPotential(const Vec2& p1, const Vec2& p2, unsigned int numSlits): 
         WallPotential(p1, p2), _slitWidth(DEFAULT_SLIT_WIDTH), _slitAlphas(numSlits, 0.0) {
@@ -46,10 +46,10 @@ namespace ews {
             const Real wallPotential = WallPotential::getPotential(x, y);
             if (wallPotential == 0.0) return wallPotential;
             const Real alphaVal = alpha(x, y);
-            const Real slitAlphaWidth = _slitWidth / length();
+            const Real slitAlphaHalfWidth = .5f * _slitWidth / length();
             for (vector<Real>::const_iterator i = _slitAlphas.begin(); i != _slitAlphas.end(); i++) {
-                // Slit window is *i +/- _slitAlphaWidth
-                if (*i - slitAlphaWidth < alphaVal && alphaVal < *i + slitAlphaWidth) {
+                // Slit window is *i +/- slitAlphaHalfWidth
+                if (*i - slitAlphaHalfWidth < alphaVal && alphaVal < *i + slitAlphaHalfWidth) {
                     return 0.0;
                 }
             }

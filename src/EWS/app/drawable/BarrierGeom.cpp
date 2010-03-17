@@ -28,21 +28,33 @@
 #include "BarrierDragger.h"
 #include "PotentialUpdater.h"
 #include "EWSDebug.h"
-
+#include "BarrierSet.h"
+#include "WaveMedium.h"
+#include "SimulationState.h"
+#include "WaterBoundaryDragConstraint.h"
 
 namespace ews {
     namespace app {
         namespace drawable {
             using namespace osg;
             using namespace osgManipulator;
+            using namespace app::model;
             
-            
+            /** How far the barriers can go outside of the water region. */
+            const Uint ALLOWABLE_OUT_OF_BOUNDS = 5;
+            /** How tall the barriers appear. */
             const Real VISIBLE_BARRIER_HEIGHT = 10;
+            /** How wide the barriers are. */
             const float VISIBLE_BARRIER_WIDTH = 6.f;
+            /** How opaque the barriers are. */
             const float BARRIER_OPACITY = .6f;
+            /** Where starting knob is relative to to the starting point. */
             const Vec3 START_KNOB_OFFSET(0, 0, 7);
+            /** Where ending knob is relative to to the ending point. */
             const Vec3 END_KNOB_OFFSET(0, 0, 7);
+            /** The color of the barrier. */
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
+            /** Which plane the barrier is constrained to. */
             const Plane BARRIER_PLANE(osg::X_AXIS, 0);
 
             
@@ -57,10 +69,17 @@ namespace ews {
                 _switch->setNewChildDefaultValue(true);
                 addChild(_switch.get());
                 _switch->addChild(_barrierGeom.get());
+                WaveMedium& waves = _dataModel.getBarrierSet()->getSimulationState()->getWaveMedium();
+                const Real wiggle = ALLOWABLE_OUT_OF_BOUNDS;
+                BoundingBox validArea(-wiggle, -wiggle, 0,
+                                      waves.getWidth() + wiggle, waves.getLength() + wiggle, 0);
+                ref_ptr<Constraint> constraint = new WaterBoundaryDragConstraint(*this, validArea);
                 
                 // Knob locations are in gobal coordinates.
                 _startKnob->setPosition(Vec3(_dataModel.getStart(), 0));
+                _startKnob->setConstraint(*(constraint.get()));
                 _endKnob->setPosition(Vec3(_dataModel.getEnd(), 0));
+                _endKnob->setConstraint(*(constraint.get()));
                 
                 _startKnob->setName("startBarrierKnob");
                 _switch->addChild(_startKnob.get());
@@ -133,21 +152,21 @@ namespace ews {
                 // Create geometric representation
                 ref_ptr<Geode> geom = new Geode;
                 _barrierGeom->addChild(geom);
-                if (_dataModel.getNumSlits() == Barrier::ZERO) {
+                if (_dataModel.getNumSlits() == Barrier::ZERO_SLITS) {
                     addBox(geom, 0.5f, 1.f);
                 }
                 else {
-                    const Real slitAlpha = _dataModel.getSlitWidth() / barrierLength;
-                    if (_dataModel.getNumSlits() == Barrier::ONE) {
-                        Real boxLength = 0.5f - (slitAlpha / 2);
+                    const Real slitAlpha = _dataModel.calculateSlitWidthAlpha();
+                    if (_dataModel.getNumSlits() == Barrier::ONE_SLIT) {
+                        const Real boxLength = 0.5f - (slitAlpha / 2);
                         addBox(geom, boxLength / 2, boxLength);
                         addBox(geom, 1 - boxLength / 2, boxLength);
                     }
                     else {
                         // Assumes that barrierLength > slitSeparation + 2 * slitWidth
-                        const Real separationAlpha = _dataModel.getSlitSeparation() / barrierLength;
+                        const Real separationAlpha = _dataModel.calculateSlitSeparationAlpha();
                         // Box length for boxes at either end of barrier
-                        Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
+                        const Real boxLength = 0.5f - slitAlpha - (separationAlpha / 2);
                         addBox(geom, boxLength / 2, boxLength);
                         addBox(geom, 1 - boxLength / 2, boxLength);
                         // Box between the two slits
