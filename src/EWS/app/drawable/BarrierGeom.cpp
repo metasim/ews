@@ -40,8 +40,8 @@ namespace ews {
             const Real VISIBLE_BARRIER_HEIGHT = 10;
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             const float BARRIER_OPACITY = .6f;
-            const Vec3 START_KNOB_OFFSET(0, 3, 7);
-            const Vec3 END_KNOB_OFFSET(0, -3, 7);
+            const Vec3 START_KNOB_OFFSET(0, 0, 7);
+            const Vec3 END_KNOB_OFFSET(0, 0, 7);
             const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
             const Plane BARRIER_PLANE(osg::X_AXIS, 0);
 

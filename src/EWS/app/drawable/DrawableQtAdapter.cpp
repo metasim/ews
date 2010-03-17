@@ -34,10 +34,9 @@ namespace ews {
             }
             
             osgManipulator::CommandManager& DrawableQtAdapter::manipCommandManager() {
-                static osg::ref_ptr<osgManipulator::CommandManager> _manipCommander;
+                static osg::observer_ptr<osgManipulator::CommandManager> _manipCommander;
                 if(!_manipCommander.valid()) {
                     _manipCommander = new osgManipulator::CommandManager;
-                    _manipCommander->ref();
                 }
                 
                 return *(_manipCommander.get());
