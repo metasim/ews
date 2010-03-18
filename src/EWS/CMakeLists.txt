@@ -7,12 +7,19 @@
 # For example: "export CMAKE_PREFIX_PATH=/usr/local/trolltech/qt4.3.5"
 #  
 
-project(EWS)
+project(VisualizeSTEM-Wave)
 cmake_minimum_required(VERSION 2.8)
 
-set(EXE_TARGET_NAME "VisualizeSTEM-Wave")
+if(WIN32)
+	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/Windows;${CMAKE_MODULE_PATH}")
+elseif(APPLE)
+	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/OSX;${CMAKE_MODULE_PATH}")
+endif()
+set(EXE_TARGET_NAME ${CMAKE_PROJECT_NAME})
 set(APP_NAME "Visualize STEM - Wave")
-set(VERSION "0.1")
+set(VERSION_MAJOR "0")
+set(VERSION_MINOR "1")
+set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
 
 option(TESTING "build unit tests and include 'test' target" ON)
@@ -62,7 +69,7 @@ unmoc(PickHandler.h)
 unmoc(Teapot.h)
 unmoc(Knob.h)
 unmoc(PotentialUpdater.h)
-
+unmoc(WaterBoundaryDragConstraint.h)
 #message("moc files: ${EWS_MOC_HDRS}")
 
 set_source_files_properties(${EWS_HDRS} PROPERTIES HEADER_FILE_ONLY TRUE) 
@@ -96,7 +103,8 @@ endif (WIN32)
 #--------------------------------------------------------------------------------
 # this command finds Qt4 libraries and sets all required variables
 # note that it's Qt4, not QT4 or qt4
-find_package( Qt4 REQUIRED )
+set(QT_COMPONENTS QtCore QtGui QtOpenGL QtSvg QtXml)
+find_package( Qt4 REQUIRED COMPONENTS ${QT_COMPONENTS})
 
 #--------------------------------------------------------------------------------
 # QT_USE_FILE is a variable defined by FIND_PACKAGE( Qt4 ) that contains a path to
@@ -122,17 +130,17 @@ qt4_wrap_cpp( EWS_TEST_GEN_MOC_HDRS ${EWS_TEST_MOC_HDRS} )
 
 #--------------------------------------------------------------------------------
 # Add OpenSceneGraph suppport
-find_package(OpenSceneGraph REQUIRED 
-    COMPONENTS osg osgUtil osgViewer osgGA osgManipulator osgDB)
+set(OSG_COMPONENTS osg osgUtil osgViewer osgGA osgManipulator osgText osgDB)
+find_package(OpenSceneGraph REQUIRED COMPONENTS ${OSG_COMPONENTS})
 
-   
 include_directories(${OPENSCENEGRAPH_INCLUDE_DIRS})
 
 find_package(OpenGL REQUIRED)
 
 #--------------------------------------------------------------------------------
-# Make application compabilble with MacOS X Leopard.
+# Apply platform specific compiler options
 if(APPLE)
+# Make application compatible with MacOS X Leopard.
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
@@ -146,20 +154,39 @@ if(APPLE)
         # a single architecture compile.
         set(CMAKE_OSX_ARCHITECTURES "i386;i386")
     endif()
+elseif(WIN32)
+	# Stuff borrowed from OpenSceneGraph...
+    if(MSVC)
+        # This option is to enable the /MP switch for Visual Studio 2005 and above compilers
+        OPTION(WIN32_USE_MP "Set to ON to build OpenSceneGraph with the /MP option (Visual Studio 2005 and above)." ON)
+        MARK_AS_ADVANCED(WIN32_USE_MP)
+        IF(WIN32_USE_MP)
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+        ENDIF(WIN32_USE_MP)
+
+        # turn off various warnings
+        # foreach(warning 4244 4251 4267 4275 4290 4786 4305 4996)
+        #     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd${warning}")
+        # endforeach(warning)
+
+        # More MSVC specific compilation flags
+        ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
+        ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+
+
+    endif(MSVC)
 endif()    
 
 #--------------------------------------------------------------------------------
 # we need this to be able to include headers produced by uic in our code
 # CMAKE_BINARY_DIR holds a path to the build directory, while INCLUDE_DIRECTORIES()
 #  works just like INCLUDEPATH from qmake
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON) # Adds binary dir.
 include_directories (
-  # Look in the cmake build directory (some generated headers could be there)
-  ${CMAKE_CURRENT_BINARY_DIR} 
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${EWS_MODULES}
 )
-
-
 
 #--------------------------------------------------------------------------------
 # For Apple set the icns file containing icons
@@ -206,62 +233,65 @@ add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE}
 
 
 # If we are build a "Debug" version then put that on the built Application
-set(EXE_DEBUG_EXTENSION "_debug")
+#set(EXE_DEBUG_EXTENSION "_debug")
 
 #-- Set the Debug and Release names for the libraries
-set_target_properties(${EXE_TARGET_NAME} 
-    PROPERTIES
-    DEBUG_OUTPUT_NAME ${APP_NAME}${EXE_DEBUG_EXTENSION}
-    RELEASE_OUTPUT_NAME ${APP_NAME}
-)
-
-# This shouldn't be necessary, but bits aren't getting compiled when the UI files are updated.
-add_dependencies(${EXE_TARGET_NAME}  ${EWS_MOC_HDRS} ${EWS_HDRS} ${EWS_UIS} ${EWS_RCS} ${EWS_SHADERS})
+#set_target_properties(${EXE_TARGET_NAME} 
+#    PROPERTIES
+#    DEBUG_OUTPUT_NAME ${APP_NAME}${EXE_DEBUG_EXTENSION}
+#    RELEASE_OUTPUT_NAME ${APP_NAME}
+#)
 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
-target_link_libraries (${EXE_TARGET_NAME}
-    ${QT_LIBRARIES}
+set(ALL_QT_OSG_LIBS     
+	${QT_LIBRARIES}
     ${QT_QTCORE_LIBRARY} 
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY}
-#CRUFT? Not needed (and not wanted) by Macs/Linux, but leaving in as comment until it can be
-# determined that it is also unnecessary on Windows
-#    ${OPENTHREADS_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
-    ${OPENGL_LIBRARIES}
 )
+
+target_link_libraries (${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
-# Now the installation stuff below
+# Installation setup stuff below
 #--------------------------------------------------------------------------------
-set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXE_TARGET_NAME}")
-SET(QT_CONF_DEST "bin")
-set(QT_PLUGIN_DEST "bin")
+# On CMake 2.6.x use the newly minted CMAKE_LIBRARY_OUTPUT_DIRECTORY,
+# CMAKE_ARCHIVE_OUTPUT_DIRECTORY & CMAKE_RUNTIME_OUTPUT_DIRECTORY
+
+#--------------------------------------------------------------------------------
+# Setup general and platform specific items for the target executable 
+
+
 if(APPLE)
     set(CMAKE_INSTALL_PREFIX "/Applications")
     set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
     set(QT_PLUGIN_DEST "${EXE_TARGET_NAME}.app/Contents/MacOS/plugins")  
     set(QT_CONF_DEST "${EXE_TARGET_NAME}.app/Contents/Resources")  
+		
 elseif(WIN32)
-    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXE_TARGET_NAME}.exe")
+	SET(QT_CONF_DEST "bin")
+	set(QT_PLUGIN_DEST "bin/plugins")
 endif()
 
-#--------------------------------------------------------------------------------
-# Install the EWS application, on Apple, the bundle is at the root of the
-# install tree, and on other platforms it'll go into the bin directory.
-
 install(TARGETS ${EXE_TARGET_NAME} 
-    BUNDLE DESTINATION . COMPONENT Runtime
-    RUNTIME DESTINATION bin COMPONENT Runtime
+	BUNDLE DESTINATION . 
+	RUNTIME DESTINATION bin
+	LIBRARY DESTINATION bin
+	COMPONENT Runtime
 )
 
 #--------------------------------------------------------------------------------
 # Install needed Qt plugins by copying directories from the qt installation
 # One can cull what gets copied by using 'REGEX "..." EXCLUDE' 
 # NB: this is important because icon loading, etc. need image plugins.
-install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${QT_PLUGIN_DEST} COMPONENT Runtime)
+install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
+	DESTINATION ${QT_PLUGIN_DEST} 
+	COMPONENT RuntimeLibraries
+	FILES_MATCHING PATTERN "*.dll"
+)
 
 
 #--------------------------------------------------------------------------------
@@ -270,10 +300,10 @@ install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${QT_PLUGIN_DEST}
 # This is needed so Qt can find search path for plugins.
 INSTALL(CODE "
     message(\"Creating \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
-    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\" \"\")
-    " COMPONENT Runtime)
+    file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\" \"\") "
+    COMPONENT Runtime)
     
-
+# Platform specific tweaks to get the library dependencies installed.
 if(APPLE)
     #--------------------------------------------------------------------------------
     # Use BundleUtilities to get all other dependencies for the application to work.
@@ -291,7 +321,7 @@ if(APPLE)
     # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
     # over.
     install(CODE "
-        include(InstallRequiredSystemLibraries)
+#        include(InstallRequiredSystemLibraries)
         file(GLOB_RECURSE QTPLUGINS
             \"\${CMAKE_INSTALL_PREFIX}/${QT_PLUGIN_DEST}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
         message(\"plugins: \${QTPLUGINS}\")
@@ -299,6 +329,9 @@ if(APPLE)
         include(BundleUtilities)
         fixup_bundle(\"${APP_INSTALL_PATH}\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
         " COMPONENT Runtime)
+elseif(WIN32)
+	include(InstallSupportLibraries)
+#	set(CMAKE_PREFIX_PATH "/Build")
 endif()
 
 
@@ -311,6 +344,12 @@ set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
 set(CPACK_GENERATOR ZIP)
 set(CPACK_SOURCE_GENERATOR ZIP)
 set(CPACK_MONOLITHIC_INSTALL TRUE)
+SET(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
+
+set (CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
+set (CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
+
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
 # set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
 if(APPLE)
@@ -318,9 +357,21 @@ if(APPLE)
     # where CPackConfig.cmake is created by including CPack
     # And then there's ways to customize this as well
     set(CPACK_GENERATOR DragNDrop)
+elseif(WIN32)
+    set(CPACK_GENERATOR NSIS)
+	set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
+	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${VERSION}")
+	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
+	SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${VERSION}")
 endif()
 
+
 include(CPack)
+
+# Get all defined components
+GET_CMAKE_PROPERTY(CPACK_COMPONENTS_ALL COMPONENTS)
+
+message("CPack components: ${CPACK_COMPONENTS_ALL}")
 
 
 ############################################################
