@@ -264,16 +264,16 @@ target_link_libraries (${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS
 #--------------------------------------------------------------------------------
 # Setup general and platform specific items for the target executable 
 
+set(QT_CONF_DEST "bin")
+set(QT_PLUGIN_DEST "bin/plugins")
 
 if(APPLE)
     set(CMAKE_INSTALL_PREFIX "/Applications")
     set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
     set(QT_PLUGIN_DEST "${EXE_TARGET_NAME}.app/Contents/MacOS/plugins")  
     set(QT_CONF_DEST "${EXE_TARGET_NAME}.app/Contents/Resources")  
-		
 elseif(WIN32)
-	SET(QT_CONF_DEST "bin")
-	set(QT_PLUGIN_DEST "bin/plugins")
+
 endif()
 
 install(TARGETS ${EXE_TARGET_NAME} 
