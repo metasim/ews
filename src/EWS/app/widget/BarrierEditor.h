@@ -25,10 +25,11 @@
 
 
 /** Forward declaration of UI implementation class. */
+/** @cond */
 namespace Ui {
     class BarrierEditorForm;
 }
-
+/** @endcond */
 
 namespace ews {
     namespace app {

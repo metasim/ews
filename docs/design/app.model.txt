@@ -19,20 +19,15 @@ SimulationState : +medium : WaveMedium
 SimulationState : +barriers : List<Barrier>
 SimulationState : +sources : List<DripSource>
 
-class SimulationUnits
-SimulationState *-> "1" SimulationUnits
-SimulationUnits : +timeScale : float
-SimulationUnits : +timeUnits : string
-SimulationUnits : +width : float
-SimulationUnits : +length : float
-SimulationUnits : +distanceUnits : string
-
 note as N2
     The root object of 
     all simulation state
 end note
 
 N2 .> SimulationState
+
+class BarrierSet << QO >>
+BarrierSet : barrierAt(i : int) : Barrier
 
 class Barrier << QO >>
 Barrier : +numSlits
@@ -49,8 +44,9 @@ WaveMedium : +energyMap : Array2d
 
 end package
 
-SimulationState "1" o-- "1..*" Barrier
+BarrierSet "1" o-- "0..*" Barrier
 SimulationState "1" o-- "1..2" DripSource
+SimulationState "1" o-- "1" BarrierSet
 SimulationState "1" o-- "1" WaveMedium
 
 end package

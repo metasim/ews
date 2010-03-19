@@ -1,6 +1,22 @@
 /**
 
-\mainpage Visualize STEM-Wave High-level Design
+\mainpage Visualize STEM-Wave Code Structure Overview
+<p>All code generated for this project resides in the ews namespace. Within this namespace reside the ews::app, ews::physics,
+ews::test, and ews::util namespaces.</p>
+<p>The ews::app namespace is the parent namespace for GUI-related code and in turn contains the ews::app::drawable,
+ews::app::model, and ews::app::widget namespaces. The ews::app::drawable namespace contains the classes responsible for
+generating 3-dimensional OpenGL representations. The ews::app::model namespace contains the classes responsible for the
+business logic associated with classes in the drawable namespace. The ews::app::widge namespace contain the classes responsible
+for displaying forms and gather input from the user. The exception to this rule is PickHandler which responds to user mouse
+input for interacting with OpenGL objects.</p>
+<p>The ews::physics namespace is responsible for basic mathematics and physics, independent of user interaction. Many classes in
+the ews::app::model have a 1-to-1 relationship with objects in the ews::physics namespace. For example, ews::app::model::Barrier
+is closely linked to ews::physics::SlitPotential, ews::app::model::DripSource is closely linked to ews::physics::Oscillator, and
+ews::app::model::WaveMedium is closely linked to ews::physics::WaveModel.</p>
+<p>The ews::test namespace contains tests that are run post-compilation for regression testing. These tests are QtTest
+harnesses.</p>
+<p>The ews::util namespace contains code that is useful for debug or simple mathematics.</p>
+\page page1 High-level Design
 \htmlinclude index.html
 
 */

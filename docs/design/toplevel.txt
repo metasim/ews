@@ -52,12 +52,10 @@ end note
 class EWSMainWindow << QW >>
 
 class SimulationEditor << QW >>
-class SimulationControls << QW >>
-class OSGWidget << Mixin >>
+class QOSGWidget << Mixin >>
 
-EWSMainWindow <|-- SimulationEditor
-EWSMainWindow <|-- OSGWidget
-EWSMainWindow <|-- SimulationControls
+EWSMainWindow --> SimulationEditor
+EWSMainWindow --> QOSGWidget
 
 note as N0
 Composed of several 
@@ -114,23 +112,21 @@ end note
 abstract class Potential
 Potential <|-- CompositePotential
 CompositePotential --> Potential
-Potential <|--  ConstantPotential
 Potential <|--  SlitPotential
-Potential <|--  WallPotential
 
 WavePropagator --> Potential
 
 end package
 
-DripSource ..> Oscillator
-Barrier ..> Potential
-WaveMedium ..> Lattice
+DripSource --> Oscillator
+Barrier --> SlitPotential
+WaveMedium --> WaveModel
 
 SimulationEditor ..> DripSource
 SimulationEditor ..> Barrier
-SimulationControls ..> SimulationState
+EWSMainWindow ..> SimulationState
 
-OSGWidget ...> DrawableAdapter
+QOSGWidget ...> DrawableAdapter
 
 WaterSurfaceGeom ...> WaveMedium
 BarrierGeom ...> Barrier
