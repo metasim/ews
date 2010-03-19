@@ -26,14 +26,14 @@
 # MinGW
 # Visual Studio 2008 (AKA Visual Studio 9)
 # CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-win32-x86.exe
-# Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-windows-cpp
-  * You'll also want http://get.qt.nokia.com/qt/source/qt-win-opensource-4.6.2-vs2008.exe
-  * You'll need to update your Path environment variable manually (i.e. add c:\Qt\x.y.z\qt\bin)
-  * Create static libraries for Qt:
+# Qt SDK 4.6.2: http://get.qt.nokia.com/qt/source/qt-win-opensource-4.6.2-vs2008.exe
+  * You'll need to update your Path environment variable manually (i.e. add c:\Qt\x.y.z\bin)
+  * (maybe Create static libraries for Qt?)
   ** see: http://qt.nokia.com/doc/4.6/deployment-windows.html#building-qt-statically
 # OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/binaries/Windows/VisualStudio9/openscenegraph-all-2.8.2-win32-x86-vc90-Release.zip
   * You'll also have to set OSG_DIR to C:\Documents and Settings\Administrator\Desktop\OpenSceneGraph-2.8.2\ (or wherever you unzip your the above zip file to). Note: do not include "bin" in OSG_DIR.
 # Install NSIS and 7Zip, per: http://www.cmake.org/Wiki/CMake:CPackWin32NewbiesChecklist
+# Tracking down library dependency issues is helped with http://www.dependencywalker.com/
 
 ==Helpful Documents==
 
