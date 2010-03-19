@@ -26,7 +26,7 @@ end note
 
 N2 .> SimulationState
 
-class BarrierSet
+class BarrierSet << QO >>
 BarrierSet : barrierAt(i : int) : Barrier
 
 class Barrier << QO >>

@@ -5,7 +5,7 @@
 ews::test, and ews::util namespaces.</p>
 <p>The ews::app namespace is the parent namespace for GUI-related code and in turn contains the ews::app::drawable,
 ews::app::model, and ews::app::widget namespaces. The ews::app::drawable namespace contains the classes responsible for
-generating 3-dimensional openGL representations. The ews::app::model namespace contains the classes responsible for the
+generating 3-dimensional OpenGL representations. The ews::app::model namespace contains the classes responsible for the
 business logic associated with classes in the drawable namespace. The ews::app::widge namespace contain the classes responsible
 for displaying forms and gather input from the user. The exception to this rule is PickHandler which responds to user mouse
 input for interacting with OpenGL objects.</p>
