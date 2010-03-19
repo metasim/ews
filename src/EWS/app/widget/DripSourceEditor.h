@@ -24,9 +24,11 @@
 
 
 /** Forward declaration of UI implementation class. */
+/** @cond */
 namespace Ui {
     class DripSourceEditorForm;
 }
+/** @endcond */
 
 
 namespace ews {

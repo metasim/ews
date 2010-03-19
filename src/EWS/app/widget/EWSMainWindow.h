@@ -29,9 +29,11 @@
 
 
 /** Forward declaration of generated UI class. */
+/** @cond */
 namespace Ui {
     class EWSMainWindowForm;
 }
+/** @endcond */
 
 
 namespace ews {
