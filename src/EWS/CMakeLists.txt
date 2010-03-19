@@ -210,6 +210,7 @@ if(APPLE)
 elseif(WIN32)
   # Set the executable wrapper type
   set(EXE_TYPE WIN32)
+  set(WIN_RC ${CMAKE_CURRENT_SOURCE_DIR}/winrez.rc)
 endif()
 
 if(CMAKE_GENERATOR STREQUAL "Xcode")
@@ -228,7 +229,7 @@ add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE}
   ${EWS_GEN_MOC_HDRS} 
   ${EWS_GEN_UIS}
   ${EWS_GEN_RCS}
-  ${EWS_HDRS}
+  ${WIN_RC}
 )
 
 
@@ -299,7 +300,7 @@ install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats"
 # this inserts some cmake code into the install script to write the file
 # This is needed so Qt can find search path for plugins.
 INSTALL(CODE "
-    message(\"Creating \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
+    message(\"--   Creating: \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
     file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\" \"\") "
     COMPONENT Runtime)
     
@@ -314,7 +315,6 @@ if(APPLE)
     # directories to look for dependencies
     get_filename_component(OSG_LIBRARY_DIR ${OSG_LIBRARY} PATH)
     set(FIXUP_LIBRARY_SEARCH_PATH ${QT_LIBRARY_DIR} ${OSG_LIBRARY_DIR} ${QT_PLUGINS_DIR}/imageformats)
-    ##message("FIXUP_LIBRARY_SEARCH_PATH = ${FIXUP_LIBRARY_SEARCH_PATH}")
 
     # Now the work of copying dependencies into the bundle/package
     # The quotes are escaped and variables to use at install time have their $ escaped
@@ -331,7 +331,8 @@ if(APPLE)
         " COMPONENT Runtime)
 elseif(WIN32)
 	include(InstallSupportLibraries)
-#	set(CMAKE_PREFIX_PATH "/Build")
+	file(GLOB WIN_MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/*.manifest)
+	install(FILES ${WIN_MANIFEST} DESTINATION bin COMPONENT Runtime)
 endif()
 
 
@@ -344,7 +345,7 @@ set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
 set(CPACK_GENERATOR ZIP)
 set(CPACK_SOURCE_GENERATOR ZIP)
 set(CPACK_MONOLITHIC_INSTALL TRUE)
-SET(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION}")
+SET(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${VERSION}")
 
 set (CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
 set (CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
@@ -362,7 +363,15 @@ elseif(WIN32)
 	set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
 	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${VERSION}")
 	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
-	SET(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${VERSION}")
+	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${VERSION}")
+#	file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/images/MustardSeedIcon.ico" CPACK_PACKAGE_ICON)
+#	string(REPLACE "\\" "\\\\" CPACK_PACKAGE_ICON ${CPACK_PACKAGE_ICON})
+	set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\MustardSeedIcon.ico")
+	set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\Nvidia_logo_200.png")
+	set(CPACK_NSIS_URL_INFO_ABOUT "http://mseedsoft.com")
+	set(CPACK_NSIS_CONTACT "simeon.fitch@mseedsoft.com")
+	# Icon in the add/remove control panel
+	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${EXE_TARGET_NAME}.exe")
 endif()
 
 

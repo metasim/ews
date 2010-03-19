@@ -1,4 +1,4 @@
-if %1==vs goto VS
+if "%1"=="vs" goto VS
 
 goto NMAKE
 
@@ -7,9 +7,9 @@ goto NMAKE
 rmdir /s /q build
 mkdir build
 cd build
-cmake -G"NMake Makefiles" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Release
+cmake -G"NMake Makefiles" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%CD%
 nmake
-nmake install 
+nmake package 
 GOTO FINISH
 
 
@@ -17,7 +17,7 @@ GOTO FINISH
 rmdir /s /q build.vs
 mkdir build.vs
 cd build.vs
-cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Release
+cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%CD%
 start VisualizeSTEM-Wave.sln
 GOTO FINISH
 

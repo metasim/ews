@@ -38,13 +38,11 @@ if(WIN32)
 	message(STATUS "OSG library path: ${OSG_DLL_PATH}, components ${OSG_COMPONENTS}")	
 	if (OSG_COMPONENTS AND OSG_DLL_PATH)
 	  	foreach( component ${OSG_COMPONENTS} )
-			if(HAVE_DEBUG_OSG)
-				install(FILES ${OSG_DLL_PATH}/${component}d.dll 
-					DESTINATION bin 
-					CONFIGURATIONS Debug
-					COMPONENT RuntimeLibraries
-				)
-			endif()
+			install(FILES ${OSG_DLL_PATH}/${component}d.dll 
+				DESTINATION bin 
+				CONFIGURATIONS Debug
+				COMPONENT RuntimeLibraries
+			)
 			install(FILES ${OSG_DLL_PATH}/osg55-${component}.dll 
 				DESTINATION bin 
 				CONFIGURATIONS Release Debug
