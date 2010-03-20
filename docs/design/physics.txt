@@ -14,11 +14,13 @@ package app.model
 
 class SimulationState <<QO>>
 class DripSource <<QO>>
+class BarrierSet <<QO>>
 class Barrier <<QO>>
 class WaveMedium <<QO>>
 
-SimulationState "1" o-- "1,2" DripSource
-SimulationState "1" o-- "0..*" Barrier
+SimulationState "1" o-- "2" DripSource
+SimulationState "1" o-- "1" BarrierSet
+BarrierSet "1" o-- "0..*" Barrier
 SimulationState "1" o-- "1" WaveMedium
 
 end package
@@ -39,50 +41,28 @@ Potential : +enabled : bool
 class CompositePotential
 CompositePotential : +getPotential() : List
 
-class SlitPotential
-SlitPotential : +setEnabled(enabled : boolean) : void
-SlitPotential : +setOneSlit() : void
-SlitPotential : +setTwoSlits() : void
-
 class WallPotential
+WallPotential : +srcPoint : Vec2
+WallPotential : +dstPoint : Vec2
+WallPotential : +thickness : Real
 
-class VerticalSingleSlit
-VerticalSingleSlit "1" ..> "1" CompositePotential : creates
-VerticalSingleSlit "1" ..> "2" WallPotential : creates
-
-class VerticalDoubleSlit
-VerticalDoubleSlit "1" ..> "1" CompositePotential : creates
-VerticalDoubleSlit "1" ..> "3" WallPotential : creates
+class SlitPotential
+SlitPotential : +slitWidth : Real
+SlitPotential : addSlit(alphaVal : Real)
+SlitPotential : getSlitLocation(slitNumber : int) : Vec2
+SlitPotential : removeSlit(slitNumber : int)
 
 class PrecomputedPotential
 PrecomputedPotential : +PrecomputedPotential(potential : Potential, width : int, length : int)
 PrecomputedPotential : +setPotential(potential : Potential) : void
 PrecomputedPotential : +setLatticeSize(width : int, length : int) : void
-VerticalSingleSlit "1" ..> "1" PrecomputedPotential : creates
-VerticalDoubleSlit "1" ..> "1" PrecomputedPotential : creates
-
-class ConstantPotential
-
-SlitPotential "1" ...> "0..1" ConstantPotential : creates
-SlitPotential "1" ...> "0..1" VerticalSingleSlit : creates
-SlitPotential "1" ...> "0..1" VerticalDoubleSlit : creates
-
-abstract class VerticalBarrier
-Potential <|-- VerticalBarrier
-VerticalBarrier : +slitSeparation : int
-VerticalBarrier : +slitSize : int
-VerticalBarrier : +thickness : int
-
-VerticalBarrier <|-- VerticalSingleSlit
-VerticalBarrier <|-- VerticalDoubleSlit
 
 Potential <|- CompositePotential
 Potential "0..*" <--o "1" CompositePotential
 
 Potential <|-- PrecomputedPotential
 Potential <|-- WallPotential
-Potential <|-- SlitPotential
-Potential <|-- ConstantPotential
+WallPotential <|-- SlitPotential
 
 end package
 
@@ -110,33 +90,37 @@ Lattice : setSize(width : int, length : int) : void
 Lattice : getWidth() : int
 Lattice : getLength() : int
 
-WaveModel --> CompositePotential : has
+WaveModel --> PrecomputedPotential : receives
 Oscillator "1" --> "1" WaveModel : has, updates
 WaveModel -> Lattice : produces
 
-class ClassicalWavePropagator
-ClassicalWavePropagator : +potential : Potential
-ClassicalWavePropagator : -prevLattice : Lattice
-ClassicalWavePropagator : +ClassicalWavePropagator(potential : Potential)
-ClassicalWavePropagator : +setBoundaryCondition(x : int, y : int, value : float) : void
-ClassicalWavePropagator : +propagate(lattice : Lattice) : void
+abstract class WavePropagator
+WavePropagator : +WavePropagator(potential : Potential)
+WavePropagator : +setBoundaryCondition(x : int, y : int, value : float) : void
+WavePropagator : +propagate(lattice : Lattice) : void
 
 class DampedClassicalWavePropagator
 DampedClassicalWavePropagator : -dampX : int
 DampedClassicalWavePropagator : -dampY : int
+DampedClassicalWavePropagator : +potential : Potential
+DampedClassicalWavePropagator : -prevLattice : Lattice
 DampedClassicalWavePropagator : +DampedClassicalWavePropagator(potential : Potential, dampX : int, dampY : int)
+DampedClassicalWavePropagator "1" --> "2" Lattice : has, produces
+DampedClassicalWavePropagator -> Potential : has
+DampedClassicalWavePropagator -> PrecomputedPotential : receives
 
-WaveModel "1" --> "1" ClassicalWavePropagator : has
+WaveModel "1" --> "1" WavePropagator : has
 WaveModel "1" ..> "1" DampedClassicalWavePropagator : creates
-ClassicalWavePropagator "1" --> "2" Lattice : has, produces
-ClassicalWavePropagator -> Potential : has
 
-ClassicalWavePropagator <|- DampedClassicalWavePropagator
+WavePropagator <|- DampedClassicalWavePropagator
 
 end package
 
-WaveMedium "1" --> "1" Lattice : has
-Barrier "1" --> "1" Potential : has
+WaveMedium "1" --> "1" WaveModel : has
+BarrierSet "1" --> "1" CompositePotential : has, creates
+BarrierSet "1" ..> "1" PrecomputedPotential : creates
+BarrierSet "1" ..> "1" WaveModel : sends PrecomputedPotential
+Barrier "1" ..> "1" SlitPotential : creates
 DripSource "1" --> "1" Oscillator : has
 
 @enduml

@@ -18,6 +18,9 @@ package widget
 
 class EWSMainWindow << QW QMainWindow >>
 EWSMainWindow : -simulation : SimulationState
+EMSMainWindow : +play()
+EMSMainWindow : +pause()
+EMSMainWindow : +reset()
 
 
 #---------------------------------------------------------
@@ -29,39 +32,22 @@ DripSourceEditor : +frequency : int
 DripSourceEditor : +amplitude : int
 DripSourceEditor : +pulse()
 
-
 #---------------------------------------------------------
-
-class WallEditor << QW >>
-WallEditor : +addWall(w : WallPotential)
-WallEditor : +removeWall(w : WallPotential)
-WallEditor : +selectWall(w : WallPotential)
-WallEditor : -selectedWall : WallPotential
-WallEditor : -walls : Set<WallPotential>
+class BarrierTableModel << QW >>
+BarrierTableModel : -selectedBarrier : Barrier
+BarrierTableModel : -barriers : Set<Barrier>
+BarrierTableModel : +addBarrier(w : Barrier)
+BarrierTableModel : +removeBarrier(w : Barrier)
+BarrierTableModel : +selectBarrier(w : Barrier)
 
 #---------------------------------------------------------
 
 class BarrierEditor << QW >>
-BarrierEditor : +addBarrier(w : BarrierPotential)
-BarrierEditor : +removeBarrier(w : BarrierPotential)
-BarrierEditor : +selectBarrier(w : BarrierPotential)
-BarrierEditor : -selectedBarrier : BarrierPotential
-BarrierEditor : -barriers : Set<BarrierPotential>
 BarrierEditor : +setNumSlits(slits : int[1,2])
 BarrierEditor : +setSlitWidth(width : float)
 BarrierEditor : +setSlitSeparation(width : float)
 
 #---------------------------------------------------------
-
-class SimulationControls << QW >>
-SimulationControls : -simulation : SimulationState
-SimulationControls : +play()
-SimulationControls : +pause()
-SimulationControls : +reset()
-
-
-#---------------------------------------------------------
-
 
 class QGLWidget << QW >>
 QGLWidget : +glcontext
@@ -77,21 +63,29 @@ and manage the scene graph and
 OpenGL pipeline.
 end note
 
-class OSGWidget << Mixin >>
-QGLWidget <|-- OSGWidget
-osgViewer <|-- OSGWidget
+note as N2
+Class that provides a connection between the QT toolkit
+and the OpenSceneGraph toolkit. This class is responsible for
+displaying the world that we are interacting with.
+end note
 
-OSGWidget : -timer : QTimer
-OSGWidget : -gw : GraphicsWindowEmbedded
+class QOSGWidget << Mixin >>
+QGLWidget <|-- QOSGWidget
+osgViewer <|-- QOSGWidget
 
-OSGWidget : paintGL()
+N2 .> QOSGWidget
+
+QOSGWidget : -timer : QTimer
+QOSGWidget : -gw : GraphicsWindowEmbedded
+
+QOSGWidget : paintGL()
     
-OSGWidget : resizeGL(width : int,height : int);
-OSGWidget : keyPressEvent(e : QKeyEvent*)
-OSGWidget : keyReleaseEvent(e :  QKeyEvent*)
-OSGWidget : mousePressEvent(e : QMouseEvent*)
-OSGWidget : mouseReleaseEvent(e : QMouseEvent*)
-OSGWidget : mouseMoveEvent(e : QMouseEvent*)
+QOSGWidget : resizeGL(width : int,height : int);
+QOSGWidget : keyPressEvent(e : QKeyEvent*)
+QOSGWidget : keyReleaseEvent(e :  QKeyEvent*)
+QOSGWidget : mousePressEvent(e : QMouseEvent*)
+QOSGWidget : mouseReleaseEvent(e : QMouseEvent*)
+QOSGWidget : mouseMoveEvent(e : QMouseEvent*)
 
 
 class osgCamera << OSG >>
@@ -118,11 +112,9 @@ osgNode <|-- osgGeode
 
 
 EWSMainWindow *-- "2" DripSourceEditor
-EWSMainWindow *-- "1" WallEditor
-EWSMainWindow *-- "1" BarrierEditor
-EWSMainWindow *---- "1" OSGWidget
-EWSMainWindow *- "1" SimulationControls
-
+EWSMainWindow *-- "1" BarrierTableModel
+EWSMainWindow *---- "1" QOSGWidget
+BarrierTableModel *-- "1" BarrierEditor
 
 end package
 
@@ -130,8 +122,16 @@ end package
 #---------------------------------------------------------
 
 package drawables
+
 class SceneRoot << OSG >>
 class DrawableQtAdapter << Mixin >>
+
+note as N3
+Root object of the scene graph.
+end note
+
+N3 .> SceneRoot
+
 end package
 
 end package

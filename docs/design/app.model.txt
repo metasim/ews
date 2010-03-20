@@ -45,7 +45,7 @@ WaveMedium : +energyMap : Array2d
 end package
 
 BarrierSet "1" o-- "0..*" Barrier
-SimulationState "1" o-- "1..2" DripSource
+SimulationState "1" o-- "2" DripSource
 SimulationState "1" o-- "1" BarrierSet
 SimulationState "1" o-- "1" WaveMedium
 
