@@ -18,9 +18,9 @@ class BarrierSet <<QO>>
 class Barrier <<QO>>
 class WaveMedium <<QO>>
 
-SimulationState "1" o-- "2" DripSource
-SimulationState "1" o-- "1" BarrierSet
 BarrierSet "1" o-- "0..*" Barrier
+SimulationState "1" o--- "1" BarrierSet
+SimulationState "1" o-- "2" DripSource
 SimulationState "1" o-- "1" WaveMedium
 
 end package
@@ -117,9 +117,9 @@ WavePropagator <|- DampedClassicalWavePropagator
 end package
 
 WaveMedium "1" --> "1" WaveModel : has
-BarrierSet "1" --> "1" CompositePotential : has, creates
-BarrierSet "1" ..> "1" PrecomputedPotential : creates
-BarrierSet "1" ..> "1" WaveModel : sends PrecomputedPotential
+BarrierSet "1" -> "1" CompositePotential : has, creates
+BarrierSet "1" .> "1" PrecomputedPotential : creates
+BarrierSet "1" .> "1" WaveModel : sends PrecomputedPotential
 Barrier "1" ..> "1" SlitPotential : creates
 DripSource "1" --> "1" Oscillator : has
 

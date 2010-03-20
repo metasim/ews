@@ -57,7 +57,7 @@ class WaveMedium << QO >>
 
 SimulationState o-- "0..*" Barrier
 SimulationState o-- "1" WaveMedium
-SimulationState o-- "1,2" DripSource
+SimulationState o-- "2" DripSource
 
 end package
 
