@@ -53,7 +53,7 @@ namespace ews {
                 osg::Camera* c = getCamera();
                 c->setViewport(new osg::Viewport(0,0,width(),height()));
                 c->setProjectionMatrixAsPerspective(30.0f, static_cast<double>(width())/static_cast<double>(height()), 1.0f, 10000.0f);
-                c->setGraphicsContext(getGraphicsWindow());
+                c->setGraphicsContext(_gw.get());
                 c->setClearColor(osg::Vec4(0.7f, 0.7f, 0.7f, 1.0f));
                 
                 setThreadingModel(osgViewer::Viewer::SingleThreaded);
@@ -73,7 +73,7 @@ namespace ews {
                 // add the window size toggle handler
                 addEventHandler(new osgViewer::WindowSizeHandler);               
                                 
-                
+                // updateGL will invoke glDraw which invokes paintGL
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
                 _timer.start(30);
             }
@@ -118,6 +118,7 @@ namespace ews {
             }
             
             void QOSGWidget::paintGL() {
+                // Invoke osgViewer::ViewerBase::frame() which renders a complete new frame. 
                 frame();
             }
             

@@ -49,6 +49,7 @@ namespace ews {
                 
                 // Config 3-D view.
                 _sceneRoot = new SceneRoot(this);
+                // renderer is an instance (the only one) of QOSGWidget
                 _ui->renderer->setSceneData(_sceneRoot);
                 _ui->renderer->setBetweenFrameDelay(10);
                 

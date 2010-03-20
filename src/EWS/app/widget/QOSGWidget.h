@@ -36,11 +36,14 @@ namespace ews {
             class QOSGWidget :  public QGLWidget, public osgViewer::Viewer  {
                 Q_OBJECT
             public:
+                /**
+                 * Default constructor.
+                 */
                 explicit QOSGWidget(QWidget* parent = 0);
+                /**
+                 * Virtual destructor
+                 */
                 virtual ~QOSGWidget();
-                
-                osgViewer::GraphicsWindow* getGraphicsWindow() { return _gw.get(); }
-                const osgViewer::GraphicsWindow* getGraphicsWindow() const { return _gw.get(); }
                 
                 /**
                  * Set the delay interjected between frames in milliseconds.
@@ -52,8 +55,20 @@ namespace ews {
                 /** Set the sene graph data that viewer with view.*/
                 virtual void setSceneData(osg::Node* node);
                 
+                /**
+                 * Paints the current view of the world.
+                 * paintGL is invoked by QGLWidget::glDraw which is invoked by QGLWidget::updateGL.
+                 * QGLWidget::updateGL in turn is a slot attached to a QTimer object's timeout signal.
+                 * In turn, paintGL traverses the scene graph held by SceneRoot (EWSMainWindow makes
+                 * this connection), updating it and all of its children nodes. As a result of this,
+                 * the WaterSurfaceGeom object's callback invokes the VertexHeightUpdater which
+                 * propagates the WaveModel a single time step.
+                 */
                 virtual void paintGL();
                 
+                /**
+                 * Resets the camera to its original "home" position.
+                 */
                 virtual void homePosition();
                 
             protected:
@@ -66,7 +81,7 @@ namespace ews {
                 virtual void closeEvent( QCloseEvent * event );
                 virtual void destroyEvent( bool destroyWindow = true, bool destroySubWindows = true);
 
-            private:
+            private:                
                 Q_DISABLE_COPY(QOSGWidget)
                 void computeHomePosition();
                 osg::ref_ptr<osgViewer::GraphicsWindowEmbedded> _gw;

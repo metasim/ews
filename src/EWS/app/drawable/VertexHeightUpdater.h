@@ -89,7 +89,7 @@ namespace ews {
                 /**
                  *  Callback method called by the NodeVisitor when visiting a node.
                  *  TODO: Consider moving the propagate stage of this
-                 *  out of this class and into someghitn more general, such
+                 *  out of this class and into something more general, such
                  *  as a parent decorator node for simulation update. See
                  *  corresponding code in FaucetGeom.
                  */
