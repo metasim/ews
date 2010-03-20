@@ -18,9 +18,9 @@ package widget
 
 class EWSMainWindow << QW QMainWindow >>
 EWSMainWindow : -simulation : SimulationState
-EMSMainWindow : +play()
-EMSMainWindow : +pause()
-EMSMainWindow : +reset()
+EWSMainWindow : +play()
+EWSMainWindow : +pause()
+EWSMainWindow : +reset()
 
 
 #---------------------------------------------------------
