@@ -57,13 +57,11 @@ namespace ews {
                 sp->setSlitWidth(calculateSlitWidthAlpha() * sp->length());
                 if (getNumSlits() != ZERO_SLITS) {
                     if (getNumSlits() == ONE_SLIT) {
-                        qDebug() << "There are five lights";
                         sp->addSlit(.5f);
                     }
                     else {
                         Real deltaAlpha = .5f * (calculateSlitSeparationAlpha() + 
                                                  calculateSlitWidthAlpha());
-                        qDebug() << "deltaAlpha = " << deltaAlpha;
                         sp->addSlit(.5f - deltaAlpha);
                         sp->addSlit(.5f + deltaAlpha);
                     }
