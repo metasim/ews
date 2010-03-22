@@ -1,6 +1,9 @@
 /**
+\mainpage Visualize STEM-Wave
+\author Simeon H.K. Fitch <simeon.fitch@mseedsoft.com>
+\author A. Ben Hocking <ben.hocking@mseedsoft.com>
 
-\mainpage Visualize STEM-Wave Code Structure Overview
+\section Code Structure Overview
 <p>All code generated for this project resides in the ews namespace. Within this namespace reside the ews::app, ews::physics,
 ews::test, and ews::util namespaces.</p>
 <p>The ews::app namespace is the parent namespace for GUI-related code and in turn contains the ews::app::drawable,
@@ -17,6 +20,6 @@ ews::app::model::WaveMedium is closely linked to ews::physics::WaveModel.</p>
 harnesses.</p>
 <p>The ews::util namespace contains code that is useful for debug or simple mathematics.</p>
 \page page1 High-level Design
-\htmlinclude index.html
+\htmlinclude design.html
 
 */
