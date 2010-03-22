@@ -1,18 +1,35 @@
-Very important:
-The wave model for water assumes that the period (and hence,
+<ul>
+
+<li>Very important:
+<ul>
+<li>The wave model for water assumes that the period (and hence,
 frequency) of the faucet (oscillator) determines the wave length of
 the waves in the water. Although this is true for the light analog,
 this is just plain wrong for water. The wave length of water is
 primarily determined by its depth. (See
 http://www.physicsclassroom.com/Class/waves/u10l3b.cfm for a more
 in-depth explanation of this.)
+</ul>
 
-Important:
-The physics in general is very approximate, and although it typically
+<li>Important:
+<ul>
+<li>The physics in general is very approximate, and although it typically
 "feels" right, it could stand improvement. For one thing, there are
 no units explicitly used, so measurements are only comparative.
+</ul>
 
-Somewhat important:
-It would be nice to be able to scale the magnitude of the various
+<li>Somewhat important:
+<ul>
+<li>It would be nice to be able to scale the magnitude of the various
 graphs available to us, or at the very least have an option to
 auto-scale.
+</ul>
+
+<li>Would be nice:
+<ul>
+<li>Use Navier-Stokes equations or other more physically realistic modelling
+method instead of current technique.
+<li>Add sound effects, such as water drops hitting the surface.
+</ul>
+
+</ul>
