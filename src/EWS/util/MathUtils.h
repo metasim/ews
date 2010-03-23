@@ -20,20 +20,23 @@
 #define __MATHUTILS_H
 
 #include "EWSDefine.h"
-#include <limits>
+#include <algorithm>
 
 namespace ews {
     namespace util {
         /**
          * Return x if x is between min and max (inclusive), else return min if x is less than min
          * or max if x is greater than max
-         * @param min Minimum allowable value
+         * @param lower Minimum allowable value
          * @param x Value to impose bounds on
-         * @param max Maximum allowable value
+         * @param upper Maximum allowable value
          * @return Bounded x
          */
-        inline Real imposeBounds(Real min, Real x, Real max) {
-            return std::min(std::max(min, x), max);
+        inline Real imposeBounds(Real lower, Real x, Real upper) {
+            using std::max;
+            using std::min;
+            Real r1 = max(lower, x);
+            return min(r1, upper);
         }
         /**
          * Return a value frac distance between min and max.
