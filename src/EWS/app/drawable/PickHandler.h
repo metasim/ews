@@ -43,7 +43,7 @@ namespace ews {
                 
             public:
                 
-                PickHandler() : GUIEventHandler() { }                                                       
+                PickHandler() : GUIEventHandler(), activeDragger(NULL) { }                                                       
                 
                 /** Handle GUI event. */
                 virtual bool handle(const GUIEventAdapter& ea,

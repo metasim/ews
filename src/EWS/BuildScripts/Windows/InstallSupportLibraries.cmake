@@ -38,21 +38,26 @@ if(WIN32)
 	message(STATUS "OSG library path: ${OSG_DLL_PATH}, components ${OSG_COMPONENTS}")	
 	if (OSG_COMPONENTS AND OSG_DLL_PATH)
 	  	foreach( component ${OSG_COMPONENTS} )
-			install(FILES ${OSG_DLL_PATH}/${component}d.dll 
+			install(FILES ${OSG_DLL_PATH}/osg55-${component}d.dll 
 				DESTINATION bin 
 				CONFIGURATIONS Debug
 				COMPONENT RuntimeLibraries
 			)
 			install(FILES ${OSG_DLL_PATH}/osg55-${component}.dll 
 				DESTINATION bin 
-				CONFIGURATIONS Release Debug
+				CONFIGURATIONS Release
 				COMPONENT RuntimeLibraries
 			)
 		endforeach()
 		# ---------- Find/Install the needed OpenThreads libraries. 
 		install(FILES ${OSG_DLL_PATH}/ot11-OpenThreads.dll 
 			DESTINATION bin 
-			CONFIGURATIONS Release Debug
+			CONFIGURATIONS Release
+			COMPONENT RuntimeLibraries
+		)
+		install(FILES ${OSG_DLL_PATH}/ot11-OpenThreadsd.dll 
+			DESTINATION bin 
+			CONFIGURATIONS Debug
 			COMPONENT RuntimeLibraries
 		)
 		

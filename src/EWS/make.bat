@@ -1,38 +1,45 @@
+@echo off
+
+set OSG_DIR=c:\OpenSceneGraph-2.8.2
+
 if "%1"=="vs" goto VS
+if "%1" == "debug" goto DEBUG
 
 goto NMAKE
 
 
 :NMAKE
-rmdir /s /q build
-mkdir build
-cd build
-cmake -G"NMake Makefiles" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%CD%
+set BDIR=build
+if EXIST %BDIR% rmdir /s /q %BDIR%
+mkdir %BDIR%
+cd %BDIR%
+
+cmake -G"NMake Makefiles" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=%CD% -DOSG_DIR:PATH=%OSG_DIR%
+nmake
+nmake package 
+GOTO FINISH
+
+:DEBUG
+set BDIR=build.debug
+if EXIST %BDIR% rmdir /s /q %BDIR%
+mkdir %BDIR%
+cd %BDIR%
+cmake -G"NMake Makefiles" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%CD% -DOSG_DIR:PATH=%OSG_DIR%
 nmake
 nmake package 
 GOTO FINISH
 
 
 :VS
-rmdir /s /q build.vs
-mkdir build.vs
-cd build.vs
-cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%CD%
+set BDIR=build.vs
+if EXIST %BDIR% rmdir /s /q %BDIR%
+mkdir %BDIR%
+cd %BDIR%
+cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%CD% -DOSG_DIR:PATH=%OSG_DIR%
 start VisualizeSTEM-Wave.sln
+cd ..
 GOTO FINISH
 
 :FINISH
-cd ..
+echo Done.
 
-@echo off
-
-REM rmdir /s /q build.vs
-REM mkdir build.vs
-REM mkdir build.vs\Debug
-REM copy ..\..\..\..\OpenSceneGraph-2.8.2\bin\bin\*d.dll build.vs\Debug
-REM mkdir build.vs\Release
-REM copy ..\..\..\..\OpenSceneGraph-2.8.2\bin\bin\*.dll build.vs\Release
-REM del /Q build.vs\Release\*d.dll
-REM cd build.vs
-REM cmake -G"Visual Studio 9 2008" ..
-REM cd ..

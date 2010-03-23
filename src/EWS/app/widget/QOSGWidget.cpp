@@ -29,7 +29,7 @@
 #include <osg/MatrixTransform>
 
 #include "CameraController.h"
-
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
