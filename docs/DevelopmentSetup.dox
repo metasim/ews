@@ -1,0 +1,80 @@
+/**
+\page page2 Development Environment Setup
+
+This is a work in progres....
+
+\section deps Dependencies
+
+\subsection macos MacOS X
+<ol>
+<li>CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-Darwin-universal.dmg
+<li>Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
+<li>OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
+<ul>
+  <li>For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
+  <li>http://googletest.googlecode.com/files/gtest-1.4.0.tar.gz (works for all platforms)
+</ul>
+</ol>
+
+\subsection linux Linux (64 bit)
+<ol>
+<li>CMake 2.8.0: http://www.cmake.org/cmake/resources/software.html
+<ol type="a">
+  <li>tar -xzf cmake-2.8.0.tar.gz
+  <li>cd cmake-2.8.0
+  <li>./configure
+  <li>make
+  <li>sudo make install 
+</ol>
+<li>Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-linux-x11-64bit-cpp
+<ol type="a">
+  <li>Follow the directions on the web-page
+  <li>Read the installation notes and make sure you have the necessary dependencies loaded
+  <li>sudo apt-get install libqt
+</ul>  
+<li>OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
+</ol>
+
+\subsection winxp Windows XP
+<ol>
+<li>MSYS-Git: http://code.google.com/p/msysgit/
+<li>Visual Studio 2008 (AKA Visual Studio 9)
+<li>CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-win32-x86.exe
+<li>Qt SDK 4.6.2: http://get.qt.nokia.com/qt/source/qt-win-opensource-4.6.2-vs2008.exe
+  <ul><li>You'll need to update your Path environment variable manually (i.e. add c:\Qt\x.y.z\bin)</li></ul>
+<li>OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/binaries/Windows/VisualStudio9/openscenegraph-all-2.8.2-win32-x86-vc90-Release.zip
+<ul>
+  <li>Also get debug version: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/binaries/Windows/VisualStudio9/openscenegraph-all-2.8.2-win32-x86-vc90-Debug.zip
+  <li>Suggest installing/extracting them in different locations (don't merge them).
+  <li>You'll also have to set OSG_DIR to C:\OpenSceneGraph-2.8.2\ (or wherever you unzip your the above zip file to). Note: do not include "bin" in OSG_DIR.
+</ul>  
+<li>Install NSIS and 7Zip, per: http://www.cmake.org/Wiki/CMake:CPackWin32NewbiesChecklist
+<li>Tracking down library dependency issues is helped with http://www.dependencywalker.com/
+</ol>
+
+
+\section links Helpful Documents and Links
+
+\subsection codeconv Coding conventions
+<ul>
+<li>Qt Coding Style: http://qt.gitorious.org/qt/pages/QtCodingStyle
+<li>Designing Qt-Style C++ APIs: http://doc.trolltech.com/qq/qq13-apis.html
+</ul>
+
+\subsection qt Qt
+<ul>
+<li>Qt API Docs: http://qt.nokia.com/doc/4.6/index.html
+<li>Qt Tutorials: http://doc.qt.nokia.com/4.6/tutorials.html
+<li>Qt Examples: http://doc.qt.nokia.com/4.6/examples.html
+<li>eBook "C++ GUI Programming with Qt 4, 1st ed.: http://www.qtrac.eu/C++-GUI-Programming-with-Qt-4-1st-ed.zip
+</ul>
+
+\subsection osg OpenSceneGraph
+<ul>
+<li>Home: http://www.openscenegraph.org/projects/osg
+<li>General docs: http://www.openscenegraph.org/projects/osg/wiki/Support
+<li>Reference manual: http://www.openscenegraph.org/projects/osg/wiki/Support/ReferenceGuides
+<li>Quick Start Guide (free ebook): http://www.osgbooks.com/books/osg_qs.html
+</ul>
+
+*/

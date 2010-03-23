@@ -193,7 +193,6 @@ namespace ews {
                     return true;
                 }
                 bool removeAll(int count) {
-                    qDebug() << "Removed " << count;
                     beginRemoveRows(QModelIndex(), 0, count - 1);
                     // Rows already removed in model.
                     endRemoveRows();
