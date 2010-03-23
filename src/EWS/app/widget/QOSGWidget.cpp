@@ -36,9 +36,6 @@ namespace ews {
         namespace widget {
             QOSGWidget::QOSGWidget(QWidget* parent)
             : QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer() {
-#if defined(QT_DEBUG)                
-                osg::setNotifyLevel(osg::WARN);
-#endif                
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
                 setFocusPolicy(Qt::StrongFocus);
                 

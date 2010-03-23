@@ -18,20 +18,59 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QSplashScreen>
-#include <QtCore/QThread>
-#include <osg/DisplaySettings>
-#include <osg/ref_ptr>
+#include <QString>
+#include <osg/Notify>
+#include <iostream>
+#include <sstream>
 #include "EWSMainWindow.h"
+
+#if defined(WIN32) && !defined(__CYGWIN__)
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define __WINLOG
+#endif
+
+inline void logMessage(const char* typeStr, const char* msg) {
+    std::ostringstream oss;
+    oss << typeStr << ": " << msg << std::endl;
+    std::cerr << oss;
+#if defined(__WINLOG)
+    OutputDebugStringA(oss.str().c_str());
+#endif
+}
+
+/** Message handler for Qt logging system. */
+ void messageHandler(QtMsgType type, const char *msg) {
+     switch (type) {
+     case QtDebugMsg:
+         logMessage("Debug", msg);
+         break;
+     case QtWarningMsg:
+         logMessage("Warning", msg);
+         break;
+     case QtCriticalMsg:
+         logMessage("Critical", msg);
+         break;
+     case QtFatalMsg:
+         logMessage("Fatal", msg);
+         break;
+     }
+ }
+
 
 int main(int argc, char *argv[])
 {
     using namespace ews::app::model;
     using namespace ews::app::widget;
+
+#if defined(QT_DEBUG)                
+    osg::setNotifyLevel(osg::INFO);
+#endif                
     
-    // To see object dumps on macos, run with the environment variable
+    // To see Qt object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
     
-    
+    qInstallMsgHandler(messageHandler);
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(true);
     
