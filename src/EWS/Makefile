@@ -33,15 +33,15 @@ test: $(BLD)
 
 XBLD=build.xcode
 xcode:
-	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open EWS.xcodeproj)
+	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open VisualizeSTEM-Wave.xcodeproj)
 
 XBLDT=build.xcode-test
 xcode-test:
-	(mkdir -p ${XBLDT}; cd ${XBLDT}; cmake .. -G"Xcode"; open EWS.xcodeproj)
+	(mkdir -p ${XBLDT}; cd ${XBLDT}; cmake .. -G"Xcode"; open VisualizeSTEM-Wave.xcodeproj)
 
 VSBLD=build-vs
 vs:
-	(mkdir -p $(VSBLD); cd $(VSBLD); cmake -G"Visual Studio 9 2008" ..)
+	make.bat vs
 
 clean:
 	rm -rf $(BLD) $(XBLD) $(VSBLD) $(XBLDT)
