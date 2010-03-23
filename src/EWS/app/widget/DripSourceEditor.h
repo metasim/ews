@@ -21,7 +21,7 @@
 
 #include <QtGui/QWidget>
 #include "DripSource.h"
-
+#include "EWSDebug.h"
 
 /** Forward declaration of UI implementation class. */
 /** @cond */
@@ -34,7 +34,7 @@ namespace Ui {
 namespace ews {
     namespace app {
         namespace widget {
-            
+            using namespace ews::util::debug;            
             using ews::app::model::DripSource;
             
             /**
@@ -50,11 +50,18 @@ namespace ews {
                 
                 void setDataModel(DripSource* data);
                 
-                public slots:
-                void setEnabledState(bool state) {
-                    if(_dataModel) {
-                        _dataModel->setEnabled(state);
+            public slots:
+                virtual void setEnabled(bool state) {
+                    if (_dataModel != NULL) {
+                        bool prevState = _dataModel->isEnabled();
+                        qDebug() << "prevState = " << prevState << ", state = " << state;
+                        if (prevState != state) {
+                            _dataModel->setEnabled(state);                        
+                            qDebug() << "emit enabledChanged(" << state << ")";
+                            emit enabledChanged(state);
+                        }
                     }
+                    syncUI();
                 }
                 
                 void pulse() {
@@ -76,6 +83,9 @@ namespace ews {
                 }
 
                 void syncUI();
+
+            signals:
+                void enabledChanged(bool);
 
             private slots:
                 void throb();

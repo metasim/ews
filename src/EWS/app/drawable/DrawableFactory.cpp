@@ -30,6 +30,7 @@ namespace ews {
     namespace app {
         namespace drawable {
             using namespace ews::app::model;
+            using namespace ews::util::debug;
             
             DrawableFactory& DrawableFactory::instance() {
                 static DrawableFactory singleton;

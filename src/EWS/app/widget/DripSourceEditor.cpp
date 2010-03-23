@@ -18,6 +18,9 @@
 
 #include "DripSourceEditor.h"
 #include "ui_DripSourceEditor.h"
+#include "DripSource.h"
+#include "ui_EWSMainWindow.h"
+#include "EWSDebug.h"
 
 namespace ews {
     namespace app {
@@ -36,7 +39,7 @@ namespace ews {
             
                 
             void DripSourceEditor::throb() {
-                if(_dataModel) {
+                if (_dataModel != NULL) {
                     
                     bool on = false;
                     
@@ -49,7 +52,7 @@ namespace ews {
             }
             
             void DripSourceEditor::setDataModel(DripSource* data) {
-                if(_dataModel) {
+                if (_dataModel != NULL) {
                     _dataModel->disconnect(this);
                 }
                 
@@ -64,11 +67,11 @@ namespace ews {
             
             
             void DripSourceEditor::syncUI() {
-                if(_dataModel) {
+                if (_dataModel != NULL) {
                     blockSignals(true);
                     _ui->enabled->setChecked(_dataModel->isEnabled());
                     _ui->frequency->setValue(_dataModel->getFrequency());
-                    _ui->amplitude->setValue(_dataModel->getAmplitude());
+                    _ui->amplitude->setValue(_dataModel->getAmplitude());                    
                     blockSignals(false);
                 }
             }

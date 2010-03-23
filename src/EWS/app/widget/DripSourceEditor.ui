@@ -303,7 +303,7 @@
    <sender>enabled</sender>
    <signal>toggled(bool)</signal>
    <receiver>DripSourceEditor</receiver>
-   <slot>setEnabledState(bool)</slot>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>76</x>
@@ -461,7 +461,7 @@
   </connection>
  </connections>
  <slots>
-  <slot>setEnabledState(bool)</slot>
+  <signal>enabledChanged(bool)</signal>
   <slot>throb()</slot>
   <slot>setAmplitude(int)</slot>
   <slot>setFrequency(int)</slot>

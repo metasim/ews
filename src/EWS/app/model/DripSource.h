@@ -30,13 +30,13 @@
 namespace ews {
     namespace app {
         namespace model {
-            const QString DRIPSOURCE1("dripSource1");
-            const QString DRIPSOURCE2("dripSource2");
-
             using ews::physics::WaveModel;
             using ews::physics::Oscillator;
             using osg::Vec2;
-            
+
+            const QString DRIPSOURCE1("dripSource1");
+            const QString DRIPSOURCE2("dripSource2");
+
             class SimulationState;
             
             /**
@@ -119,16 +119,22 @@ namespace ews {
                  * Set the enabled state of this drip source.
                  */
                 void setEnabled(bool state) {
-                    _enabled = state;
-                    emit enabledChanged(state);
+                    qDebug() << "_enabled = " << _enabled << ", state = " << state;
+                    if (_enabled != state) {
+                        _enabled = state;
+                        qDebug() << "emit enabledChanged(" << state << ")";
+                        emit enabledChanged(state);
+                    }
                 }
                 
                 /**
                  * Set the paused state.
                  */
                 void setPaused(bool state) {
-                    _paused = state;
-                    emit pausedStateChanged(state);
+                    if (_paused != state) {
+                        _paused = state;
+                        emit pausedStateChanged(state);
+                    }
                 }
                  
                 /**

@@ -60,8 +60,6 @@
     <addaction name="actionAddBarrier"/>
     <addaction name="actionRemoveBarrier"/>
     <addaction name="separator"/>
-    <addaction name="actionAddWall"/>
-    <addaction name="actionRemoveWall"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuItems"/>
@@ -257,36 +255,6 @@
     <string>Meta+Shift+R</string>
    </property>
   </action>
-  <action name="actionAddWall">
-   <property name="icon">
-    <iconset resource="../../Resources.qrc">
-     <normaloff>:/images/images/list-add.png</normaloff>:/images/images/list-add.png</iconset>
-   </property>
-   <property name="text">
-    <string>Add Wall</string>
-   </property>
-   <property name="toolTip">
-    <string>Add wall</string>
-   </property>
-   <property name="shortcut">
-    <string>Meta+W</string>
-   </property>
-  </action>
-  <action name="actionRemoveWall">
-   <property name="icon">
-    <iconset resource="../../Resources.qrc">
-     <normaloff>:/images/images/list-remove.png</normaloff>:/images/images/list-remove.png</iconset>
-   </property>
-   <property name="text">
-    <string>Remove Wall</string>
-   </property>
-   <property name="toolTip">
-    <string>Remove selected wall</string>
-   </property>
-   <property name="shortcut">
-    <string>Meta+Shift+W</string>
-   </property>
-  </action>
   <action name="actionAddBarrier">
    <property name="icon">
     <iconset resource="../../Resources.qrc">
@@ -346,21 +314,22 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>DripSourceEditor</class>
-   <extends>QWidget</extends>
-   <header>DripSourceEditor.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QOSGWidget</class>
+   <class>ews::app::widget::QOSGWidget</class>
    <extends>QWidget</extends>
    <header>QOSGWidget.h</header>
   </customwidget>
   <customwidget>
-   <class>BarrierEditor</class>
+   <class>ews::app::widget::DripSourceEditor</class>
+   <extends>QWidget</extends>
+   <header>DripSourceEditor.h</header>
+   <slots>
+    <signal>enabled(bool)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>ews::app::widget::BarrierEditor</class>
    <extends>QWidget</extends>
    <header>BarrierEditor.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
@@ -412,6 +381,70 @@
     <hint type="destinationlabel">
      <x>577</x>
      <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggleDripSource1</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>dripSource1</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>154</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggleDripSource2</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>dripSource2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>112</x>
+     <y>273</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dripSource1</sender>
+   <signal>enabledChanged(bool)</signal>
+   <receiver>actionToggleDripSource1</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>449</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>dripSource2</sender>
+   <signal>enabledChanged(bool)</signal>
+   <receiver>actionToggleDripSource2</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>112</x>
+     <y>273</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
