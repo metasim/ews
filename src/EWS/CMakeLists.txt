@@ -321,7 +321,7 @@ if(APPLE)
     # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
     # over.
     install(CODE "
-#        include(InstallRequiredSystemLibraries)
+        ##include(InstallRequiredSystemLibraries)
         file(GLOB_RECURSE QTPLUGINS
             \"\${CMAKE_INSTALL_PREFIX}/${QT_PLUGIN_DEST}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
         message(\"plugins: \${QTPLUGINS}\")
@@ -330,6 +330,10 @@ if(APPLE)
         fixup_bundle(\"${APP_INSTALL_PATH}\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
         " COMPONENT Runtime)
 elseif(WIN32)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
+    endif()
+    include(InstallRequiredSystemLibraries)
 	include(InstallSupportLibraries)
 	file(GLOB WIN_MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/*.manifest)
 	install(FILES ${WIN_MANIFEST} DESTINATION bin COMPONENT Runtime)
