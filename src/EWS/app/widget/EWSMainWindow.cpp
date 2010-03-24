@@ -56,7 +56,14 @@ namespace ews {
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
-                
+            }
+            
+            EWSMainWindow::~EWSMainWindow() {
+                _ui->renderer->setSceneData(NULL);
+                delete _ui;
+            }
+
+            void EWSMainWindow::init() {
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
 
@@ -66,12 +73,7 @@ namespace ews {
                 // Start simulation.
                 start();
             }
-            
-            EWSMainWindow::~EWSMainWindow() {
-                _ui->renderer->setSceneData(NULL);
-                delete _ui;
-            }
-            
+
             void EWSMainWindow::start() {
                 _state->setPaused(false);
                 _ui->actionPause->setEnabled(true);
@@ -90,6 +92,16 @@ namespace ews {
                 _ui->dripSource1->syncUI();
                 _ui->dripSource2->syncUI();
                 _ui->renderer->homePosition();
+            }
+
+            bool EWSMainWindow::event(QEvent* event) {
+                int retval = QWidget::event(event);
+
+                if (event->type() == QEvent::Polish) {
+                    init();
+                }
+                
+                return retval;
             }
         }
     }

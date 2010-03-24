@@ -130,7 +130,7 @@ namespace ews {
                     image->dirty();
                 }
                 
-                static char* loadTextResource(const char* resource) {
+                static QString loadTextResource(const char* resource) {
                     QFile progResource(resource);
                     if (!progResource.open(QIODevice::ReadOnly|QIODevice::Text)) {
                         qWarning() << "Couldn't find" << resource;
@@ -143,26 +143,23 @@ namespace ews {
                     QByteArray bytes = progResource.readAll();
                     progResource.close();
                     
-                    char* retval = new char[bytes.size()];
-                    qstrcpy(retval, bytes.constData());
-                    return retval;
+                    return QString(bytes);
                 }
                 
                 static const char* loadFragmentProgram() {
-                    static char* data = 0;
-                    if(!data) {
+                    static QString data;
+                    if(!data.length()) {
                         data = loadTextResource(":text/waves.fs");
                     }
-                    return data;
+                    return qPrintable(data);
                 }
                 static const char* loadVertexProgram() {
-                    static char* data = 0;
-                    if(!data) {
+                    static QString data;
+                    if(!data.length()) {
                         data = loadTextResource(":text/waves.vs");
                     }
-                    return data;
+                    return qPrintable(data);
                 }
-                
             } ;
         }
     }

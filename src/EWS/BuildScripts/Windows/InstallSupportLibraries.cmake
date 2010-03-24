@@ -17,13 +17,13 @@ if(WIN32)
 		foreach( component ${QT_COMPONENTS} )
 			install(FILES ${QT_DLL_PATH}/${component}d4.dll 
 				DESTINATION bin 
-				CONFIGURATIONS Debug 
-				COMPONENT RuntimeLibraries
+				CONFIGURATIONS Debug RelWithDebInfo
+				COMPONENT Runtime
 			)
 			install(FILES ${QT_DLL_PATH}/${component}4.dll 
 				DESTINATION bin 
-				CONFIGURATIONS Release 
-				COMPONENT RuntimeLibraries
+				CONFIGURATIONS Release RelWithDebInfo
+				COMPONENT Runtime
 			)
 		endforeach()
 	endif()
@@ -40,25 +40,25 @@ if(WIN32)
 	  	foreach( component ${OSG_COMPONENTS} )
 			install(FILES ${OSG_DLL_PATH}/osg55-${component}d.dll 
 				DESTINATION bin 
-				CONFIGURATIONS Debug
-				COMPONENT RuntimeLibraries
+				CONFIGURATIONS Debug RelWithDebInfo
+				COMPONENT Runtime
 			)
 			install(FILES ${OSG_DLL_PATH}/osg55-${component}.dll 
 				DESTINATION bin 
-				CONFIGURATIONS Release
-				COMPONENT RuntimeLibraries
+				CONFIGURATIONS Release RelWithDebInfo
+				COMPONENT Runtime
 			)
 		endforeach()
 		# ---------- Find/Install the needed OpenThreads libraries. 
 		install(FILES ${OSG_DLL_PATH}/ot11-OpenThreads.dll 
 			DESTINATION bin 
-			CONFIGURATIONS Release
-			COMPONENT RuntimeLibraries
+			CONFIGURATIONS Release RelWithDebInfo
+			COMPONENT Runtime
 		)
 		install(FILES ${OSG_DLL_PATH}/ot11-OpenThreadsd.dll 
 			DESTINATION bin 
-			CONFIGURATIONS Debug
-			COMPONENT RuntimeLibraries
+			CONFIGURATIONS Debug RelWithDebInfo
+			COMPONENT Runtime
 		)
 		
 	endif()

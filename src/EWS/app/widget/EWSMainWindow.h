@@ -52,10 +52,18 @@ namespace ews {
                 explicit EWSMainWindow(SimulationState* state, QWidget *parent = 0);
                 virtual ~EWSMainWindow();
 
+                virtual bool event(QEvent* event);
+
             public slots:
+                /** Start the simulation. */
                 void start();
+                /** Stop/pause the simulation. */
                 void stop();
+                /** Reset simulation state to initial conditions. */
                 void reset();
+            private slots:
+                /** Do any final connecting of components after rest of application is connected.*/
+                void init();
                 
             private:
                 Q_DISABLE_COPY(EWSMainWindow)

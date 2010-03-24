@@ -119,10 +119,9 @@ namespace ews {
                  * Set the enabled state of this drip source.
                  */
                 void setEnabled(bool state) {
-                    qDebug() << "_enabled = " << _enabled << ", state = " << state;
                     if (_enabled != state) {
                         _enabled = state;
-                        qDebug() << "emit enabledChanged(" << state << ")";
+                        qDebug() << __FILE__ << "emit enabledChanged(" << state << ")";
                         emit enabledChanged(state);
                     }
                 }

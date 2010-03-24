@@ -19,6 +19,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QSplashScreen>
 #include <QString>
+#include <QErrorMessage>
 #include <osg/Notify>
 #include <iostream>
 #include <sstream>
@@ -69,21 +70,21 @@ int main(int argc, char *argv[])
     
     // To see Qt object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
-    
     qInstallMsgHandler(messageHandler);
     QApplication a(argc, argv);
+    // QErrorMessage::qtHandler();
     a.setQuitOnLastWindowClosed(true);
     
-    QSplashScreen* splash = new QSplashScreen;
+    QSplashScreen splash;
     QPixmap img(":/images/splash.png");
     
     if(img.isNull()) {
        qWarning() << "Couldn't load splash image";
     }
     
-    splash->setPixmap(img);
-    splash->showMessage(QObject::tr("Starting up...."));
-    splash->show();
+    splash.setPixmap(img);
+    splash.showMessage(QObject::tr("Starting up...."));
+    splash.show();
     
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
 
@@ -94,9 +95,7 @@ int main(int argc, char *argv[])
 
     w.show();
     
-    splash->finish(&w);
+    splash.finish(&w);
 
-    delete splash;
-    
     return a.exec();
 }
