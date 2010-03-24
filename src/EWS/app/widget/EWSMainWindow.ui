@@ -330,6 +330,10 @@
    <class>ews::app::widget::BarrierEditor</class>
    <extends>QWidget</extends>
    <header>BarrierEditor.h</header>
+   <slots>
+    <slot>addBarrier()</slot>
+    <slot>removeBarrier()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
@@ -445,6 +449,38 @@
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAddBarrier</sender>
+   <signal>triggered()</signal>
+   <receiver>barrierEditor</receiver>
+   <slot>addBarrier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1167</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRemoveBarrier</sender>
+   <signal>triggered()</signal>
+   <receiver>barrierEditor</receiver>
+   <slot>removeBarrier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1167</x>
+     <y>253</y>
     </hint>
    </hints>
   </connection>
