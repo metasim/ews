@@ -130,34 +130,19 @@ namespace ews {
 
                     image->dirty();
                 }
-                
-                static QString loadTextResource(const char* resource) {
-                    QFile progResource(resource);
-                    if (!progResource.open(QIODevice::ReadOnly|QIODevice::Text)) {
-                        qWarning() << "Couldn't find" << resource;
-                        return 0;
-                    }
-                    else {
-                        qDebug() << "Loaded" << resource;
-                    }
-                    
-                    QByteArray bytes = progResource.readAll();
-                    progResource.close();
-                    
-                    return QString(bytes);
-                }
+
                 
                 static const char* loadFragmentProgram() {
                     static QString data;
                     if(!data.length()) {
-                        data = loadTextResource(":text/waves.fs");
+                        data = loadTextResource(":/text/waves.fs");
                     }
                     return qPrintable(data);
                 }
                 static const char* loadVertexProgram() {
                     static QString data;
                     if(!data.length()) {
-                        data = loadTextResource(":text/waves.vs");
+                        data = loadTextResource(":/text/waves.vs");
                     }
                     return qPrintable(data);
                 }

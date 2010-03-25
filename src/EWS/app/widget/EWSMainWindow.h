@@ -66,8 +66,7 @@ namespace ews {
                 void about();
                 /** Request platform to open url to project website. */
                 void projectWebsite();
-                
-                void graphicsInfo();
+
                 
             private slots:
                 /** Do any final connecting of components after rest of application is connected.*/

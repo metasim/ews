@@ -9,6 +9,7 @@
     <file>images/edit-undo.png</file>
     <file>images/media-playback-start.png</file>
     <file>images/media-playback-pause.png</file>
+    <file alias="mseedsoft">images/MustardSeedLogo-150.png</file>
   </qresource>
   <qresource prefix="text">
     <file alias="waves.vs">app/drawable/waves.vs</file>

@@ -18,7 +18,7 @@ endif()
 set(EXE_TARGET_NAME ${CMAKE_PROJECT_NAME})
 set(APP_NAME "Visualize STEM - Wave")
 set(VERSION_MAJOR "0")
-set(VERSION_MINOR "3")
+set(VERSION_MINOR "4")
 set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
 set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
 
@@ -119,6 +119,17 @@ set_source_files_properties(${EWS_GEN_RCS} PROPERTIES GENERATED 1)
 foreach(SHADE_SRC ${SHADERS})
     set_source_files_properties(${EWS_GEN_RCS} PROPERTIES OBJECT_DEPENDS ${SHADE_SRC})
 endforeach()
+
+macro(do_configure OUTFILE)
+    set(INFILE ${OUTFILE}.in)
+    configure_file(
+        ${INFILE}
+        ${OUTFILE}
+    )    
+    set_source_files_properties(${EWS_GEN_RCS} PROPERTIES OBJECT_DEPENDS ${INFILE})
+endmacro()
+
+do_configure(${CMAKE_CURRENT_SOURCE_DIR}/app/widget/about.html)
 
 #--------------------------------------------------------------------------------
 # this will run uic on .ui files:
