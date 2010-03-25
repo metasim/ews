@@ -4,6 +4,7 @@ set OSG_DIR=c:\OpenSceneGraph-2.8.2
 
 if "%1"=="vs" goto VS
 if "%1" == "debug" goto DEBUG
+if "%1" == "clean" goto CLEAN
 
 goto NMAKE
 
@@ -39,6 +40,12 @@ cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug 
 start VisualizeSTEM-Wave.sln
 cd ..
 GOTO FINISH
+
+
+:CLEAN
+if EXIST build rmdir /s build
+if EXIST build.debug rmdir /s build.debug
+if EXIST build.vs rmdir /s build.vs
 
 :FINISH
 echo Done.
