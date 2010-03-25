@@ -45,7 +45,7 @@ namespace ews {
                 fmt.setSamples(4); 
                 fmt.setSampleBuffers(true); 
                 setFormat(fmt);                    
-#endif
+#endif // GL_MULTISAMPLE_ARB
                 
                 osg::Camera* c = getCamera();
                 c->setViewport(new osg::Viewport(0,0,width(),height()));
@@ -56,6 +56,8 @@ namespace ews {
                 setThreadingModel(osgViewer::Viewer::SingleThreaded);
                 
                 setCameraManipulator(new ews::app::drawable::CameraController);
+                
+#if defined(QT_DEBUG)                      
                 addEventHandler(new osgViewer::StatsHandler);
                 
                 // add the help handler
@@ -66,6 +68,7 @@ namespace ews {
                 
                 // add the thread model handler
                 addEventHandler(new osgViewer::ThreadingHandler);
+#endif // QT_DEBUG                
                 
                 // add the window size toggle handler
                 addEventHandler(new osgViewer::WindowSizeHandler);               
