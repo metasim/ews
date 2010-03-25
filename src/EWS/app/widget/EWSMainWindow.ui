@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>950</height>
+    <width>1041</width>
+    <height>775</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,6 +18,12 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="ews::app::widget::QOSGWidget" name="renderer" native="true">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -34,8 +40,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1048</width>
-     <height>22</height>
+     <width>1041</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="nativeMenuBar">
