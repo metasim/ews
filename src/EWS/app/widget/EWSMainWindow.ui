@@ -34,7 +34,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1156</width>
+     <width>1280</width>
      <height>22</height>
     </rect>
    </property>
@@ -61,8 +61,17 @@
     <addaction name="actionRemoveBarrier"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionGraphicsSystemInfo"/>
+    <addaction name="actionProjectWebsite"/>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuItems"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="movable">
@@ -310,6 +319,21 @@
     <string>Toggle Drip Source 2</string>
    </property>
   </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionProjectWebsite">
+   <property name="text">
+    <string>Project Website</string>
+   </property>
+  </action>
+  <action name="actionGraphicsSystemInfo">
+   <property name="text">
+    <string>Graphics System Info...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -431,8 +455,8 @@
      <y>154</y>
     </hint>
     <hint type="destinationlabel">
-     <x>639</x>
-     <y>449</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
@@ -489,5 +513,8 @@
   <slot>start()</slot>
   <slot>stop()</slot>
   <slot>reset()</slot>
+  <slot>about()</slot>
+  <slot>projectWebsite()</slot>
+  <slot>graphicsInfo()</slot>
  </slots>
 </ui>

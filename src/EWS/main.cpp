@@ -41,26 +41,25 @@ inline void logMessage(const char* typeStr, const char* msg) {
 }
 
 /** Message handler for Qt logging system. */
- void messageHandler(QtMsgType type, const char *msg) {
-     switch (type) {
-     case QtDebugMsg:
-         logMessage("Debug", msg);
-         break;
-     case QtWarningMsg:
-         logMessage("Warning", msg);
-         break;
-     case QtCriticalMsg:
-         logMessage("Critical", msg);
-         break;
-     case QtFatalMsg:
-         logMessage("Fatal", msg);
-         break;
-     }
- }
+void messageHandler(QtMsgType type, const char *msg) {
+    switch (type) {
+        case QtDebugMsg:
+            logMessage("Debug", msg);
+            break;
+        case QtWarningMsg:
+            logMessage("Warning", msg);
+            break;
+        case QtCriticalMsg:
+            logMessage("Critical", msg);
+            break;
+        case QtFatalMsg:
+            logMessage("Fatal", msg);
+            break;
+    }
+}
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     using namespace ews::app::model;
     using namespace ews::app::widget;
 
@@ -70,6 +69,10 @@ int main(int argc, char *argv[])
     
     // To see Qt object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
+    
+    QApplication::setOrganizationName("Mustard Seed Software, LLC");
+    QApplication::setOrganizationDomain("com.mseedsoft");
+    
     qInstallMsgHandler(messageHandler);
     QApplication a(argc, argv);
     // QErrorMessage::qtHandler();
@@ -86,6 +89,9 @@ int main(int argc, char *argv[])
     splash.showMessage(QObject::tr("Starting up...."));
     splash.show();
     
+
+    QApplication::setWindowIcon(QIcon(":/images/appicon"));
+                           
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
 
     SimulationState state;

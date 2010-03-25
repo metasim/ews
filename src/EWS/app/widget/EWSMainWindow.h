@@ -51,7 +51,8 @@ namespace ews {
             public:
                 explicit EWSMainWindow(SimulationState* state, QWidget *parent = 0);
                 virtual ~EWSMainWindow();
-
+                
+                /** Overidden to trap polish request for final initialization. */
                 virtual bool event(QEvent* event);
 
             public slots:
@@ -61,10 +62,17 @@ namespace ews {
                 void stop();
                 /** Reset simulation state to initial conditions. */
                 void reset();
+                /** Show the about window. */
+                void about();
+                /** Request platform to open url to project website. */
+                void projectWebsite();
+                
+                void graphicsInfo();
+                
             private slots:
                 /** Do any final connecting of components after rest of application is connected.*/
                 void init();
-                
+
             private:
                 Q_DISABLE_COPY(EWSMainWindow)
                 Ui::EWSMainWindowForm* _ui;

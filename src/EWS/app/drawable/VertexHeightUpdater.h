@@ -24,7 +24,7 @@
 #include <osg/Texture2D>
 #include <osg/Image>
 #include <vector>
-#include <QByteArray>
+#include "EWSUtils.h"
 #include "WaveModel.h"
 #include "Lattice.h"
 
@@ -34,6 +34,7 @@ namespace ews {
             using namespace osg;
             using ews::physics::WaveModel;
             using ews::physics::Lattice;
+            using namespace ews::util;
             
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;

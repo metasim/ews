@@ -115,6 +115,7 @@ include( ${QT_USE_FILE} )
 # this command will generate rules that will run rcc on all files from EWS_RCS
 # in result EWS_GEN_RCS variable will contain paths to files produced by rcc
 qt4_add_resources( EWS_GEN_RCS ${EWS_RCS} )
+set_source_files_properties(${EWS_GEN_RCS} PROPERTIES GENERATED 1)
 foreach(SHADE_SRC ${SHADERS})
     set_source_files_properties(${EWS_GEN_RCS} PROPERTIES OBJECT_DEPENDS ${SHADE_SRC})
 endforeach()
@@ -213,14 +214,13 @@ elseif(WIN32)
   set(WIN_RC ${CMAKE_CURRENT_SOURCE_DIR}/winrez.rc)
 endif()
 
-if(CMAKE_GENERATOR STREQUAL "Xcode")
-    source_group("Headers" FILES ${EWS_HDRS})
-    source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
-    source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
-    source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
-    source_group("Shaders" FILES ${EWS_SHADERS})
-endif()
-
+#--------------------------------------------------------------------------------
+# IDE conveniences
+source_group("Headers" FILES ${EWS_HDRS})
+source_group("Headers (Qt MOC)"  FILES ${EWS_MOC_HDRS})
+source_group("Source (Qt Designer)" REGULAR_EXPRESSION ".*\\.ui$")
+source_group("Source (Generated)" FILES ${EWS_GEN_MOC_HDRS} ${EWS_GEN_UIS} ${EWS_GEN_RCS})
+source_group("Shaders" FILES ${EWS_SHADERS})
 
 #--------------------------------------------------------------------------------
 #  CMake's way of creating an executable
@@ -230,6 +230,8 @@ add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE}
   ${EWS_GEN_UIS}
   ${EWS_GEN_RCS}
   ${WIN_RC}
+  ${EWS_MOC_HDRS}
+  ${EWS_HDRS}
 )
 
 
@@ -253,7 +255,7 @@ set(ALL_QT_OSG_LIBS
     ${OPENSCENEGRAPH_LIBRARIES} 
 )
 
-target_link_libraries (${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})
+target_link_libraries(${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
@@ -358,9 +360,6 @@ set (CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
 # set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
 if(APPLE)
-    # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
-    # where CPackConfig.cmake is created by including CPack
-    # And then there's ways to customize this as well
     set(CPACK_GENERATOR DragNDrop)
 elseif(WIN32)
     set(CPACK_GENERATOR NSIS)
@@ -368,8 +367,6 @@ elseif(WIN32)
 	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${VERSION}")
 	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${VERSION}")
-#	file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/images/MustardSeedIcon.ico" CPACK_PACKAGE_ICON)
-#	string(REPLACE "\\" "\\\\" CPACK_PACKAGE_ICON ${CPACK_PACKAGE_ICON})
 	set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\MustardSeedIcon.ico")
 	set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\Nvidia_logo_200.png")
 	set(CPACK_NSIS_URL_INFO_ABOUT "http://mseedsoft.com")
@@ -434,7 +431,7 @@ if(TESTING)
     cxx_test(SlitPotentialTest test/physics test/physics/SlitPotentialTest.cpp physics/SlitPotential.cpp physics/WallPotential.cpp)
     cxx_test(CompositePotentialTest test/physics test/physics/CompositePotentialTest.cpp physics/CompositePotential.cpp physics/WallPotential.cpp)
     cxx_test(PrecomputedPotentialTest test/physics test/physics/PrecomputedPotentialTest.cpp physics/PrecomputedPotential.cpp physics/CompositePotential.cpp physics/WallPotential.cpp)
-    cxx_test(DampedClassicalWavePropagatorTest test/physics test/physics/DampedClassicalWavePropagatorTest.cpp ${EWS_PHYS_SRC})
     cxx_test(WaveModelTest test/physics test/physics/WaveModelTest.cpp ${EWS_PHYS_SRC})
     cxx_test(OscillatorTest test/physics test/physics/OscillatorTest.cpp ${EWS_PHYS_SRC})
+    cxx_test(DampedClassicalWavePropagatorTest test/physics test/physics/DampedClassicalWavePropagatorTest.cpp ${EWS_PHYS_SRC})
 endif()
