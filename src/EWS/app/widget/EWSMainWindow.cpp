@@ -23,7 +23,9 @@
 #include "DrawableFactory.h"
 
 #include "ui_EWSMainWindow.h"
-
+#include <QMessageBox>
+#include <QDesktopServices>
+#include "EWSUtils.h"
 
 namespace ews {
     namespace app {
@@ -103,6 +105,16 @@ namespace ews {
                 
                 return retval;
             }
+            
+            void EWSMainWindow::about() {
+                using ews::util::loadTextResource;
+                QMessageBox::about(this, "About...", loadTextResource(":/text/about"));
+            }
+            
+            void EWSMainWindow::projectWebsite() {
+                QDesktopServices::openUrl(QUrl("http://ews.mseedsoft.com/",QUrl::TolerantMode));
+            }
+
         }
     }
 }

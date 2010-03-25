@@ -31,36 +31,42 @@
 #define __WINLOG
 #endif
 
+
 inline void logMessage(const char* typeStr, const char* msg) {
     std::ostringstream oss;
     oss << typeStr << ": " << msg << std::endl;
-    std::cerr << oss;
+    std::cerr << oss.str();
 #if defined(__WINLOG)
     OutputDebugStringA(oss.str().c_str());
 #endif
 }
 
+static QtMsgHandler defMsgHandler = NULL;
+
 /** Message handler for Qt logging system. */
- void messageHandler(QtMsgType type, const char *msg) {
-     switch (type) {
-     case QtDebugMsg:
-         logMessage("Debug", msg);
-         break;
-     case QtWarningMsg:
-         logMessage("Warning", msg);
-         break;
-     case QtCriticalMsg:
-         logMessage("Critical", msg);
-         break;
-     case QtFatalMsg:
-         logMessage("Fatal", msg);
-         break;
-     }
- }
+void messageHandler(QtMsgType type, const char *msg) {
+    switch (type) {
+        case QtDebugMsg:
+            logMessage("Debug", msg);
+            break;
+        case QtWarningMsg:
+            logMessage("Warning", msg);
+            break;
+        case QtCriticalMsg:
+            logMessage("Critical", msg);
+            break;
+        case QtFatalMsg:
+            logMessage("Fatal", msg);
+            break;
+    }
+    
+    if(type != QtDebugMsg && defMsgHandler) {
+        defMsgHandler(type, msg);
+    }
+}
 
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     using namespace ews::app::model;
     using namespace ews::app::widget;
 
@@ -70,13 +76,23 @@ int main(int argc, char *argv[])
     
     // To see Qt object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
-    qInstallMsgHandler(messageHandler);
+    
     QApplication a(argc, argv);
-    // QErrorMessage::qtHandler();
     a.setQuitOnLastWindowClosed(true);
+    QApplication::setOrganizationName("Mustard Seed Software, LLC");
+    QApplication::setOrganizationDomain("com.mseedsoft");
+    
+    
+    // First register the dialog error handler, then
+    // get the function pointer to it by passing zero to the handler installer
+    // then install our own.
+    QErrorMessage::qtHandler();
+    defMsgHandler = qInstallMsgHandler(0);
+    qInstallMsgHandler(messageHandler);
+    
     
     QSplashScreen splash;
-    QPixmap img(":/images/splash.png");
+    QPixmap img(":/images/splash");
     
     if(img.isNull()) {
        qWarning() << "Couldn't load splash image";
@@ -86,12 +102,16 @@ int main(int argc, char *argv[])
     splash.showMessage(QObject::tr("Starting up...."));
     splash.show();
     
+
+    QApplication::setWindowIcon(QIcon(":/images/appicon"));
+                           
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
 
     SimulationState state;
     state.setObjectName("root");
     
     EWSMainWindow w(&state);
+    QApplication::setApplicationName(w.windowTitle());
 
     w.show();
     

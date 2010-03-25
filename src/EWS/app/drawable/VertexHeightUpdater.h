@@ -24,7 +24,7 @@
 #include <osg/Texture2D>
 #include <osg/Image>
 #include <vector>
-#include <QByteArray>
+#include "EWSUtils.h"
 #include "WaveModel.h"
 #include "Lattice.h"
 
@@ -34,6 +34,7 @@ namespace ews {
             using namespace osg;
             using ews::physics::WaveModel;
             using ews::physics::Lattice;
+            using namespace ews::util;
             
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
@@ -129,34 +130,19 @@ namespace ews {
 
                     image->dirty();
                 }
-                
-                static QString loadTextResource(const char* resource) {
-                    QFile progResource(resource);
-                    if (!progResource.open(QIODevice::ReadOnly|QIODevice::Text)) {
-                        qWarning() << "Couldn't find" << resource;
-                        return 0;
-                    }
-                    else {
-                        qDebug() << "Loaded" << resource;
-                    }
-                    
-                    QByteArray bytes = progResource.readAll();
-                    progResource.close();
-                    
-                    return QString(bytes);
-                }
+
                 
                 static const char* loadFragmentProgram() {
                     static QString data;
                     if(!data.length()) {
-                        data = loadTextResource(":text/waves.fs");
+                        data = loadTextResource(":/text/waves.fs");
                     }
                     return qPrintable(data);
                 }
                 static const char* loadVertexProgram() {
                     static QString data;
                     if(!data.length()) {
-                        data = loadTextResource(":text/waves.vs");
+                        data = loadTextResource(":/text/waves.vs");
                     }
                     return qPrintable(data);
                 }
