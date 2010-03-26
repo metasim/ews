@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include "EWSUtils.h"
+#include "EWSVersion.h"
 
 namespace ews {
     namespace app {
@@ -112,7 +113,9 @@ namespace ews {
             }
             
             void EWSMainWindow::projectWebsite() {
-                QDesktopServices::openUrl(QUrl("http://ews.mseedsoft.com/",QUrl::TolerantMode));
+                QUrl url(EWS_WEBSITE,QUrl::TolerantMode);
+                qDebug() << "Opening" << url;
+                QDesktopServices::openUrl(url);
             }
 
         }

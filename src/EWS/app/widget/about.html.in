@@ -1,16 +1,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>@EWS_APP_NAME@ Version @EWS_VERSION@</title>
 </head>
-<body style="font-size: 11pt; font-weight: normal;">
+<body style="font-size: 11pt; font-weight: normal; font-family: Verdana, Arial, Helvetica, sans-serif;">
 <center>
-<h1><u>Visualize&nbsp;STEM&nbsp;-&nbsp;Wave</u></h1>
-<p>Version @VERSION@</p>
+<h1><u>@EWS_APP_NAME@</u></h1>
+<p>Version @EWS_VERSION@ (@EWS_BUILD_DATE@)</p>
 </center>
 
-<center><img height="100" src=":/images/splash"/></center>
 <p>
-<b>Visualize STEM - Wave</b> is an open-source, multi-platform 
+<b>@EWS_APP_NAME@</b> is an open-source, multi-platform 
 "virtual laboratory" for experimentation with wave interference in 3-D. 
 It is targeted for use by middle- and high-school students.
 </p>
@@ -23,16 +23,10 @@ for more details.</p>
 <h3 align="center"><u>Acknowledgements</u></h3>
 
 <p>
-Development of <b>Visualize STEM - Wave</b> was supported by a generous grant
+Development of <b>@EWS_APP_NAME@</b> was supported by a generous grant
 from the <a href="http://www.nvidia.com/object/corporate_community.html">NVIDIA Foundation</a>.
 </p>
 
-<p>
-Implementation was preformed by <a href="http://mseedsoft.com">Mustard Seed Software, LLC</a>.
-</p>
-<center><img src=":/images/mseedsoft"/></center>
-<br/>
-<br/>
 <p>
 The discretized wave equation implementation was derived from the
 <a href="http://phet.colorado.edu/simulations/sims.php?sim=Wave_Interference">
@@ -52,6 +46,13 @@ Icons are from the <a href="http://tango.freedesktop.org/Tango_Desktop_Project">
 
 <br/>
 <br/>
+<p>
+Implementation was preformed by <a href="http://mseedsoft.com">Mustard Seed Software, LLC</a>.
+</p>
+<center><img src=":/images/mseedsoft"/></center>
+<br/>
+<br/>
+
 <h3 align="center"><u>License</u></h3>
 
 <pre style="font-size: 9pt;">

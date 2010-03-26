@@ -7,22 +7,50 @@
 # For example: "export CMAKE_PREFIX_PATH=/usr/local/trolltech/qt4.3.5"
 #  
 
-project(VisualizeSTEM-Wave)
+project(VisualizePhysics-Wave)
 cmake_minimum_required(VERSION 2.8)
+
+set(EXE_TARGET_NAME ${CMAKE_PROJECT_NAME})
+set(EWS_APP_NAME "Visualize Physics - Wave")
+set(EWS_VERSION_MAJOR "0")
+set(EWS_VERSION_MINOR "5")
+set(EWS_VERSION ${EWS_VERSION_MAJOR}.${EWS_VERSION_MINOR})
+set(EWS_COPYRIGHT "2010 NVIDIA Foundation")
+set(EWS_WEBSITE "http://ews.mseedsoft.com/")
+set(EWS_EMAIL   "simeon.fitch@mseedsoft.com")
+set(EWS_ICON     "ews-icon.png")
+set(EWS_ICON_MAC "ews-icon.icns")
+set(EWS_ICON_WIN "ews-icon.ico")
+set(EWS_BUNDLE_ID "com.mseedsoft.ews")
+set(EWS_ORGANIZATION_NAME "Mustard Seed Software, LLC")
+
+
+#----------------------------------------------------------------------
+# Macro to get the current date, from:
+# http://www.cmake.org/pipermail/cmake/2009-February/027014.html
+macro (curr_date RESULT)
+    if (WIN32)
+        execute_process(COMMAND "date" "/T" OUTPUT_VARIABLE ${RESULT})
+        string(REGEX REPLACE "(..)/(..)/(....).*" "\\3\\2\\1" ${RESULT} ${${RESULT}})
+    elseif(UNIX)
+        execute_process(COMMAND "date" "+%d/%m/%Y" OUTPUT_VARIABLE ${RESULT})
+        string(REGEX REPLACE "(..)/(..)/(....).*" "\\3\\2\\1" ${RESULT} ${${RESULT}})
+    else()
+        message(SEND_ERROR "date not available")
+        set(${RESULT} 000000)
+    endif()
+endmacro()
+curr_date(EWS_BUILD_DATE)
+
+option(TESTING "build unit tests and include 'test' target" ON)
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
 
 if(WIN32)
 	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/Windows;${CMAKE_MODULE_PATH}")
 elseif(APPLE)
 	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/OSX;${CMAKE_MODULE_PATH}")
 endif()
-set(EXE_TARGET_NAME ${CMAKE_PROJECT_NAME})
-set(APP_NAME "Visualize STEM - Wave")
-set(VERSION_MAJOR "0")
-set(VERSION_MINOR "4")
-set(VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
-set(SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts)
-
-option(TESTING "build unit tests and include 'test' target" ON)
 
 set(EWS_MODULES app/widget app/drawable app/model physics geometry util test)
 
@@ -130,6 +158,7 @@ macro(do_configure OUTFILE)
 endmacro()
 
 do_configure(${CMAKE_CURRENT_SOURCE_DIR}/app/widget/about.html)
+do_configure(${CMAKE_CURRENT_SOURCE_DIR}/util/EWSVersion.h)
 
 #--------------------------------------------------------------------------------
 # this will run uic on .ui files:
@@ -213,12 +242,12 @@ if(APPLE)
   # include the icns file in the target
   set(EWS_SRCS ${EWS_SRCS} ${CMAKE_CURRENT_SOURCE_DIR}/images/${ICON_NAME})
   # Set additional application metadata.
-  set(MACOSX_BUNDLE_BUNDLE_NAME ${APP_NAME})
-  set(MACOSX_BUNDLE_IDENTIFIER com.mseedsoft.ews) # Doesn't seem to work in cmake 2.6
-  set(MACOSX_BUNDLE_INFO_STRING "${APP_NAME} - Version ${VERSION}")
-  set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${VERSION})
-  set(MACOSX_BUNDLE_BUNDLE_VERSION ${VERSION})
-  set(MACOSX_BUNDLE_COPYRIGHT "2010 NVIDIA Foundation")  
+  set(MACOSX_BUNDLE_BUNDLE_NAME ${EWS_APP_NAME})
+  set(MACOSX_BUNDLE_IDENTIFIER ${EWS_BUNDLE_ID}) # Doesn't seem to work in cmake 2.6
+  set(MACOSX_BUNDLE_INFO_STRING "${EWS_APP_NAME} - Version ${EWS_VERSION}")
+  set(MACOSX_BUNDLE_SHORT_VERSION_STRING ${EWS_VERSION})
+  set(MACOSX_BUNDLE_BUNDLE_VERSION ${EWS_VERSION})
+  set(MACOSX_BUNDLE_COPYRIGHT ${EWS_COPYRIGHT})  
 elseif(WIN32)
   # Set the executable wrapper type
   set(EXE_TYPE WIN32)
@@ -244,17 +273,6 @@ add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE}
   ${EWS_MOC_HDRS}
   ${EWS_HDRS}
 )
-
-
-# If we are build a "Debug" version then put that on the built Application
-#set(EXE_DEBUG_EXTENSION "_debug")
-
-#-- Set the Debug and Release names for the libraries
-#set_target_properties(${EXE_TARGET_NAME} 
-#    PROPERTIES
-#    DEBUG_OUTPUT_NAME ${APP_NAME}${EXE_DEBUG_EXTENSION}
-#    RELEASE_OUTPUT_NAME ${APP_NAME}
-#)
 
 #--------------------------------------------------------------------------------
 # Tell CMake which libraries we need to link our executable against.
@@ -303,7 +321,7 @@ install(TARGETS ${EXE_TARGET_NAME}
 # NB: this is important because icon loading, etc. need image plugins.
 install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
 	DESTINATION ${QT_PLUGIN_DEST} 
-	COMPONENT RuntimeLibraries
+	COMPONENT Runtime
 	FILES_MATCHING PATTERN "*.dll"
 )
 
@@ -362,11 +380,11 @@ set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
 set(CPACK_GENERATOR ZIP)
 set(CPACK_SOURCE_GENERATOR ZIP)
 set(CPACK_MONOLITHIC_INSTALL TRUE)
-SET(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${VERSION}")
+SET(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
 
 set (CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
-set (CPACK_PACKAGE_VERSION_MAJOR "${VERSION_MAJOR}")
-set (CPACK_PACKAGE_VERSION_MINOR "${VERSION_MINOR}")
+set (CPACK_PACKAGE_VERSION_MAJOR "${EWS_VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${EWS_VERSION_MINOR}")
 
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
 # set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
@@ -375,15 +393,15 @@ if(APPLE)
 elseif(WIN32)
     set(CPACK_GENERATOR NSIS)
 	set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
-	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${VERSION}")
+	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${EWS_VERSION}")
 	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
-	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${VERSION}")
-	set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\MustardSeedIcon.ico")
-	set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/images\\\\Nvidia_logo_200.png")
-	set(CPACK_NSIS_URL_INFO_ABOUT "http://mseedsoft.com")
-	set(CPACK_NSIS_CONTACT "simeon.fitch@mseedsoft.com")
+	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
+	set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_SOURCE_DIR}/images\\\\${EWS_ICON_WIN})
+	set(CPACK_PACKAGE_ICON  ${CMAKE_CURRENT_SOURCE_DIR}/images\\\\${EWS_ICON})
+	set(CPACK_NSIS_URL_INFO_ABOUT ${EWS_WEBSITE})
+	set(CPACK_NSIS_CONTACT ${EWS_EMAIL})
 	# Icon in the add/remove control panel
-	set(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\${EXE_TARGET_NAME}.exe")
+	set(CPACK_NSIS_INSTALLED_ICON_NAME bin\\\\${EXE_TARGET_NAME}.exe)
 endif()
 
 
@@ -446,3 +464,4 @@ if(TESTING)
     cxx_test(OscillatorTest test/physics test/physics/OscillatorTest.cpp ${EWS_PHYS_SRC})
     cxx_test(DampedClassicalWavePropagatorTest test/physics test/physics/DampedClassicalWavePropagatorTest.cpp ${EWS_PHYS_SRC})
 endif()
+

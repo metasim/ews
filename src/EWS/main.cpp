@@ -24,6 +24,7 @@
 #include <iostream>
 #include <sstream>
 #include "EWSMainWindow.h"
+#include "EWSVersion.h"
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define WIN32_LEAN_AND_MEAN
@@ -79,9 +80,9 @@ int main(int argc, char *argv[]) {
     
     QApplication a(argc, argv);
     a.setQuitOnLastWindowClosed(true);
-    QApplication::setOrganizationName("Mustard Seed Software, LLC");
-    QApplication::setOrganizationDomain("com.mseedsoft");
-    
+    QApplication::setOrganizationName(EWS_ORGANIZATION_NAME);
+    QApplication::setOrganizationDomain(EWS_BUNDLE_ID);
+    QApplication::setApplicationVersion(EWS_VERSION);
     
     // First register the dialog error handler, then
     // get the function pointer to it by passing zero to the handler installer
@@ -101,7 +102,6 @@ int main(int argc, char *argv[]) {
     splash.setPixmap(img);
     splash.showMessage(QObject::tr("Starting up...."));
     splash.show();
-    
 
     QApplication::setWindowIcon(QIcon(":/images/appicon"));
                            
@@ -111,7 +111,8 @@ int main(int argc, char *argv[]) {
     state.setObjectName("root");
     
     EWSMainWindow w(&state);
-    QApplication::setApplicationName(w.windowTitle());
+    w.setWindowTitle(EWS_APP_NAME);
+    QApplication::setApplicationName(EWS_APP_NAME);
 
     w.show();
     
