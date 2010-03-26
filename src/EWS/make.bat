@@ -37,7 +37,7 @@ if EXIST %BDIR% rmdir /s /q %BDIR%
 mkdir %BDIR%
 cd %BDIR%
 cmake -G"Visual Studio 9 2008" .. -DTESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=%CD% -DOSG_DIR:PATH=%OSG_DIR%
-start VisualizeSTEM-Wave.sln
+start VisualizePhysics-Wave.sln
 cd ..
 GOTO FINISH
 
