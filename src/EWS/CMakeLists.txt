@@ -24,6 +24,9 @@ set(EWS_ICON_WIN "ews-icon.ico")
 set(EWS_BUNDLE_ID "com.mseedsoft.ews")
 set(EWS_ORGANIZATION_NAME "Mustard Seed Software, LLC")
 
+# Add to search path our custom scripts
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts;${CMAKE_MODULE_PATH}")
+
 
 #----------------------------------------------------------------------
 # Macro to get the current date, from:
@@ -46,11 +49,6 @@ option(TESTING "build unit tests and include 'test' target" ON)
 
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR})
 
-if(WIN32)
-	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/Windows;${CMAKE_MODULE_PATH}")
-elseif(APPLE)
-	set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/BuildScripts/OSX;${CMAKE_MODULE_PATH}")
-endif()
 
 set(EWS_MODULES app/widget app/drawable app/model physics geometry util test)
 
@@ -213,8 +211,6 @@ elseif(WIN32)
         # More MSVC specific compilation flags
         ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
         ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
-
-
     endif(MSVC)
 endif()    
 
@@ -300,8 +296,8 @@ set(QT_CONF_DEST "bin")
 set(QT_PLUGIN_DEST "bin/plugins")
 
 if(APPLE)
-    set(CMAKE_INSTALL_PREFIX "/Applications")
-    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
+#    set(CMAKE_INSTALL_PREFIX "/Applications")
+#    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
     set(QT_PLUGIN_DEST "${EXE_TARGET_NAME}.app/Contents/MacOS/plugins")  
     set(QT_CONF_DEST "${EXE_TARGET_NAME}.app/Contents/Resources")  
 elseif(WIN32)
@@ -337,34 +333,8 @@ INSTALL(CODE "
     
 # Platform specific tweaks to get the library dependencies installed.
 if(APPLE)
-    #--------------------------------------------------------------------------------
-    # Use BundleUtilities to get all other dependencies for the application to work.
-    # It takes a bundle or executable along with possible plugins and inspects it
-    # for dependencies.  
-
-
-    # directories to look for dependencies
-    get_filename_component(OSG_LIBRARY_DIR ${OSG_LIBRARY} PATH)
-    set(FIXUP_LIBRARY_SEARCH_PATH ${QT_LIBRARY_DIR} ${OSG_LIBRARY_DIR} ${QT_PLUGINS_DIR}/imageformats)
-
-    # Now the work of copying dependencies into the bundle/package
-    # The quotes are escaped and variables to use at install time have their $ escaped
-    # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
-    # over.
-    install(CODE "
-        ##include(InstallRequiredSystemLibraries)
-        file(GLOB_RECURSE QTPLUGINS
-            \"\${CMAKE_INSTALL_PREFIX}/${QT_PLUGIN_DEST}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-        message(\"plugins: \${QTPLUGINS}\")
-        set(FIXUP_EXTRA_LIBS ${OPENSCENEGRAPH_LIBRARIES};\${QTPLUGINS})
-        include(BundleUtilities)
-        fixup_bundle(\"${APP_INSTALL_PATH}\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
-        " COMPONENT Runtime)
+    include(InstallSupportLibraries)
 elseif(WIN32)
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_INSTALL_DEBUG_LIBRARIES TRUE)
-    endif()
-    include(InstallRequiredSystemLibraries)
 	include(InstallSupportLibraries)
 	file(GLOB WIN_MANIFEST ${CMAKE_CURRENT_BINARY_DIR}/*.manifest)
 	install(FILES ${WIN_MANIFEST} DESTINATION bin COMPONENT Runtime)
@@ -387,7 +357,6 @@ set (CPACK_PACKAGE_VERSION_MAJOR "${EWS_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${EWS_VERSION_MINOR}")
 
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
-# set(CPACK_INSTALL_CMAKE_PROJECTS ${APP_INSTALL_PATH};${EXE_TARGET_NAME};ALL;/)
 if(APPLE)
     set(CPACK_GENERATOR DragNDrop)
 elseif(WIN32)
