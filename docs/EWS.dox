@@ -1,7 +1,7 @@
 /**
-\mainpage Visualize STEM-Wave
-\author Simeon H.K. Fitch <simeon.fitch@mseedsoft.com>
-\author A. Ben Hocking <ben.hocking@mseedsoft.com>
+\mainpage Visualize Physics-Wave
+\author Simeon H.K. Fitch simeon.fitch@mseedsoft.com
+\author A. Ben Hocking ben.hocking@mseedsoft.com
 
 \section Code Structure Overview
 <p>All code generated for this project resides in the ews namespace. Within this namespace reside the ews::app, ews::physics,
