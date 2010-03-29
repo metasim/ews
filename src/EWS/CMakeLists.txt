@@ -130,12 +130,19 @@ endif (WIN32)
 # this command finds Qt4 libraries and sets all required variables
 # note that it's Qt4, not QT4 or qt4
 set(QT_COMPONENTS QtCore QtGui QtOpenGL QtSvg QtXml)
-find_package( Qt4 REQUIRED COMPONENTS ${QT_COMPONENTS})
+find_package(Qt4 REQUIRED COMPONENTS ${QT_COMPONENTS})
 
 #--------------------------------------------------------------------------------
 # QT_USE_FILE is a variable defined by FIND_PACKAGE( Qt4 ) that contains a path to
 # a CMake script that sets up this directory for building with Qt4
 include( ${QT_USE_FILE} )
+
+
+#--------------------------------------------------------------------------------
+# Find plotting library.
+find_package(Qwt5 REQUIRED)
+include_directories(${Qwt5_INCLUDE_DIR})
+
 
 #--------------------------------------------------------------------------------
 # this command will generate rules that will run rcc on all files from EWS_RCS
@@ -278,6 +285,7 @@ set(ALL_QT_OSG_LIBS
     ${QT_QTGUI_LIBRARY} 
     ${QT_QTOPENGL_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
+    ${Qwt5_Qt4_LIBRARY}
 )
 
 target_link_libraries(${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})

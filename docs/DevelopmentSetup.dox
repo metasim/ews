@@ -34,6 +34,7 @@ This is a work in progres....
   <li>Follow the directions on the web-page
   <li>Read the installation notes and make sure you have the necessary dependencies loaded
   <li>sudo apt-get install libqt
+  <li>sudo /usr/local/qwt-5.2.0 /usr/local/qwt # replace 5.2.0 with version built
 </ul>  
 <li>OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
 </ol>
