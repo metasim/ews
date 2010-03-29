@@ -10,9 +10,12 @@ This is a work in progres....
 <li>CMake 2.8.0: http://www.cmake.org/files/v2.8/cmake-2.8.0-Darwin-universal.dmg
 <li>Qt SDK 4.6.2: Complete Development Environment: http://qt.nokia.com/downloads/sdk-mac-os-cpp
 <li>OpenSceneGraph 2.8.2: http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-2.8.2/source/OpenSceneGraph-2.8.2.zip
+<ul><li>Build and install according to directions. </li></ul>
+<li>Qwt 5.2: <pre>svn co https://qwt.svn.sourceforge.net/svnroot/qwt/branches/qwt-5.2</pre></li>
 <ul>
-  <li>For Snow Leopard, read http://forum.openscenegraph.org/viewtopic.php?t=4453
-  <li>http://googletest.googlecode.com/files/gtest-1.4.0.tar.gz (works for all platforms)
+    <li>Generate makefile with <pre>qmake qwt.pro -spec macx-g++</pre></li>
+    <li>Tweak makefile according to http://stackoverflow.com/questions/1959580/</li>
+    <li>make && sudo make install</li>    
 </ul>
 </ol>
 
