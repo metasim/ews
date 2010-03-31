@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>EWSMainWindowForm</class>
- <widget class="QMainWindow" name="EWSMainWindow">
+ <widget class="QMainWindow" name="EWSMainWindowForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1041</width>
-    <height>775</height>
+    <width>1163</width>
+    <height>895</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Visualize STEM: Wave</string>
+   <string>Visualize Physics: Wave</string>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>true</bool>
@@ -26,6 +26,12 @@
     </property>
     <item row="0" column="0">
      <widget class="ews::app::widget::QOSGWidget" name="renderer" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="minimumSize">
        <size>
         <width>300</width>
@@ -46,7 +52,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1041</width>
+     <width>1163</width>
      <height>22</height>
     </rect>
    </property>
@@ -118,7 +124,7 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="dropSourceDockContainer">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QGroupBox" name="dripSource1Group">
@@ -132,6 +138,9 @@
         <string>Drip Source 1</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="ews::app::widget::DripSourceEditor" name="dripSource1" native="true">
           <property name="minimumSize">
@@ -157,6 +166,9 @@
         <string>Drip Source 2</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="ews::app::widget::DripSourceEditor" name="dripSource2" native="true">
           <property name="minimumSize">
@@ -233,12 +245,18 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QDockWidget" name="plotRegion">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+    <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
      <horstretch>0</horstretch>
-     <verstretch>1</verstretch>
+     <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>300</width>
+     <height>200</height>
+    </size>
    </property>
    <property name="floating">
     <bool>false</bool>
@@ -250,32 +268,33 @@
     <set>Qt::BottomDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>Plot</string>
+    <string>Amplitude Plot</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3">
+   <widget class="QWidget" name="plotDockContents">
     <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
     <layout class="QGridLayout" name="gridLayout_4">
-     <item row="0" column="0">
-      <widget class="QwtPlot" name="qwtPlot">
+     <item row="1" column="1">
+      <widget class="QwtPlot" name="amplitudePlot">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
          <horstretch>0</horstretch>
-         <verstretch>1</verstretch>
+         <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>150</height>
-        </size>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="ampPlotEnabled">
+       <property name="text">
+        <string>Detector Enabled</string>
        </property>
       </widget>
      </item>
@@ -432,7 +451,7 @@
   <connection>
    <sender>actionRun</sender>
    <signal>triggered()</signal>
-   <receiver>EWSMainWindow</receiver>
+   <receiver>EWSMainWindowForm</receiver>
    <slot>start()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -448,7 +467,7 @@
   <connection>
    <sender>actionPause</sender>
    <signal>triggered()</signal>
-   <receiver>EWSMainWindow</receiver>
+   <receiver>EWSMainWindowForm</receiver>
    <slot>stop()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -464,7 +483,7 @@
   <connection>
    <sender>actionReset</sender>
    <signal>triggered()</signal>
-   <receiver>EWSMainWindow</receiver>
+   <receiver>EWSMainWindowForm</receiver>
    <slot>reset()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -576,7 +595,7 @@
   <connection>
    <sender>actionAbout</sender>
    <signal>triggered()</signal>
-   <receiver>EWSMainWindow</receiver>
+   <receiver>EWSMainWindowForm</receiver>
    <slot>about()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -592,7 +611,7 @@
   <connection>
    <sender>actionProjectWebsite</sender>
    <signal>triggered()</signal>
-   <receiver>EWSMainWindow</receiver>
+   <receiver>EWSMainWindowForm</receiver>
    <slot>projectWebsite()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -605,6 +624,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>ampPlotEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>EWSMainWindowForm</receiver>
+   <slot>amplitudePlotEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>589</x>
+     <y>615</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>573</x>
+     <y>437</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>start()</slot>
@@ -612,6 +647,6 @@
   <slot>reset()</slot>
   <slot>about()</slot>
   <slot>projectWebsite()</slot>
-  <slot>graphicsInfo()</slot>
+  <slot>amplitudePlotEnabled(bool)</slot>
  </slots>
 </ui>

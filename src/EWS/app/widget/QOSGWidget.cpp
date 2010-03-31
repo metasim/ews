@@ -19,6 +19,7 @@
 
 #include "QOSGWidget.h"
 #include <QtGui/QKeyEvent>
+#include <QErrorMessage>
 #include <osgGA/StateSetManipulator>
 #include <osgGA/MatrixManipulator>
 #include <osg/Geometry>
@@ -36,7 +37,9 @@ namespace ews {
         namespace widget {
             QOSGWidget::QOSGWidget(QWidget* parent)
             : QGLWidget(parent), osgViewer::Viewer(), _gw(0), _timer() {
+
                 _gw = new osgViewer::GraphicsWindowEmbedded(0,0,width(),height());
+                
                 setFocusPolicy(Qt::StrongFocus);
                 
 #if defined(GL_MULTISAMPLE_ARB)
@@ -71,7 +74,7 @@ namespace ews {
 #endif // QT_DEBUG                
                 
                 // add the window size toggle handler
-                addEventHandler(new osgViewer::WindowSizeHandler);               
+                addEventHandler(new osgViewer::WindowSizeHandler);    
                                 
                 // updateGL will invoke glDraw which invokes paintGL
                 connect(&_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
@@ -81,6 +84,45 @@ namespace ews {
             QOSGWidget::~QOSGWidget() {
                 _timer.stop();
                 // Don't delete _gw, smart pointer takes care of it.
+            }
+            
+            void QOSGWidget::initializeGL() {
+                QGLWidget::initializeGL();
+
+                QString errorMessage;
+                unsigned int contextID = 0;
+                
+                _gw->makeCurrent();
+                if(_gw->valid()) {
+                    contextID = _gw->getState()->getContextID();
+                    osg::GL2Extensions* gl2ext = osg::GL2Extensions::Get(contextID, true);
+                    float ver = gl2ext ? gl2ext->getGlVersion() : -1;
+                    
+                    if( gl2ext ) {
+                        if( !gl2ext->isGlslSupported() ) {
+                            errorMessage = "GLSL not supported by OpenGL driver.";
+                        }
+                        
+                        GLint numVertexTexUnits = 0;
+                        glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &numVertexTexUnits );
+                        if( numVertexTexUnits <= 0 )  {
+                            errorMessage = "Vertex texturing not supported by OpenGL driver.";
+                        }
+                    }
+                    else  {
+                        errorMessage = "GLSL not supported.";
+                    }
+                    
+                    if(errorMessage.length() > 0) {
+                        qCritical() << qPrintable(errorMessage) << "\nYou need to have a graphics display driver with OpenGL 2.0 support.";
+                    }
+                    else {
+                        qDebug() << "Passed required support. GL version: " << ver;
+                    }
+                }
+                else {
+                    qWarning() << "Couldn't retrieve valid GL context";
+                }
             }
             
             void QOSGWidget::setSceneData(osg::Node* node) {
@@ -124,6 +166,7 @@ namespace ews {
             
             
             void QOSGWidget::resizeGL( int width, int height ) {
+                
                 _gw->getEventQueue()->windowResize(0, 0, width, height );
                 _gw->resized(0,0,width,height);
             }

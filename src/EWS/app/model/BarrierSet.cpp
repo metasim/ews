@@ -42,6 +42,7 @@ namespace ews {
             }
             
             BarrierSet::~BarrierSet() {
+                removeAllBarriers();
                 if(_potentials) {
                     delete _potentials;
                 }

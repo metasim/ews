@@ -18,6 +18,8 @@
 
 #include "SimulationState.h"
 #include <osg/Vec2>
+#include "PointSampler.h"
+
 namespace ews {
     namespace app {
         namespace model {
@@ -74,6 +76,17 @@ namespace ews {
                     _waveMedium.getWaveModel().propagate();
                 }
             }
+            
+            
+            PointSampler* SimulationState::createPointSampler() {
+                WaveModel& model = _waveMedium.getWaveModel();
+                PointSampler* retval = new PointSampler(model.getLattice(), 1024, this);
+//                retval->setPosition(Vec2(model.getWidth()/2, model.getLength()/2));
+                retval->setPosition(Vec2(10, 10));
+                emit objectAdded(*retval);
+                return retval;
+            }
+
         }
     }
 }

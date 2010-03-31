@@ -70,6 +70,7 @@ namespace ews {
                  * Resets the camera to its original "home" position.
                  */
                 virtual void homePosition();
+               
                 
             protected:
                 virtual void resizeGL( int width, int height );
@@ -80,7 +81,7 @@ namespace ews {
                 virtual void mouseMoveEvent( QMouseEvent* event );
                 virtual void closeEvent( QCloseEvent * event );
                 virtual void destroyEvent( bool destroyWindow = true, bool destroySubWindows = true);
-
+                virtual void initializeGL();
             private:                
                 Q_DISABLE_COPY(QOSGWidget)
                 void computeHomePosition();

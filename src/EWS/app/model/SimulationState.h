@@ -20,6 +20,7 @@
 #define SimulationState_H
 
 #include <QtCore>
+#include <QList>
 
 #include "DripSource.h"
 #include "WaveMedium.h"
@@ -28,6 +29,8 @@
 namespace ews {
     namespace app {
         namespace model {
+            
+            class PointSampler;
             
             /** This class is the root of the simulation state; all transient data
              *  should be available from the class and or its children.
@@ -66,6 +69,14 @@ namespace ews {
                 WaveMedium& getWaveMedium() {
                     return _waveMedium;
                 }
+                
+                /** 
+                 * Create instance which samples and maintains a history
+                 * of values at a  set x/y location. This takes
+                 * ownership of memory.
+                 */
+                PointSampler* createPointSampler();
+                    
                 
                 /**
                  * Determine if the simulation is currently in the "paused" state.
@@ -115,6 +126,7 @@ namespace ews {
                 DripSource _dripSource1;
                 DripSource _dripSource2;
                 BarrierSet _barriers;
+                QList<PointSampler*> _samplers;
             };
         }
     }

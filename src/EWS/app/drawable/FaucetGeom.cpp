@@ -80,7 +80,7 @@ namespace ews {
                     
                     traverse(node,nv);
                 }
-                
+            private:                
                 Knob& _dragger;
             };
             
@@ -164,8 +164,7 @@ namespace ews {
             
             
             void FaucetGeom::setEnabled(bool enabled) {
-                // Need to better understand these node masks and how
-                // they affect different types of node visitors
+                // TODO: convert to switch usage (see FaucetGeom)
                 setNodeMask(enabled ? 0xffffffff : 0);
                 // Hack... really need to change to a switch node arragement.
                 if(_dragger) {

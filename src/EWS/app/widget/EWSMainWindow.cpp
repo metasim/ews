@@ -27,6 +27,7 @@
 #include <QDesktopServices>
 #include "EWSUtils.h"
 #include "EWSVersion.h"
+#include "PointSampler.h"
 
 namespace ews {
     namespace app {
@@ -69,9 +70,14 @@ namespace ews {
             void EWSMainWindow::init() {
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
-
+                
                 // Make sure all consituents know we're getting ready to start.
                 reset();
+                
+                PointSampler* s = _state->createPointSampler();
+                s->setEnabled(true);
+                
+                qDebug() << "sampler: " << *s;
                 
                 // Start simulation.
                 start();
@@ -116,6 +122,9 @@ namespace ews {
                 QUrl url(EWS_WEBSITE,QUrl::TolerantMode);
                 qDebug() << "Opening" << url;
                 QDesktopServices::openUrl(url);
+            }
+            
+            void EWSMainWindow::amplitudePlotEnabled(bool state) {
             }
 
         }

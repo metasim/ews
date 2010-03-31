@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DripSourceEditorForm</class>
- <widget class="QWidget" name="DripSourceEditor">
+ <widget class="QWidget" name="DripSourceEditorForm">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>1</number>
+   </property>
    <property name="margin">
     <number>0</number>
    </property>
@@ -248,7 +251,7 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item row="1" column="0">
@@ -302,7 +305,7 @@
   <connection>
    <sender>enabled</sender>
    <signal>toggled(bool)</signal>
-   <receiver>DripSourceEditor</receiver>
+   <receiver>DripSourceEditorForm</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -318,7 +321,7 @@
   <connection>
    <sender>pulse</sender>
    <signal>clicked()</signal>
-   <receiver>DripSourceEditor</receiver>
+   <receiver>DripSourceEditorForm</receiver>
    <slot>pulse()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -334,7 +337,7 @@
   <connection>
    <sender>frequency</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>DripSourceEditor</receiver>
+   <receiver>DripSourceEditorForm</receiver>
    <slot>setFrequency(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -350,7 +353,7 @@
   <connection>
    <sender>amplitude</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>DripSourceEditor</receiver>
+   <receiver>DripSourceEditorForm</receiver>
    <slot>setAmplitude(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -414,7 +417,7 @@
   <connection>
    <sender>enabled</sender>
    <signal>clicked(bool)</signal>
-   <receiver>DripSourceEditor</receiver>
+   <receiver>DripSourceEditorForm</receiver>
    <slot>throb()</slot>
    <hints>
     <hint type="sourcelabel">

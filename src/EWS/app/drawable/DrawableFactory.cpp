@@ -24,6 +24,8 @@
 #include "WaterSurfaceGeom.h"
 #include "Barrier.h"
 #include "BarrierGeom.h"
+#include "PointSampler.h"
+#include "AmplitudeDetector.h"
 #include "EWSDebug.h"
 
 namespace ews {
@@ -55,12 +57,16 @@ namespace ews {
                     WaterSurfaceGeom* geom = new WaterSurfaceGeom(*waves);
                     retval = geom;
                 }
-
                 else if(data.inherits(Barrier::staticMetaObject.className())) {
                     Barrier* barrier = qobject_cast<Barrier*>(&data);
                     BarrierGeom* geom = new BarrierGeom(*barrier);
                     retval = geom;
                 }                                    
+                else if(data.inherits(PointSampler::staticMetaObject.className())) {
+                    PointSampler* s = qobject_cast<PointSampler*>(&data);
+                    AmplitudeDetector* geom = new AmplitudeDetector(*s);
+                    retval = geom;
+                }
                 
                 if(!retval) {
                     qWarning() << "No drawable found for" << name;

@@ -31,6 +31,7 @@
 
 #include "Barrier.h"
 #include "DripSource.h"
+#include "PointSampler.h"
 
 namespace ews {
     /**
@@ -234,6 +235,15 @@ inline QDebug operator<<(QDebug dbg, const ews::app::model::DripSource &ds) {
     dbg << "enabled=" << ds.isEnabled() << ",";
     dbg << "frequency=" << ds.getFrequency() << ",";
     dbg << "amplitude=" << ds.getAmplitude();
+    dbg << "}";
+    return dbg;
+}
+
+inline QDebug operator<<(QDebug dbg, const ews::app::model::PointSampler& samp) {
+    dbg << samp.metaObject()->className() << "{";
+    dbg << "name=" << samp.objectName() << ",";
+    dbg << "enabled=" << samp.isEnabled() << ",";
+    dbg << "position=" << samp.getPosition();
     dbg << "}";
     return dbg;
 }

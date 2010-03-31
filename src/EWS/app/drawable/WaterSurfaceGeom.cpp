@@ -143,6 +143,7 @@ namespace ews {
                 // doing shading.
                 setUpdateCallback(new VertexHeightUpdater(_settings, geom));
             }
+ 
         }
     }
 }

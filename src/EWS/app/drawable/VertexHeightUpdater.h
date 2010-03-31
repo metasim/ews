@@ -55,8 +55,12 @@ namespace ews {
                     ref_ptr<Program> program = new Program;
                     state->setAttribute(program.get());
                     
-                    program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
-                    program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
+                    bool success = program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
+                    success &= program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
+                    if(!success) {
+                        qCritical() << "GPU shaders did initialize properly";
+                        return;
+                    }
 
                     _heightMap = new Image;
                     _heightMap->setDataVariance(Object::DYNAMIC);
@@ -146,6 +150,8 @@ namespace ews {
                     }
                     return qPrintable(data);
                 }
+  
+                
             } ;
         }
     }
