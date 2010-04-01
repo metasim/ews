@@ -30,7 +30,8 @@ namespace ews {
                 if(isEnabled()) {
                     Vec2 pos = getPosition();
                     ews::physics::LatticeVal val = _lattice.getValue((int) pos.x(), (int) pos.y());
-//                    qDebug() << pos << "sample: " << val;
+                    _history.addValue(val);
+                    emit sampleHistoryChanged();
                 }
             }
             

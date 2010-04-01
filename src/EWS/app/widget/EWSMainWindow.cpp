@@ -27,6 +27,7 @@
 #include <QDesktopServices>
 #include "EWSUtils.h"
 #include "EWSVersion.h"
+#include "AmplitudePlot.h"
 #include "PointSampler.h"
 
 namespace ews {
@@ -77,7 +78,7 @@ namespace ews {
                 PointSampler* s = _state->createPointSampler();
                 s->setEnabled(true);
                 
-                qDebug() << "sampler: " << *s;
+                _ui->amplitudePlot->addSampleSource(s);
                 
                 // Start simulation.
                 start();

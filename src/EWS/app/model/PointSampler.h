@@ -24,11 +24,13 @@
 #include "Lattice.h"
 #include "EWSDefine.h"
 #include <osg/BoundsChecking>
+#include "SampleHistory.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using ews::physics::Lattice;
+            using ews::physics::LatticeVal;
             using ews::Uint;
             
             class SimulationState;
@@ -48,7 +50,8 @@ namespace ews {
                  * @param parent Qt parent. 
                  */
                 PointSampler(const Lattice& lattice, Uint size = 1024, QObject * parent = 0) 
-                : QObject(parent), _position(0, 0), _enabled(false), _lattice(lattice) {}
+                : QObject(parent), _position(0, 0), _enabled(false), 
+                  _lattice(lattice), _history(size) {}
                 
                 virtual ~PointSampler() {}
                 
@@ -64,6 +67,13 @@ namespace ews {
                  */
                 bool isEnabled() const {
                     return _enabled;
+                }
+                
+                /**
+                 * Get read-only access to history data.
+                 */
+                const SampleHistory& getHistory() const {
+                    return _history;
                 }
                 
                 /**
@@ -96,6 +106,8 @@ namespace ews {
                 void positionChanged(osg::Vec2);
                 /** Fired when enabled state changes. */
                 void enabledChanged(bool);
+                /** Fired when the history of samples has changed. */
+                void sampleHistoryChanged();
                 
             private:
                 Q_DISABLE_COPY(PointSampler);
@@ -103,6 +115,7 @@ namespace ews {
                 osg::Vec2 _position;
                 bool _enabled;
                 const Lattice& _lattice;
+                SampleHistory _history;
             };
         }
     }

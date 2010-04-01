@@ -273,32 +273,13 @@
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="plotDockContents">
+   <widget class="ews::app::widget::AmplitudePlot" name="amplitudePlot">
     <property name="sizePolicy">
      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
     </property>
-    <layout class="QGridLayout" name="gridLayout_4">
-     <item row="1" column="1">
-      <widget class="QwtPlot" name="amplitudePlot">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCheckBox" name="ampPlotEnabled">
-       <property name="text">
-        <string>Detector Enabled</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </widget>
   </widget>
   <action name="actionRun">
@@ -417,11 +398,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QwtPlot</class>
-   <extends>QFrame</extends>
-   <header>qwt_plot.h</header>
-  </customwidget>
-  <customwidget>
    <class>ews::app::widget::QOSGWidget</class>
    <extends>QWidget</extends>
    <header>QOSGWidget.h</header>
@@ -442,6 +418,12 @@
     <slot>addBarrier()</slot>
     <slot>removeBarrier()</slot>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>ews::app::widget::AmplitudePlot</class>
+   <extends>QWidget</extends>
+   <header>AmplitudePlot.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
@@ -621,22 +603,6 @@
     <hint type="destinationlabel">
      <x>523</x>
      <y>354</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ampPlotEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>EWSMainWindowForm</receiver>
-   <slot>amplitudePlotEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>589</x>
-     <y>615</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>573</x>
-     <y>437</y>
     </hint>
    </hints>
   </connection>
