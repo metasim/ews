@@ -118,17 +118,19 @@ namespace ews {
                 void applyHeightMap(Image* image) {
                     using std::vector;
 
-                    unsigned int gridWidth = _model.getWidth();
-                    unsigned int gridLength = _model.getLength();
+                    const unsigned int gridWidth = _model.getWidth();
+                    const unsigned int gridLength = _model.getLength();
 
                         
                     const Lattice& lattice = _model.getWaveModel().getLattice();
                     // The efficiency of this copy operation is very important
                     // could surely be made better.
+                    float sample = 0;
                     for(unsigned int x = 0; x < gridWidth; x++) {
                         for(unsigned int y = 0; y < gridLength; y++) {
-                            *(reinterpret_cast<float*>(image->data(x,y))) =
-                              static_cast<float>(lattice.computeAverageValue(x, y, DEFAULT_WINDOW_WIDTH));
+                            sample = static_cast<float>(lattice.computeAverageValue(x, y, DEFAULT_WINDOW_WIDTH));
+//                            sample = static_cast<float>(lattice.computeNormalizedValue(x, y, DEFAULT_WINDOW_WIDTH));
+                            *(reinterpret_cast<float*>(image->data(x,y))) = sample;
                         }
                     }
                     

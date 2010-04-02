@@ -35,7 +35,7 @@ namespace ews {
                                                                                 static_cast<Uint>(pos.y()),
                                                                                 DEFAULT_WINDOW_WIDTH);
                     _history.addValue(val);
-                    emit sampleHistoryChanged();
+                    emit sampleHistoryChanged(this);
                 }
             }
             

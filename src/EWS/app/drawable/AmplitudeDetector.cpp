@@ -120,16 +120,16 @@ namespace ews {
             }
             
             void AmplitudeDetector::createGeom() {
-                // Create geometric representation
-                
+                // Create geometric representation 
                 ref_ptr<PositionAttitudeTransform> orient = new PositionAttitudeTransform;
                 _geom->addChild(orient.get());
                 
                 ref_ptr<Geode> geode = new Geode;
                 orient->addChild(geode.get());
-                const int surfOffset = 5;
-                ref_ptr<Shape> cyl = new Cylinder(Vec3(0, 0, surfOffset), DETECTOR_RADIUS, DETECTOR_VISIBLE_HEIGHT + surfOffset);
-                ref_ptr<ShapeDrawable> d = new ShapeDrawable(cyl.get());
+                const int surfOffset = 7;
+                ref_ptr<Cone> c = new Cone(Vec3(0, 0, surfOffset), DETECTOR_RADIUS, DETECTOR_VISIBLE_HEIGHT + surfOffset);
+                c->setRotation(Quat(M_PI, Vec3(1, 0, 0)));
+                ref_ptr<ShapeDrawable> d = new ShapeDrawable(c.get());
                 d->setColor(DETECTOR_COLOR);
                 geode->addDrawable(d.get());
                 

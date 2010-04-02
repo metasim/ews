@@ -24,6 +24,7 @@ using std::vector;
 // Needed if asserts are turned back on
 //#include <cassert>
 #include <cstring> // Needed for memcpy
+#include <cmath>
 
 namespace ews {
     namespace physics {
@@ -78,10 +79,28 @@ namespace ews {
              * Computes the average value of the lattice at x, y with an averaging window of width windowWidth.
              * @param x X location to compute the average for
              * @param y Y location to compute the average for
-             * @param windoWidth Width of the averaging window (0 is a single cell)
+             * @param windowWidth Width of the averaging window (0 is a single cell)
              * @return Average value for the specified window.
              */
             LatticeVal computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const;
+            
+            /**
+             * Applies a normalization transformation on the average 
+             * value of the lattice at x, y with an averaging window of width windowWidth.
+             * @param x X location to compute the normalized average for
+             * @param y Y location to compute the normalized average for
+             * @param windowWidth Width of the averaging window (0 is a single cell)
+             * @return Average value for the specified window.
+             * @note This is experimental at the moment.
+             */
+            inline LatticeVal computeNormalizedValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
+                static const LatticeVal sigma = 2;
+                static const LatticeVal twoSigmaSqr = 2 * sigma * sigma;
+                
+                LatticeVal retval = computeAverageValue(x, y, windowWidth);
+                retval = retval * exp(-retval*retval/twoSigmaSqr);
+                return retval;
+            }
             
             /**
              * Gets the width of the lattice.

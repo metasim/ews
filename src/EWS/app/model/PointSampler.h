@@ -118,23 +118,34 @@ namespace ews {
                 /** Perform a lattice sample operation and store in history. */
                 void sample();
                 
+                /** Clear history data. */
+                void reset() {
+                    _history.clear();
+                    emit sampleHistoryChanged(this);
+                }
+                
             signals:
                 /** Fired when the location changes. */
                 void positionChanged(osg::Vec2);
                 /** Fired when enabled state changes. */
                 void enabledChanged(bool);
                 /** Fired when the history of samples has changed. */
-                void sampleHistoryChanged();
+                void sampleHistoryChanged(const PointSampler*);
                 /** Fired when the paused state changes. */
                 void pausedStateChanged(bool);
                 
             private:
                 Q_DISABLE_COPY(PointSampler);
                 
+                /** Lattice position. */
                 osg::Vec2 _position;
+                /** Whether sampler does anything. */
                 bool _enabled;
+                /** Whether the sampling of data is halted. */
                 bool _paused;
+                /** Reference to object to sample. */
                 const Lattice& _lattice;
+                /** History of previous samples. */
                 SampleHistory _history;
             };
         }

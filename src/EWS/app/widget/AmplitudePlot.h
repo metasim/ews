@@ -52,10 +52,7 @@ namespace ews {
                 void removeSampleSource(PointSampler* src);
                 
             public slots:
-                void updatePlot();
-                
-            private slots:
-                void moved(const QPoint&);
+                void updatePlot(const PointSampler*);
                            
             private:
                 Ui::AmplitudePlotForm* _ui;

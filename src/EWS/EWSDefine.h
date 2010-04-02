@@ -31,7 +31,7 @@ namespace ews {
     /**
      * Flag to enable more realistic water dripping wave
      */
-    const bool REALISTIC_DRIP = false;
+    const bool REALISTIC_DRIP = true;
 }
 
 #endif // __EWSDEFINE_H

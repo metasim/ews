@@ -50,6 +50,10 @@ namespace ews {
                     return _history[index];
                 }
                 
+                void clear() {
+                    _history.assign(_size, 0);
+                }
+                
             private:
                 std::deque<LatticeVal> _history;
                 const Uint _size;

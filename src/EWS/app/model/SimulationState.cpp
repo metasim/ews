@@ -78,6 +78,10 @@ namespace ews {
                 _dripSource2.reset();
                 _barriers.reset();
                 
+                for (PointSamplerIterator pi = _samplers.begin(); pi != _samplers.end(); pi++) {
+                    (*pi)->reset();
+                }
+                
                 // Hack to make sure cleared wave model gets rendered.
                 if(isPaused()) {
                     _waveMedium.getWaveModel().propagate();

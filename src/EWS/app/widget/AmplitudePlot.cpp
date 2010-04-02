@@ -79,7 +79,7 @@ namespace ews {
                 p->canvas()->setPaintAttribute(QwtPlotCanvas::PaintPacked, false);
                 // Assign a title
                 // p->setTitle("Amplitude vs Time");
-                p->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+                // p->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
                 
                 // Axis 
                 p->setAxisTitle(QwtPlot::xBottom, "Ticks");
@@ -92,9 +92,7 @@ namespace ews {
                                                           p->canvas());
                 picker->setRubberBandPen(QColor(Qt::darkGreen));
                 picker->setRubberBand(QwtPicker::CrossRubberBand);
-                picker->setTrackerPen(QColor(Qt::black));
-                connect(picker, SIGNAL(moved(const QPoint &)),
-                        SLOT(moved(const QPoint &)));
+                picker->setTrackerPen(QColor(Qt::darkGreen));
             }
             
             AmplitudePlot::~AmplitudePlot() {
@@ -106,16 +104,17 @@ namespace ews {
                 // Insert new curves
                 QwtPlotCurve* curve = new QwtPlotCurve(src->objectName());
                 _sources.insert(src, curve);
-                curve->setPen(QPen(Qt::red));
+//                curve->setPen(QPen(Qt::red));
+                curve->setRenderHint(QwtPlotItem::RenderAntialiased);
+                
                 SampleHistoryPlotDataAdapter adapter(src);
                 curve->setData(adapter);
                 
                 curve->attach(_ui->plot);
                 
                 _ui->plot->setAxisScale(QwtPlot::xBottom, 0, src->getHistory().size());
-//                _ui->plot->setAxisScale(QwtPlot::yLeft, -1, 1);
 
-                connect(src, SIGNAL(sampleHistoryChanged()), SLOT(updatePlot()));
+                connect(src, SIGNAL(sampleHistoryChanged(const PointSampler*)), SLOT(updatePlot(const PointSampler*)));
             }
             
             void AmplitudePlot::removeSampleSource(PointSampler* src) {
@@ -125,16 +124,8 @@ namespace ews {
                 delete curve;
             }
             
-            void AmplitudePlot::updatePlot() {
+            void AmplitudePlot::updatePlot(const PointSampler* source) {
                 _ui->plot->replot();
-            }
-            
-            void AmplitudePlot::moved(const QPoint& pos) {
-//                QString info;
-//                double x = _ui->plot->invTransform(QwtPlot::xBottom, pos.x());
-//                double y = _ui->plot->invTransform(QwtPlot::yLeft, pos.y());
-//                info.sprintf("x=%g, y=%g", x, y);
-//                qDebug() << info;
             }
         }
     }
