@@ -34,6 +34,7 @@ namespace ews {
             using namespace osg;
             using ews::physics::WaveModel;
             using ews::physics::Lattice;
+            using ews::physics::DEFAULT_WINDOW_WIDTH;
             using namespace ews::util;
             
             /** Texture binding ID used here and in WaterSurfaceGeom. */
@@ -126,7 +127,8 @@ namespace ews {
                     // could surely be made better.
                     for(unsigned int x = 0; x < gridWidth; x++) {
                         for(unsigned int y = 0; y < gridLength; y++) {
-                            *((float*)image->data(x,y)) = (float) lattice.getValue(x, y);
+                            *(reinterpret_cast<float*>(image->data(x,y))) =
+                              static_cast<float>(lattice.computeAverageValue(x, y, DEFAULT_WINDOW_WIDTH));
                         }
                     }
                     

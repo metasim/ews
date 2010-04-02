@@ -67,7 +67,7 @@ namespace ews {
                 _ui->renderer->setSceneData(NULL);
                 delete _ui;
             }
-
+            /** Perform post realization initialization() */
             void EWSMainWindow::init() {
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
@@ -104,7 +104,8 @@ namespace ews {
                 _ui->dripSource2->syncUI();
                 _ui->renderer->homePosition();
             }
-
+            
+            /** Detect when we should perform post realization initialization() */
             bool EWSMainWindow::event(QEvent* event) {
                 int retval = QWidget::event(event);
 

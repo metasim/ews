@@ -32,13 +32,16 @@ namespace ews {
                 connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(drip(int)), this, SLOT(pokeOscillator()));
-                connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
+                if (REALISTIC_DRIP) {
+                    connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
+                }
                 
                 setPosition(osg::Vec2(0, 0));
                 _oscillator.setRadius(2);
-                
-                
-                updateTimer();
+
+                if (REALISTIC_DRIP) {
+                    updateTimer();
+                }
             }
             
             void DripSource::updateTimer()  {
@@ -56,8 +59,8 @@ namespace ews {
                     _timer.setInterval(delay);
                 }
                 
-                if(_timer.isActive() != isEnabled()) {
-                    if(isEnabled()) {
+                if (_timer.isActive() != isEnabled()) {
+                    if (isEnabled()) {
                         _timer.start();
                     }
                     else {
@@ -67,12 +70,13 @@ namespace ews {
                 
                 // A bit of a hack to get a drop immediately
                 // when the timer is turned on or changed.
-                if(_timer.isActive()) {
+                if (_timer.isActive()) {
                     pulseDrip();
                 }
             }
             
             void DripSource::pokeOscillator() {
+                qDebug() << "pokeOscillator";
                 _oscillator.firePulse();
             }
             

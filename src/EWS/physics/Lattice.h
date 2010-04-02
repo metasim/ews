@@ -27,6 +27,7 @@ using std::vector;
 
 namespace ews {
     namespace physics {
+        const unsigned int DEFAULT_WINDOW_WIDTH = 2;
 
         /**
          * Value type to use for operations that will be rendered by openGL.

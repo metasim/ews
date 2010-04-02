@@ -26,6 +26,7 @@ using std::sqrt;
 #if !defined(M_PI)
 #define M_PI 3.1415926535897932384626433832795
 #endif // M_PI
+#include "EWSDebug.h"
 
 namespace ews {
     namespace physics {
@@ -64,12 +65,14 @@ namespace ews {
                 _inPulse = false;
                 _oscillating = false;
                 _phase = 0;
+                qDebug() << "Pulse over: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
             }
         }
         void Oscillator::firePulse() {
             resetPhase();
             _oscillating = true;
             _inPulse = true;
+            qDebug() << "Firing pulse: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
         }
         OscillatorVal Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
@@ -78,7 +81,9 @@ namespace ews {
             if (!_oscillating && shouldOscillate) {
                 resetPhase();
             }
+            _inPulse = false;
             _oscillating = shouldOscillate;
+            qDebug() << "_oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
         }
         void Oscillator::resetPhase() {
             _phase = -getCosArg() + M_PI/2.0; // Puts getValue at its minimum

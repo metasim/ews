@@ -28,6 +28,10 @@ namespace ews {
      * Unsigned integer. Not using UInt as that might conflict with other definitions.
      */
     typedef unsigned int Uint;
+    /**
+     * Flag to enable more realistic water dripping wave
+     */
+    const bool REALISTIC_DRIP = false;
 }
 
 #endif // __EWSDEFINE_H

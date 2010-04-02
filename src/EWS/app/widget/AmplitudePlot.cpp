@@ -52,12 +52,13 @@ namespace ews {
                     double val = _history.valueAt(i);
                     return val;
                 }
-//                virtual QwtDoubleRect boundingRect() const {
-//                    // qreal left, qreal top, qreal width, qreal height;
-//                    double vspan = _history.span(); //fabs(_history.max() - _history.min());
-//                    // qDebug() << "span" << vspan << _history.max() << _history.min();
-//                    return QwtDoubleRect(0, -vspan/2.0, size(), vspan);
-//                }
+                virtual QwtDoubleRect boundingRect() const {
+                    QwtDoubleRect retval = QwtData::boundingRect();
+                    double halfspan = std::max(fabs(retval.top()), fabs(retval.bottom()));
+                    retval.setTop(-halfspan);
+                    retval.setHeight(halfspan*2.0);
+                    return retval;
+                }
                 
             private:
                 const SampleHistory& _history;

@@ -19,17 +19,21 @@
 
 #include "PointSampler.h"
 #include "SimulationState.h"
+#include "Lattice.h"
 #include "EWSDebug.h"
+#include "EWSDefine.h"
 
 namespace ews {
     namespace app {
         namespace model {
-            
+            using ews::physics::DEFAULT_WINDOW_WIDTH;
             void PointSampler::sample() {
                 using osg::Vec2;
                 if(isEnabled() && !isPaused()) {
                     Vec2 pos = getPosition();
-                    ews::physics::LatticeVal val = _lattice.getValue((int) pos.x(), (int) pos.y());
+                    ews::physics::LatticeVal val = _lattice.computeAverageValue(static_cast<Uint>(pos.x()),
+                                                                                static_cast<Uint>(pos.y()),
+                                                                                DEFAULT_WINDOW_WIDTH);
                     _history.addValue(val);
                     emit sampleHistoryChanged();
                 }
