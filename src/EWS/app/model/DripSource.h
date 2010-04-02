@@ -76,7 +76,7 @@ namespace ews {
                  * Get the amplitude, (0, 100]
                  */
                 Uint getAmplitude() const {
-                    return (int) (_oscillator.getAmplitude() / ews::physics::MAX_AMPLITUDE * 100);
+                    return static_cast<Uint>(_oscillator.getAmplitude() / ews::physics::MAX_AMPLITUDE * 100);
                 }
                 
                 /**
@@ -121,6 +121,9 @@ namespace ews {
                 void setEnabled(bool state) {
                     if (_enabled != state) {
                         _enabled = state;
+                        if (!REALISTIC_DRIP && _frequency > 0) {
+                            _oscillator.setOscillateStatus(state);
+                        }
                         qDebug() << __FILE__ << "emit enabledChanged(" << state << ")";
                         emit enabledChanged(state);
                     }
@@ -150,6 +153,18 @@ namespace ews {
                  */
                 void setFrequency(Uint frequency) {
                     _frequency = frequency;
+                    if (!REALISTIC_DRIP) {
+                        if (frequency > 0) {
+                            if (_enabled != _oscillator.getOscillateStatus()) {
+                                _oscillator.setOscillateStatus(_enabled);
+                            }
+                            _oscillator.setPeriod(1.0 / frequency);
+                        }
+                        else {
+                            _oscillator.setOscillateStatus(false);
+                            _oscillator.setPeriod(ews::physics::DEFAULT_PERIOD);
+                        }
+                    }
                     emit frequencyChanged(frequency);
                 }
                 
@@ -167,6 +182,7 @@ namespace ews {
                  * Introduce a single drop into the system.
                  */
                 void pulseDrip() {
+                    qDebug() << "pulseDrip";
                     emit drip(_oscillator.getAmplitude());
                 }
                 
