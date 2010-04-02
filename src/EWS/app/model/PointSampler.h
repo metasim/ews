@@ -49,7 +49,7 @@ namespace ews {
                  * @param size the total size of the history buffer.
                  * @param parent Qt parent. 
                  */
-                PointSampler(const Lattice& lattice, Uint size = 1024, QObject * parent = 0) 
+                PointSampler(const Lattice& lattice, QObject* parent, Uint size = 512) 
                 : QObject(parent), _position(0, 0), _enabled(false), 
                   _lattice(lattice), _history(size) {}
                 

@@ -34,8 +34,6 @@ namespace ews {
         namespace widget {
             using ews::app::model::SampleHistory;
             
-            const double DEF_PLOT_VERT_HEIGHT = 1e-3;
-            
             class SampleHistoryPlotDataAdapter : public QwtData {
             public:
                 SampleHistoryPlotDataAdapter(PointSampler* src) : _history(src->getHistory()) {}
@@ -54,10 +52,12 @@ namespace ews {
                     double val = _history.valueAt(i);
                     return val;
                 }
-                virtual QwtDoubleRect boundingRect() const {
-                    // qreal left, qreal top, qreal width, qreal height;
-                    return QwtDoubleRect(0, -DEF_PLOT_VERT_HEIGHT/2, size(), DEF_PLOT_VERT_HEIGHT);
-                }
+//                virtual QwtDoubleRect boundingRect() const {
+//                    // qreal left, qreal top, qreal width, qreal height;
+//                    double vspan = _history.span(); //fabs(_history.max() - _history.min());
+//                    // qDebug() << "span" << vspan << _history.max() << _history.min();
+//                    return QwtDoubleRect(0, -vspan/2.0, size(), vspan);
+//                }
                 
             private:
                 const SampleHistory& _history;
@@ -77,14 +77,17 @@ namespace ews {
                 p->canvas()->setPaintAttribute(QwtPlotCanvas::PaintCached, false);
                 p->canvas()->setPaintAttribute(QwtPlotCanvas::PaintPacked, false);
                 // Assign a title
-                p->setTitle("Amplitude vs Time");
+                // p->setTitle("Amplitude vs Time");
                 p->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
+                
+                // Axis 
+                p->setAxisTitle(QwtPlot::xBottom, "Ticks");
 
-                QwtPlotGrid *grid = new QwtPlotGrid;
-                grid->enableXMin(true);
-                grid->setMajPen(QPen(Qt::white, 0, Qt::DotLine));
-                grid->setMinPen(QPen(Qt::gray, 0 , Qt::DotLine));
-                grid->attach(p);
+//                QwtPlotGrid *grid = new QwtPlotGrid;
+//                grid->enableXMin(true);
+//                grid->setMajPen(QPen(Qt::white, 0, Qt::DotLine));
+//                grid->setMinPen(QPen(Qt::gray, 0 , Qt::DotLine));
+//                grid->attach(p);
             }
             
             AmplitudePlot::~AmplitudePlot() {
@@ -102,7 +105,9 @@ namespace ews {
                 
                 curve->attach(_ui->plot);
                 
-                
+                _ui->plot->setAxisScale(QwtPlot::xBottom, 0, src->getHistory().size());
+//                _ui->plot->setAxisScale(QwtPlot::yLeft, -1, 1);
+
                 connect(src, SIGNAL(sampleHistoryChanged()), SLOT(updatePlot()));
             }
             

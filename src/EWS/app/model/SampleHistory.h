@@ -22,6 +22,7 @@
 #include "EWSDefine.h"
 #include "Lattice.h"
 #include <deque>
+#include <algorithm>
 
 namespace ews {
     namespace app {
@@ -29,21 +30,23 @@ namespace ews {
             using ews::Uint;
             using ews::physics::LatticeVal;
             
+            /** Class responsible for (efficiently) maintaining a rolling history of amplitude values. */
             class SampleHistory {
             public:
                 SampleHistory(Uint historySize)
                 : _history(historySize, 0), _size(historySize) {}
                 
                 void addValue(LatticeVal v) {
-                    _history.push_back(v);
+                    // Update history.
                     _history.pop_front();
+                    _history.push_back(v);
                 }
                 
-                Uint size() const {
+                inline Uint size() const {
                     return _size;
                 }
                 
-                LatticeVal valueAt(Uint index) const {
+                inline LatticeVal valueAt(Uint index) const {
                     return _history[index];
                 }
                 

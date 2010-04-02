@@ -25,7 +25,7 @@ namespace ews {
         namespace model {
             
             SimulationState::SimulationState(QObject * parent) 
-            : QObject(parent), _waveMedium(128, 128, 2, this),
+            : QObject(parent), _waveMedium(128, 128, 1, this),
             _dripSource1(_waveMedium.getWaveModel(), this), 
             _dripSource2(_waveMedium.getWaveModel(), this), 
             _barriers(this) {
@@ -80,9 +80,9 @@ namespace ews {
             
             PointSampler* SimulationState::createPointSampler() {
                 WaveModel& model = _waveMedium.getWaveModel();
-                PointSampler* retval = new PointSampler(model.getLattice(), 1024, this);
-//                retval->setPosition(Vec2(model.getWidth()/2, model.getLength()/2));
-                retval->setPosition(Vec2(10, 10));
+                PointSampler* retval = new PointSampler(model.getLattice(), this);
+                retval->setPosition(Vec2(20, 100));
+//                retval->setPosition(Vec2(10, 10));
                 emit objectAdded(*retval);
                 return retval;
             }

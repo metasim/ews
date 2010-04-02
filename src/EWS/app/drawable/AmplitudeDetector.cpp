@@ -54,12 +54,9 @@ namespace ews {
                             _dragger.setDirty(false);
                         }
                         
-                        // Only sample every 4 frames (arbitrary)
-                        const FrameStamp* fs = nv->getFrameStamp();
-                        int fn = fs->getFrameNumber();
-                        if(fn % 4) {
-                            s.sample();
-                        }
+//                        const FrameStamp* fs = nv->getFrameStamp();
+//                        int fn = fs->getFrameNumber();
+                        s.sample();
                     }
                     else {
                         notify(osg::WARN) << "AmplitudeDetector didn't receieve the right geometry type";

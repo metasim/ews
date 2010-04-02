@@ -76,6 +76,7 @@ namespace ews {
                 reset();
                 
                 PointSampler* s = _state->createPointSampler();
+                s->setObjectName("Probe 1");
                 s->setEnabled(true);
                 
                 _ui->amplitudePlot->addSampleSource(s);

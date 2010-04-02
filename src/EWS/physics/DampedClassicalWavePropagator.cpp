@@ -43,8 +43,8 @@ namespace ews {
             _largeLattice = _priorLattice; // At this point, largeLattice and priorLattice should already be the same
             const LatticeVal w1 = 0.14f;
             const LatticeVal w2 = 0.06f;
-	    const LatticeVal w3 = 1.1f;
-	    const LatticeVal w4 = 0.95f;
+            const LatticeVal w3 = 1.1f;
+            const LatticeVal w4 = 0.95f;
             for (unsigned int i = 1; i < width; i++) {
                 LatticeVal* priorRow = _priorLattice.getRow(i - 1);
                 LatticeVal* row = _priorLattice.getRow(i);
@@ -57,8 +57,8 @@ namespace ews {
                     }
                     else {
                         const LatticeVal neigh = (priorRow[j] + row[j-1] + row[j+1] + nextRow[j]) * w1 +
-                                             (priorRow[j-1] + priorRow[j+1] + nextRow[j-1] + nextRow[j+1]) * w2;
-                        newRow[j] = row[j] * w3 - oldRow[j] * w4 + neigh;
+                        (priorRow[j-1] + priorRow[j+1] + nextRow[j-1] + nextRow[j+1]) * w2;
+                        newRow[j] = 1/.97*(row[j] * w3 - oldRow[j] * w4 + neigh);
                     }
                 }
             }
@@ -66,10 +66,10 @@ namespace ews {
             dampHorizontal(length, -1);
             dampVertical(0, 1);
             dampVertical(width, -1);
-
+            
             _priorPriorLattice = _priorLattice;
             _priorLattice = _largeLattice;            
-
+            
             dampScale();
             for (unsigned int i = 0; i < lattice.getWidth(); i++) {
                 LatticeVal* row = _largeLattice.getRow(i + _dampX);
