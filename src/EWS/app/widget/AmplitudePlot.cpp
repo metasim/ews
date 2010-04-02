@@ -27,6 +27,9 @@
 #include <qwt_legend.h>
 #include <qwt_math.h>
 #include <qwt_data.h>
+#include <qwt_plot_picker.h>
+#include <QtCore>
+
 #include "SampleHistory.h"
 
 namespace ews {
@@ -54,7 +57,7 @@ namespace ews {
                 }
                 virtual QwtDoubleRect boundingRect() const {
                     QwtDoubleRect retval = QwtData::boundingRect();
-                    double halfspan = std::max(fabs(retval.top()), fabs(retval.bottom()));
+                    double halfspan = std::max(std::max(fabs(retval.top()), fabs(retval.bottom())), 1e-2);
                     retval.setTop(-halfspan);
                     retval.setHeight(halfspan*2.0);
                     return retval;
@@ -69,9 +72,6 @@ namespace ews {
                 
                 _ui->setupUi(this);
                 
-                // Disable polygon clipping
-//                QwtPainter::setDeviceClipping(false);
-                
                 QwtPlot* p = _ui->plot;
                 p->setCanvasBackground(QColor(Qt::white));
                 // We don't need the cache here
@@ -83,12 +83,18 @@ namespace ews {
                 
                 // Axis 
                 p->setAxisTitle(QwtPlot::xBottom, "Ticks");
-
-//                QwtPlotGrid *grid = new QwtPlotGrid;
-//                grid->enableXMin(true);
-//                grid->setMajPen(QPen(Qt::white, 0, Qt::DotLine));
-//                grid->setMinPen(QPen(Qt::gray, 0 , Qt::DotLine));
-//                grid->attach(p);
+                
+                p->setAxisTitle(QwtPlot::yLeft, "Height");
+                
+                QwtPlotPicker* picker = new QwtPlotPicker(QwtPlot::xBottom, QwtPlot::yLeft,
+                                                          QwtPicker::PointSelection | QwtPicker::DragSelection, 
+                                                          QwtPlotPicker::CrossRubberBand, QwtPicker::AlwaysOn, 
+                                                          p->canvas());
+                picker->setRubberBandPen(QColor(Qt::darkGreen));
+                picker->setRubberBand(QwtPicker::CrossRubberBand);
+                picker->setTrackerPen(QColor(Qt::black));
+                connect(picker, SIGNAL(moved(const QPoint &)),
+                        SLOT(moved(const QPoint &)));
             }
             
             AmplitudePlot::~AmplitudePlot() {
@@ -121,6 +127,14 @@ namespace ews {
             
             void AmplitudePlot::updatePlot() {
                 _ui->plot->replot();
+            }
+            
+            void AmplitudePlot::moved(const QPoint& pos) {
+//                QString info;
+//                double x = _ui->plot->invTransform(QwtPlot::xBottom, pos.x());
+//                double y = _ui->plot->invTransform(QwtPlot::yLeft, pos.y());
+//                info.sprintf("x=%g, y=%g", x, y);
+//                qDebug() << info;
             }
         }
     }

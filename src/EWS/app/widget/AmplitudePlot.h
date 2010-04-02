@@ -20,6 +20,7 @@
 #ifndef __AMPLITUDE_PLOT_H
 #define __AMPLITUDE_PLOT_H
 
+#include <QtCore>
 #include <QtGui>
 #include <QMap>
 #include "PointSampler.h"
@@ -53,6 +54,9 @@ namespace ews {
             public slots:
                 void updatePlot();
                 
+            private slots:
+                void moved(const QPoint&);
+                           
             private:
                 Ui::AmplitudePlotForm* _ui;
                 QMap<PointSampler*, QwtPlotCurve*> _sources;
