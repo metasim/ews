@@ -126,7 +126,9 @@ namespace ews {
                 DripSource _dripSource1;
                 DripSource _dripSource2;
                 BarrierSet _barriers;
-                QList<PointSampler*> _samplers;
+                typedef QList<PointSampler*> PointSamplerList;
+                typedef QList<PointSampler*>::iterator PointSamplerIterator;
+                PointSamplerList _samplers;
             };
         }
     }

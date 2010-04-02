@@ -27,7 +27,7 @@ namespace ews {
             
             void PointSampler::sample() {
                 using osg::Vec2;
-                if(isEnabled()) {
+                if(isEnabled() && !isPaused()) {
                     Vec2 pos = getPosition();
                     ews::physics::LatticeVal val = _lattice.getValue((int) pos.x(), (int) pos.y());
                     _history.addValue(val);

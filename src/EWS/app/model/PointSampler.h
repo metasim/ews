@@ -50,7 +50,7 @@ namespace ews {
                  * @param parent Qt parent. 
                  */
                 PointSampler(const Lattice& lattice, QObject* parent, Uint size = 512) 
-                : QObject(parent), _position(0, 0), _enabled(false), 
+                : QObject(parent), _position(0, 0), _enabled(false),  _paused(false),
                   _lattice(lattice), _history(size) {}
                 
                 virtual ~PointSampler() {}
@@ -67,6 +67,13 @@ namespace ews {
                  */
                 bool isEnabled() const {
                     return _enabled;
+                }
+                
+                /**
+                 * Is sampling paused?
+                 */
+                bool isPaused() const {
+                    return _paused;
                 }
                 
                 /**
@@ -98,6 +105,16 @@ namespace ews {
                     emit enabledChanged(state);
                 }
                 
+                /**
+                 * Set the paused state.
+                 */
+                void setPaused(bool state) {
+                    if (_paused != state) {
+                        _paused = state;
+                        emit pausedStateChanged(state);
+                    }
+                }
+                
                 /** Perform a lattice sample operation and store in history. */
                 void sample();
                 
@@ -108,12 +125,15 @@ namespace ews {
                 void enabledChanged(bool);
                 /** Fired when the history of samples has changed. */
                 void sampleHistoryChanged();
+                /** Fired when the paused state changes. */
+                void pausedStateChanged(bool);
                 
             private:
                 Q_DISABLE_COPY(PointSampler);
                 
                 osg::Vec2 _position;
                 bool _enabled;
+                bool _paused;
                 const Lattice& _lattice;
                 SampleHistory _history;
             };

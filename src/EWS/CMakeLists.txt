@@ -96,6 +96,7 @@ unmoc(Teapot.h)
 unmoc(Knob.h)
 unmoc(PotentialUpdater.h)
 unmoc(WaterBoundaryDragConstraint.h)
+unmoc(SampleHistory.h)
 #message("moc files: ${EWS_MOC_HDRS}")
 
 set_source_files_properties(${EWS_HDRS} PROPERTIES HEADER_FILE_ONLY TRUE) 
