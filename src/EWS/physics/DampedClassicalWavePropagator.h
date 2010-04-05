@@ -28,6 +28,15 @@
 namespace ews {
     namespace physics {
         using osg::ref_ptr;
+        const LatticeVal NEIGHBOR_PROPAGATE = 0.14f;
+        const LatticeVal DIAG_PROPAGATE = 0.06f;
+        const LatticeVal SELF_PROPAGATE = 1.1f;
+        const LatticeVal MEMORY_TERM = 0.95f;
+        // How much energy would go into the next timestep without additional adjustment
+        const LatticeVal XFR_FACTOR = 4 * (NEIGHBOR_PROPAGATE + DIAG_PROPAGATE) + SELF_PROPAGATE - MEMORY_TERM;
+        // How much energy we want to be "lost" (0.99 means 1% loss)
+        const LatticeVal DAMP_FACTOR = 0.99;
+        const LatticeVal MULT_FACTOR = DAMP_FACTOR / XFR_FACTOR;
         
         /**
          * @ingroup Physics
