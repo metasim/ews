@@ -23,8 +23,6 @@ namespace ews {
             using namespace osg;
             const Vec3 DEFAULT_OFFSET(200, 300, 200);
             const Vec3 UP(0, 1, 0);
-            const double COS_15 = cos(DegreesToRadians(15.0)); // Cosign of 5 degrees
-            const double TAN_15 = tan(DegreesToRadians(15.0)); // Tangent of 5 degrees
             
             CameraController::CameraController() 
             : TerrainManipulator()
@@ -42,7 +40,7 @@ namespace ews {
                 if(getNode()) {
                     const BoundingSphere& boundingSphere = getNode()->getBound();
                     const Vec3& center = boundingSphere.center();
-                    
+
                     setHomePosition(center+DEFAULT_OFFSET, center, UP,
                                     getAutoComputeHomePosition());
                 }

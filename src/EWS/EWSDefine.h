@@ -29,9 +29,10 @@ namespace ews {
      */
     typedef unsigned int Uint;
     /**
-     * Flag to enable more realistic water dripping wave
+     * Flag to enable more realistic water dripping wave. Specifically, if this flag is turned
+     * on, the wavelength in water isn't connected to the frequency of the oscillator.
      */
-    const bool REALISTIC_DRIP = true;
+    const bool REALISTIC_DRIP = false;
 }
 
 #endif // __EWSDEFINE_H

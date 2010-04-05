@@ -44,30 +44,30 @@ namespace ews {
             testDampedClassicalWavePropagator.propagate(lattice);
             LatticeVal prior = expected;
             LatticeVal priorPrior = prior;
-            const LatticeVal w1 = 0.14f;
-            const LatticeVal w2 = 0.06f;
-            const LatticeVal w3 = 1.1f;
-            const LatticeVal w4 = -0.95f;
-            expected = w3 * prior + w4 * priorPrior;
+            expected = MULT_FACTOR * (SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(lattice.getValue(x, y), expected);
-            LatticeVal neighbor = w1 * prior;
+            LatticeVal neighbor = MULT_FACTOR * NEIGHBOR_PROPAGATE * prior;
             QCOMPARE(lattice.getValue(x, y + 1), neighbor);
-            LatticeVal diagNeigh = w2 * prior;
+            LatticeVal diagNeigh = MULT_FACTOR * DIAG_PROPAGATE * prior;
             QCOMPARE(lattice.getValue(x + 1, y + 1), diagNeigh);
             testDampedClassicalWavePropagator.propagate(lattice);
             priorPrior = prior;
             prior = expected;
-            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            expected = MULT_FACTOR * (4 * (neighbor * NEIGHBOR_PROPAGATE + diagNeigh * DIAG_PROPAGATE) + 
+                                      SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(lattice.getValue(x, y), expected);
             LatticeVal priorNeigh = neighbor;
-            neighbor = (prior + 2 * diagNeigh) * w1 + priorNeigh * (2 * w2 + w3);
+            neighbor = MULT_FACTOR * ((prior + 2 * diagNeigh) * NEIGHBOR_PROPAGATE + 
+                                      priorNeigh * (2 * DIAG_PROPAGATE + SELF_PROPAGATE));
             QCOMPARE(lattice.getValue(x, y + 1), neighbor);
-            diagNeigh = 2 * priorNeigh * w1 + prior * w2 + diagNeigh * w3;
+            diagNeigh = MULT_FACTOR * (2 * priorNeigh * NEIGHBOR_PROPAGATE + prior * DIAG_PROPAGATE + 
+                                       diagNeigh * SELF_PROPAGATE);
             QCOMPARE(lattice.getValue(x + 1, y + 1), diagNeigh);
             testDampedClassicalWavePropagator.propagate(lattice);
             priorPrior = prior;
             prior = expected;
-            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            expected = MULT_FACTOR * (4 * (neighbor * NEIGHBOR_PROPAGATE + diagNeigh * DIAG_PROPAGATE) + 
+                                      SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(lattice.getValue(x, y), expected);
         }
         void DampedClassicalWavePropagatorTest::MethodPropagateWorksAcrossSpace() {
@@ -82,8 +82,6 @@ namespace ews {
             lattice.setValue(x, y, expected);
             testDampedClassicalWavePropagator.setBoundaryCondition(x, y, expected);
             x++;
-            const LatticeVal w1 = 0.14f;
-            const LatticeVal w2 = 0.06f;
             const LatticeVal zero = 0.0f;
             for (; x < lattice.getWidth(); x++) {
                 QCOMPARE(lattice.getValue(x, y), zero);
@@ -91,8 +89,9 @@ namespace ews {
                 QCOMPARE(lattice.getValue(x, y + 1), zero);
                 const LatticeVal priorDiag = lattice.getValue(x - 1, y + 1);
                 testDampedClassicalWavePropagator.propagate(lattice);
-                expected *= w1;
-                expected += 2 * priorDiag * w2; // From both diagonals
+                expected *= NEIGHBOR_PROPAGATE;
+                expected += 2 * priorDiag * DIAG_PROPAGATE; // From both diagonals
+                expected *= MULT_FACTOR;
                 QCOMPARE(lattice.getValue(x, y), expected);
             }
         }

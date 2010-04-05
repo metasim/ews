@@ -29,10 +29,10 @@ namespace ews {
             DripSource::DripSource(WaveModel& model, SimulationState * parent)
             :  QObject(parent), _oscillator(model), _timer(), _paused(false), _enabled(false), _frequency(0) {
                 
-                connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
-                connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
                 connect(this, SIGNAL(drip(int)), this, SLOT(pokeOscillator()));
                 if (REALISTIC_DRIP) {
+                    connect(this, SIGNAL(enabledChanged(bool)), this, SLOT(updateTimer()));
+                    connect(this, SIGNAL(frequencyChanged(int)), this, SLOT(updateTimer()));
                     connect(&_timer, SIGNAL(timeout()), this, SLOT(pulseDrip()));
                 }
                 
@@ -52,7 +52,7 @@ namespace ews {
                     return;
                 }
                 
-                int delay = 100000/getFrequency();
+                int delay = computeMillisecondPeriod();
                 qDebug() << "***** drip delay is: " << delay;
                 
                 if(_timer.interval() != delay && delay > 0) {

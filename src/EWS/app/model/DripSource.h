@@ -26,16 +26,22 @@
 #include "WaveModel.h"
 #include "Oscillator.h"
 #include "EWSDefine.h"
+#include "MathUtils.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using ews::physics::WaveModel;
             using ews::physics::Oscillator;
+            using ews::physics::OscillatorVal;
             using osg::Vec2;
 
             const QString DRIPSOURCE1("dripSource1");
             const QString DRIPSOURCE2("dripSource2");
+            // Used for converting frequency dial value to period (in seconds)
+            const OscillatorVal MIN_PERIOD = 0.33; // Seconds
+            const OscillatorVal MAX_PERIOD = 1.25; // Seconds
+            
 
             class SimulationState;
             
@@ -70,6 +76,14 @@ namespace ews {
                  */
                 Uint getFrequency() const {
                     return _frequency;
+                }
+                
+                /**
+                 * Compute the period in milliseconds
+                 * @return Period in milliseconds
+                 */
+                Uint computeMillisecondPeriod() {
+                    return 100000 / getFrequency();
                 }
                 
                 /**
@@ -149,16 +163,19 @@ namespace ews {
                 }
                 
                 /**
-                 * Set the frequency in of drops in millihertz
+                 * Set the frequency in (0, 100]
                  */
                 void setFrequency(Uint frequency) {
+                    using ews::util::scale;
                     _frequency = frequency;
                     if (!REALISTIC_DRIP) {
                         if (frequency > 0) {
                             if (_enabled != _oscillator.getOscillateStatus()) {
                                 _oscillator.setOscillateStatus(_enabled);
                             }
-                            _oscillator.setPeriod(1.0 / frequency);
+                            OscillatorVal freq = scale(1 / MAX_PERIOD, getFrequency(), 1 / MIN_PERIOD);
+                            // The corresponding frequency here differs from when REALISTIC_DRIP is true                            
+                            _oscillator.setPeriod(1 / freq);
                         }
                         else {
                             _oscillator.setOscillateStatus(false);
