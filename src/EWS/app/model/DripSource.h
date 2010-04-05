@@ -32,6 +32,7 @@ namespace ews {
         namespace model {
             using ews::physics::WaveModel;
             using ews::physics::Oscillator;
+            using ews::physics::OscillatorVal;
             using osg::Vec2;
 
             const QString DRIPSOURCE1("dripSource1");
@@ -70,6 +71,14 @@ namespace ews {
                  */
                 Uint getFrequency() const {
                     return _frequency;
+                }
+                
+                /**
+                 * Compute the period in milliseconds
+                 * @return Period in milliseconds
+                 */
+                Uint computeMillisecondPeriod() {
+                    return 100000 / getFrequency();
                 }
                 
                 /**
@@ -158,7 +167,7 @@ namespace ews {
                             if (_enabled != _oscillator.getOscillateStatus()) {
                                 _oscillator.setOscillateStatus(_enabled);
                             }
-                            _oscillator.setPeriod(1.0 / frequency);
+                            _oscillator.setPeriod(static_cast<OscillatorVal>(computeMillisecondPeriod()) / 10000.0);
                         }
                         else {
                             _oscillator.setOscillateStatus(false);
