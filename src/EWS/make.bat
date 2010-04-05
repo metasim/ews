@@ -1,6 +1,9 @@
 @echo off
 
 set OSG_DIR=c:\OpenSceneGraph-2.8.2
+set Qwt5_INCLUDE_DIR=c:\qwt-5.2.0\include
+set Qwt5_Qt4_LIBRARY_DIR=c:\qwt-5.2.0\lib
+
 
 if "%1"=="vs" goto VS
 if "%1" == "debug" goto DEBUG

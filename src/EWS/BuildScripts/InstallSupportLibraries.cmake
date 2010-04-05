@@ -71,7 +71,20 @@ if(WIN32)
 			CONFIGURATIONS Debug RelWithDebInfo
 			COMPONENT Runtime
 		)
+
+        get_filename_component(Qwt5_DLL_DIR ${Qwt5_Qt4_LIBRARY} PATH)
+        install(FILES ${Qwt5_DLL_DIR}/qwt5.dll
+            DESTINATION bin
+            CONFIGURATIONS Release
+            COMPONENT Runtime
+        )
 		
+        install(FILES ${Qwt5_DLL_DIR}/qwt5d.dll
+            DESTINATION bin
+            CONFIGURATIONS Debug
+            COMPONENT Runtime
+        )
+
 	endif()
 	
 endif()
