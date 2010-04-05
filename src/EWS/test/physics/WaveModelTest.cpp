@@ -17,10 +17,11 @@
  */
 
 #include "WaveModelTest.h"
+#include "EWSDebug.h"
+#include "DampedClassicalWavePropagator.h"
 
 namespace ews {
     namespace test {
-        
         void WaveModelTest::initTestCase() { /* do nothing */ }
         void WaveModelTest::cleanupTestCase() { /* do nothing */ }
         void WaveModelTest::init() { /* do nothing */ }
@@ -40,30 +41,30 @@ namespace ews {
             testWaveModel.propagate();
             LatticeVal prior = expected;
             LatticeVal priorPrior = prior;
-            const LatticeVal w1 = 0.14f;
-            const LatticeVal w2 = 0.06f;
-            const LatticeVal w3 = 1.1f;
-            const LatticeVal w4 = -0.95f;
-            expected = w3 * prior + w4 * priorPrior;
+            expected = MULT_FACTOR * (SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
-            LatticeVal neighbor = w1 * prior;
+            LatticeVal neighbor = MULT_FACTOR * NEIGHBOR_PROPAGATE * prior;
             QCOMPARE(testWaveModel.getValue(x, y + 1), neighbor);
-            LatticeVal diagNeigh = w2 * prior;
+            LatticeVal diagNeigh = MULT_FACTOR * DIAG_PROPAGATE * prior;
             QCOMPARE(testWaveModel.getValue(x + 1, y + 1), diagNeigh);
             testWaveModel.propagate();
             priorPrior = prior;
             prior = expected;
-            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            expected = MULT_FACTOR * (4 * (neighbor * NEIGHBOR_PROPAGATE + diagNeigh * DIAG_PROPAGATE) + 
+                                      SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             LatticeVal priorNeigh = neighbor;
-            neighbor = (prior + 2 * diagNeigh) * w1 + priorNeigh * (2 * w2 + w3);
+            neighbor = MULT_FACTOR * ((prior + 2 * diagNeigh) * NEIGHBOR_PROPAGATE + 
+                                      priorNeigh * (2 * DIAG_PROPAGATE + SELF_PROPAGATE));
             QCOMPARE(testWaveModel.getValue(x, y + 1), neighbor);
-            diagNeigh = 2 * priorNeigh * w1 + prior * w2 + diagNeigh * w3;
+            diagNeigh = MULT_FACTOR * (2 * priorNeigh * NEIGHBOR_PROPAGATE + 
+                                       prior * DIAG_PROPAGATE + diagNeigh * SELF_PROPAGATE);
             QCOMPARE(testWaveModel.getValue(x + 1, y + 1), diagNeigh);
             testWaveModel.propagate();
             priorPrior = prior;
             prior = expected;
-            expected = 4 * (neighbor * w1 + diagNeigh * w2) + w3 * prior + w4 * priorPrior;            
+            expected = MULT_FACTOR * (4 * (neighbor * NEIGHBOR_PROPAGATE + diagNeigh * DIAG_PROPAGATE) + 
+                                      SELF_PROPAGATE * prior - MEMORY_TERM * priorPrior);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
         }
         void WaveModelTest::MethodPropagateWorksAcrossSpace() {
@@ -74,8 +75,6 @@ namespace ews {
             testWaveModel.setSourceValue(x, y, expected);
             QCOMPARE(testWaveModel.getValue(x, y), expected);
             x++;
-            const LatticeVal w1 = 0.14f;
-            const LatticeVal w2 = 0.06f;
             QBENCHMARK {
                 for (; x < testWaveModel.getWidth(); x++) {
                     QCOMPARE(testWaveModel.getValue(x, y), 0.0f);
@@ -83,8 +82,9 @@ namespace ews {
                     QCOMPARE(testWaveModel.getValue(x, y + 1), 0.0f);
                     const LatticeVal priorDiag = testWaveModel.getValue(x - 1, y + 1);
                     testWaveModel.propagate();
-                    expected *= w1;
-                    expected += 2 * priorDiag * w2; // From both diagonals
+                    expected *= NEIGHBOR_PROPAGATE;
+                    expected += 2 * priorDiag * DIAG_PROPAGATE; // From both diagonals
+                    expected *= MULT_FACTOR;
                     QCOMPARE(testWaveModel.getValue(x, y), expected);
                 }
             }

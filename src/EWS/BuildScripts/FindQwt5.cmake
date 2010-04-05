@@ -17,6 +17,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
+
 # Condition is "(A OR B) AND C", CMake does not support parentheses but it evaluates left to right
 IF(Qwt5_Qt4_LIBRARY OR Qwt5_Qt3_LIBRARY AND Qwt5_INCLUDE_DIR)
     SET(Qwt5_FIND_QUIETLY TRUE)
@@ -29,7 +30,7 @@ ENDIF(NOT QT4_FOUND)
 IF( QT4_FOUND )
 	# Is Qwt5 installed? Look for header files
 	FIND_PATH( Qwt5_INCLUDE_DIR qwt.h 
-               PATHS ${QT_INCLUDE_DIR} /usr/local/qwt/include /usr/include/qwt
+               PATHS ${QT_INCLUDE_DIR} /usr/local/qwt/include /usr/include/qwt "$ENV{Qwt5_INCLUDE_DIR}"
                PATH_SUFFIXES qwt qwt5 qwt-qt4 qwt5-qt4 qwt-qt3 qwt5-qt3 include qwt/include qwt5/include qwt-qt4/include qwt5-qt4/include qwt-qt3/include qwt5-qt3/include ENV PATH)
 	
 	# Find Qwt version
@@ -41,7 +42,7 @@ IF( QT4_FOUND )
 		STRING(REGEX REPLACE ".*#define[\\t\\ ]+QWT_VERSION_STR[\\t\\ ]+\"([0-9]+\\.[0-9]+\\.[0-9]+)\".*" "\\1" Qwt_VERSION "${QWT_GLOBAL_H}")
 
 		# Find Qwt5 library linked to Qt4
-		FIND_LIBRARY( Qwt5_Qt4_TENTATIVE_LIBRARY NAMES qwt5-qt4 qwt-qt4 qwt5 qwt PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib )
+		FIND_LIBRARY( Qwt5_Qt4_TENTATIVE_LIBRARY NAMES qwt5-qt4 qwt-qt4 qwt5 qwt PATHS /usr/local/qwt/lib /usr/local/lib /usr/lib $ENV{Qwt5_Qt4_LIBRARY_DIR})
 		IF( UNIX AND NOT CYGWIN)
 			IF( Qwt5_Qt4_TENTATIVE_LIBRARY )
 				#MESSAGE("Qwt5_Qt4_TENTATIVE_LIBRARY = ${Qwt5_Qt4_TENTATIVE_LIBRARY}")

@@ -24,6 +24,8 @@
 
 namespace ews {
     namespace util {
+        const Real MAX_PERCENT = 100;
+
         /**
          * Return x if x is between min and max (inclusive), else return min if x is less than min
          * or max if x is greater than max
@@ -47,6 +49,16 @@ namespace ews {
          */
         inline Real scale(Real min, Real frac, Real max) {
             return (frac * (max - min)) + min;
+        }
+        /**
+         * Return a value frac distance between min and max.
+         * @param min Minimum allowable value (if frac is between 0 and 1)
+         * @param frac Percentage distance from min to max (between 0 and 100)
+         * @param max Maximum allowable value (if frac is between 0 and 1)
+         * @return Value scaled between min and max
+         */
+        inline Real scale(Real min, Uint frac, Real max) {
+            return scale(min, static_cast<Real>(frac) / MAX_PERCENT, max);
         }
     }
 }
