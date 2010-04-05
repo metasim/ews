@@ -52,6 +52,16 @@ This is a work in progres....
   <li>You must merge debug/non-debug contents for CMake to find it all properly (i.e. extract them to the same place).
   <li>You'll also have to set OSG_DIR to C:\OpenSceneGraph-2.8.2\ (or wherever you unzip your the above zip file to). Note: do not include "bin" in OSG_DIR.
 </ul>  
+<li>Install Qwt 5.2.x
+<ul>
+  <li>Download zip-ball from http://sourceforge.net/projects/qwt/
+  <li>Extract to c:\
+  <li>Edit the file "src\qwt_valuelist.h" around line 39, change "#if QT_VERSION < 0x040300" to "#if 1".
+  <li>Build with qmake according to instructions in the file "INSTALL" in the extracted directory
+  <li>Create the debug and release versions with "nmake debug" and "nmake release". Make sure to rename the debug versions as the 
+  qmake file doesn't distinguish between release and debug targets.
+  <li>You'll probably need to set Qwt5_INCLUDE_DIR and Qwt5_Qt4_LIBRARY_DIR for cmake to find it. Currently set in make.bat.
+</ul>
 <li>Install NSIS and 7Zip, per: http://www.cmake.org/Wiki/CMake:CPackWin32NewbiesChecklist
 <li>Tracking down library dependency issues is helped with http://www.dependencywalker.com/
 </ol>
