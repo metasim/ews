@@ -28,6 +28,7 @@
 namespace ews {
     namespace physics {
         using osg::ref_ptr;
+        const Uint DEFAULT_DAMP_LENGTH = 50;
         const LatticeVal NEIGHBOR_PROPAGATE = 0.14f;
         const LatticeVal DIAG_PROPAGATE = 0.06f;
         const LatticeVal SELF_PROPAGATE = 1.1f;
