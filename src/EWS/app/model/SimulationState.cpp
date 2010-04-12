@@ -49,19 +49,13 @@ namespace ews {
             }
             
             SimulationState::~SimulationState()  {
-                for (PointSamplerIterator i = _samplers.begin(); i != _samplers.end(); i++) {
-                    PointSampler* s = *i;
-                    delete s;
-                }
             }
             
             void SimulationState::setPaused(bool state) {
                 _dripSource1.setPaused(state);
                 _dripSource2.setPaused(state);
                 _waveMedium.setPaused(state);
-                for (PointSamplerIterator pi = _samplers.begin(); pi != _samplers.end(); pi++) {
-                    (*pi)->setPaused(state);
-                }
+
             }
                                             
             void SimulationState::forwardBarrierSetAddition(int index, Barrier* barrier) {
@@ -72,30 +66,27 @@ namespace ews {
                 emit objectRemoved(*barrier);
             }
             
+            void SimulationState::forwardSamplerSetAddition(int index, PointSampler* sampler) {
+                emit objectAdded(*sampler);
+            }
+            
+            void SimulationState::forwardSamplerSetRemoval(int index, PointSampler* sampler) {
+                emit objectRemoved(*sampler);
+            }
+            
             void SimulationState::reset() {
                 _waveMedium.getWaveModel().clear();
                 _dripSource1.reset();
                 _dripSource2.reset();
                 _barriers.reset();
-                
-                for (PointSamplerIterator pi = _samplers.begin(); pi != _samplers.end(); pi++) {
-                    (*pi)->reset();
-                }
-                
+                _samplers.reset();
+
                 // Hack to make sure cleared wave model gets rendered.
                 if(isPaused()) {
                     _waveMedium.getWaveModel().propagate();
                 }
             }
-            
-            PointSampler* SimulationState::createPointSampler() {
-                WaveModel& model = _waveMedium.getWaveModel();
-                PointSampler* retval = new PointSampler(model.getLattice(), this);
-                retval->setPosition(Vec2(20, 100));
-                _samplers.push_back(retval);
-                emit objectAdded(*retval);
-                return retval;
-            }
+
 
         }
     }

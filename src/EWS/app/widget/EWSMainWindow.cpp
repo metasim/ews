@@ -61,26 +61,27 @@ namespace ews {
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
+                
+                // Setup sync between samplers and plot.
+                QObject::connect(&_state->getSamplers(), SIGNAL(samplerAdded(int,PointSampler*)), 
+                                 _ui->amplitudePlot, SLOT(addSampleSource(int, PointSampler*)));
+                QObject::connect(&_state->getSamplers(), SIGNAL(samplerRemoved(int,PointSampler*)), 
+                                 _ui->amplitudePlot, SLOT(removeSampleSource(int, PointSampler*)));
             }
             
             EWSMainWindow::~EWSMainWindow() {
                 _ui->renderer->setSceneData(NULL);
                 delete _ui;
             }
+            
             /** Perform post realization initialization() */
             void EWSMainWindow::init() {
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
                 
+                
                 // Make sure all consituents know we're getting ready to start.
                 reset();
-                
-                PointSampler* s = _state->createPointSampler();
-                s->setObjectName("Probe 1");
-                s->setEnabled(true);
-                
-                _ui->amplitudePlot->addSampleSource(s);
-                
                 // Start simulation.
                 start();
             }
@@ -103,6 +104,7 @@ namespace ews {
                 _ui->dripSource1->syncUI();
                 _ui->dripSource2->syncUI();
                 _ui->renderer->homePosition();
+                _ui->amplitudePlot->reset();
             }
             
             /** Detect when we should perform post realization initialization() */

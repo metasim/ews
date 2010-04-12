@@ -67,7 +67,8 @@ namespace ews {
                 const SampleHistory& _history;
             };
             
-            AmplitudePlot::AmplitudePlot(QWidget * parent)
+            /** Plot class contructor. */
+            AmplitudePlot::AmplitudePlot(QWidget* parent)
             : QWidget(parent), _ui(new Ui::AmplitudePlotForm) { 
                 
                 _ui->setupUi(this);
@@ -104,7 +105,7 @@ namespace ews {
                 // Insert new curves
                 QwtPlotCurve* curve = new QwtPlotCurve(src->objectName());
                 _sources.insert(src, curve);
-//                curve->setPen(QPen(Qt::red));
+                curve->setPen(QPen(Qt::red));
                 curve->setRenderHint(QwtPlotItem::RenderAntialiased);
                 
                 SampleHistoryPlotDataAdapter adapter(src);
@@ -114,7 +115,7 @@ namespace ews {
                 
                 _ui->plot->setAxisScale(QwtPlot::xBottom, 0, src->getHistory().size());
 
-                connect(src, SIGNAL(sampleHistoryChanged(const PointSampler*)), SLOT(updatePlot(const PointSampler*)));
+                connect(src, SIGNAL(sampleHistoryChanged(const PointSampler*)), SLOT(updatePlot()));
             }
             
             void AmplitudePlot::removeSampleSource(PointSampler* src) {
@@ -124,8 +125,16 @@ namespace ews {
                 delete curve;
             }
             
-            void AmplitudePlot::updatePlot(const PointSampler* source) {
+            void AmplitudePlot::updatePlot() {
                 _ui->plot->replot();
+            }
+            
+            void AmplitudePlot::reset() {
+                SamplerCurveIterator it;
+                for(it = _sources.begin(); it != _sources.end(); ++it) {
+                    PointSampler* src = it.key();
+                    removeSampleSource(src);
+                }
             }
         }
     }

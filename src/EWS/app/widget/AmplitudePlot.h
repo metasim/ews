@@ -47,16 +47,32 @@ namespace ews {
             public:
                 AmplitudePlot(QWidget * parent = 0);
                 virtual ~AmplitudePlot();
-                
-                void addSampleSource(PointSampler* src);
-                void removeSampleSource(PointSampler* src);
-                
+
             public slots:
-                void updatePlot(const PointSampler*);
+                /** Add a sampler to plot. */
+                void addSampleSource(PointSampler* src);
+                /** Signal mapping slot.*/
+                void addSampleSource(int index, PointSampler* src) {
+                    addSampleSource(src);
+                }
+                /** Remove a sampler from plot. */
+                void removeSampleSource(PointSampler* src);
+                /** Signal mapping slot.*/
+                void removeSampleSource(int index, PointSampler* src) {
+                    removeSampleSource(src);
+                }
+                
+                /** Redraw plot. */
+                void updatePlot();
+
+                /** Reset to the default state. */
+                void reset();
                            
             private:
                 Ui::AmplitudePlotForm* _ui;
-                QMap<PointSampler*, QwtPlotCurve*> _sources;
+                typedef QMap<PointSampler*, QwtPlotCurve*> SamplerCurveMap;
+                typedef QMap<PointSampler*, QwtPlotCurve*>::iterator SamplerCurveIterator;
+                SamplerCurveMap _sources;
             };
         }
     }

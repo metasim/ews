@@ -25,15 +25,14 @@
 #include "DripSource.h"
 #include "WaveMedium.h"
 #include "BarrierSet.h"
+#include "SamplerSet.h"
 
 namespace ews {
     namespace app {
         namespace model {
             
-            class PointSampler;
-            
             /** This class is the root of the simulation state; all transient data
-             *  should be available from the class and or its children.
+             *  should be available from this class and/or its children.
              */
             class SimulationState :  public QObject  {
                 Q_OBJECT
@@ -64,19 +63,19 @@ namespace ews {
                 }
                 
                 /**
+                 * Get the amplitude samplers.
+                 */
+                SamplerSet& getSamplers() {
+                    return _samplers;
+                }
+                
+                /**
                  * Get the wave medium.
                  */
                 WaveMedium& getWaveMedium() {
                     return _waveMedium;
                 }
-                
-                /** 
-                 * Create instance which samples and maintains a history
-                 * of values at a  set x/y location. This takes
-                 * ownership of memory.
-                 */
-                PointSampler* createPointSampler();
-                    
+
                 
                 /**
                  * Determine if the simulation is currently in the "paused" state.
@@ -116,9 +115,23 @@ namespace ews {
                 /** Reset the simulation and view to the default view. */
                 void reset();
                 
-                
+                /** Due to an "impedence mismatch" between the signal fired
+                 * by the BarrierSet class and our objectAdded() signal, 
+                 * a conversion/mapping slot is is used to fire objectAdded()
+                 * with the proper arguments. 
+                 */
                 void forwardBarrierSetAddition(int index, Barrier* barrier);
+                /** See forwardBarrierSetAddition(int, Barrier*) */
                 void forwardBarrierSetRemoval(int index, Barrier* barrier);
+                
+
+                /**
+                 * Performs same function as formwardBarrierSetAddition(int, Barrier*)
+                 * except for SamplerSet.
+                 */
+                void forwardSamplerSetAddition(int index, PointSampler* sampler);
+                /** See forwardSamplerSetAddition(int, Sampler*) */
+                void forwardSamplerSetRemoval(int index, PointSampler* sampler);
 
             private:
                 Q_DISABLE_COPY(SimulationState)
@@ -126,9 +139,7 @@ namespace ews {
                 DripSource _dripSource1;
                 DripSource _dripSource2;
                 BarrierSet _barriers;
-                typedef QList<PointSampler*> PointSamplerList;
-                typedef QList<PointSampler*>::iterator PointSamplerIterator;
-                PointSamplerList _samplers;
+                SamplerSet _samplers;
             };
         }
     }

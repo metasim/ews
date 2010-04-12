@@ -62,11 +62,16 @@ void messageHandler(QtMsgType type, const char *msg) {
     }
     
     if(type != QtDebugMsg && defMsgHandler) {
+        QWidget* win = QApplication::activeWindow();
+        QMainWindow* main = qobject_cast<QMainWindow*>(win);
+        if(main) {
+            main->lower();
+        }
         defMsgHandler(type, msg);
     }
 }
 
-
+/** Application launch functionn. */
 int main(int argc, char *argv[]) {
     using namespace ews::app::model;
     using namespace ews::app::widget;
@@ -90,7 +95,6 @@ int main(int argc, char *argv[]) {
     QErrorMessage::qtHandler();
     defMsgHandler = qInstallMsgHandler(0);
     qInstallMsgHandler(messageHandler);
-    
     
     QSplashScreen splash;
     QPixmap img(":/images/splash");

@@ -114,7 +114,7 @@ namespace ews {
                     }
                     
                     if(errorMessage.length() > 0) {
-                        qCritical() << qPrintable(errorMessage) << "\nYou need to have a graphics display driver with OpenGL 2.0 support.";
+                        qCritical() << qPrintable(errorMessage) << "\nYou need to have NVIDIA graphics hardware with OpenGL 2.0 support.";
                     }
                     else {
                         qDebug() << "Passed required support. GL version: " << ver;

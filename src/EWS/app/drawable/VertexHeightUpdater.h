@@ -59,7 +59,7 @@ namespace ews {
                     bool success = program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
                     success &= program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
                     if(!success) {
-                        qCritical() << "GPU shaders did initialize properly";
+                        qCritical() << "GPU shaders did initialize properly\nYou need NVIDIA graphics hardware with OpenGL 2.0 support.";
                         return;
                     }
 
@@ -117,6 +117,8 @@ namespace ews {
                 
                 void applyHeightMap(Image* image) {
                     using std::vector;
+                    
+                    if(!image) return;
 
                     const unsigned int gridWidth = _model.getWidth();
                     const unsigned int gridLength = _model.getLength();
