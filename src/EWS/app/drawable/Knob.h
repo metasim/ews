@@ -46,7 +46,7 @@ namespace ews {
                  * @param showGeom if true, then a sphere is shown as the selection
                  * geometry. If false, the geometry is hidden.
                  */
-                Knob(Vec3 geomOffset = Vec3(0, 0, 0), unsigned int radius = 3, bool showGeom = true);
+                Knob(const Vec3& geomOffset = Vec3(0, 0, 0), unsigned int radius = 3, bool showGeom = true);
 
                 /** Get the knob's current location in global coordinates. */
                 Vec2 currXYLocation() const {
@@ -55,8 +55,9 @@ namespace ews {
                     Vec3 translation = toWorld.getTrans();
                     return Vec2(translation.x(), translation.y());
                 }
-                void setPosition(Vec3 pos) {
-                    setMatrix(Matrix::translate(pos));
+                void setPosition(const Vec3& pos) {
+                    _selectionNode->setMatrix(Matrix::translate(pos));
+                    _dragger->setMatrix(Matrix::translate(pos + _geomOffset));
                 }
                 
                 /** Control the dirty flag. */
@@ -84,6 +85,7 @@ namespace ews {
             private:
                 ref_ptr<Dragger> _dragger;
                 ref_ptr<Selection> _selectionNode;
+                Vec3 _geomOffset;
                 bool _dirty;
             };
             

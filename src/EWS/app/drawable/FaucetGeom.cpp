@@ -56,7 +56,7 @@ namespace ews {
                 }
                 
                 void detectAndHandleMove(FaucetGeom* geom, NodeVisitor* nv) {
-                    if(_dragger.isDirty()) {
+                    if (_dragger.isDirty()) {
                         geom->getDataModel().setPosition(_dragger.currXYLocation());
                         _dragger.setDirty(false);
                     }
@@ -69,7 +69,7 @@ namespace ews {
                 /** Callback method. */
                 virtual void operator()(Node* node, NodeVisitor* nv) { 
                     FaucetGeom* geom = dynamic_cast<FaucetGeom*>(node);
-                    if(geom) {
+                    if (geom != NULL) {
                         detectAndHandleMove(geom, nv);
                         updateOscillator(geom, nv);
                     }
@@ -160,6 +160,9 @@ namespace ews {
             void FaucetGeom::setPosition(const osg::Vec2& pos) {
                 Vec3 newPos(pos.x(), pos.y(), 50);
                 _geom->setPosition(newPos);
+                if (!_dragger->isDirty()) {
+                    _dragger->setPosition(newPos);
+                }
             }
             
             
@@ -167,7 +170,7 @@ namespace ews {
                 // TODO: convert to switch usage (see FaucetGeom)
                 setNodeMask(enabled ? 0xffffffff : 0);
                 // Hack... really need to change to a switch node arragement.
-                if(_dragger) {
+                if (_dragger) {
                     _dragger->setNodeMask(enabled ? 0xffffffff : 0);
                 }
             }

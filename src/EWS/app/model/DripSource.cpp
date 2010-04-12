@@ -90,8 +90,7 @@ namespace ews {
                 WaveMedium& medium = getSimulationState()->getWaveMedium();
                 Uint maxWidth = medium.getWidth();
                 Uint maxLength = medium.getLength();
-                
-                
+
                 if (objectName() != DRIPSOURCE2) {
                     setPosition(osg::Vec2(maxWidth / 2, maxLength / 2));
                     setEnabled(true);
