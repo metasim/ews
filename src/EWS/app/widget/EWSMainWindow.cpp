@@ -103,6 +103,7 @@ namespace ews {
                 _ui->dripSource1->syncUI();
                 _ui->dripSource2->syncUI();
                 _ui->renderer->homePosition();
+                _ui->actionRun->trigger();
             }
             
             /** Detect when we should perform post realization initialization() */
