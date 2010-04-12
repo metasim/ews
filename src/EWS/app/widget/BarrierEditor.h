@@ -73,6 +73,10 @@ namespace ews {
                 /** Update the data model to reflect the give slit separation.*/
                 void updateSlitSeparation(int);
                 
+            signals:
+                void canAddBarrier(bool);
+                void canRemoveBarrier(bool);
+                
             private:
                 Barrier::NumSlits numSlitsSelected() const;
                 void select(Barrier* barrier);

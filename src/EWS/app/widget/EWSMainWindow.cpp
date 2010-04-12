@@ -61,6 +61,8 @@ namespace ews {
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
+                QObject::connect(_ui->barrierEditor, SIGNAL(canAddBarrier(bool)), _ui->actionAddBarrier, SLOT(setEnabled(bool)));
+                QObject::connect(_ui->barrierEditor, SIGNAL(canRemoveBarrier(bool)), _ui->actionRemoveBarrier, SLOT(setEnabled(bool)));
             }
             
             EWSMainWindow::~EWSMainWindow() {
