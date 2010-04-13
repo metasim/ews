@@ -36,7 +36,7 @@ namespace ews {
                 /**
                  * Standard ctor.
                  */
-                explicit DrawableQtAdapter(QObject* peer);
+                explicit DrawableQtAdapter();
                 
                 /** Get access to the singleton instance of the command manager. */
                 static osgManipulator::CommandManager& manipCommandManager();

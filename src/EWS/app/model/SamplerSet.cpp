@@ -35,10 +35,13 @@ namespace ews {
             
             PointSampler* SamplerSet::createSampler() {  
                 static unsigned int count = 1;
+                
+                if(isFull()) return NULL;
+                
                 const int pos = _samplers.size();
                 WaveMedium& water = getSimulationState()->getWaveMedium();
                 const unsigned int initX = (int) (count * Barrier::width() * 2) % water.getWidth();
-                const Vec2 loc(initX, 20);
+                const Vec2 loc(initX, water.getLength()-20);
                 
                 PointSampler* retval = new PointSampler(water.getWaveModel().getLattice(), this);
                 // Set starting position

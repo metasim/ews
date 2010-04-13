@@ -174,11 +174,13 @@ namespace ews {
                     canEdit = _ui->barrierTable->selectionModel()->hasSelection();
                 }
                 
+                _ui->removeBarrier->setEnabled(canEdit);
+
+                // Tweak canEdit determination with enabled state. */
                 if (canEdit) {
                     Barrier* b = selectedBarrier();
                     canEdit = b != NULL && b->isEnabled();
                 }
-                _ui->removeBarrier->setEnabled(canEdit);
 
                 bool canAdd = _dataModel != NULL && !_dataModel->isFull();
                 _ui->addBarrier->setEnabled(canAdd);

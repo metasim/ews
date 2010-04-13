@@ -71,7 +71,7 @@ namespace ews {
             };
                 
             AmplitudeDetector::AmplitudeDetector(PointSampler& sampler) 
-            : DrawableQtAdapter(&sampler), _sampler(sampler), _dragger(new Knob(KNOB_OFFSET, DETECTOR_RADIUS + 2, true)), 
+            : DrawableQtAdapter(), _sampler(sampler), _dragger(new Knob(KNOB_OFFSET, DETECTOR_RADIUS + 2, true)), 
             _geom(new PositionAttitudeTransform), _switch(new Switch)  {
                 using ews::app::model::SimulationState;
                 

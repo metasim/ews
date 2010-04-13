@@ -35,7 +35,7 @@ namespace ews {
             const float WATER_OPACITY = 1.f;
 
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
-            DrawableQtAdapter(&settings), _settings(settings) {
+            DrawableQtAdapter(), _settings(settings) {
 
                 QObject::connect(&_settings, SIGNAL(sizeChanged(int,int)), this, SLOT(updateWaterGeometry()));
                 QObject::connect(&_settings, SIGNAL(resolutionChanged(int)), this, SLOT(updateWaterGeometry()));

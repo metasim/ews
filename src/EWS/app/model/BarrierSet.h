@@ -118,16 +118,12 @@ namespace ews {
                  * Signals that a barrier has been removed.
                  */
                 void barrierRemoved(int,Barrier*);
-                /**
-                 * Signals that all barriers have been removed.
-                 */
-                void allBarriersRemoved(int);
                 
                 /**
-                 * The condition of being "full" has changed.
-                 * @param updated fullness state
+                 * General signal for case when number of items in the
+                 * set has changed. Parameter is the new number of items.
                  */
-                void fullnessChanged(bool);
+                void sizeChanged(Uint);
                 
             private slots:
                 /**

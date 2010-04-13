@@ -161,7 +161,9 @@ namespace ews {
                     canEdit = s != NULL && s->isEnabled();
                 }
                 _ui->remove->setEnabled(canEdit);
-
+                
+                bool canAdd = _dataModel != NULL && !_dataModel->isFull();
+                _ui->add->setEnabled(canAdd);
             }
 
         }

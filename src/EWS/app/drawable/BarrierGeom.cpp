@@ -59,7 +59,7 @@ namespace ews {
             
             /** Primary constructor. */
             BarrierGeom::BarrierGeom(Barrier& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), _switch(new Switch),
+            : DrawableQtAdapter(), _dataModel(dataModel), _switch(new Switch),
             _barrierGeom(new PositionAttitudeTransform), 
             _startKnob(new Knob(START_KNOB_OFFSET)), _endKnob(new Knob(END_KNOB_OFFSET)) {
                 

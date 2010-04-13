@@ -73,9 +73,7 @@ namespace ews {
                                  _ui->amplitudePlot, SLOT(removeSampleSource(int, PointSampler*)));
 
                 // Sync setup between 
-                QObject::connect(&_state->getBarriers(), SIGNAL(fullnessChanged(bool)), this, SLOT(updateMenusEnabledState()));
-
-
+                QObject::connect(&_state->getBarriers(), SIGNAL(sizeChanged(Uint)), this, SLOT(updateMenusEnabledState()));
             }
             
             EWSMainWindow::~EWSMainWindow() {
@@ -90,6 +88,10 @@ namespace ews {
                 
                 // Make sure all consituents know we're getting ready to start.
                 reset();
+                
+                // Fix menu state.
+                updateMenusEnabledState();
+                
                 // Start simulation.
                 start();
             }
@@ -121,6 +123,8 @@ namespace ews {
                 if(_state->isPaused()) {
                     _ui->actionRun->trigger();
                 }
+                
+                updateMenusEnabledState();       
             }
             
             /** Detect when we should perform post realization initialization() */
@@ -135,7 +139,7 @@ namespace ews {
             }
             
             void EWSMainWindow::updateMenusEnabledState() {
-                _ui->actionAddBarrier->setEnabled(!_state->getBarriers().isFull())
+                _ui->actionAddBarrier->setEnabled(!_state->getBarriers().isFull());
                 _ui->actionRemoveBarrier->setEnabled(_state->getBarriers().size() > 0);
             }
             

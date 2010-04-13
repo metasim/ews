@@ -61,7 +61,7 @@ namespace ews {
 
             
             void SceneRoot::addDrawableFor(QObject& data) {
-                DrawableQtAdapter* drawable = DrawableFactory::instance().createDrawableFor(data);
+                ref_ptr<DrawableQtAdapter> drawable = DrawableFactory::instance().createDrawableFor(data);
                 if(drawable) {
                     addChild(drawable);
                     _drawables.insert(&data, drawable);
@@ -69,9 +69,9 @@ namespace ews {
             }
             
             void SceneRoot::removeDrawableFor(QObject& data) {
-                osg::Node* geom = _drawables.take(&data);
-                qDebug() << "removing a drawable node";
+                ref_ptr<Node> geom = _drawables.take(&data);
                 if(geom) {
+                    qDebug() << "removing a drawable node" << geom <<"of type" << typeid(*geom).name();
                     removeChild(geom);
                 }
             }

@@ -87,7 +87,7 @@ namespace ews {
             
             /** Standard ctor. */
             FaucetGeom::FaucetGeom(DripSource& dataModel) 
-            : DrawableQtAdapter(&dataModel), _dataModel(dataModel), 
+            : DrawableQtAdapter(), _dataModel(dataModel), 
             _dragger(new Knob(Vec3(-20,0,5), 12, false)), _geom(new PositionAttitudeTransform) {
                 
                 addChild(_dragger.get());

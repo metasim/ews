@@ -116,6 +116,19 @@ namespace ews {
                 _ui->plot->setAxisScale(QwtPlot::xBottom, 0, src->getHistory().size());
 
                 connect(src, SIGNAL(sampleHistoryChanged(const PointSampler*)), SLOT(updatePlot()));
+                connect(src, SIGNAL(enabledChanged(bool)), SLOT(updateSeriesVisibility(bool)));
+            }
+            
+            void AmplitudePlot::updateSeriesVisibility(bool state) {
+                QObject* srcObj = QObject::sender();
+                PointSampler* src = qobject_cast<PointSampler*>(srcObj);
+                if(src) {
+                    QwtPlotCurve* curve = _sources.value(src);
+                    if(curve)  {
+                        qDebug() << "Setting visibility of" << curve << "to" << state;
+                        curve->setVisible(state);
+                    }
+                }
             }
             
             void AmplitudePlot::removeSampleSource(PointSampler* src) {

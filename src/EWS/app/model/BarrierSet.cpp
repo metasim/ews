@@ -78,9 +78,7 @@ namespace ews {
                 QObject::connect(b, SIGNAL(potentialChanged()), this, SLOT(updatePotentials()));
                 
                 emit barrierAdded(pos, b);
-                if(isFull()) {
-                    emit fullnessChanged(true);
-                }
+                emit sizeChanged(size());
                 return b;
             }
             
@@ -111,15 +109,12 @@ namespace ews {
             void BarrierSet::removeBarrier(Barrier* b) {
                 const int pos = indexOf(b);
                 if(pos >= 0) {
-                    bool full = isFull();
                     const bool did = _barriers.removeOne(b);
                     if (did) {
                         b->disconnect(this);
                         updatePotentials();
                         emit barrierRemoved(pos, b);
-                        if(full != isFull()) {
-                            emit fullnessChanged(false);
-                        }
+                        emit sizeChanged(size());
                         delete b;
                     }
                 }

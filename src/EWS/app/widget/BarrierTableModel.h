@@ -40,7 +40,6 @@ namespace ews {
                 : QAbstractTableModel(), _barriers(barriers) {
                     connect(barriers, SIGNAL(barrierAdded(int,Barrier*)), this, SLOT(rowsAdded(int)));
                     connect(barriers, SIGNAL(barrierRemoved(int,Barrier*)), this, SLOT(rowsRemoved(int)));
-                    connect(barriers, SIGNAL(allBarriersRemoved(int)), this, SLOT(removeAll(int)));
                 }
                 
                 /** Standard dtor. */

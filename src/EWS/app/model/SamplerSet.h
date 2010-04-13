@@ -26,6 +26,8 @@
 namespace ews {
     namespace app {
         namespace model {
+            const int MAX_SAMPLERS = 5;
+            
             class SimulationState;
             
             /**
@@ -58,6 +60,14 @@ namespace ews {
                  */
                 int size() const {
                     return _samplers.size();
+                }
+                
+                /** 
+                 * Determine if the set has reached the maximum allowable
+                 * samplers.
+                 */
+                bool isFull() const {
+                    return _samplers.size()  >= MAX_SAMPLERS;
                 }
 
                 /**

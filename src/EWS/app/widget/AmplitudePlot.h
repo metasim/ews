@@ -67,6 +67,9 @@ namespace ews {
 
                 /** Reset to the default state. */
                 void reset();
+                
+            private slots:
+                void updateSeriesVisibility(bool);
                            
             private:
                 Ui::AmplitudePlotForm* _ui;
