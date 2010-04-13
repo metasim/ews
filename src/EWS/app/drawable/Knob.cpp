@@ -68,7 +68,8 @@ namespace ews {
             /** The ctor creates a mini-hierarchy with a Dragger and Selection
              * as the immediate children of this, and the selection geometry 
              * (i.e. sphere) as a child of the selection. */
-            Knob::Knob(Vec3 geomOffset, unsigned int radius, bool showGeom) : _dirty(true) {
+            Knob::Knob(const Vec3& geomOffset, unsigned int radius, bool showGeom)
+            : MatrixTransform(), _geomOffset(geomOffset), _dirty(true) {
                 setName("knob");
                 // Create selection type to contain our drawable.
                 _selectionNode = new Selection;
@@ -83,7 +84,7 @@ namespace ews {
                 ref_ptr<Geode> geom;
                 ref_ptr<Sphere> sphere;
                 ref_ptr<ShapeDrawable> sphereGeom;                
-                if(showGeom) {
+                if (showGeom) {
                     geom = new Geode;
                     geom->setName("knobGeometry");
                     _dragger->addChild(geom.get());

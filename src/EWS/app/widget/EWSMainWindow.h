@@ -66,12 +66,12 @@ namespace ews {
                 void about();
                 /** Request platform to open url to project website. */
                 void projectWebsite();
-                /** Change state of plot measurement. */
-                void amplitudePlotEnabled(bool);
                 
             private slots:
                 /** Do any final connecting of components after rest of application is connected.*/
                 void init();
+                /** Update the enabled state of menu items.*/
+                void updateMenusEnabledState();
 
             private:
                 Q_DISABLE_COPY(EWSMainWindow)

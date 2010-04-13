@@ -85,7 +85,7 @@ namespace ews {
                 _samplers.reset();
 
                 // Hack to make sure cleared wave model gets rendered.
-                if(isPaused()) {
+                if (isPaused()) {
                     _waveMedium.getWaveModel().propagate();
                 }
             }

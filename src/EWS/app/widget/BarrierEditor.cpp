@@ -30,12 +30,11 @@
 namespace ews {
     namespace app {
         namespace widget {
-            
             using ews::app::model::BarrierSet;
             using ews::app::model::Barrier;
             
             BarrierEditor::BarrierEditor(QWidget* parent) 
-            : QWidget(parent), _ui(new Ui::BarrierEditorForm) {
+            : QWidget(parent), _ui(new Ui::BarrierEditorForm), _dataModel(NULL) {
                 _ui->setupUi(this);   
                 updateEnabled();
             }
@@ -168,6 +167,7 @@ namespace ews {
                 return Barrier::ZERO_SLITS;
             }
             
+            /** Update the enabled state of all the widgets. */
             void BarrierEditor::updateEnabled() {
                 bool canEdit = false;
                 if(_ui->barrierTable->selectionModel()) {
@@ -179,10 +179,14 @@ namespace ews {
                     canEdit = b != NULL && b->isEnabled();
                 }
                 _ui->removeBarrier->setEnabled(canEdit);
+
+                bool canAdd = _dataModel != NULL && !_dataModel->isFull();
+                _ui->addBarrier->setEnabled(canAdd);
+
                 _ui->slitNumSelect->setEnabled(canEdit);
                 
                 Barrier::NumSlits num = numSlitsSelected();
-                
+                 
                 const bool canEditSlit = canEdit && num != Barrier::ZERO_SLITS;
                 _ui->slitWidth->setEnabled(canEditSlit);
                 const bool canEditSlitSep = canEdit && num == Barrier::TWO_SLITS;

@@ -31,7 +31,7 @@ namespace ews {
     namespace app {
         namespace model {
             
-        
+            /** Ctor. */
             BarrierSet::BarrierSet(SimulationState* parent)  
             : QObject(parent), _barriers(), _potentials(NULL) {
                 _potentials = new CompositePotential();
@@ -40,7 +40,7 @@ namespace ews {
                 QObject::connect(this, SIGNAL(barrierAdded(int, Barrier*)), this, SLOT(updatePotentials()));
                 
             }
-            
+            /** Dtor. */
             BarrierSet::~BarrierSet() {
                 removeAllBarriers();
                 if(_potentials) {
@@ -48,8 +48,14 @@ namespace ews {
                 }
             }
             
+            /** Create a new barrier and add it to the list. */
             Barrier* BarrierSet::createBarrier() {        
                 static unsigned int count = 1;
+                
+                // Enforce number limitation.
+                if(isFull()) return NULL;
+                
+                
                 const int pos = _barriers.size();
                 const WaveMedium& water = getSimulationState()->getWaveMedium();
                 const unsigned int initX = (int) (count * Barrier::width() * 2) % water.getWidth();
@@ -72,9 +78,13 @@ namespace ews {
                 QObject::connect(b, SIGNAL(potentialChanged()), this, SLOT(updatePotentials()));
                 
                 emit barrierAdded(pos, b);
+                if(isFull()) {
+                    emit fullnessChanged(true);
+                }
                 return b;
             }
             
+            /** Recompute the combined potential grid. */
             void BarrierSet::updatePotentials() {
                 ref_ptr<CompositePotential> worldPot = new CompositePotential();
                 for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
@@ -89,6 +99,7 @@ namespace ews {
                 waveModel.setPotential(prePot.get());
             }
 
+            /** Delete all barriers. */
             void BarrierSet::removeAllBarriers() {
                 for (QList<Barrier*>::iterator i = _barriers.begin(); i != _barriers.end(); i++) {
                     Barrier* b = *i;
@@ -96,19 +107,25 @@ namespace ews {
                 }
             }
 
+            /** Remove the given barrier. */
             void BarrierSet::removeBarrier(Barrier* b) {
                 const int pos = indexOf(b);
                 if(pos >= 0) {
+                    bool full = isFull();
                     const bool did = _barriers.removeOne(b);
                     if (did) {
                         b->disconnect(this);
                         updatePotentials();
                         emit barrierRemoved(pos, b);
+                        if(full != isFull()) {
+                            emit fullnessChanged(false);
+                        }
                         delete b;
                     }
                 }
             }
             
+            /** Convenience method to get the current simulation state parent. */
             SimulationState* BarrierSet::getSimulationState() const {
                 QObject* obj = parent();
                 return qobject_cast<SimulationState*>(obj);

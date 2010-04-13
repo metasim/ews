@@ -61,6 +61,7 @@ namespace ews {
                 _ui->renderer->setSceneData(_sceneRoot);
                 _ui->renderer->setBetweenFrameDelay(10);
                 
+                
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
@@ -70,6 +71,11 @@ namespace ews {
                                  _ui->amplitudePlot, SLOT(addSampleSource(int, PointSampler*)));
                 QObject::connect(&_state->getSamplers(), SIGNAL(samplerRemoved(int,PointSampler*)), 
                                  _ui->amplitudePlot, SLOT(removeSampleSource(int, PointSampler*)));
+
+                // Sync setup between 
+                QObject::connect(&_state->getBarriers(), SIGNAL(fullnessChanged(bool)), this, SLOT(updateMenusEnabledState()));
+
+
             }
             
             EWSMainWindow::~EWSMainWindow() {
@@ -107,6 +113,14 @@ namespace ews {
                 _ui->dripSource2->syncUI();
                 _ui->renderer->homePosition();
                 _ui->amplitudePlot->reset();
+                
+                // If paused we fire a run action trigger
+                // for convenience to start the simulation again
+                // with the default state (and update the button enabled state).
+
+                if(_state->isPaused()) {
+                    _ui->actionRun->trigger();
+                }
             }
             
             /** Detect when we should perform post realization initialization() */
@@ -120,18 +134,22 @@ namespace ews {
                 return retval;
             }
             
+            void EWSMainWindow::updateMenusEnabledState() {
+                _ui->actionAddBarrier->setEnabled(!_state->getBarriers().isFull())
+                _ui->actionRemoveBarrier->setEnabled(_state->getBarriers().size() > 0);
+            }
+            
+            /** Show the about box. */
             void EWSMainWindow::about() {
                 using ews::util::loadTextResource;
                 QMessageBox::about(this, "About...", loadTextResource(":/text/about"));
             }
             
+            /** Request the OS open the configured project site. */
             void EWSMainWindow::projectWebsite() {
                 QUrl url(EWS_WEBSITE,QUrl::TolerantMode);
                 qDebug() << "Opening" << url;
                 QDesktopServices::openUrl(url);
-            }
-            
-            void EWSMainWindow::amplitudePlotEnabled(bool state) {
             }
 
         }

@@ -28,6 +28,8 @@
 namespace ews {
     namespace app {
         namespace model {
+            const int MAX_BARRIERS = 8;
+            
             using ews::physics::CompositePotential;
             
             class SimulationState;
@@ -65,6 +67,13 @@ namespace ews {
                  */
                 int size() const {
                     return _barriers.size();
+                }
+                
+                /**
+                 * Determine if we've reached the maximum number of barriers.
+                 */
+                bool isFull() const {
+                    return size() >= MAX_BARRIERS;
                 }
 
                 /**
@@ -113,6 +122,12 @@ namespace ews {
                  * Signals that all barriers have been removed.
                  */
                 void allBarriersRemoved(int);
+                
+                /**
+                 * The condition of being "full" has changed.
+                 * @param updated fullness state
+                 */
+                void fullnessChanged(bool);
                 
             private slots:
                 /**
