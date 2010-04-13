@@ -76,7 +76,6 @@ namespace ews {
             }
             
             void DripSource::pokeOscillator() {
-                qDebug() << "pokeOscillator";
                 _oscillator.firePulse();
             }
             

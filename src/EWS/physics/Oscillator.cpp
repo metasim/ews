@@ -35,11 +35,13 @@ namespace ews {
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
         }
+        
         Oscillator::Oscillator(WaveModel& waveModel, unsigned int x, unsigned int y):
         _waveModel(waveModel), _x(x), _y(y), _radius(DEFAULT_RADIUS), _amplitude(DEFAULT_AMPLITUDE),
         _period(DEFAULT_PERIOD), _time(0.0), _phase(0.0), _oscillating(false), _inPulse(false) {
             resetPhase();
         }
+        
         void Oscillator::updateTimeAndOscillator(OscillatorVal time) {
             _time = time;
             if (_oscillating) {
@@ -65,26 +67,30 @@ namespace ews {
                 _inPulse = false;
                 _oscillating = false;
                 _phase = 0;
-                qDebug() << "Pulse over: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
+//                qDebug() << "Pulse over: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
             }
         }
+        
         void Oscillator::firePulse() {
             resetPhase();
             _oscillating = true;
             _inPulse = true;
-            qDebug() << "Firing pulse: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
+//            qDebug() << "Firing pulse: _oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
         }
+        
         OscillatorVal Oscillator::getValue() const {
             return _amplitude * cos(getCosArg() + _phase);
         }
+        
         void Oscillator::setOscillateStatus(bool shouldOscillate) {
             if (!_oscillating && shouldOscillate) {
                 resetPhase();
             }
             _inPulse = false;
             _oscillating = shouldOscillate;
-            qDebug() << "_oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
+//            qDebug() << "_oscillating = " << _oscillating << ", _inPulse = " << _inPulse;
         }
+        
         void Oscillator::resetPhase() {
             _phase = -getCosArg() + M_PI/2.0; // Puts getValue at its minimum
         }

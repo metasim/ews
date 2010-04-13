@@ -294,7 +294,7 @@
          </sizepolicy>
         </property>
        </widget>
-       <widget class="ews::app::widget::DetectorEditor" name="plotControls" native="true">
+       <widget class="ews::app::widget::DetectorEditor" name="detectorEditor" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
           <horstretch>0</horstretch>

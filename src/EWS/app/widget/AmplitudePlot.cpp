@@ -123,6 +123,7 @@ namespace ews {
                 curve->detach();
                 src->disconnect(this);
                 delete curve;
+                updatePlot();
             }
             
             void AmplitudePlot::updatePlot() {

@@ -40,9 +40,9 @@ namespace ews {
             public:
                 DetectorTableModel(SamplerSet* samplers) 
                 : QAbstractTableModel(), _samplers(samplers) {
-                    connect(samplers, SIGNAL(detectorAdded(int,PointSampler*)), this, SLOT(rowsAdded(int)));
-                    connect(samplers, SIGNAL(detectorRemoved(int,PointSampler*)), this, SLOT(rowsRemoved(int)));
-                    connect(samplers, SIGNAL(allDetectorsRemoved(int)), this, SLOT(removeAll(int)));
+                    connect(samplers, SIGNAL(samplerAdded(int,PointSampler*)), this, SLOT(rowsAdded(int)));
+                    connect(samplers, SIGNAL(samplerRemoved(int,PointSampler*)), this, SLOT(rowsRemoved(int)));
+                    connect(samplers, SIGNAL(allSamplerRemoved(int)), this, SLOT(removeAll(int)));
                 }
                 
                 /** Standard dtor. */

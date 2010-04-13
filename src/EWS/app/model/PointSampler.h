@@ -34,6 +34,7 @@ namespace ews {
             using ews::Uint;
             
             class SimulationState;
+            class SamplerSet;
             
             /** This class is responsible for sampling the lattice when its
              * \c sample() method is called, and maintaining a history of
@@ -49,11 +50,9 @@ namespace ews {
                  * @param size the total size of the history buffer.
                  * @param parent Qt parent. 
                  */
-                PointSampler(const Lattice& lattice, QObject* parent, Uint size = 512) 
-                : QObject(parent), _position(0, 0), _enabled(false),  _paused(false),
-                  _lattice(lattice), _history(size) {}
+                PointSampler(const Lattice& lattice, SamplerSet* parent, Uint size = 512); 
                 
-                virtual ~PointSampler() {}
+                virtual ~PointSampler();
                 
                 /**
                  * Get location in lattice. 

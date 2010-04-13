@@ -171,12 +171,42 @@
  <resources>
   <include location="../../Resources.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>add</sender>
+   <signal>clicked()</signal>
+   <receiver>DetectorEditorForm</receiver>
+   <slot>addDetector()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>31</x>
+     <y>234</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>-13</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>remove</sender>
+   <signal>clicked()</signal>
+   <receiver>DetectorEditorForm</receiver>
+   <slot>removeDetector()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>236</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>179</x>
+     <y>-6</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
-  <slot>addBarrier()</slot>
-  <slot>removeBarrier()</slot>
-  <slot>updateNumSlits()</slot>
-  <slot>updateSlitWidth(int)</slot>
-  <slot>updateSlitSeparation(int)</slot>
+  <slot>addDetector()</slot>
+  <slot>removeDetector()</slot>
  </slots>
 </ui>

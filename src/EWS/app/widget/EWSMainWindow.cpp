@@ -52,6 +52,9 @@ namespace ews {
                 // Config barrier editor.
                 _ui->barrierEditor->setDataModel(&state->getBarriers());
                 
+                // Config detector editor.
+                _ui->detectorEditor->setDataModel(&state->getSamplers());
+                
                 // Config 3-D view.
                 _sceneRoot = new SceneRoot(this);
                 // renderer is an instance (the only one) of QOSGWidget
@@ -78,7 +81,6 @@ namespace ews {
             void EWSMainWindow::init() {
                 // Force synchronization between model and listeners.
                 _state->emitSignalsForDefaults();
-                
                 
                 // Make sure all consituents know we're getting ready to start.
                 reset();

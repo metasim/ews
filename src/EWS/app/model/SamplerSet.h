@@ -37,7 +37,7 @@ namespace ews {
                 /**
                  * Default constructor
                  */
-                explicit SamplerSet(SimulationState* parent = 0);
+                explicit SamplerSet(SimulationState* parent);
                 /**
                  * Virtual destructor
                  */

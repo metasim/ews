@@ -31,16 +31,26 @@ namespace ews {
             
             SamplerSet::~SamplerSet() {
                 removeAllSamplers();
-
-
             }
             
             PointSampler* SamplerSet::createSampler() {  
-                WaveModel& model = getSimulationState()->getWaveMedium().getWaveModel();
-                PointSampler* retval = new PointSampler(model.getLattice(), this);
-                retval->setPosition(Vec2(20, 100));
-                _samplers.push_back(retval);
-                emit samplerAdded(_samplers.size() - 1, retval);
+                static unsigned int count = 1;
+                const int pos = _samplers.size();
+                WaveMedium& water = getSimulationState()->getWaveMedium();
+                const unsigned int initX = (int) (count * Barrier::width() * 2) % water.getWidth();
+                const Vec2 loc(initX, 20);
+                
+                PointSampler* retval = new PointSampler(water.getWaveModel().getLattice(), this);
+                // Set starting position
+                retval->setPosition(loc);
+                // Default name
+                retval->setObjectName(QString("Detector %1").arg(count++));
+                
+                // Add to our list
+                _samplers << retval;
+                
+                // Notify listeners
+                emit samplerAdded(pos, retval);
                 return retval;
             }
 
@@ -62,7 +72,6 @@ namespace ews {
                     }
                 }
             }
-            
             
             void SamplerSet::setPaused(bool state) {
                 for (PointSamplerIterator pi = _samplers.begin(); pi != _samplers.end(); pi++) {

@@ -22,11 +22,22 @@
 #include "Lattice.h"
 #include "EWSDebug.h"
 #include "EWSDefine.h"
+#include "SamplerSet.h"
 
 namespace ews {
     namespace app {
         namespace model {
             using ews::physics::DEFAULT_WINDOW_WIDTH;
+            
+            
+            PointSampler::PointSampler(const Lattice& lattice, SamplerSet* parent, Uint size)  
+            : QObject(parent), _position(0, 0), _enabled(true),  _paused(false),
+            _lattice(lattice), _history(size) {
+            
+            }
+            
+            PointSampler::~PointSampler() {}
+            
             void PointSampler::sample() {
                 using osg::Vec2;
                 if(isEnabled() && !isPaused()) {
@@ -41,7 +52,9 @@ namespace ews {
             
             SimulationState* PointSampler::getSimulationState() const {
                 QObject* obj = parent();
-                return qobject_cast<SimulationState*>(obj);
+                SamplerSet* parent = qobject_cast<SamplerSet*>(obj);
+                assert(parent);
+                return parent->getSimulationState();
             }
         }
     }

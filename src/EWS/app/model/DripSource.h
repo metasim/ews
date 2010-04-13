@@ -138,7 +138,7 @@ namespace ews {
                         if (!REALISTIC_DRIP && _frequency > 0) {
                             _oscillator.setOscillateStatus(state);
                         }
-                        qDebug() << __FILE__ << "emit enabledChanged(" << state << ")";
+
                         emit enabledChanged(state);
                     }
                 }
@@ -199,7 +199,6 @@ namespace ews {
                  * Introduce a single drop into the system.
                  */
                 void pulseDrip() {
-                    qDebug() << "pulseDrip";
                     emit drip(_oscillator.getAmplitude());
                 }
                 
