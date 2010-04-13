@@ -20,6 +20,7 @@
 #define __POINT_SAMPLER_H
 
 #include <QtCore>
+#include <QColor>
 #include <osg/Vec2>
 #include "Lattice.h"
 #include "EWSDefine.h"
@@ -76,6 +77,13 @@ namespace ews {
                 }
                 
                 /**
+                 * Get the rendering color
+                 */
+                const QColor& getColor() const {
+                    return _color;
+                }
+                
+                /**
                  * Get read-only access to history data.
                  */
                 const SampleHistory& getHistory() const {
@@ -102,6 +110,14 @@ namespace ews {
                 void setEnabled(bool state) {
                     _enabled = state;
                     emit enabledChanged(state);
+                }
+                
+                /**
+                 * Change the rendering color. 
+                 */
+                void setColor(const QColor& c) {
+                    _color = c;
+                    emit colorChanged(_color);
                 }
                 
                 /**
@@ -132,6 +148,8 @@ namespace ews {
                 void sampleHistoryChanged(const PointSampler*);
                 /** Fired when the paused state changes. */
                 void pausedStateChanged(bool);
+                /** Fired when color changes. */
+                void colorChanged(QColor);
                 
             private:
                 Q_DISABLE_COPY(PointSampler);
@@ -146,6 +164,8 @@ namespace ews {
                 const Lattice& _lattice;
                 /** History of previous samples. */
                 SampleHistory _history;
+                /** Rendering color. */
+                QColor _color;
             };
         }
     }

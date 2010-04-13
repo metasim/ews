@@ -79,12 +79,12 @@ namespace ews {
                     
                     _ui->samplerTable->setModel(newModel);
                     
+                    _ui->samplerTable->horizontalHeader()->setStretchLastSection(false);
+                    _ui->samplerTable->horizontalHeader()->setResizeMode(DetectorTableModel::NAME, QHeaderView::Stretch);
                     
-                    // Hide columns we don't want in the table.
-                    for(Uint c = DetectorTableModel::NAME + 1; c < DetectorTableModel::NUM_COLS; c++) {
-                        _ui->samplerTable->setColumnHidden(c, true);
-                    }
-
+                    _ui->samplerTable->setColumnWidth(DetectorTableModel::ENABLED, 25);
+                    _ui->samplerTable->setColumnWidth(DetectorTableModel::COLOR, 25);
+                    
                     // Register for selection changes so we can update the widgets. */
                     connect(_ui->samplerTable->selectionModel(), 
                             SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),

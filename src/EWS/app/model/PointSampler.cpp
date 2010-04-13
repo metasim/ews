@@ -29,14 +29,33 @@ namespace ews {
         namespace model {
             using ews::physics::DEFAULT_WINDOW_WIDTH;
             
+            static const QColor _predefinedColors[] =  {
+                QColor(Qt::red),
+                QColor(Qt::green),
+                QColor(Qt::cyan),
+                QColor(Qt::magenta),
+                QColor(Qt::gray),
+                QColor(Qt::darkRed),
+                QColor(Qt::darkGreen),
+                QColor(Qt::darkCyan),
+                QColor(Qt::darkMagenta),
+                QColor(Qt::darkYellow),
+                QColor(Qt::darkGray),
+                QColor(Qt::darkBlue),
+                QColor(Qt::blue),
+            };
+            
+            static const int _numPredefinedColors = 13;
+            static int _samplerCount = 0;
             
             PointSampler::PointSampler(const Lattice& lattice, SamplerSet* parent, Uint size)  
             : QObject(parent), _position(0, 0), _enabled(true),  _paused(false),
-            _lattice(lattice), _history(size) {
-            
+            _lattice(lattice), _history(size), _color(_predefinedColors[_samplerCount++%_numPredefinedColors]) {
+
             }
             
-            PointSampler::~PointSampler() {}
+            PointSampler::~PointSampler() {
+            }
             
             void PointSampler::sample() {
                 using osg::Vec2;

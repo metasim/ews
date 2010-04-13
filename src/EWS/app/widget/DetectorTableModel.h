@@ -42,7 +42,6 @@ namespace ews {
                 : QAbstractTableModel(), _samplers(samplers) {
                     connect(samplers, SIGNAL(samplerAdded(int,PointSampler*)), this, SLOT(rowsAdded(int)));
                     connect(samplers, SIGNAL(samplerRemoved(int,PointSampler*)), this, SLOT(rowsRemoved(int)));
-                    connect(samplers, SIGNAL(allSamplerRemoved(int)), this, SLOT(removeAll(int)));
                 }
                 
                 /** Standard dtor. */
@@ -51,13 +50,14 @@ namespace ews {
                 }
                 
                 /** Enumeration mapping column symbol names to indexes. */
-                enum ColType { ENABLED, NAME, NUM_COLS };
+                enum ColType { ENABLED, NAME, COLOR, NUM_COLS };
                 
                 virtual int rowCount(const QModelIndex &parent = QModelIndex()) const {
                     return _samplers->size();
                 }
                 
                 virtual int columnCount(const QModelIndex &parent = QModelIndex()) const {
+                    
                     return NUM_COLS;
                 }
                 
@@ -72,8 +72,11 @@ namespace ews {
                         case ENABLED:
                             flags |= Qt::ItemIsUserCheckable;
                             break;
-                        default:
+                        case NAME:
                             flags |= Qt::ItemIsEditable;
+                            break;
+                        default:
+                            flags = Qt::ItemIsEnabled;
                             break;
                     }
                   
@@ -96,6 +99,8 @@ namespace ews {
                                 return QString(tr("Enabled"));
                             case NAME:
                                 return QString(tr("Name"));
+                            case COLOR:
+                                return QString(tr("Color"));
                             default:
                                 return QString("Col# %1").arg(section);
                         }
@@ -114,6 +119,17 @@ namespace ews {
                             switch(j) {
                                 case NAME:
                                     return QString(s->objectName());
+//                                case COLOR:
+//                                    return s->getColor();
+                                default:
+                                    break;
+                            }
+                            break;
+                            
+                        case Qt::DecorationRole:
+                            switch(j) {
+                                case COLOR:
+                                    return s->getColor();
                                 default:
                                     break;
                             }

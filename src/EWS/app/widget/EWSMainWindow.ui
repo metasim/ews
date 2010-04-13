@@ -268,7 +268,7 @@
     <set>Qt::BottomDockWidgetArea</set>
    </property>
    <property name="windowTitle">
-    <string>Amplitude Plot</string>
+    <string>Plots</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>8</number>

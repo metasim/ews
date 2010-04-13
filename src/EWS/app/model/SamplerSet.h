@@ -119,10 +119,6 @@ namespace ews {
                  * Signals that a sampler has been removed.
                  */
                 void samplerRemoved(int,PointSampler*);
-                /**
-                 * Signals that all sampler have been removed.
-                 */
-                void allSamplerRemoved(int);
                 
             private:
                 Q_DISABLE_COPY(SamplerSet)

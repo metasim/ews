@@ -78,10 +78,6 @@ namespace ews {
                 // We don't need the cache here
                 p->canvas()->setPaintAttribute(QwtPlotCanvas::PaintCached, false);
                 p->canvas()->setPaintAttribute(QwtPlotCanvas::PaintPacked, false);
-                // Assign a title
-                // p->setTitle("Amplitude vs Time");
-                // p->insertLegend(new QwtLegend(), QwtPlot::BottomLegend);
-                
                 // Axis 
                 p->setAxisTitle(QwtPlot::xBottom, "Ticks");
                 
@@ -105,7 +101,7 @@ namespace ews {
                 // Insert new curves
                 QwtPlotCurve* curve = new QwtPlotCurve(src->objectName());
                 _sources.insert(src, curve);
-                curve->setPen(QPen(Qt::red));
+                curve->setPen(QPen(src->getColor()));
                 curve->setRenderHint(QwtPlotItem::RenderAntialiased);
                 
                 SampleHistoryPlotDataAdapter adapter(src);

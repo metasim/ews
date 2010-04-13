@@ -59,6 +59,7 @@ namespace ews {
                 _dripSource1.setPaused(state);
                 _dripSource2.setPaused(state);
                 _waveMedium.setPaused(state);
+                _samplers.setPaused(state);
             }
                                             
             void SimulationState::forwardBarrierSetAddition(int index, Barrier* barrier) {

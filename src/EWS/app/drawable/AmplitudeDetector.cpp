@@ -26,8 +26,6 @@ namespace ews {
     namespace  app {
         namespace drawable {
             using namespace osg;
-            /** The color of the detector geometry. */
-            const Vec4 DETECTOR_COLOR(0.1f, 1.0f, 0.2f, 1.f);
             /** How tall the detector is above surface. */
             const Real DETECTOR_VISIBLE_HEIGHT = 10;
             /** Where knob sits relative to to the geometry origin. */
@@ -130,7 +128,9 @@ namespace ews {
                 ref_ptr<Cone> c = new Cone(Vec3(0, 0, surfOffset), DETECTOR_RADIUS, DETECTOR_VISIBLE_HEIGHT + surfOffset);
                 c->setRotation(Quat(M_PI, Vec3(1, 0, 0)));
                 ref_ptr<ShapeDrawable> d = new ShapeDrawable(c.get());
-                d->setColor(DETECTOR_COLOR);
+                
+                const QColor& color = _sampler.getColor();
+                d->setColor(Vec4(color.redF(), color.greenF(), color.blueF(), 1.f));
                 geode->addDrawable(d.get());
                 
             }
