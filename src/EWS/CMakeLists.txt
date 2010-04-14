@@ -18,9 +18,9 @@ set(EWS_VERSION ${EWS_VERSION_MAJOR}.${EWS_VERSION_MINOR})
 set(EWS_COPYRIGHT "2010 NVIDIA Foundation")
 set(EWS_WEBSITE "http://ews.mseedsoft.com/")
 set(EWS_EMAIL   "simeon.fitch@mseedsoft.com")
-set(EWS_ICON     "ews-icon.png")
 set(EWS_ICON_MAC "ews-icon.icns")
-set(EWS_ICON_WIN "ews-icon.ico")
+set(EWS_ICON_ICO "ews-icon.ico")
+set(EWS_ICON_BMP "ews-icon.bmp")
 set(EWS_BUNDLE_ID "com.mseedsoft.ews")
 set(EWS_ORGANIZATION_NAME "Mustard Seed Software, LLC")
 
@@ -355,7 +355,7 @@ endif()
 # CPack configuration
 #--------------------------------------------------------------------------------
 set(CPACK_PACKAGE_NAME ${EXE_TARGET_NAME})
-set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
+set(CPACK_PACKAGE_VENDOR "${EWS_ORGANIZATION_NAME}")
 set(CPACK_GENERATOR ZIP)
 set(CPACK_SOURCE_GENERATOR ZIP)
 set(CPACK_MONOLITHIC_INSTALL TRUE)
@@ -370,18 +370,40 @@ if(APPLE)
     set(CPACK_GENERATOR DragNDrop)
 elseif(WIN32)
     set(CPACK_GENERATOR NSIS)
-	set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
+	set(CPACK_NSIS_PACKAGE_NAME "${EWS_APP_NAME}")
 	set(CPACK_NSIS_DISPLAY_NAME "${EWS_APP_NAME}")
-	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
+	set(CPACK_NSIS_CONTACT "${EWS_EMAIL}")
+	set(CPACK_NSIS_URL_INFO_ABOUT "${EWS_WEBSITE}")
+    set(CPACK_NSIS_HELP_LINK "${EWS_WEBSITE}")
+	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EWS_APP_NAME}")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
-	set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_SOURCE_DIR}/images\\\\${EWS_ICON_WIN})
-	set(CPACK_PACKAGE_ICON  ${CMAKE_CURRENT_SOURCE_DIR}/images\\\\${EWS_ICON})
-	set(CPACK_NSIS_URL_INFO_ABOUT ${EWS_WEBSITE})
-	set(CPACK_NSIS_CONTACT ${EWS_EMAIL})
-	# Icon in the add/remove control panel
+
+    # tell cpack to create a desktop link to CMakeSetup
+    set(CPACK_CREATE_DESKTOP_LINKS "${EXE_TARGET_NAME}")
+    set(CPACK_NSIS_MENU_LINKS "${EWS_WEBSITE}" "Homepage for ${EWS_APP_NAME}")
+
+    # set the install icon used for the installer itself (.ico format) TODO: doesn't work
+#	set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/images/${EWS_ICON_ICO}")
+
+    # set the package header icon (.bmp format) TODO: doesn't work
+#	set(CPACK_PACKAGE_ICON  "${CMAKE_CURRENT_SOURCE_DIR}/images/${EWS_ICON_BMP}")
+
+	# Icon in the add/remove control panel. Must be an .exe file on destination
 	set(CPACK_NSIS_INSTALLED_ICON_NAME bin\\\\${EXE_TARGET_NAME}.exe)
-    set(CPACK_NSIS_PAGE_COMPONENTS "!define MUI_FINISHPAGE_RUN \\\"$INSTDIR\\\\bin\\\\${EXE_TARGET_NAME}.exe\\\";")
-    set(CPACK_NSIS_MENU_LINKS "http://ews.mseedsoft.com/" "Homepage for ${EWS_APP_HOME}")
+
+
+    set(CPACK_NSIS_PAGE_COMPONENTS "
+        !define MUI_FINISHPAGE_RUN \\\"$INSTDIR\\\\bin\\\\${EXE_TARGET_NAME}.exe\\\"
+        !define MUI_STARTMENUPAGE_NODISABLE
+    ")
+
+    set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+        CreateShortCut \\\"$DESKTOP\\\\${EWS_APP_NAME}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\${EXE_TARGET_NAME}.exe\\\"
+    ")
+
+    set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+        Delete \\\"$DESKTOP\\\\${EWS_APP_NAME}.lnk\\\"
+    ")
 endif()
 
 
