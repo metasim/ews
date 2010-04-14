@@ -23,6 +23,7 @@
 #include "EWSDebug.h"
 #include "EWSDefine.h"
 #include "SamplerSet.h"
+#include <cassert>
 
 namespace ews {
     namespace app {

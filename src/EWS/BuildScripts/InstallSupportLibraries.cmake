@@ -75,13 +75,14 @@ if(WIN32)
         get_filename_component(Qwt5_DLL_DIR ${Qwt5_Qt4_LIBRARY} PATH)
         install(FILES ${Qwt5_DLL_DIR}/qwt5.dll
             DESTINATION bin
-            CONFIGURATIONS Release
+            CONFIGURATIONS Release RelWithDebInfo
             COMPONENT Runtime
         )
 		
         install(FILES ${Qwt5_DLL_DIR}/qwt5d.dll
             DESTINATION bin
-            CONFIGURATIONS Debug
+            RENAME qwt5.dll
+            CONFIGURATIONS Debug RelWithDebInfo
             COMPONENT Runtime
         )
 

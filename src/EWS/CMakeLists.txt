@@ -283,14 +283,13 @@ add_executable( ${EXE_TARGET_NAME} ${EXE_TYPE}
 # Tell CMake which libraries we need to link our executable against.
 set(ALL_QT_OSG_LIBS     
 	${QT_LIBRARIES}
-    ${QT_QTCORE_LIBRARY} 
-    ${QT_QTGUI_LIBRARY} 
-    ${QT_QTOPENGL_LIBRARY}
     ${OPENSCENEGRAPH_LIBRARIES} 
-    ${Qwt5_Qt4_LIBRARY}
+    ${Qwt5_Qt4_LIBRARIES}
 )
 
-target_link_libraries(${EXE_TARGET_NAME}  ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})
+##message("libs:  ${ALL_QT_OSG_LIBS}")
+
+target_link_libraries(${EXE_TARGET_NAME} ${OPENGL_LIBRARIES} ${ALL_QT_OSG_LIBS})
 
 #--------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------
@@ -360,11 +359,11 @@ set(CPACK_PACKAGE_VENDOR "Mustard Seed Software, LLC")
 set(CPACK_GENERATOR ZIP)
 set(CPACK_SOURCE_GENERATOR ZIP)
 set(CPACK_MONOLITHIC_INSTALL TRUE)
-SET(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
+set(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
 
-set (CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
-set (CPACK_PACKAGE_VERSION_MAJOR "${EWS_VERSION_MAJOR}")
-set (CPACK_PACKAGE_VERSION_MINOR "${EWS_VERSION_MINOR}")
+set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${EWS_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${EWS_VERSION_MINOR}")
 
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
 if(APPLE)
@@ -372,7 +371,7 @@ if(APPLE)
 elseif(WIN32)
     set(CPACK_GENERATOR NSIS)
 	set(CPACK_NSIS_PACKAGE_NAME ${CPACK_PACKAGE_NAME})
-	set(CPACK_NSIS_DISPLAY_NAME "${CPACK_PACKAGE_NAME} ${EWS_VERSION}")
+	set(CPACK_NSIS_DISPLAY_NAME "${EWS_APP_NAME}")
 	set(CPACK_PACKAGE_EXECUTABLES "${EXE_TARGET_NAME}" "${EXE_TARGET_NAME}")
 	set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
 	set(CPACK_NSIS_MUI_ICON ${CMAKE_CURRENT_SOURCE_DIR}/images\\\\${EWS_ICON_WIN})
@@ -381,6 +380,8 @@ elseif(WIN32)
 	set(CPACK_NSIS_CONTACT ${EWS_EMAIL})
 	# Icon in the add/remove control panel
 	set(CPACK_NSIS_INSTALLED_ICON_NAME bin\\\\${EXE_TARGET_NAME}.exe)
+    set(CPACK_NSIS_PAGE_COMPONENTS "!define MUI_FINISHPAGE_RUN \\\"$INSTDIR\\\\bin\\\\${EXE_TARGET_NAME}.exe\\\";")
+    set(CPACK_NSIS_MENU_LINKS "http://ews.mseedsoft.com/" "Homepage for ${EWS_APP_HOME}")
 endif()
 
 

@@ -62,7 +62,7 @@ IF( QT4_FOUND )
 			ENDIF( Qwt5_Qt4_TENTATIVE_LIBRARY )
 		ELSE( UNIX AND NOT CYGWIN)
 		# Assumes qwt.dll is in the Qt dir
-			SET( Qwt5_Qt4_LIBRARY ${Qwt5_Qt4_TENTATIVE_LIBRARY} )
+			SET( Qwt5_Qt4_LIBRARY ${Qwt5_Qt4_TENTATIVE_LIBRARY} CACHE FILEPATH "Qwt library")
 			SET( Qwt5_Qt4_FOUND TRUE )
 			IF (NOT Qwt5_FIND_QUIETLY)
 				MESSAGE( STATUS "Found Qwt version ${Qwt_VERSION} linked to Qt4" )
@@ -70,29 +70,7 @@ IF( QT4_FOUND )
 		ENDIF( UNIX AND NOT CYGWIN)
 		
 		
-		# Find Qwt5 library linked to Qt3
-		FIND_LIBRARY( Qwt5_Qt3_TENTATIVE_LIBRARY NAMES qwt-qt3 qwt qwt5-qt3 qwt5 )
-		IF( UNIX AND NOT CYGWIN)
-			IF( Qwt5_Qt3_TENTATIVE_LIBRARY )
-				#MESSAGE("Qwt5_Qt3_TENTATIVE_LIBRARY = ${Qwt5_Qt3_TENTATIVE_LIBRARY}")
-				EXECUTE_PROCESS( COMMAND "ldd" ${Qwt5_Qt3_TENTATIVE_LIBRARY} OUTPUT_VARIABLE Qwt-Qt3_LIBRARIES_LINKED_TO )
-				STRING( REGEX MATCH "qt-mt" Qwt5_IS_LINKED_TO_Qt3 ${Qwt-Qt3_LIBRARIES_LINKED_TO})
-				IF( Qwt5_IS_LINKED_TO_Qt3 )
-					SET( Qwt5_Qt3_LIBRARY ${Qwt5_Qt3_TENTATIVE_LIBRARY} )
-					SET( Qwt5_Qt3_FOUND TRUE )
-					IF (NOT Qwt5_FIND_QUIETLY)
-						MESSAGE( STATUS "Found Qwt version ${Qwt_VERSION} linked to Qt3" )
-					ENDIF (NOT Qwt5_FIND_QUIETLY)
-				ENDIF( Qwt5_IS_LINKED_TO_Qt3 )
-			ENDIF( Qwt5_Qt3_TENTATIVE_LIBRARY )
-		ELSE( UNIX AND NOT CYGWIN)
-			SET( Qwt5_Qt3_LIBRARY ${Qwt5_Qt3_TENTATIVE_LIBRARY} )
-			SET( Qwt5_Qt3_FOUND TRUE )
-			IF (NOT Qwt5_FIND_QUIETLY)
-				MESSAGE( STATUS "Found Qwt: ${Qwt5_Qt3_LIBRARY}" )
-			ENDIF (NOT Qwt5_FIND_QUIETLY)
-		ENDIF( UNIX AND NOT CYGWIN)
-		
+				
 		ENDIF( QWT_IS_VERSION_5 )
 		
 		IF( Qwt5_Qt4_FOUND OR Qwt5_Qt3_FOUND )
@@ -105,5 +83,18 @@ IF( QT4_FOUND )
    	IF (NOT Qwt5_FOUND AND Qwt5_FIND_REQUIRED)
       		MESSAGE(FATAL_ERROR "Could not find Qwt 5.x")
    	ENDIF (NOT Qwt5_FOUND AND Qwt5_FIND_REQUIRED)
+
+
+    if(WIN32)
+
+    	get_filename_component(_qwt_path ${Qwt5_Qt4_LIBRARY} PATH)
+    	get_filename_component(_qwt_basename ${Qwt5_Qt4_LIBRARY} NAME_WE)
+    	get_filename_component(_qwt_ext ${Qwt5_Qt4_LIBRARY} EXT)
+        set(Qwt5_Qt4_LIBRARY_DEBUG ${_qwt_path}/${_qwt_basename}d.lib CACHE FILEPATH "Qwt debug library")
+
+        set(Qwt5_Qt4_LIBRARIES optimized ${Qwt5_Qt4_LIBRARY} debug ${Qwt5_Qt4_LIBRARY_DEBUG})
+    else()
+        set(Qwt5_Qt4_LIBRARIES ${Qwt5_Qt4_LIBRARY})
+    endif()
 
 ENDIF( QT4_FOUND )

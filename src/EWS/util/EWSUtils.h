@@ -28,11 +28,11 @@ namespace ews {
          * @param resource name of resource
          * @return resource contents as string, or QString::null if not found. 
          */
-        static QString loadTextResource(const char* resource) {
+        static QByteArray loadTextResource(const char* resource) {
             QFile progResource(resource);
             if (!progResource.open(QIODevice::ReadOnly|QIODevice::Text)) {
                 qWarning() << "Couldn't find" << resource;
-                return QString::null;
+                return QByteArray();
             }
             else {
                 qDebug() << "Loaded" << resource;
@@ -41,7 +41,7 @@ namespace ews {
             QByteArray bytes = progResource.readAll();
             progResource.close();
             
-            return QString(bytes);
+            return bytes;
         }
     }
 }
