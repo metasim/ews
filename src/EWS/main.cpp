@@ -88,6 +88,7 @@ int main(int argc, char *argv[]) {
     QApplication::setOrganizationName(EWS_ORGANIZATION_NAME);
     QApplication::setOrganizationDomain(EWS_BUNDLE_ID);
     QApplication::setApplicationVersion(EWS_VERSION);
+    QApplication::setApplicationName(EWS_APP_NAME);
     
     // First register the dialog error handler, then
     // get the function pointer to it by passing zero to the handler installer
@@ -107,8 +108,7 @@ int main(int argc, char *argv[]) {
     splash.showMessage(QObject::tr("Starting up...."));
     splash.show();
 
-    QApplication::setWindowIcon(QIcon(":/images/appicon"));
-                           
+    
     a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
 
     SimulationState state;
@@ -116,7 +116,12 @@ int main(int argc, char *argv[]) {
     
     EWSMainWindow w(&state);
     w.setWindowTitle(EWS_APP_NAME);
-    QApplication::setApplicationName(EWS_APP_NAME);
+#if defined(__APPLE__)
+    w.setWindowIcon(QIcon(":/images/appicon"));
+#else    
+    QApplication::setWindowIcon(QIcon(":/images/appicon"));    
+#endif    
+
 
     w.show();
     

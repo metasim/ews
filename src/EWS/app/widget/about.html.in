@@ -30,7 +30,7 @@ from the <a href="http://www.nvidia.com/object/corporate_community.html">NVIDIA 
 <p>
 The discretized wave equation implementation was derived from the
 <a href="http://phet.colorado.edu/simulations/sims.php?sim=Wave_Interference">
-Phet Wave Interference Application</a> source code by Sam Reid, University
+PhET Wave Interference Application</a> source code by Sam Reid, University
 of Colorado at Boulder.
 </p>
 
@@ -47,7 +47,7 @@ Icons are from the <a href="http://tango.freedesktop.org/Tango_Desktop_Project">
 <br/>
 <br/>
 <p>
-Implementation was preformed by <a href="http://mseedsoft.com">Mustard Seed Software, LLC</a>.
+Implementation by <a href="http://mseedsoft.com">Mustard Seed Software, LLC</a>.
 </p>
 <center><img src=":/images/mseedsoft"/></center>
 <br/>

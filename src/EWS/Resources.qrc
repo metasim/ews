@@ -3,6 +3,7 @@
     <!-- Application icons. -->
     <file alias="splash">images/ews-icon.png</file>
     <file alias="appicon">images/ews-icon.ico</file>
+    <file alias="appicon.mac">images/ews-icon.icns</file>
     <file alias="mseedsoft">images/MustardSeedLogo-250.png</file>
     <!-- Button icons. -->
     <file>images/media-record.png</file>
