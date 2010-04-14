@@ -81,6 +81,7 @@ if(WIN32)
 		
         install(FILES ${Qwt5_DLL_DIR}/qwt5d.dll
             DESTINATION bin
+            RENAME qwt5.dll
             CONFIGURATIONS Debug RelWithDebInfo
             COMPONENT Runtime
         )
