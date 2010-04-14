@@ -36,7 +36,7 @@ namespace ews {
             using ews::app::model::PointSampler;
             
             DetectorEditor::DetectorEditor(QWidget* parent) 
-            : QWidget(parent), _ui(new Ui::DetectorEditorForm) {
+            : QWidget(parent), _ui(new Ui::DetectorEditorForm), _dataModel(NULL) {
                 _ui->setupUi(this);   
                 updateEnabled();
             }

@@ -56,8 +56,10 @@ namespace ews {
                     ref_ptr<Program> program = new Program;
                     state->setAttribute(program.get());
                     
-                    bool success = program->addShader(new Shader(Shader::VERTEX, loadVertexProgram()));
-                    success &= program->addShader(new Shader(Shader::FRAGMENT, loadFragmentProgram()));
+                    const char* data = loadVertexProgram();
+                    bool success = program->addShader(new Shader(Shader::VERTEX, data));
+                    data = loadFragmentProgram();
+                    success &= program->addShader(new Shader(Shader::FRAGMENT, data));
                     if(!success) {
                         qCritical() << "GPU shaders did initialize properly\nYou need NVIDIA graphics hardware with OpenGL 2.0 support.";
                         return;
@@ -143,21 +145,22 @@ namespace ews {
 
                 
                 static const char* loadFragmentProgram() {
-                    static QString data;
-                    if(!data.length()) {
+                    static QByteArray data;
+                    if(!data.size()) {
                         data = loadTextResource(":/text/waves.fs");
+                        qDebug() << "waves.fs = \n" << data;
                     }
-                    return qPrintable(data);
+                  
+                    return data.constData();
                 }
                 static const char* loadVertexProgram() {
-                    static QString data;
-                    if(!data.length()) {
+                    static QByteArray data;
+                    if(!data.size()) {
                         data = loadTextResource(":/text/waves.vs");
+                        qDebug() << "waves.vs = \n" << data;
                     }
-                    return qPrintable(data);
+                    return data.constData();
                 }
-  
-                
             } ;
         }
     }
