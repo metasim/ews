@@ -113,9 +113,19 @@ if(APPLE)
         ##include(InstallRequiredSystemLibraries)
         file(GLOB_RECURSE QTPLUGINS
             \"\${CMAKE_INSTALL_PREFIX}/${QT_PLUGIN_DEST}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
-        message(\"plugins: \${QTPLUGINS}\")
+        message(STATUS \"Qt plugins: \${QTPLUGINS}\")
         set(FIXUP_EXTRA_LIBS ${OPENSCENEGRAPH_LIBRARIES};\${QTPLUGINS})
         include(BundleUtilities)
-        fixup_bundle(\"${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
+        message(STATUS \"About to apply bundle fixup to: \${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app\")
+        fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app\" \"\${FIXUP_EXTRA_LIBS}\" \"${FIXUP_LIBRARY_SEARCH_PATH}\")
         " COMPONENT Runtime)
+        
+        
+# INSTALL(CODE "
+#    file(GLOB_RECURSE QTPLUGINS
+#      \"\${CMAKE_INSTALL_PREFIX}/${plugin_dest_dir}/plugins/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+#    include(BundleUtilities)
+#    fixup_bundle(\"${APPS}\" \"\${QTPLUGINS}\" \"${DIRS}\")
+#    " COMPONENT Runtime)
+        
 endif()

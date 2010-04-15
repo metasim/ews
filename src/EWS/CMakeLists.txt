@@ -305,8 +305,6 @@ set(QT_CONF_DEST "bin")
 set(QT_PLUGIN_DEST "bin/plugins")
 
 if(APPLE)
-#    set(CMAKE_INSTALL_PREFIX "/Applications")
-#    set(APP_INSTALL_PATH "${CMAKE_INSTALL_PREFIX}/${EXE_TARGET_NAME}.app")
     set(QT_PLUGIN_DEST "${EXE_TARGET_NAME}.app/Contents/MacOS/plugins")  
     set(QT_CONF_DEST "${EXE_TARGET_NAME}.app/Contents/Resources")  
 elseif(WIN32)
@@ -324,10 +322,13 @@ install(TARGETS ${EXE_TARGET_NAME}
 # Install needed Qt plugins by copying directories from the qt installation
 # One can cull what gets copied by using 'REGEX "..." EXCLUDE' 
 # NB: this is important because icon loading, etc. need image plugins.
+
+message(STATUS "Qt plugins dir = ${QT_PLUGINS_DIR}, extension = ${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
 install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" 
 	DESTINATION ${QT_PLUGIN_DEST} 
 	COMPONENT Runtime
-	FILES_MATCHING PATTERN "*.dll"
+	FILES_MATCHING PATTERN "*${CMAKE_SHARED_LIBRARY_SUFFIX}"
 )
 
 
@@ -336,7 +337,7 @@ install(DIRECTORY "${QT_PLUGINS_DIR}/imageformats"
 # this inserts some cmake code into the install script to write the file
 # This is needed so Qt can find search path for plugins.
 INSTALL(CODE "
-    message(\"--   Creating: \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
+    message(STATUS \"Creating: \${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\")
     file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${QT_CONF_DEST}/qt.conf\" \"\") "
     COMPONENT Runtime)
     
@@ -410,9 +411,9 @@ endif()
 include(CPack)
 
 # Get all defined components
-GET_CMAKE_PROPERTY(CPACK_COMPONENTS_ALL COMPONENTS)
+get_cmake_property(CPACK_COMPONENTS_ALL COMPONENTS)
 
-message("CPack components: ${CPACK_COMPONENTS_ALL}")
+message(STATUS "CPack components: ${CPACK_COMPONENTS_ALL}")
 
 
 ############################################################

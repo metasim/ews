@@ -31,11 +31,11 @@ default:
 test: $(BLD)
 	(cd $(BLD); make test)
 
-XBLD=build.xcode
+XBLD=build.xc
 xcode:
 	(mkdir -p ${XBLD}; cd ${XBLD}; cmake .. -DTESTING:BOOL=OFF -G"Xcode"; open VisualizePhysics-Wave.xcodeproj)
 
-XBLDT=build.xcode-test
+XBLDT=build.xc-test
 xcode-test:
 	(mkdir -p ${XBLDT}; cd ${XBLDT}; cmake .. -G"Xcode"; open VisualizePhysics-Wave.xcodeproj)
 
