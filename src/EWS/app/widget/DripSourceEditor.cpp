@@ -37,20 +37,6 @@ namespace ews {
                 delete _ui;
             }
             
-                
-            void DripSourceEditor::throb() {
-                if (_dataModel != NULL) {
-                    
-                    bool on = false;
-                    
-                    if(_dataModel->isEnabled()) {
-                        on = !_ui->throbber->isEnabled();
-                    }
-                    
-                    _ui->throbber->setEnabled(on);
-                }
-            }
-            
             void DripSourceEditor::setDataModel(DripSource* data) {
                 if (_dataModel != NULL) {
                     _dataModel->disconnect(this);
@@ -58,10 +44,17 @@ namespace ews {
                 
                 _dataModel = data;
                 
-                if(_dataModel) {
-                    connect(_dataModel, SIGNAL(drip(int)), this, SLOT(throb()));
+                syncUI();
+            }
+            
+            void DripSourceEditor::setEnabled(bool state) {
+                if (_dataModel != NULL) {
+                    bool prevState = _dataModel->isEnabled();
+                    if (prevState != state) {
+                        _dataModel->setEnabled(state);                        
+                        emit enabledChanged(state);
+                    }
                 }
-                
                 syncUI();
             }
             
@@ -70,9 +63,20 @@ namespace ews {
                 if (_dataModel != NULL) {
                     blockSignals(true);
                     _ui->enabled->setChecked(_dataModel->isEnabled());
+                    _ui->throbber->setEnabled(_dataModel->isEnabled());
                     _ui->frequency->setValue(_dataModel->getFrequency());
-                    _ui->amplitude->setValue(_dataModel->getAmplitude());                    
+                    _ui->amplitude->setValue(_dataModel->getAmplitude());    
                     blockSignals(false);
+                }
+            }
+            
+            void DripSourceEditor::pulse() {
+                if(_dataModel) {
+                    // When the user clicks the "pulse" button it 
+                    // sets the frequency to zero to basically turn off the
+                    // oscillator.
+                    _ui->frequency->setValue(0);
+                    _dataModel->pulseDrip();
                 }
             }
         }

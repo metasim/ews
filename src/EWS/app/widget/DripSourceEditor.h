@@ -51,24 +51,8 @@ namespace ews {
                 void setDataModel(DripSource* data);
                 
             public slots:
-                virtual void setEnabled(bool state) {
-                    if (_dataModel != NULL) {
-                        bool prevState = _dataModel->isEnabled();
-                        qDebug() << "prevState = " << prevState << ", state = " << state;
-                        if (prevState != state) {
-                            _dataModel->setEnabled(state);                        
-                            qDebug() << "emit enabledChanged(" << state << ")";
-                            emit enabledChanged(state);
-                        }
-                    }
-                    syncUI();
-                }
-                
-                void pulse() {
-                    if(_dataModel) {
-                        _dataModel->pulseDrip();
-                    }
-                }
+                virtual void setEnabled(bool state);
+                void pulse();
                 
                 void setAmplitude(int val) {
                     if(_dataModel) {
@@ -86,9 +70,6 @@ namespace ews {
 
             signals:
                 void enabledChanged(bool);
-
-            private slots:
-                void throb();
                 
             private:
                 Ui::DripSourceEditorForm* _ui;

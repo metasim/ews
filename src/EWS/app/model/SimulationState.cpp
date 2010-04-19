@@ -43,9 +43,11 @@ namespace ews {
                         SLOT(forwardSamplerSetRemoval(int, PointSampler*)));
                 
                 _dripSource1.setObjectName(ews::app::model::DRIPSOURCE1);
+                _dripSource1.setColor(osg::Vec4(.8f, .9f, .8f, 1.f));
                 _dripSource1.reset();
                 
                 _dripSource2.setObjectName(ews::app::model::DRIPSOURCE2);
+                _dripSource2.setColor(osg::Vec4(.9f, .9f, .8f, 1.f));
                 _dripSource2.reset();
                 
                 _waveMedium.setObjectName("waveMedium");

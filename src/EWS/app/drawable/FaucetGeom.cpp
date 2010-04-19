@@ -105,7 +105,7 @@ namespace ews {
                 ref_ptr<Constraint> constraint = new WaterBoundaryDragConstraint(*this, waterArea);
                 _dragger->setConstraint(*(constraint.get()));
                 
-                setColor(Vec4(.2f, .9f, .9f, 1.f)); 
+                setColor(_dataModel.getColor()); 
 
                 // Attach render-loop callback to update oscillator.
                 setUpdateCallback(new FaucetUpdater(*_dragger));
@@ -113,6 +113,8 @@ namespace ews {
                 QObject::connect(&_dataModel, SIGNAL(drip(int)), this, SLOT(drip()));
                 QObject::connect(&_dataModel, SIGNAL(enabledChanged(bool)), this, SLOT(setEnabled(bool)));
                 QObject::connect(&_dataModel, SIGNAL(positionChanged(osg::Vec2)), this, SLOT(setPosition(const osg::Vec2&)));
+                QObject::connect(&_dataModel, SIGNAL(colorChanged(osg::Vec4)), this, SLOT(setColor(const osg::Vec4&)));
+                
                 
                 setEnabled(_dataModel.isEnabled());
             }

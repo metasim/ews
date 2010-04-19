@@ -115,6 +115,13 @@ namespace ews {
                     return _paused;
                 }
                 
+                /** 
+                 * Get the rendering color. 
+                 */
+                osg::Vec4 getColor() const {
+                    return _color;
+                }
+                
                 /**
                  * Reset drip source to default configuration.
                  */
@@ -202,6 +209,12 @@ namespace ews {
                     emit drip(_oscillator.getAmplitude());
                 }
                 
+                /** Set the rendering color. */
+                void setColor(osg::Vec4 color) {
+                    _color = color;
+                    emit colorChanged(color);
+                }
+                
             private slots:
                 /** Propagate data model values to timer. */
                 void updateTimer();
@@ -214,6 +227,7 @@ namespace ews {
                 void frequencyChanged(int);
                 void amplitudeChanged(int);
                 void positionChanged(osg::Vec2);
+                void colorChanged(osg::Vec4);
                 
                 
                 /**
@@ -234,6 +248,7 @@ namespace ews {
                 bool _paused;
                 bool _enabled;
                 Uint _frequency;
+                osg::Vec4 _color;
             };
         }
     }

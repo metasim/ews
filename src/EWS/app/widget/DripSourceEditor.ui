@@ -45,7 +45,7 @@
       <item>
        <widget class="QLabel" name="throbber">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -325,8 +325,8 @@
    <slot>pulse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>178</x>
-     <y>306</y>
+     <x>184</x>
+     <y>220</y>
     </hint>
     <hint type="destinationlabel">
      <x>7</x>
@@ -342,7 +342,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>140</x>
-     <y>72</y>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>187</x>
@@ -358,7 +358,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>85</x>
-     <y>196</y>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>8</x>
@@ -378,7 +378,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>47</x>
-     <y>74</y>
+     <y>69</y>
     </hint>
    </hints>
   </connection>
@@ -394,39 +394,23 @@
     </hint>
     <hint type="destinationlabel">
      <x>104</x>
-     <y>196</y>
+     <y>171</y>
     </hint>
    </hints>
   </connection>
   <connection>
    <sender>enabled</sender>
    <signal>toggled(bool)</signal>
-   <receiver>pulse</receiver>
+   <receiver>throbber</receiver>
    <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>162</x>
-     <y>11</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>143</x>
-     <y>306</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>enabled</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>DripSourceEditorForm</receiver>
-   <slot>throb()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>33</x>
      <y>13</y>
     </hint>
     <hint type="destinationlabel">
-     <x>115</x>
-     <y>130</y>
+     <x>286</x>
+     <y>10</y>
     </hint>
    </hints>
   </connection>
@@ -438,11 +422,11 @@
    <hints>
     <hint type="sourcelabel">
      <x>184</x>
-     <y>87</y>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>148</x>
-     <y>115</y>
+     <y>83</y>
     </hint>
    </hints>
   </connection>
@@ -454,18 +438,33 @@
    <hints>
     <hint type="sourcelabel">
      <x>204</x>
-     <y>205</y>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
      <x>151</x>
-     <y>255</y>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>enabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>pulse</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>138</x>
+     <y>10</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>147</x>
+     <y>204</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
   <signal>enabledChanged(bool)</signal>
-  <slot>throb()</slot>
   <slot>setAmplitude(int)</slot>
   <slot>setFrequency(int)</slot>
  </slots>

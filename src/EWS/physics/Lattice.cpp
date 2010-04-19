@@ -23,17 +23,28 @@ using std::min;
 
 namespace ews {
     namespace physics {
+        /** 
+         * Data type for storing indexes into amplitude data. profiler shows that unsigned short is /slightly/
+         * faster than unsigned int. Overflow shouldn't be a concern in the near term.
+         */
+        typedef unsigned short LoopType;
         LatticeVal Lattice::computeAverageValue(unsigned int x, unsigned int y, unsigned int windowWidth) const {
             LatticeVal sum = 0.0;
             if (getSize() == 0) return sum;
-            const unsigned int minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
-            const unsigned int maxX = min(x + windowWidth, static_cast<unsigned int>(getWidth()) - 1);
-            const unsigned int minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
-            const unsigned int maxY = min(y + windowWidth, static_cast<unsigned int>(getLength()) - 1);
-            const unsigned int count = (maxX - minX + 1) * (maxY - minY + 1);
-            for (unsigned int i = minX; i <= maxX; i++) {
-                for (unsigned int j = minY; j <= maxY; j++) {
-                    sum += getValue(i, j);
+            const LoopType minX = max(static_cast<int>(x) - static_cast<int>(windowWidth), 0);
+            const LoopType maxX = min(x + windowWidth, static_cast<unsigned int>(getWidth()) - 1);
+            const LoopType minY = max(static_cast<int>(y) - static_cast<int>(windowWidth), 0);
+            const LoopType maxY = min(y + windowWidth, static_cast<unsigned int>(getLength()) - 1);
+            const LoopType count = (maxX - minX + 1) * (maxY - minY + 1);
+            
+            const LoopType len = getLength();
+            
+            LoopType i, j;
+            for (i = minX; i <= maxX; i++) {
+                const LoopType rowOffset = i * len;
+                for (j = minY; j <= maxY; j++) {
+                    sum += _amplitudeData[rowOffset + j];
+// same as:         sum += getValue(i, j);
                 }
             }
             return sum / count;    

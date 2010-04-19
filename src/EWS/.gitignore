@@ -2,7 +2,4 @@
 *~
 OSGFun*
 build
-build.vs
-build.xcode
-build.xcode-test
-
+build.*

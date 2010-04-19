@@ -27,7 +27,8 @@ namespace ews {
             using ews::physics::WaveModel;
             
             DripSource::DripSource(WaveModel& model, SimulationState * parent)
-            :  QObject(parent), _oscillator(model), _timer(), _paused(false), _enabled(false), _frequency(0) {
+            :  QObject(parent), _oscillator(model), _timer(), _paused(false), 
+            _enabled(false), _frequency(0), _color(osg::Vec4(.2f, .9f, .9f, 1.f)) {
                 
                 connect(this, SIGNAL(drip(int)), this, SLOT(pokeOscillator()));
                 if (REALISTIC_DRIP) {

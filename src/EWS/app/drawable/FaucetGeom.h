@@ -45,13 +45,13 @@ namespace ews {
                 DripSource& getDataModel() {
                     return _dataModel;
                 }
-                
-                void setColor(osg::Vec4 color);
+
                 
             public slots:
                 void drip();
                 void setEnabled(bool enabled) ;
                 void setPosition(const osg::Vec2& pos);
+                void setColor(osg::Vec4 color);
                
             protected:
                 /** Protected to encourage use with ref_ptr. */
