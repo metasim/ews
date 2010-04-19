@@ -131,7 +131,7 @@ endif (WIN32)
 # this command finds Qt4 libraries and sets all required variables
 # note that it's Qt4, not QT4 or qt4
 set(QT_COMPONENTS QtCore QtGui QtOpenGL QtSvg QtXml)
-find_package(Qt4 REQUIRED COMPONENTS ${QT_COMPONENTS})
+find_package(Qt4 4.6 REQUIRED COMPONENTS ${QT_COMPONENTS})
 
 #--------------------------------------------------------------------------------
 # QT_USE_FILE is a variable defined by FIND_PACKAGE( Qt4 ) that contains a path to
