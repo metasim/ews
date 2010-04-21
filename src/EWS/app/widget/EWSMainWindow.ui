@@ -68,6 +68,7 @@
     <addaction name="separator"/>
     <addaction name="actionReset"/>
     <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuItems">
@@ -422,6 +423,9 @@
    <property name="text">
     <string>About</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
   <action name="actionProjectWebsite">
    <property name="text">
@@ -436,6 +440,23 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ApplicationShortcut</enum>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
    </property>
   </action>
  </widget>
@@ -672,6 +693,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionPreferences</sender>
+   <signal>triggered()</signal>
+   <receiver>EWSMainWindowForm</receiver>
+   <slot>preferences()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>581</x>
+     <y>447</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>start()</slot>
@@ -679,6 +716,6 @@
   <slot>reset()</slot>
   <slot>about()</slot>
   <slot>projectWebsite()</slot>
-  <slot>amplitudePlotEnabled(bool)</slot>
+  <slot>preferences()</slot>
  </slots>
 </ui>

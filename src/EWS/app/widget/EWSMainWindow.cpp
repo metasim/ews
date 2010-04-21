@@ -27,13 +27,15 @@
 #include <QDesktopServices>
 #include "EWSUtils.h"
 #include "EWSVersion.h"
+#include "EWSDefine.h"
 #include "AmplitudePlot.h"
 #include "PointSampler.h"
+#include "Preferences.h"
 
 namespace ews {
     namespace app {
         namespace widget {
-            
+            using ews::Uint;
             using namespace ews::app::drawable;
             using namespace ews::app::model;
             
@@ -59,9 +61,6 @@ namespace ews {
                 _sceneRoot = new SceneRoot(this);
                 // renderer is an instance (the only one) of QOSGWidget
                 _ui->renderer->setSceneData(_sceneRoot);
-                _ui->renderer->setBetweenFrameDelay(10);
-                
-                
                 // Setup sync between model and renderer.
                 QObject::connect(_state, SIGNAL(objectAdded(QObject&)), _sceneRoot, SLOT(addDrawableFor(QObject&)));
                 QObject::connect(_state, SIGNAL(objectRemoved(QObject&)), _sceneRoot, SLOT(removeDrawableFor(QObject&)));
@@ -141,6 +140,20 @@ namespace ews {
             void EWSMainWindow::updateMenusEnabledState() {
                 _ui->actionAddBarrier->setEnabled(!_state->getBarriers().isFull());
                 _ui->actionRemoveBarrier->setEnabled(_state->getBarriers().size() > 0);
+            }
+            
+            Uint EWSMainWindow::getInterFrameDelay() const {
+                return _ui->renderer->getInterFrameDelay();
+            }
+            
+            void EWSMainWindow::setInterFrameDelay(Uint delayMS) {
+                _ui->renderer->setInterFrameDelay(delayMS);
+            }
+            
+            /** Prefs dialog. */
+            void EWSMainWindow::preferences() {
+                Preferences* p = new Preferences(this);
+                p->show();
             }
             
             /** Show the about box. */
