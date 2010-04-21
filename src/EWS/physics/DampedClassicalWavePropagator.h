@@ -54,8 +54,7 @@ namespace ews {
              * @param dampX Dampening factor in the x direction
              * @param dampY Dampening factor in the y direction
              */
-            DampedClassicalWavePropagator(Potential* p, unsigned int width, unsigned int length,
-                                          unsigned int dampX, unsigned int dampY);
+            DampedClassicalWavePropagator(Potential* p, Uint width, Uint length, Uint dampX, Uint dampY);
             /**
              * Virtual destructor
              */
@@ -66,7 +65,7 @@ namespace ews {
              * @param y Y-location to modify
              * @param value Value to assign
              */
-            void setBoundaryCondition(unsigned int x, unsigned int y, LatticeVal value);
+            void setBoundaryCondition(Uint x, Uint y, LatticeVal value);
             /**
              * Update the given lattice using history stored in this propagator.
              * @param lattice Lattice to update
@@ -81,7 +80,16 @@ namespace ews {
              * Adjusts the region over which this propagator is valid. If the valid differs from the existing
              * size, it resets all history to zero.
              */
-            void setSize(unsigned int width, unsigned int length);
+            void setSize(Uint width, Uint length);
+            /**
+             * Returns the potential associated with this propagator at location x, y.
+             * @param x
+             * @param y
+             * @return Associated potential
+             */
+            Real getPotential(Uint x, Uint y) const {
+                return _potential->getPotential(x + _dampX, y + _dampY);
+            }
             /**
              * Returns the potential associated with this propagator.
              * @return Associated potential
@@ -104,31 +112,31 @@ namespace ews {
              */
             class PaddedPotential : public Potential {
             public:
-                PaddedPotential(Potential* p, unsigned int dampX, unsigned int dampY)
+                PaddedPotential(Potential* p, Uint dampX, Uint dampY)
                 : _innerP(p), _dampX(dampX), _dampY(dampY) {
                     /* do nothing */
                 }
                 virtual ~PaddedPotential() { /* do nothing */ }
-                Real getPotential(unsigned int x, unsigned int y) const {
+                Real getPotential(Uint x, Uint y) const {
                     return _innerP->getPotential(x - _dampX, y - _dampY);
                 }
             private:
                 ref_ptr<Potential> _innerP;
-                unsigned int _dampX;
-                unsigned int _dampY;
+                Uint _dampX;
+                Uint _dampY;
             };
-            void dampHorizontal(unsigned int y, int delta);
-            void dampHorizontal(unsigned int y, int delta, unsigned int numDampPts);
-            void dampVertical(unsigned int x, int delta);
-            void dampVertical(unsigned int x, int delta, unsigned int numDampPts);
+            void dampHorizontal(Uint y, int delta);
+            void dampHorizontal(Uint y, int delta, Uint numDampPts);
+            void dampVertical(Uint x, int delta);
+            void dampVertical(Uint x, int delta, Uint numDampPts);
             void dampScale();
-            LatticeVal getDamp(unsigned int depthInDampRegion);
+            LatticeVal getDamp(Uint depthInDampRegion);
             ref_ptr<Potential> _potential;
             Lattice _largeLattice;
             Lattice _priorLattice;
             Lattice _priorPriorLattice;
-            unsigned int _dampX;
-            unsigned int _dampY;
+            Uint _dampX;
+            Uint _dampY;
         };
     }
 }

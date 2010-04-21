@@ -45,19 +45,21 @@ namespace ews {
         void Oscillator::updateTimeAndOscillator(OscillatorVal time) {
             _time = time;
             if (_oscillating) {
-                const OscillatorVal value = getValue();
-                // Making these int here so that subtraction doesn't wrap around
-                const int x = static_cast<int>(_x);
-                const int y = static_cast<int>(_y);
-                const int r = static_cast<int>(_radius);
-                const int minX = max(0, x - r);
-                const int maxX = min(static_cast<int>(_waveModel.getWidth()) - 1, x + r);
-                const int minY = max(0, y - r);
-                const int maxY = min(static_cast<int>(_waveModel.getLength() - 1), y + r);
-                for (int i = minX; i <= maxX; i++) {
-                    for (int j = minY; j <= maxY; j++) {
-                        if (sqrt(static_cast<Real>((i - x) * (i - x)  + (j - y) * (j - y))) < _radius) {
-                            _waveModel.setSourceValue(i, j, value);
+                if (_waveModel.getPotential(_x, _y) <= 0.0) {
+                    const OscillatorVal value = getValue();
+                    // Making these int here so that subtraction doesn't wrap around
+                    const int x = static_cast<int>(_x);
+                    const int y = static_cast<int>(_y);
+                    const int r = static_cast<int>(_radius);
+                    const int minX = max(0, x - r);
+                    const int maxX = min(static_cast<int>(_waveModel.getWidth()) - 1, x + r);
+                    const int minY = max(0, y - r);
+                    const int maxY = min(static_cast<int>(_waveModel.getLength() - 1), y + r);
+                    for (int i = minX; i <= maxX; i++) {
+                        for (int j = minY; j <= maxY; j++) {
+                            if (sqrt(static_cast<Real>((i - x) * (i - x)  + (j - y) * (j - y))) < _radius) {
+                                _waveModel.setSourceValue(i, j, value);
+                            }
                         }
                     }
                 }

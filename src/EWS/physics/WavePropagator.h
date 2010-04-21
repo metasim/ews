@@ -60,6 +60,13 @@ namespace ews {
              */
             virtual void setSize(unsigned int width, unsigned int length) = 0;
             /**
+             * Returns the potential associated with this propagator at location x, y.
+             * @param x
+             * @param y
+             * @return Associated potential
+             */
+            virtual Real getPotential(Uint x, Uint y) const = 0;
+            /**
              * Returns the potential associated with this propagator.
              * @return Associated potential
              */
