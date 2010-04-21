@@ -119,6 +119,14 @@ namespace ews {
                 return _wavePropagator->getPotential();
             }
             /**
+             * Get the potential associated with this wave model at location (x,y)
+             * @param x
+             * @param y
+             */
+            Real getPotential(Uint x, Uint y) const {
+                return _wavePropagator->getPotential(x, y);
+            }
+            /**
              * Assign a new potential to be used by this wave model.
              */
             void setPotential(Potential* p) { _wavePropagator->setPotential(p); }
