@@ -16,6 +16,7 @@
 #include <osg/Notify>
 #include <osg/io_utils>
 #include <osgUtil/LineSegmentIntersector>
+#include "MathUtils.h"
 
 namespace ews {
     namespace app {
@@ -154,18 +155,10 @@ namespace ews {
             }
             
             void CameraController::doZoom(double dx, double dy) {
+                using namespace ews::util;
                 // zoom model.
-                
-                double fd = _distance;
-                double scale = 1.0f+dy;
-                if (fd*scale>_minimumDistance) {
-                    _distance *= scale;
-                    
-                } 
-                else {
-                    _distance = _minimumDistance;
-                }
-             
+                const double scale = 1.0f + dy;
+                _distance = imposeBounds(MIN_ZOOM_DISTANCE, _distance * scale, MAX_ZOOM_DISTANCE);
             }
             
             void CameraController::doPan(double dx, double dy) {
