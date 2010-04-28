@@ -101,19 +101,18 @@ namespace ews {
                 unsigned int contextID = 0;
                 
                 _gw->makeCurrent();
-                if(_gw->valid()) {
+                if (_gw->valid()) {
                     contextID = _gw->getState()->getContextID();
                     osg::GL2Extensions* gl2ext = osg::GL2Extensions::Get(contextID, true);
-                    float ver = gl2ext ? gl2ext->getGlVersion() : -1;
-                    
-                    if( gl2ext ) {
-                        if( !gl2ext->isGlslSupported() ) {
+                    float ver = (gl2ext != NULL) ? gl2ext->getGlVersion() : -1;
+                    if (gl2ext != NULL) {
+                        if (!gl2ext->isGlslSupported()) {
                             errorMessage = "GLSL not supported by OpenGL driver.";
                         }
                         
                         GLint numVertexTexUnits = 0;
                         glGetIntegerv( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, &numVertexTexUnits );
-                        if( numVertexTexUnits <= 0 )  {
+                        if (numVertexTexUnits <= 0)  {
                             errorMessage = "Vertex texturing not supported by OpenGL driver.";
                         }
                     }
@@ -121,7 +120,7 @@ namespace ews {
                         errorMessage = "GLSL not supported.";
                     }
                     
-                    if(errorMessage.length() > 0) {
+                    if (errorMessage.length() > 0) {
                         qCritical() << qPrintable(errorMessage) << "\nYou need to have NVIDIA graphics hardware with OpenGL 2.0 support.";
                     }
                     else {
