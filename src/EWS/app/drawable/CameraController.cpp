@@ -230,12 +230,12 @@ namespace ews {
                     osg::Vec3d new_localUp = getUpVector(coordinateFrame);
                     
                     osg::Quat pan_rotation;
-                    pan_rotation.makeRotate(localUp,new_localUp);
+                    pan_rotation.makeRotate(localUp, new_localUp);
                     
                     if (!pan_rotation.zeroRotation()) {
                         _rotation = _rotation * pan_rotation;
                         _previousUp = new_localUp;
-//                        osg::notify(osg::NOTICE)<<"Rotating from "<<localUp<<" to "<<new_localUp<<"  angle = "<<acos(localUp*new_localUp/(localUp.length()*new_localUp.length()))<<std::endl;
+                        osg::notify(osg::NOTICE)<<"Rotating from "<<localUp<<" to "<<new_localUp<<"  angle = "<<acos(localUp*new_localUp/(localUp.length()*new_localUp.length()))<<std::endl;
 //                        clampOrientation();
                     }
                     else {
@@ -310,11 +310,9 @@ namespace ews {
                 osg::Vec3d sideVector = lookVector ^ localUp;
                 
                 if (sideVector.length()<0.1) {
-                    osg::notify(osg::INFO)<<"Side vector short "<<sideVector.length()<<std::endl;
-                    
+                    osg::notify(osg::INFO) << "Side vector short " << sideVector.length() << std::endl;
                     sideVector = upVector ^ localUp;
                     sideVector.normalize();
-                    
                 }
                     
                 Vec3d newUpVector = sideVector ^ lookVector;
