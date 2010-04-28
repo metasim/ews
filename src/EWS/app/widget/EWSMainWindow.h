@@ -54,6 +54,11 @@ namespace ews {
                 
                 /** Overidden to trap polish request for final initialization. */
                 virtual bool event(QEvent* event);
+                
+                /** Get the number of milliseconds the rendering timer is set to 
+                 * trigger.
+                 */
+                Uint getInterFrameDelay() const;
 
             public slots:
                 /** Start the simulation. */
@@ -62,10 +67,14 @@ namespace ews {
                 void stop();
                 /** Reset simulation state to initial conditions. */
                 void reset();
+                /** Show the preferences dialog. */
+                void preferences();
                 /** Show the about window. */
                 void about();
                 /** Request platform to open url to project website. */
                 void projectWebsite();
+                /** Set the inter-frame delay in milli-seconds. */
+                void setInterFrameDelay(Uint delay);
                 
             private slots:
                 /** Do any final connecting of components after rest of application is connected.*/

@@ -31,7 +31,7 @@ namespace ews {
         namespace drawable {
             using namespace osg;
             using namespace osgGA;
-            const double MIN_ZOOM_DISTANCE = 200;
+            const double MIN_ZOOM_DISTANCE = 75;
             const double MAX_ZOOM_DISTANCE = 500;
             
             /**

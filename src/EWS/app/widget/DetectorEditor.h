@@ -48,7 +48,7 @@ namespace ews {
             public:
                 explicit DetectorEditor(QWidget *parent = 0);
                 virtual ~DetectorEditor();
-                
+
                 void setDataModel(SamplerSet* data);
                 
                 /** Remove all detectors (e.g., to start over). */

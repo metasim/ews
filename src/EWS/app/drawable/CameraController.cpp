@@ -28,7 +28,7 @@ namespace ews {
             CameraController::CameraController() 
             : TerrainManipulator()
             {
-                setMinimumDistance(10);
+                setMinimumDistance(MIN_ZOOM_DISTANCE);
                 computeHomePosition();
             }
             
@@ -158,7 +158,7 @@ namespace ews {
                 using namespace ews::util;
                 // zoom model.
                 const double scale = 1.0f + dy;
-                _distance = imposeBounds(MIN_ZOOM_DISTANCE, _distance * scale, MAX_ZOOM_DISTANCE);
+                _distance = imposeBounds(getMinimumDistance(), _distance * scale, MAX_ZOOM_DISTANCE);
             }
             
             void CameraController::doPan(double dx, double dy) {

@@ -86,6 +86,14 @@ namespace ews {
                 // Don't delete _gw, smart pointer takes care of it.
             }
             
+            Uint QOSGWidget::getInterFrameDelay() const {
+                return _timer.interval();
+            }
+            
+            void QOSGWidget::setInterFrameDelay(Uint delayMS) {
+                _timer.setInterval(delayMS);
+            }
+            
             void QOSGWidget::initializeGL() {
                 QGLWidget::initializeGL();
 

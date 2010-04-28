@@ -21,6 +21,7 @@
 #include <osg/PolygonMode>
 #include <osg/MatrixTransform>
 #include <osg/Material>
+#include <osg/CullFace>
 
 #include <osgManipulator/Translate2DDragger>
 
@@ -46,7 +47,7 @@ namespace ews {
             /** How wide the barriers are. */
             const float VISIBLE_BARRIER_WIDTH = 6.f;
             /** How opaque the barriers are. */
-            const float BARRIER_OPACITY = .6f;
+            const float BARRIER_OPACITY = 1.f;
             /** Where starting knob is relative to to the starting point. */
             const Vec3 START_KNOB_OFFSET(0, 0, 7);
             /** Where ending knob is relative to to the ending point. */
@@ -115,7 +116,12 @@ namespace ews {
                 mat->setAmbient(Material::FRONT, color);
                 mat->setShininess(Material::FRONT, 95.f);
                 state->setAttribute(mat.get());
-                state->setMode(GL_BLEND, StateAttribute::ON); // Activate blending (for transparency)
+                if(BARRIER_OPACITY < 1) {
+                    state->setMode(GL_BLEND, StateAttribute::ON); // Activate blending (for transparency)
+                }
+//                ref_ptr<CullFace> cf = new CullFace(CullFace::BACK);
+//                state->setAttribute(cf.get());
+                
             }
             
             void BarrierGeom::addBox(const ref_ptr<Geode>& geode, Real boxCenter, Real boxLength) {
@@ -124,6 +130,7 @@ namespace ews {
                 ref_ptr<Shape> s = new Box(Vec3(boxCenter, 0.f, 0.f),
                                                      boxLength, boxWidth,
                                                      VISIBLE_BARRIER_HEIGHT);
+                ref_ptr<TessellationHints> hints = new TessellationHints();
                 d->setShape(s.get());
                 geode->addDrawable(d.get());
             }

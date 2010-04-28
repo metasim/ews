@@ -70,9 +70,7 @@ namespace ews {
             /** Plot class contructor. */
             AmplitudePlot::AmplitudePlot(QWidget* parent)
             : QWidget(parent), _ui(new Ui::AmplitudePlotForm) { 
-                
                 _ui->setupUi(this);
-                
                 QwtPlot* p = _ui->plot;
                 p->setCanvasBackground(QColor(Qt::white));
                 // We don't need the cache here

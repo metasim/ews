@@ -19,7 +19,7 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *  THE SOFTWARE.
  */
-
+#include "EWSDefine.h"
 #include <QtGui/QWidget>
 #include <QtOpenGL/QGLWidget>
 #include <QtCore/QTimer>
@@ -29,6 +29,8 @@
 namespace ews {
     namespace app {
         namespace widget {
+            using ews::Uint;
+            
             /**
              * Class responsible for rendering the scene graph. It combines the QT OpenGL support
              * with OpenSceneGraph.
@@ -48,9 +50,13 @@ namespace ews {
                 /**
                  * Set the delay interjected between frames in milliseconds.
                  */
-                void setBetweenFrameDelay(unsigned int delayMilliSec) {
-                    _timer.setInterval(delayMilliSec);
-                }
+                /** Get the number of milliseconds the rendering timer is set to 
+                 * trigger.
+                 */
+                Uint getInterFrameDelay() const;
+                
+                /** Set the inter-frame delay in milli-seconds. */
+                void setInterFrameDelay(Uint delay);                
                 
                 /** Set the sene graph data that viewer with view.*/
                 virtual void setSceneData(osg::Node* node);
@@ -65,6 +71,7 @@ namespace ews {
                  * propagates the WaveModel a single time step.
                  */
                 virtual void paintGL();
+                
                 
                 /**
                  * Resets the camera to its original "home" position.
