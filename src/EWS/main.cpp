@@ -18,58 +18,20 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QSplashScreen>
-#include <QString>
+//#include <QString>
 #include <QErrorMessage>
 #include <osg/Notify>
-#include <iostream>
-#include <sstream>
 #include "EWSMainWindow.h"
 #include "EWSVersion.h"
+#include "ErrorWrapper.h"
+using ews::app::widget::saveHandler;
+using ews::app::widget::errHandler;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #define __WINLOG
 #endif
-
-
-inline void logMessage(const char* typeStr, const char* msg) {
-    std::ostringstream oss;
-    oss << typeStr << ": " << msg << std::endl;
-    std::cerr << oss.str();
-#if defined(__WINLOG)
-    OutputDebugStringA(oss.str().c_str());
-#endif
-}
-
-static QtMsgHandler defMsgHandler = NULL;
-
-/** Message handler for Qt logging system. */
-void messageHandler(QtMsgType type, const char *msg) {
-    switch (type) {
-        case QtDebugMsg:
-            logMessage("Debug", msg);
-            break;
-        case QtWarningMsg:
-            logMessage("Warning", msg);
-            break;
-        case QtCriticalMsg:
-            logMessage("Critical", msg);
-            break;
-        case QtFatalMsg:
-            logMessage("Fatal", msg);
-            break;
-    }
-    
-    if(type != QtDebugMsg && defMsgHandler) {
-        QWidget* win = QApplication::activeWindow();
-        QMainWindow* main = qobject_cast<QMainWindow*>(win);
-        if(main) {
-            main->lower();
-        }
-        defMsgHandler(type, msg);
-    }
-}
 
 /** Application launch functionn. */
 int main(int argc, char *argv[]) {
@@ -83,8 +45,8 @@ int main(int argc, char *argv[]) {
     // To see Qt object dumps on macos, run with the environment variable
     // "DYLD_IMAGE_SUFFIX" set to "_debug".
     
-    QApplication a(argc, argv);
-    a.setQuitOnLastWindowClosed(true);
+    QApplication mainQApp(argc, argv);
+    mainQApp.setQuitOnLastWindowClosed(true);
     QApplication::setOrganizationName(EWS_ORGANIZATION_NAME);
     QApplication::setOrganizationDomain(EWS_BUNDLE_ID);
     QApplication::setApplicationVersion(EWS_VERSION);
@@ -94,22 +56,21 @@ int main(int argc, char *argv[]) {
     // get the function pointer to it by passing zero to the handler installer
     // then install our own.
     QErrorMessage::qtHandler();
-    defMsgHandler = qInstallMsgHandler(0);
-    qInstallMsgHandler(messageHandler);
+    saveHandler(qInstallMsgHandler(0));
+    qInstallMsgHandler(errHandler);
     
     QSplashScreen splash;
     QPixmap img(":/images/splash");
     
-    if(img.isNull()) {
+    if (img.isNull()) {
        qWarning() << "Couldn't load splash image";
     }
     
     splash.setPixmap(img);
     splash.showMessage(QObject::tr("Starting up...."));
     splash.show();
-
     
-    a.connect( &a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
+    mainQApp.connect(&mainQApp, SIGNAL(lastWindowClosed()), &mainQApp, SLOT(quit()));
 
     SimulationState state;
     state.setObjectName("root");
@@ -127,5 +88,5 @@ int main(int argc, char *argv[]) {
     
     splash.finish(&w);
 
-    return a.exec();
+    return mainQApp.exec();
 }

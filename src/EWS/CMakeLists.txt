@@ -14,7 +14,8 @@ set(EXE_TARGET_NAME ${CMAKE_PROJECT_NAME})
 set(EWS_APP_NAME "Visualize Physics - Wave")
 set(EWS_VERSION_MAJOR "0")
 set(EWS_VERSION_MINOR "9")
-set(EWS_VERSION ${EWS_VERSION_MAJOR}.${EWS_VERSION_MINOR})
+set(EWS_VERSION_REV   "2")
+set(EWS_VERSION ${EWS_VERSION_MAJOR}.${EWS_VERSION_MINOR}.${EWS_VERSION_REV})
 set(EWS_COPYRIGHT "2010 NVIDIA Foundation")
 set(EWS_WEBSITE "http://ews.mseedsoft.com/")
 set(EWS_EMAIL   "simeon.fitch@mseedsoft.com")
@@ -190,8 +191,8 @@ if(APPLE)
 # Make application compatible with MacOS X Leopard.
 #    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
 #    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isysroot /Developer/SDKs/MacOSX10.5.sdk")
-#    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
-#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.5")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mmacosx-version-min=10.5")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mmacosx-version-min=10.5")
 
     set(CMAKE_OSX_SYSROOT /Developer/SDKs/MacOSX10.5.sdk)
 
@@ -367,6 +368,9 @@ set(CPACK_PACKAGE_FILE_NAME "Install-${CMAKE_PROJECT_NAME}-${EWS_VERSION}")
 set(CPACK_RESOURCE_FILE_LICENSE  "${CMAKE_CURRENT_SOURCE_DIR}/../../LICENSE.txt")
 set(CPACK_PACKAGE_VERSION_MAJOR "${EWS_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${EWS_VERSION_MINOR}")
+set(CPACK_PACKAGE_VERSION_PATCH "${EWS_VERSION_REV}")
+set(CPACK_PACKAGE_VERSION 
+  "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 #  List components for CPACK_INSTALL_CMAKE_PROJECTS are (path;name;component;subdirectory).
 if(APPLE)
