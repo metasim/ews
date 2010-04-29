@@ -66,12 +66,12 @@ namespace ews {
                 // add the help handler
                 addEventHandler(new osgViewer::HelpHandler());
                 
-                // Allows us to toggle lighting and other basic state items with keyboard
-                addEventHandler( new osgGA::StateSetManipulator(getCamera()->getOrCreateStateSet()));
-                
                 // add the thread model handler
                 addEventHandler(new osgViewer::ThreadingHandler);
 #endif // QT_DEBUG                
+                
+                // Allows us to toggle lighting and other basic state items with keyboard
+                addEventHandler( new osgGA::StateSetManipulator(getCamera()->getOrCreateStateSet()));
                 
                 // add the window size toggle handler
                 addEventHandler(new osgViewer::WindowSizeHandler);    
