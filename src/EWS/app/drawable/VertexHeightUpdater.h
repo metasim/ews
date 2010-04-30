@@ -40,6 +40,9 @@ namespace ews {
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
+            const int DEF_HEIGHT_FACTOR = 15;
+            
+            
             /**
              * Callback class used by WaterSurfaceGeom to update the water surface height.
              */
@@ -85,6 +88,12 @@ namespace ews {
                     ref_ptr<Uniform> gridSize = new Uniform("gridSize", Vec2(gridWidth, gridLength));
                     gridSize->setDataVariance(Object::STATIC);
                     state->addUniform(gridSize.get());
+                    
+                    // Provide
+                    ref_ptr<Uniform> heightFactor = new Uniform("heightFactor", DEF_HEIGHT_FACTOR);
+                    heightFactor->setDataVariance(Object::STATIC);
+                    state->addUniform(heightFactor.get());
+                    
                                              
                     ref_ptr<Uniform> heightMapID = new Uniform("heightMap", TEX_ID);
                     heightMapID->setDataVariance(Object::STATIC);
