@@ -34,5 +34,7 @@ vec4 directional() {
 
 void main (void) {
     gl_FragColor = directional();
-//    gl_FragColor.rgb = debug;
+	if(length(debug) > 0.) {
+	    gl_FragColor.rgb = debug;
+	}
 }

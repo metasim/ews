@@ -105,12 +105,10 @@ void main(void) {
 	debug = vec3(0.0);
     // Really shouldn't need to compute this each time.
     vec2 texOffset = 1.0/gridSize;
-	texOffset.x =0.;
-	texOffset.y =0.;
 
     // First take care of passing on regular color info to fs
     gl_FrontColor = gl_Color;
-//    gl_TexCoord[0] = gl_MultiTexCoord0;
+    gl_TexCoord[0] = gl_MultiTexCoord0;
     doFragmentLightingSetup();
     vec2 currTexCoord = gl_MultiTexCoord0.st;
     
@@ -124,18 +122,15 @@ void main(void) {
     float hDown = computeHeightDisplacement(currTexCoord + vec2(0, -texOffset.t));
     float hRight = computeHeightDisplacement(currTexCoord + vec2(texOffset.s, 0));
     float hLeft = computeHeightDisplacement(currTexCoord + vec2(-texOffset.s, 0));
-//	debug.r = hUp;
-//	hUp = val;
-//	hDown = -val;
-//	hRight = val;
-//	hLeft = -val;
+//	debug.rgb = normalize(vec3(hUp, hDown, hRight));
 
     // Create vectors to neighbors
     float currZ = newVertex.z;
-    vec3 up = vec3(0, gridSize.y, currZ - hUp);
-    vec3 down = vec3(0, -gridSize.y, currZ - hDown);
-    vec3 right = vec3(gridSize.x, 0, currZ - hRight);
-    vec3 left = vec3(-gridSize.x, 0, currZ - hLeft);
+
+    vec3 up =    vec3(0,  1, currZ - hUp);
+    vec3 down =  vec3(0, -1, currZ - hDown);
+    vec3 right = vec3(1,  0, currZ - hRight);
+    vec3 left =  vec3(-1, 0, currZ - hLeft);
 
     // Compute the magnatude normal of the triangles neighboring vertex
     vec3 uxl = cross(up, left);
