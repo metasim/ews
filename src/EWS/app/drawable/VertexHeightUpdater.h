@@ -40,7 +40,7 @@ namespace ews {
             /** Texture binding ID used here and in WaterSurfaceGeom. */
             const int TEX_ID = 0;
             
-            const int DEF_HEIGHT_FACTOR = 15;
+            const float DEF_HEIGHT_FACTOR = 15.f;
             
             
             /**
