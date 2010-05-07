@@ -39,8 +39,7 @@ uniform float heightFactor;
 //   mat4 osg_ViewMatrix;
 //   mat4 osg_InverseViewMatrix; 
 
-varying vec4 diffuse,ambient;
-varying vec3 normal,lightDir,halfVector, debug;
+varying vec3 normal, lightDir, eyeVec, debug;
 
 /**
  * Compute the height deformation offset from height map texture
@@ -79,22 +78,10 @@ vec4 displaceVertex(const in vec4 vertex, const in vec2 heightMapCoord) {
  * Copied from http://www.lighthouse3d.com/opengl/glsl/index.php?dirlightpix
  */
 void doFragmentLightingSetup() {
-		/* first transform the normal into eye space and 
-		normalize the result */
-//		normal = normalize(gl_NormalMatrix * gl_Normal);
-		/* Normalize the light's direction. Note that 
-		according to the OpenGL specification, the light 
-		is stored in eye space. Also since we're talking about 
-		a directional light, the position field is actually direction */
-		lightDir = normalize(vec3(gl_LightSource[0].position));
-	
-		/* Normalize the halfVector to pass it to the fragment shader */
-		halfVector = normalize(gl_LightSource[0].halfVector.xyz);
-					
-		/* Compute the diffuse, ambient and globalAmbient terms */
-		diffuse = gl_FrontMaterial.diffuse * gl_LightSource[0].diffuse;
-		ambient = gl_FrontMaterial.ambient * gl_LightSource[0].ambient;
-		ambient += gl_LightModel.ambient * gl_FrontMaterial.ambient;
+    // Compute lighting vectors for fs. Normal handled below.
+    vec4 origVertex = gl_ModelViewMatrix * gl_Vertex;
+    lightDir = gl_LightSource[0].position.xyz - origVertex.xyz;
+    eyeVec = -origVertex.xyz;
 }
 
 

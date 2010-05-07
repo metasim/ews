@@ -31,7 +31,7 @@ namespace ews {
             using osg::ref_ptr;
             using namespace osg;
             
-            const Vec3 WATER_COLOR(0.1f, 0.1f, 1.f);
+            const Vec3 WATER_COLOR(0.2f, 0.2f, 0.9f);
             const float WATER_OPACITY = 1.f;
 
             WaterSurfaceGeom::WaterSurfaceGeom(WaveMedium& settings) : 
@@ -42,13 +42,18 @@ namespace ews {
                 
                 osg::StateSet* state = getOrCreateStateSet(); 
                 osg::ref_ptr<Material> mat = new Material; 
-                mat->setAmbient(Material::FRONT, Vec4(WATER_COLOR, WATER_OPACITY));
+                mat->setAmbient(Material::FRONT, Vec4(0.5, 0.5, 0.8, WATER_OPACITY));
                 mat->setDiffuse(Material::FRONT, Vec4(WATER_COLOR, WATER_OPACITY)); 
-                mat->setSpecular(Material::FRONT, Vec4(0.f, 0.f, 0.f, WATER_OPACITY)); 
+                mat->setSpecular(Material::FRONT, Vec4(0.8f, 0.8f, 1.f, WATER_OPACITY)); 
                 mat->setShininess(Material::FRONT, 30.f); 
                 mat->setColorMode(osg::Material::AMBIENT_AND_DIFFUSE);
                 state->setAttribute(mat.get());
-                state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
+                if(WATER_OPACITY < 1.0) {
+                    state->setMode(GL_BLEND, osg::StateAttribute::ON); // Activate blending (for transparency)
+                }
+                else {
+                    state->setMode(GL_BLEND, osg::StateAttribute::OFF); // Activate blending (for transparency)
+                }
                 
                 updateWaterGeometry();
             }

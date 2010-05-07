@@ -1,40 +1,42 @@
 
 
+varying vec3 normal, lightDir, eyeVec, debug;
+uniform sampler2D heightMap; 
+
 /**
- * Per pixel directional lighting.
- * Copied from http://www.lighthouse3d.com/opengl/glsl/index.php?dirlightpix
+ * Phong lighting model from:
+ * http://www.ozone3d.net/tutorials/glsl_lighting_phong.php
+ * If multi-light support is needed, see:
+ * http://www.geeks3d.com/20091013/shader-library-phong-shader-with-multiple-lights-glsl/
  */
-varying vec4 diffuse,ambient;
-varying vec3 normal,lightDir,halfVector, debug;
-vec4 directional() {
-    vec3 n,halfV;
-    float NdotL,NdotHV;
-    
-    /* The ambient term will always be present */
-    vec4 color = ambient;
-    
-    /* a fragment shader can't write a varying variable, hence we need
-     a new variable to store the normalized interpolated normal */
-    n = normalize(normal);
-    
-    /* compute the dot product between normal and ldir */
-    NdotL = max(dot(n,lightDir),0.0);
-    if (NdotL > 0.0) {
-        color += diffuse * NdotL;
-        halfV = normalize(halfVector);
-        NdotHV = max(dot(n,halfV),0.0);
-        color += gl_FrontMaterial.specular * 
-        gl_LightSource[0].specular * 
-            pow(NdotHV, gl_FrontMaterial.shininess);
+vec4 phong() {
+    vec4 final_color = 
+        (gl_FrontLightModelProduct.sceneColor * gl_FrontMaterial.ambient) + 
+        (gl_LightSource[0].ambient * gl_FrontMaterial.ambient);
+    vec3 N = normalize(normal);
+    vec3 L = normalize(lightDir);
+    float lambertTerm = dot(N,L);
+    if(lambertTerm > 0.0) {
+        final_color += gl_LightSource[0].diffuse * 
+            gl_FrontMaterial.diffuse * lambertTerm;
+        vec3 E = normalize(eyeVec);
+        vec3 R = reflect(-L, N);
+        float specular = pow( max(dot(R, E), 0.0), 
+            gl_FrontMaterial.shininess );
+        final_color += gl_LightSource[0].specular * 
+            gl_FrontMaterial.specular * specular;
     }
-    
-    return color;
+
+    return final_color;
 }
 
 
 void main (void) {
-    gl_FragColor = directional();
 	if(length(debug) > 0.) {
 	    gl_FragColor.rgb = debug;
 	}
+    else {
+        gl_FragColor = phong();
+    }
+    
 }
