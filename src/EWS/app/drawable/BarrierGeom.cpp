@@ -53,7 +53,7 @@ namespace ews {
             /** Where ending knob is relative to to the ending point. */
             const Vec3 END_KNOB_OFFSET(0, 0, 7);
             /** The color of the barrier. */
-            const Vec4 BARRIER_COLOR(1.f, 0.f, 0.f, BARRIER_OPACITY);
+            const Vec4 BARRIER_COLOR(0.6f, 0.1f, 0.1f, BARRIER_OPACITY);
             /** Which plane the barrier is constrained to. */
             const Plane BARRIER_PLANE(osg::X_AXIS, 0);
 
@@ -112,7 +112,7 @@ namespace ews {
                 ref_ptr<StateSet> state = getOrCreateStateSet(); 
                 ref_ptr<Material> mat = new Material; 
                 mat->setDiffuse(Material::FRONT, color);
-                mat->setSpecular(Material::FRONT, Vec4(0.f, 0.f, 0.f, BARRIER_OPACITY));
+                mat->setSpecular(Material::FRONT, Vec4(0.1f, 0.1f, 0.1f, BARRIER_OPACITY));
                 mat->setAmbient(Material::FRONT, color);
                 mat->setShininess(Material::FRONT, 95.f);
                 state->setAttribute(mat.get());

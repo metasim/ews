@@ -39,6 +39,7 @@ namespace ews {
                 state->setMode(GL_LIGHTING, osg::StateAttribute::ON); 
                 state->setMode(GL_LIGHT0, osg::StateAttribute::ON);
                 
+                // Light 1 (affects all)
                 ref_ptr<Light> light = new Light; 
                 light->setLightNum(0);
                 light->setPosition(Vec4(20.0f, 100.0f, 75.0f, 1.0f));
@@ -49,6 +50,20 @@ namespace ews {
                 ref_ptr<LightSource> lSource = new LightSource;
                 lSource->setLight(light.get());
                 addChild(lSource.get());
+                
+                // Light 2 (doesn't affect water).
+                state->setMode(GL_LIGHT1, osg::StateAttribute::ON);
+                light = new Light; 
+                light->setLightNum(1);
+                light->setPosition(Vec4(100.0f, 100.0f, 75.0f, 1.0f));
+//                light->setAmbient(Vec4(0.3f, 0.3f, 0.3f, 1.0f)); 
+                light->setDiffuse(Vec4(0.4f, 0.4f, 0.4f, 1.0f));
+                light->setSpecular(Vec4(1.0f, 1.0f, 1.0f, 1.0f)); 
+                
+                lSource = new LightSource;
+                lSource->setLight(light.get());
+                addChild(lSource.get());
+                
                 
                 
                 addEventCallback(new PickHandler);
